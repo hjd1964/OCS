@@ -70,7 +70,7 @@ void processCommands() {
           } else
             commandError=true;
         } else
-//  :Gb#  Get barometric reading as Float
+//  :Gb#  Get absolute barometric pressure as Float
 //         Returns: n.nnn#
 //         where n ranges from about 980.0 to 1050.0 (mbar, sea-level compensated)
         if ((command[1]=='b') && (parameter[0]==0)) {

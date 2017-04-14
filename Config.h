@@ -58,7 +58,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define WEATHER_OUT_TEMP_ON
 #define WEATHER_PRESSURE_ON
 #define WEATHER_HUMIDITY_ON
-#define WEATHER_WIND_SPD_ON
+#define WEATHER_WIND_SPD_OFF
 #define WEATHER_WIND_SPD_THRESHOLD 10 // above this wind speed (kph) is considered to be UNSAFE
 #define WEATHER_SKY_QUAL_ON
 #define WEATHER_CLOUD_CVR_ON
