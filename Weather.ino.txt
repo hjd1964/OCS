@@ -1,0 +1,50 @@
+// -----------------------------------------------------------------------------------------------------------------
+// Weather functions
+// ======= add your weather sensor support here =======
+
+// this gets called once on startup to initialize any weather sensors
+void weatherInit() {
+}
+
+// gets outside temperature in deg. C
+// any returned value <= -1000 is considered to be an error
+double weatherOutsideTemp() {
+  return 25.0;
+}
+
+// gets sky IR temperature in deg. C
+// any returned value <= -1000 is considered to be an error
+double weatherSkyTemp() {
+  return -20.0;
+}
+
+// gets windspeed in kph
+// any returned value <= -1000 is considered to be an error
+double weatherWindspeed() {
+  return 5.0;
+}
+
+// gets barometric pressure in mb
+// any returned value <= -1000 is considered to be an error
+double weatherPressure() {
+  return 1016;
+}
+
+// gets relative humidity in %
+// any returned value <= -1000 is considered to be an error
+double weatherHumidity() {
+  return -1000;
+  return 40;
+}
+
+// gets cloud cover in %
+// any returned value <= -1000 is considered to be an error
+double weatherCloudCover() {
+  return 11.0;
+}
+
+// gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry (default=3, which allows ASCOM safety based on just the cloud detector)
+// any returned value <= -1000 is considered to be an error
+int weatherRain() {
+  return 3;
+}
