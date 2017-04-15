@@ -40,9 +40,8 @@ void RelayPwmISR() {
       slowPwmCycle++; if (slowPwmCycle>9) { slowPwmCycle=0; }
       if (slowPwmCycle==0) {
         relayState[ROR_PWR_RELAY]=1; digitalWrite(relayPin[ROR_PWR_RELAY],HIGH);
-      } else {
-        if ((!roofMaxPower) && ((roofCurrentPower/10)==slowPwmCycle)) { relayState[ROR_PWR_RELAY]=0; digitalWrite(relayPin[ROR_PWR_RELAY],LOW); }
       }
+      if ((!roofMaxPower) && ((roofCurrentPower/10)==slowPwmCycle)) { relayState[ROR_PWR_RELAY]=0; digitalWrite(relayPin[ROR_PWR_RELAY],LOW); }
     }
   } else {
     if (relayState[ROR_PWR_RELAY]==1) { relayState[ROR_PWR_RELAY]=0; digitalWrite(relayPin[ROR_PWR_RELAY],LOW); }

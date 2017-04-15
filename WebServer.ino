@@ -12,7 +12,7 @@ void WebServer::init() {
   // start the Ethernet connection and the server:
   setResponseHeader(http_defaultHeader);
 
-  Ethernet.begin(mac, ip);
+  Ethernet.begin(mac, ip, myDns, gateway, subnet);
   server.begin();
 #ifdef WEBSERVER_DEBUG_ON
   Serial.print("www server is at ");

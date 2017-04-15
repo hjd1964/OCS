@@ -16,7 +16,7 @@ void openRoof() {
 
 #ifdef ROR_SOFTSTART_ON
     if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/100; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
     }
 #endif
 
@@ -31,14 +31,14 @@ void openRoof() {
       lastSecondsOfTravel=secondsOfTravel;
       EEPROM_writeLong(EE_timeLeftToOpen,timeLeftToOpenNow);
       EEPROM_writeLong(EE_timeLeftToClose,timeLeftToCloseNow);
-      Serial.print("Time left=");
-      Serial.println((timeLeftToOpenAtStart-msOfTravel));
-      Serial.print("<limit=");
-      Serial.println(-roofTimeErrorLimit);
+//      Serial.print("Time left=");
+//      Serial.println((timeLeftToOpenAtStart-msOfTravel));
+//      Serial.print("<limit=");
+//      Serial.println(-roofTimeErrorLimit);
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>2000) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>4000) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
@@ -69,7 +69,7 @@ void openRoof() {
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      digitalWrite(relayState[ROR_DIR_RELAY_A], LOW);
+      digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW);
       relayState[ROR_DIR_RELAY_A]=0;
       // Reset the status register
       // roofStatusRegister=0;
@@ -86,7 +86,7 @@ void closeRoof() {
 
 #ifdef ROR_SOFTSTART_ON
     if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/100; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
     }
 #endif
     
@@ -104,7 +104,7 @@ void closeRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>2000) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>4000) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle

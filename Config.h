@@ -27,6 +27,9 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 // The IP address will be dependent on your local network
 IPAddress ip(192, 168, 1, 50);
+IPAddress myDns(192,168, 1, 254);
+IPAddress gateway(192, 168, 1, 254);
+IPAddress subnet(255, 255, 255, 0);
 
 // NTP Servers:
 IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
@@ -103,7 +106,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define LIGHT_ORW_RELAY "12"        // Observing room white lights, default="12"
 #define LIGHT_ORR_RELAY "10"        // Observing room red lights, default="10"
 #define LIGHT_OUTSIDE_RELAY "1"     // Outside flood, default="1"
-#define LIGHT_SW_SENSE 3            // A switch to turn WRW lights on/off (ON when input is HIGH), default=3
+#define LIGHT_SW_SENSE 4            // A switch to turn WRW lights on/off (ON when input is HIGH), default=4
 
 // Roll-off roof panel
 #define ROR_ON
@@ -119,19 +122,19 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 // this "relay", a MOSFET power transistor on my ROR, is setup to do slow PWM on the 12VDC roof motor
 // to control the motor speed.  It can also be used with a relay to just enable/disable the roof motor
 // as a backup to the relay's above
-#define ROR_PWR_RELAY   14
+#define ROR_PWR_RELAY   13
 // these sense the roof limits, inputs are normally LOW but go HIGH when the roof is fully opened or closed
 #define ROR_CLOSED_LIMIT_SENSE 1    // Sense# for closed switch (CLOSED when input is HIGH)
-#define ROR_OPENED_LIMIT_SENSE 2    // Sense# for open switch (OPEN when input is HIGH)
+#define ROR_OPENED_LIMIT_SENSE 3    // Sense# for open switch (OPEN when input is HIGH)
 // PWM frequency for roof control, set to _OFF to disable, default=5, range 1 to 100
-#define ROR_PWM_SPEED_HZ 5
+#define ROR_PWM_SPEED_HZ 10
 // PWM power levels for DC control, default=20, this gets rounded at tens for 10%, 20%, 30%, etc.
-#define ROR_PWM_POWER_PERCENT 30
+#define ROR_PWM_POWER_PERCENT 20
 // PWM soft start, begins at 0% and adds 10% per second until ROR_PWM_POWER_PERCENT is reached
-#define ROR_SOFTSTART_OFF
-// Average amount of time to open/close the roof (in seconds), default=60*5 (five minutes)
-#define ROR_TIME_AVG (60*5)
+#define ROR_SOFTSTART_ON
+// Average amount of time to open/close the roof (in seconds), default=210
+#define ROR_TIME_AVG 210
 // Additional time +/- (in seconds,) > this range and the roof is stopped/error thrown, default=30 (+/- one minute)
-#define ROR_TIME_TOL 30
+#define ROR_TIME_TOL 20
 
 
