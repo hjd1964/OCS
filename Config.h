@@ -2,8 +2,7 @@
 // Configure options
 
 // ========= Also remember to see Weather.ino and Thermostat.ino to setup any sensors ==========
-// ======== See Weather.ino.txt for an example of how to setup a couple of I2C sensors  ========
-
+/
 // Relay's are mapped to digital output pins: 23,25,27,29,31,33,35,37,39,41,43,45,47,49
 //                                    Relay#:  1  2  3  4  5  6  7  8  9 10 11 12 13 14
 //
@@ -132,7 +131,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_PWM_SPEED_HZ 10
 // PWM power levels for DC control, default=20, this gets rounded at tens for 10%, 20%, 30%, etc.
 #define ROR_PWM_POWER_PERCENT 20
-// PWM soft start, begins at 0% and adds 10% per second until ROR_PWM_POWER_PERCENT is reached
+// PWM soft start, begins at 0% and adds 5% per second until ROR_PWM_POWER_PERCENT is reached
 #define ROR_SOFTSTART_ON
 // Average amount of time to open/close the roof (in seconds), default=220
 #define ROR_TIME_AVG 220

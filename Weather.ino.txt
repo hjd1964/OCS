@@ -55,4 +55,3 @@ int weatherRain() {
 double weatherSkyQuality() {
   return (invalid);
 }
-
