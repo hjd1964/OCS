@@ -4,47 +4,55 @@
 
 // this gets called once on startup to initialize any weather sensors
 void weatherInit() {
+  analogReference(DEFAULT);
 }
 
 // gets outside temperature in deg. C
-// any returned value <= -1000 is considered to be an error
+// return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
-  return 25.0;
+  return (invalid);
 }
 
 // gets sky IR temperature in deg. C
-// any returned value <= -1000 is considered to be an error
+// return (invalid) if not implemented or if there's an error
 double weatherSkyTemp() {
-  return -20.0;
+  return (invalid);
 }
 
 // gets windspeed in kph
-// any returned value <= -1000 is considered to be an error
+// the returned value should be the highest measured speed over a 1 minute period
+// return (invalid) if not implemented or if there's an error
 double weatherWindspeed() {
-  return 5.0;
+  return (invalid);
 }
 
-// gets barometric pressure in mb
-// any returned value <= -1000 is considered to be an error
+// gets absolute barometric pressure in mb (not sea-level adjusted)
+// return (invalid) if not implemented or if there's an error
 double weatherPressure() {
-  return 1016;
+  return (invalid);
+}
+
+// gets barometric pressure in mb (sea-level adjusted)
+// return (invalid) if not implemented or if there's an error
+double weatherPressureSeaLevel() {
+  return (invalid);
 }
 
 // gets relative humidity in %
-// any returned value <= -1000 is considered to be an error
+// return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
-  return -1000;
-  return 40;
+  return (invalid);
 }
 
-// gets cloud cover in %
-// any returned value <= -1000 is considered to be an error
-double weatherCloudCover() {
-  return 11.0;
-}
-
-// gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry (default=3, which allows ASCOM safety based on just the cloud detector)
-// any returned value <= -1000 is considered to be an error
+// gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
+// return (invalid) if not implemented or if there's an error
 int weatherRain() {
-  return 3;
+  return (invalid);
 }
+
+// gets sky brightness in mag/arc-sec^2
+// return (invalid) if not implemented or if there's an error
+double weatherSkyQuality() {
+  return (invalid);
+}
+
