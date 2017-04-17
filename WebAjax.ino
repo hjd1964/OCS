@@ -55,6 +55,7 @@ void setvar(EthernetClient *client) {
 #endif
 #endif
 
+
 #ifdef ROR_ON
   if (a=="roof_open") { startRoofOpen(); }
   if (a=="roof_close") { startRoofClose(); }
@@ -245,6 +246,102 @@ void weather(EthernetClient *client) {
     strcpy_P(temp,htmlInnerWeatherUnSafe1); client->print(temp);
   }
 #endif
+}
+#endif
+
+// power ---------------------------------------------------------------------------------------------------------------------
+#ifdef POWER_ON
+const char htmlPower[] PROGMEM =
+"<b>Power</b><br />"
+"<form><div>"
+#ifdef POWER_DEVICE1_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE1_RELAY "\",this.checked)' %___PD1 />&nbsp;&nbsp;" POWER_DEVICE1_NAME "<br />"
+#endif
+#ifdef POWER_DEVICE2_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE2_RELAY "\",this.checked)' %___PD2 />&nbsp;&nbsp;" POWER_DEVICE2_NAME "<br />"
+#endif
+#ifdef POWER_DEVICE3_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE3_RELAY "\",this.checked)' %___PD3 />&nbsp;&nbsp;" POWER_DEVICE3_NAME "<br />"
+#endif
+#ifdef POWER_DEVICE4_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE4_RELAY "\",this.checked)' %___PD4 />&nbsp;&nbsp;" POWER_DEVICE4_NAME "<br />"
+#endif
+#ifdef POWER_DEVICE5_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE5_RELAY "\",this.checked)' %___PD5 />&nbsp;&nbsp;" POWER_DEVICE5_NAME "<br />"
+#endif
+#ifdef POWER_DEVICE6_RELAY
+"&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" POWER_DEVICE6_RELAY "\",this.checked)' %___PD6 />&nbsp;&nbsp;" POWER_DEVICE6_NAME "<br />"
+#endif
+"<br />"
+"</div></form>";
+
+void power(EthernetClient *client) {
+  char temp[800];
+
+  strcpy_P(temp,htmlPower);
+  #ifdef POWER_DEVICE1_RELAY
+  if (relayOn(POWER_DEVICE1_RELAY)) check(temp,"%___PD1"); else erase(temp,"%___PD1");
+  #endif
+  #ifdef POWER_DEVICE2_RELAY
+  if (relayOn(POWER_DEVICE2_RELAY)) check(temp,"%___PD2"); else erase(temp,"%___PD2");
+  #endif
+  #ifdef POWER_DEVICE3_RELAY
+  if (relayOn(POWER_DEVICE3_RELAY)) check(temp,"%___PD3"); else erase(temp,"%___PD3");
+  #endif
+  #ifdef POWER_DEVICE4_RELAY
+  if (relayOn(POWER_DEVICE4_RELAY)) check(temp,"%___PD4"); else erase(temp,"%___PD4");
+  #endif
+  #ifdef POWER_DEVICE5_RELAY
+  if (relayOn(POWER_DEVICE5_RELAY)) check(temp,"%___PD5"); else erase(temp,"%___PD5");
+  #endif
+  #ifdef POWER_DEVICE6_RELAY
+  if (relayOn(POWER_DEVICE6_RELAY)) check(temp,"%___PD6"); else erase(temp,"%___PD6");
+  #endif
+  client->print(temp);
+}
+#endif
+
+// light ---------------------------------------------------------------------------------------------------------------------
+#ifdef LIGHT_ON
+const char htmlLighting[] PROGMEM =
+"<b>Lighting</b><br />"
+"<form><div>"
+"&nbsp;&nbsp;"
+#ifdef LIGHT_WRR_RELAY
+"<input type=\"checkbox\" onclick='SetRelay(\"" LIGHT_WRR_RELAY "\",this.checked)' %___WRR />&nbsp;Red"
+#endif
+#ifdef LIGHT_WRW_RELAY
+" <input type=\"checkbox\" onclick='SetRelay(\"" LIGHT_WRW_RELAY "\",this.checked)' %___WRW />&nbsp;White"
+#endif
+" Warm Rm Lights<br />&nbsp;&nbsp;"
+#ifdef LIGHT_ORR_RELAY
+"<input type=\"checkbox\" onclick='SetRelay(\"" LIGHT_ORR_RELAY "\",this.checked)' %___ORR />&nbsp;Red"
+#endif
+#ifdef LIGHT_ORW_RELAY
+" <input type=\"checkbox\" onclick='SetRelay(\"" LIGHT_ORW_RELAY "\",this.checked)' %___ORW />&nbsp;White"
+#endif
+" Obs Rm Lights<br />&nbsp;&nbsp;"
+"<br /><br />"
+"&nbsp;&nbsp;<input type=\"button\" onclick='SetVar(\"press\",\"light_exit\")' value=\"Exit\" />&nbsp;&nbsp;Outside Light Timer<br />"
+"</div></form>";
+
+void light(EthernetClient *client) {
+  char temp[800];
+  
+  strcpy_P(temp,htmlLighting);
+  #ifdef LIGHT_WRW_RELAY
+  if (relayOn(LIGHT_WRW_RELAY)) check(temp,"%___WRW"); else erase(temp,"%___WRW");
+  #endif
+  #ifdef LIGHT_WRR_RELAY
+  if (relayOn(LIGHT_WRR_RELAY)) check(temp,"%___WRR"); else erase(temp,"%___WRR");
+  #endif
+  #ifdef LIGHT_ORW_RELAY
+  if (relayOn(LIGHT_ORW_RELAY)) check(temp,"%___ORW"); else erase(temp,"%___ORW");
+  #endif
+  #ifdef LIGHT_ORR_RELAY
+  if (relayOn(LIGHT_ORR_RELAY)) check(temp,"%___ORR"); else erase(temp,"%___ORR");
+  #endif
+  client->print(temp);
 }
 #endif
 
