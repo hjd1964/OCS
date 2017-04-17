@@ -25,7 +25,7 @@
 // Enter an MAC address for your controller
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-// The IP address will be dependent on your local network
+// The IP address, etc. will be dependent on your local network
 IPAddress ip(192, 168, 1, 50);
 IPAddress myDns(192,168, 1, 254);
 IPAddress gateway(192, 168, 1, 254);
@@ -60,6 +60,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define WEATHER_INS_TEMP_ON
 #define WEATHER_OUT_TEMP_ON
 #define WEATHER_PRESSURE_ON
+#define WEATHER_NOMINAL_PRESSURE 970  // in mb, varies with altitude
 #define WEATHER_HUMIDITY_ON
 #define WEATHER_WIND_SPD_OFF
 #define WEATHER_WIND_SPD_THRESHOLD 10 // above this wind speed (kph) is considered to be UNSAFE
@@ -132,9 +133,9 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_PWM_POWER_PERCENT 20
 // PWM soft start, begins at 0% and adds 10% per second until ROR_PWM_POWER_PERCENT is reached
 #define ROR_SOFTSTART_ON
-// Average amount of time to open/close the roof (in seconds), default=210
-#define ROR_TIME_AVG 210
-// Additional time +/- (in seconds,) > this range and the roof is stopped/error thrown, default=30 (+/- one minute)
-#define ROR_TIME_TOL 20
+// Average amount of time to open/close the roof (in seconds), default=220
+#define ROR_TIME_AVG 220
+// Additional time +/- (in seconds,) > this range and the roof is stopped/error thrown, default=22
+#define ROR_TIME_TOL 22
 
 
