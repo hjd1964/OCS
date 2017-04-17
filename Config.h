@@ -96,6 +96,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define POWER_DEVICE6_MEMORY_OFF
 
 // Thermostat panel, use _OFF to disable individual items
+// I use an lm335 temperature sensor on Analog 3, use one too or add your sensor in Thermostat.ino's thermostatInsideTemp() function instead
 #define THERMOSTAT_ON
 #define HEAT_RELAY 4                // Relay# for heating
 #define COOL_RELAY_OFF              // Relay# for cooling/venting, default=OFF
