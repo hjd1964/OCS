@@ -31,10 +31,6 @@ void openRoof() {
       lastSecondsOfTravel=secondsOfTravel;
       EEPROM_writeLong(EE_timeLeftToOpen,timeLeftToOpenNow);
       EEPROM_writeLong(EE_timeLeftToClose,timeLeftToCloseNow);
-//      Serial.print("Time left=");
-//      Serial.println((timeLeftToOpenAtStart-msOfTravel));
-//      Serial.print("<limit=");
-//      Serial.println(-roofTimeErrorLimit);
     }
 
     // Or a stuck limit switch
