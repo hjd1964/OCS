@@ -53,9 +53,9 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define STAT_12V_PS_ANALOG 1        // Analog# for 12V power supply voltage (these have a voltage divider /100 so 12V = 1.2V)
 
 // Weather panel (see Weather.ino for more info.)
-// The charts on the Weather and Sky Conditions web pages use "Chart.js"
+// The charts on the Weather and Sky Conditions web pages use "Chart.js" from http://www.chartjs.org/
 // Specifically, version 2.5 of "Chart.min.js" renamed to "Chart.js" and placed in the root directory of the SD card:
-// It can be downloaded from here: https://github.com/chartjs/Chart.js/releases/tag/v2.5.0
+// It can be downloaded from here: https://github.com/chartjs/Chart.js/releases/tag/v2.5.0 (scroll to bottom of page for download links)
 #define WEATHER_ON
 #define SD_CARD_ON                  // for logging weather an SD card must be present
 #define WEATHER_ALTITUDE 120        // site altitude in meters
