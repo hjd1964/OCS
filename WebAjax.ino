@@ -237,7 +237,7 @@ void weather(EthernetClient *client) {
 #ifdef WEATHER_CLOUD_CVR_ON
   strcpy_P(temp1,htmlInnerWeatherCloud); strcpy(ws1,weatherCloudCoverDescriptionShort().c_str()); sprintf(temp,temp1,ws1); client->print(temp);
 #endif
-#if defined(WEATHER_RAIN_ON) || defined(WEATHER_CLOUD_CVR_ON) || defined(WEATHER_WIND_SPD_ON) || defined(STAT_MAINS_SENSE)
+#if defined(WEATHER_RAIN_ON) || defined(WEATHER_CLOUD_CVR_ON)
   if (isSafe()) {
     strcpy_P(temp,htmlInnerWeatherSafe);  client->print(temp);
     strcpy_P(temp,htmlInnerWeatherSafe1); client->print(temp);
