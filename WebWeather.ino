@@ -76,13 +76,18 @@ void weatherPage(EthernetClient *client) {
   client->print(F("<script>\r\n"));
   client->print(F("window.onload = function(){\r\n"));
 #ifdef WEATHER_OUT_TEMP_ON
+#ifdef  IMPERIAL_UNITS_ON
+  // a negative column# means this is a temperature and needs conversion to degrees F
+  makeChartJs(client,"ambientT","Outside Temperature F (last "+periodStr+")",-8,5,-40,120,20,period);
+#else
   makeChartJs(client,"ambientT","Outside Temperature C (last "+periodStr+")",8,5,-40,50,10,period);
+#endif
 #endif
 #ifdef WEATHER_WIND_SPD_ON
   makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
 #endif
 #ifdef WEATHER_PRESSURE_ON
-  makeChartJs(client,"BP","Absolute Barometric Pressure mb (last "+periodStr+")",26,6,1013-40,1013+40,10,period);
+  makeChartJs(client,"BP","Absolute Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE-40,WEATHER_NOMINAL_PRESSURE+40,10,period);
 #endif
 #ifdef WEATHER_HUMIDITY_ON
   makeChartJs(client,"RH","Relative Humidity % (last "+periodStr+")",33,5,0,100,10,period);
@@ -198,11 +203,13 @@ void makeChartJs(EthernetClient *client, char chartId[], String chartName, int l
       }
       dataFile.seek(((rec+i*hours)-k)*80L);
       //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
-      dataFile.read(ws1,80); ws1[logColumn+colWidth]=0;
-      int j=logColumn; while ((ws1[j]==' ') && (ws1[j]!=0)) j++;
+      dataFile.read(ws1,80); ws1[abs(logColumn)+colWidth]=0;
+      int j=abs(logColumn); while ((ws1[j]==' ') && (ws1[j]!=0)) j++;
       strcpy(ws2,(char*)&(ws1[j]));
       if (ws2[0]!=0) {
-        dtostrf(atof(ws2),1,1,ws2);
+        double f=atof(ws2); 
+        if (logColumn<0) f=f*(9.0/5.0)+32.0;
+        dtostrf(f,1,1,ws2);
         if (hours==1) dtostrf((120-i)/2.0,1,1,ws1);
         if (hours==24) dtostrf((120-i)/5.0,1,1,ws1);
         if (hours==48) dtostrf((120-i)/2.5,1,1,ws1);
