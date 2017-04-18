@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------
-// Cloud/Safety monitor
+// Cloud/Safety monitor and logging
 
 #ifdef SD_CARD_ON
 #include <SD.h>
