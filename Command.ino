@@ -225,47 +225,51 @@ void processCommands() {
 #ifdef ROR_ON
       if (command[0]=='R') {
 //  :RC#  Roof Close
-//         Returns: 1 on success
-        if ((command[1]=='C') && (parameter[0]=0)) {
-          if (!startRoofClose()) commandError=true;
+//         Returns: nothing
+        if ((command[1]=='C') && (parameter[0]==0)) {
+          startRoofClose();
+          quietReply=true;
         } else
 //  :RO#  Roof Open
-//         Returns: 1 on success
-        if ((command[1]=='O') && (parameter[0]=0)) {
-          if (!startRoofOpen()) commandError=true;
+//         Returns: nothing
+        if ((command[1]=='O') && (parameter[0]==0)) {
+          startRoofOpen();
+          quietReply=true;
         } else
-//  :RS#  Roof Stop
+//  :RH#  Roof Stop
 //         Returns: 1 on success
-        if ((command[1]=='S') && (parameter[0]=0)) {
+        if ((command[1]=='H') && (parameter[0]==0)) {
           stopRoof();
         } else
 //  :R!#  Roof Safety Override
 //         Returns: 1 on success
-        if ((command[1]=='!') && (parameter[0]=0)) {
+        if ((command[1]=='!') && (parameter[0]==0)) {
           roofSafetyOverride=true;
         } else
 //  :R+#  Roof high power mode
 //         Returns: 1 on success
-        if ((command[1]=='!') && (parameter[0]=0)) {
+        if ((command[1]=='!') && (parameter[0]==0)) {
           roofMaxPower=true;
         } else
 //  :RS#  Roof Status
 //         Returns: status code
-        if ((command[1]=='S') && (parameter[0]=0)) {
+        if ((command[1]=='S') && (parameter[0]==0)) {
           quietReply=true;
           sprintf(reply,"%d",roofStatusRegister);
         } else
-          commandError=true;
 //  :RSE#  Roof Status Expanded
 //         Returns: status string
-        if ((command[1]=='S') && (parameter[0]=0)) {
+        if ((command[1]=='S') && (parameter[0]=='E') && (parameter[1]==0)) {
           quietReply=true;
+          senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
+          senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
+          if ((senseState[ROR_CLOSED_LIMIT_SENSE]) && (!senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(reply,"CLOSED"); else
+          if ((!senseState[ROR_CLOSED_LIMIT_SENSE]) && (senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(reply,"OPEN"); else
           strcpy(reply,getRoofStatus().c_str());
         } else
-          commandError=true;
 //  :RSL#  Roof Status Last Error
 //         Returns: status string
-        if ((command[1]=='S') && (parameter[0]=="L") && (parameter[1]=0)) {
+        if ((command[1]=='S') && (parameter[0]=='L') && (parameter[1]==0)) {
           quietReply=true;
           strcpy(reply,roofLastError.c_str());
         } else
