@@ -237,9 +237,10 @@ void processCommands() {
           quietReply=true;
         } else
 //  :RH#  Roof Stop
-//         Returns: 1 on success
+//         Returns: nothing
         if ((command[1]=='H') && (parameter[0]==0)) {
           stopRoof();
+          quietReply=true;
         } else
 //  :R!#  Roof Safety Override
 //         Returns: 1 on success
@@ -251,11 +252,11 @@ void processCommands() {
         if ((command[1]=='!') && (parameter[0]==0)) {
           roofMaxPower=true;
         } else
-//  :RS#  Roof Status
+//  :RS#  Roof State
 //         Returns: status code
         if ((command[1]=='S') && (parameter[0]==0)) {
           quietReply=true;
-          sprintf(reply,"%d",roofStatusRegister);
+          reply[0]=roofState; reply[1]=0;
         } else
 //  :RSE#  Roof Status Expanded
 //         Returns: status string
