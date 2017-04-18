@@ -132,7 +132,7 @@ void index(EthernetClient *client) {
   strcpy_P(temp,html_pageHeader1); client->print(temp);
   strcpy_P(temp,html_pageHeader2); client->print(temp);
   strcpy_P(temp,html_links1s); client->print(temp);
-#ifdef WEATHER_ON
+#if defined(WEATHER_ON) && defined(SD_CARD_ON)
   strcpy_P(temp,html_links2); client->print(temp);
 #if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
   strcpy_P(temp,html_links3); client->print(temp);

@@ -208,7 +208,7 @@ void setup()   {
   www.setResponseHeader(http_defaultHeader);
   www.init();
   www.on("index.htm",index);
-#ifdef WEATHER_ON
+#if defined(WEATHER_ON) && defined(SD_CARD_ON)
   www.on("weatherpage.htm",weatherPage);
 #if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
   www.on("skypage.htm",skyPage);

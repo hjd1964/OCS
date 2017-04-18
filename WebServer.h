@@ -66,7 +66,7 @@ const char html_pageHeader2[] PROGMEM = "</td></tr></table>";
 
 const char html_links1[] PROGMEM = "<a href=\"/index.htm\" style=\"background-color: #222222;\">Overview</a>";
 const char html_links1s[] PROGMEM = "<a href=\"/index.htm\" style=\"background-color: #552222;\">Overview</a>";
-#ifdef WEATHER_ON
+#if defined(WEATHER_ON) && defined(SD_CARD_ON)
 const char html_links2[] PROGMEM = "<a href=\"/weatherpage.htm\" style=\"background-color: #222222;\">Weather</a>";
 const char html_links2s[] PROGMEM = "<a href=\"/weatherpage.htm\" style=\"background-color: #552222;\">Weather</a>";
 #if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
