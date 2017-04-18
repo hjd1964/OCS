@@ -354,8 +354,8 @@ const char htmlInnerRoofStat[] PROGMEM =
 "<div style=\"text-align:center\">%s</div>";
 
 void roof_stat(EthernetClient *client) {
-  char temp[128]="";
-  char temp1[128]="";
+  char temp[200]="";
+  char temp1[200]="";
   char ws1[20]="";
 
   strcpy_P(temp1,htmlInnerRoofStat);
