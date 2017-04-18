@@ -34,10 +34,9 @@
  */
 
 // firmware info
-#define FirmwareDate   "04 05 17"
+#define FirmwareDate   "04 18 17"
 #define FirmwareNumber "1.0a"
 #define FirmwareName   "OnCue OCS"
-#define FirmwareCompatibility "CloudSensorEvoPlus"
 #define FirmwareTime   "12:00:00"
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time

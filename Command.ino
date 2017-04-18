@@ -97,7 +97,7 @@ void processCommands() {
             commandError=true;
         } else
 #endif
-#if defined(WEATHER_ON) && defined(WEATHER_HUMIDITY_ON)
+#if defined(WEATHER_HUMIDITY_ON) && defined(WEATHER_ON)
 //  :Gh#  Get relative humidity reading as Float
 //         Returns: n.n#
 //         where n ranges from 0.0 to 100.0
@@ -106,11 +106,27 @@ void processCommands() {
           quietReply=true;
         } else
 #endif
+//  :GP#  Get power status
+//         Returns: OK#, OUT#, or N/A#
+//         
+        if ((command[1]=='P') && (parameter[0]==0)) {
+#if defined(STAT_MAINS_SENSE) && defined(WEATHER_ON)
+          // check for mains power out
+          if (digitalRead(sensePin[STAT_MAINS_SENSE])!=HIGH) strcpy(reply,"OUT"); else strcpy(reply,"OK");
+#else
+          strcpy(reply,"N/A");
+#endif
+          quietReply=true;
+        } else
 //  :GR#  Get rain sensor status
 //         Returns: n#
-//         where 1# is Rain, 2# is Warn, and 3# is Dry
+//         -1000 is invalid, 0 is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
         if ((command[1]=='R') && (parameter[0]==0)) {
+#if defined(WEATHER_RAIN_ON) && defined(WEATHER_ON)
           sprintf(reply,"%d",weatherRain());
+#else
+          strcpy(reply,"0");
+#endif
           quietReply=true;
         } else
 //  :GRn#  Get Relay n state
@@ -158,7 +174,7 @@ void processCommands() {
 //         Returns: SAFE#, UNSAFE#
         if ((command[1]=='s') && (parameter[0]==0)) {
           quietReply=true;
-          if (!isSafe()) strcpy(reply,"SAFE"); else strcpy(reply,"UNSAFE");
+          if (isSafe()) strcpy(reply,"SAFE"); else strcpy(reply,"UNSAFE");
         } else
 #if defined(THERMOSTAT_ON) && defined(COOL_RELAY)
 //  :GV#  Get Cool/Vent setpoint
@@ -173,6 +189,18 @@ void processCommands() {
             commandError=true;
         } else
 #endif
+//  :GW#  Get wind status
+//         Returns: OK#, HIGH#, or N/A#
+//         
+        if ((command[1]=='W') && (parameter[0]==0)) {
+#if defined(WEATHER_WIND_SPD_ON) && defined(WEATHER_ON)
+          if (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD) strcpy(reply,"HIGH"); else 
+          if (weatherWindspeed()==invalid) strcpy(reply,"Invalid"); else strcpy(reply,"OK");
+#else
+          strcpy(reply,"N/A");
+#endif
+          quietReply=true;
+        } else
           commandError=true;
       } else
 
@@ -187,7 +215,7 @@ void processCommands() {
 //  :IP#  get Product (compatibility)
 //         Returns: s#
         if ((command[1]=='P') && (parameter[0]==0)) {
-          strcpy(reply,FirmwareCompatibility);
+          strcpy(reply,FirmwareName);
           quietReply=true;
         } else
           commandError=true;

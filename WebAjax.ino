@@ -155,7 +155,7 @@ const char htmlInnerWeatherPres[] PROGMEM =
 #endif
 #ifdef WEATHER_HUMIDITY_ON
 const char htmlInnerWeatherHumd[] PROGMEM =
-"&nbsp;&nbsp;Relative Humidity<div class=\"aStatus\">%s %%</div><br />";
+"&nbsp;&nbsp;Relative Humidity<div class=\"aStatus\">%s%s</div><br />";
 #endif
 #ifdef WEATHER_WIND_SPD_ON
 const char htmlInnerWeatherWind[] PROGMEM =
@@ -204,13 +204,15 @@ void weather(EthernetClient *client) {
 #endif
 #ifdef WEATHER_PRESSURE_ON
   f=weatherPressure();
-  if (f==invalid) strcpy(ws1,"Invalid"); else dtostrf(f,6,0,ws1); 
-  strcpy_P(temp1,htmlInnerWeatherPres); dtostrf(f,6,0,ws1); strcpy(ws2," mb"); sprintf(temp,temp1,ws1,ws2); client->print(temp);
+  strcpy(ws2," mb");
+  if (f==invalid) { strcpy(ws1,"Invalid"); strcpy(ws2,""); } else dtostrf(f,6,0,ws1);
+  strcpy_P(temp1,htmlInnerWeatherPres); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
 #ifdef WEATHER_HUMIDITY_ON
   f=weatherHumidity();
-  if (f==invalid) strcpy(ws1,"Invalid"); else dtostrf(f,6,1,ws1); 
-  strcpy_P(temp1,htmlInnerWeatherHumd); sprintf(temp,temp1,ws1); client->print(temp);
+  strcpy(ws2," %");
+  if (f==invalid) { strcpy(ws1,"Invalid"); strcpy(ws2,""); } else dtostrf(f,6,1,ws1); 
+  strcpy_P(temp1,htmlInnerWeatherHumd); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
 #ifdef WEATHER_WIND_SPD_ON
   f=weatherWindspeed(); strcpy(ws2," kph");
