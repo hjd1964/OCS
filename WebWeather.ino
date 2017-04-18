@@ -171,6 +171,7 @@ void skyPage(EthernetClient *client) {
 #endif
 
 void makeChartJs(EthernetClient *client, char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
+#ifdef SD_CARD_ON
   char temp[256]="";
   char temp1[256]="";
   char ws1[90]="";
@@ -221,6 +222,7 @@ void makeChartJs(EthernetClient *client, char chartId[], String chartName, int l
   }
 
   strcpy_P(temp1,ChartJs4); sprintf(temp,temp1,rangeMax,rangeMin,rangeStep); client->print(temp);
+#endif
 }
 
 void makeChartCanvas(EthernetClient *client, char chartId[]) {

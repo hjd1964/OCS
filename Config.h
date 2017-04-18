@@ -2,7 +2,7 @@
 // Configure options
 
 // ========= Also remember to see Weather.ino and Thermostat.ino to setup any sensors ==========
-/
+//
 // Relay's are mapped to digital output pins: 23,25,27,29,31,33,35,37,39,41,43,45,47,49
 //                                    Relay#:  1  2  3  4  5  6  7  8  9 10 11 12 13 14
 //
@@ -26,8 +26,8 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 // The IP address, etc. will be dependent on your local network
 IPAddress ip(192, 168, 1, 50);
-IPAddress myDns(192,168, 1, 254);
-IPAddress gateway(192, 168, 1, 254);
+IPAddress myDns(192,168, 1, 1);
+IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // NTP Servers:
@@ -57,21 +57,22 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 // Specifically, version 2.5 of "Chart.min.js" renamed to "Chart.js" and placed in the root directory of the SD card:
 // It can be downloaded from here: https://github.com/chartjs/Chart.js/releases/tag/v2.5.0 (scroll to bottom of page for download links)
 #define WEATHER_ON
-#define SD_CARD_ON                  // for logging weather an SD card must be present
+#define SD_CARD_OFF                  // for logging weather an SD card must be present
 #define WEATHER_ALTITUDE 120        // site altitude in meters
 #define WEATHER_INS_TEMP_ON
 #define WEATHER_OUT_TEMP_ON
 #define WEATHER_PRESSURE_ON
 #define WEATHER_NOMINAL_PRESSURE 970  // in mb, varies with altitude
 #define WEATHER_HUMIDITY_ON
-#define WEATHER_WIND_SPD_OFF
+#define WEATHER_WIND_SPD_ON
 #define WEATHER_WIND_SPD_THRESHOLD 10 // above this wind speed (kph) is considered to be UNSAFE
 #define WEATHER_SKY_QUAL_ON
 #define WEATHER_CLOUD_CVR_ON
-#define WEATHER_RAIN_ON             // a "wet" condition is considered to be UNSAFE, default location is on Analog 2
-#define WEATHER_CLER_THRESHOLD -19
-#define WEATHER_HAZE_THRESHOLD -17
+#define WEATHER_RAIN_ON              // a "wet" condition is considered to be UNSAFE, default location is on Analog 2
 #define WEATHER_SAFE_THRESHOLD -14  // above this temperature (deg C) is considered to be UNSAFE
+#define WEATHER_VCLR_THRESHOLD -19
+#define WEATHER_CLER_THRESHOLD -17
+#define WEATHER_HAZE_THRESHOLD -14
 #define WEATHER_OVRC_THRESHOLD -11
 #define WEATHER_CLDY_THRESHOLD -8
 #define WEATHER_VCLD_THRESHOLD -5
