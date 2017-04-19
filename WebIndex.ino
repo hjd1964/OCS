@@ -19,7 +19,7 @@ const char htmlPower3[] PROGMEM =
 const char htmlThermostat1[] PROGMEM =
 "<div class=\"obsControl\">"
 "<b>Thermostat</b><br />"
-"&nbsp;&nbsp;Temperature (Inside)<div id=\"thermo_inside\" class=\"aStatus\">%s%s</div><br /><br />"
+"&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\">%s%s</div><br /><br />"
 "<form name=\"thermostat\" >";
 const char htmlThermostatHeat1[] PROGMEM =
 "<div>"
@@ -73,7 +73,7 @@ const char html_ajax_active1[] PROGMEM =
 " var request = new XMLHttpRequest();"
 " request.onreadystatechange = function() {"
 " if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Status').innerHTML=this.responseText;}};"
-" request.open('GET','status'+nocache,true);request.send(null);}";
+" request.open('GET','status'+nocache,true); request.send(null);}";
 const char html_ajax_active2[] PROGMEM = 
 #ifdef WEATHER_ON
 "var autoWeather=setInterval(Weather,30000);"
@@ -82,11 +82,23 @@ const char html_ajax_active2[] PROGMEM =
 " var request = new XMLHttpRequest();"
 " request.onreadystatechange = function() {"
 " if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Weather').innerHTML=this.responseText;}};"
-" request.open('GET','weather'+nocache,true);request.send(null);}";
+" request.open('GET','weather'+nocache,true); request.send(null);}";
 #else
 "";
 #endif
 const char html_ajax_active3[] PROGMEM = 
+#ifdef THERMOSTAT_ON
+"var autoTS=setInterval(InsideTemp,30000);"
+"function InsideTemp() {"
+" nocache='?nocache='+Math.random()*1000000;"
+" var request = new XMLHttpRequest();"
+" request.onreadystatechange = function() {"
+" if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Thermostat').innerHTML=this.responseText;}};"
+" request.open('GET','thermostat'+nocache,true); request.send(null);}";
+#else
+"";
+#endif
+const char html_ajax_active4[] PROGMEM = 
 #ifdef ROR_ON
 "var autoRoofStat = setInterval(RoofStatus,2000);"
 "function RoofStatus() {"
@@ -94,7 +106,7 @@ const char html_ajax_active3[] PROGMEM =
 " var request = new XMLHttpRequest();"
 " request.onreadystatechange = function() {"
 " if ((this.readyState==4)&&(this.status==200)) {document.getElementById('RoofStatus').innerHTML=this.responseText;}};"
-" request.open('GET','roof_stat'+nocache,true);request.send(null);}"
+" request.open('GET','roof_stat'+nocache,true); request.send(null);}"
 "</script>\r\n";
 #else
 "</script>\r\n";
@@ -164,12 +176,18 @@ void index(EthernetClient *client) {
     char ws2[20]="";
 
     double T=thermostatInsideTemp();
-    strcpy(ws2," &deg;C");
+    if (T==invalid) {
+      strcpy(ws2,"");
+      strcpy(ws1,"Invalid");
+    } else {
+      strcpy(ws2," &deg;C");
 #ifdef IMPERIAL_UNITS_ON
-    T=T*(9.0/5.0)+32.0;
-    strcpy(ws2," &deg;F");
+      T=T*(9.0/5.0)+32.0;
+      strcpy(ws2," &deg;F");
 #endif
-    strcpy_P(temp1,htmlThermostat1); dtostrf(T,6,1,ws1); sprintf(temp,temp1,ws1,ws2); client->print(temp);
+      dtostrf(T,6,1,ws1);
+    }
+    strcpy_P(temp1,htmlThermostat1); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #ifdef HEAT_RELAY
     strcpy_P(temp,htmlThermostatHeat1); client->print(temp);
 #ifdef IMPERIAL_UNITS_ON
@@ -244,6 +262,7 @@ void index(EthernetClient *client) {
   strcpy_P(temp,html_ajax_active1); client->print(temp);
   strcpy_P(temp,html_ajax_active2); client->print(temp);
   strcpy_P(temp,html_ajax_active3); client->print(temp);
+  strcpy_P(temp,html_ajax_active4); client->print(temp);
   strcpy_P(temp,html_ajax_setRelay); client->print(temp);
   strcpy_P(temp,html_ajax_setVar); client->print(temp);
 

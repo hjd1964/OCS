@@ -251,6 +251,27 @@ void weather(EthernetClient *client) {
 }
 #endif
 
+// thermostat ----------------------------------------------------------------------------------------------------------------
+void thermostat(EthernetClient *client) {
+  char temp[80]="";
+  char ws1[20]="";
+  char ws2[20]="";
+  
+  double T=thermostatInsideTemp();
+  if (T==invalid) {
+    strcpy(ws2,"");
+    strcpy(ws1,"Invalid");
+  } else {
+    strcpy(ws2," &deg;C");
+#ifdef IMPERIAL_UNITS_ON
+    T=T*(9.0/5.0)+32.0;
+    strcpy(ws2," &deg;F");
+#endif
+    dtostrf(T,6,1,ws1);
+  }
+  sprintf(temp,"%s%s",ws1,ws2); client->print(temp);
+}
+
 // power ---------------------------------------------------------------------------------------------------------------------
 #ifdef POWER_ON
 const char htmlPower[] PROGMEM =

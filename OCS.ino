@@ -220,6 +220,9 @@ void setup()   {
 #ifdef WEATHER_ON
   www.on("weather",weather);
 #endif
+#ifdef THERMOSTAT_ON
+  www.on("thermostat",thermostat);
+#endif
 #ifdef ROR_ON
   www.on("roof_stat",roof_stat);
 #endif
