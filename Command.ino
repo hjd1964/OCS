@@ -252,21 +252,17 @@ void processCommands() {
         if ((command[1]=='!') && (parameter[0]==0)) {
           roofMaxPower=true;
         } else
-//  :RS#  Roof State
-//         Returns: status code
+//  :RS#  Roof Status
+//         Returns: status string
         if ((command[1]=='S') && (parameter[0]==0)) {
           quietReply=true;
-          reply[0]=roofState; reply[1]=0;
-        } else
-//  :RSE#  Roof Status Expanded
-//         Returns: status string
-        if ((command[1]=='S') && (parameter[0]=='E') && (parameter[1]==0)) {
-          quietReply=true;
+          char ws[10];
           senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
           senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-          if ((senseState[ROR_CLOSED_LIMIT_SENSE]) && (!senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(reply,"CLOSED"); else
-          if ((!senseState[ROR_CLOSED_LIMIT_SENSE]) && (senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(reply,"OPEN"); else
-          strcpy(reply,getRoofStatus().c_str());
+          if ((senseState[ROR_CLOSED_LIMIT_SENSE]) && (!senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(ws,"CLOSED"); else
+          if ((!senseState[ROR_CLOSED_LIMIT_SENSE]) && (senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(ws,"OPEN"); else
+          strcpy(ws,getRoofStatus().c_str());
+          sprintf(reply,"%c,%s",roofState,ws);
         } else
 //  :RSL#  Roof Status Last Error
 //         Returns: status string
