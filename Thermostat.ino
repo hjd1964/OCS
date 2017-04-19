@@ -25,7 +25,7 @@ void thermostat() {
     t2=t1; t1=thermostatInsideTemp(); if (t2==-999) { t2=t1; }
     insideTemperature=(t1+t2)/2.0; // average last two readings
 
-    if (insideTemperature==invalid) {
+    if (abs(insideTemperature-invalid)<0.1) {
 #ifdef HEAT_RELAY
       relayState[HEAT_RELAY]=0; digitalWrite(relayPin[HEAT_RELAY],LOW);
 #endif
