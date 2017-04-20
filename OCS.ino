@@ -232,8 +232,8 @@ void setup()   {
   www.on("/",index);
 
   // Initialize the cmd server, timeout after 500ms
-  Cmd.init(9999,2000);
-  Cmd1.init(9998,2000);
+  Cmd.init(9999,500);
+  Cmd1.init(9998,500);
 
   // Set variables
   roofState          ='i';
