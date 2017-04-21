@@ -169,9 +169,6 @@ void setup()   {
   // Set pins for input
   for (int i=1; i<=6; i++) pinMode(sensePin[i],INPUT);
 
-  // get any weather sensors ready to go
-  weatherInit();
-
   // Initialize EEPROM if necessary
   if (EEPROM_readLong(EE_key)!=19653291L) {
     EEPROM_writeLong(EE_key,19653291L);
@@ -200,7 +197,16 @@ void setup()   {
   #if defined(POWER_DEVICE6_RELAY) && defined(POWER_DEVICE6_MEMORY_ON)
   if ((bool)EEPROM.read(EE_powerDevice_6)) { relayState[atoi(POWER_DEVICE6_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE6_RELAY)],HIGH); }
   #endif
-  
+
+  // get any weather sensors ready to go
+  weatherInit();
+
+  // wait for a moment just to be sure ethernet, etc is up
+  delay(2000);
+#ifdef WATCHDOG_ON
+  wdt_reset();
+#endif
+
   // Initialize serial communications
   Serial.begin(9600);
 
@@ -254,6 +260,7 @@ void setup()   {
   setSyncInterval(24*60*60); // sync time once a day
   startupTime=now();
 #endif
+
 }
 
 void loop()                     
