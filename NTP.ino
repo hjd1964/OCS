@@ -8,7 +8,8 @@ byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 time_t getNtpTime()
 {
-  while (Udp.parsePacket() > 0) ; // discard any previously received packets
+  unsigned long tOut=millis()+3000;
+  while ((Udp.parsePacket() > 0) && (millis() - tOut < 0)) ; // discard any previously received packets
 #ifdef NTP_DEBUG_ON
   Serial.println("Transmit NTP Request");
 #endif
