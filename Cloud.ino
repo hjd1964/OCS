@@ -78,8 +78,9 @@ void clouds(void) {
 
         File dataFile;
         if (!SD.exists(fn)) {
+#ifdef SD_DEBUG_ON
           Serial.println("Data file doesn't exist...");
-
+#endif
           // create the empty file
           dataFile=SD.open(fn, FILE_WRITE); dataFile.close(); // create the file
 
@@ -89,15 +90,23 @@ void clouds(void) {
 
           dataFile=SD.open(fn, FILE_WRITE);
           if (dataFile) {
+#ifdef SD_DEBUG_ON
             Serial.print("Writing file...");
+#endif
             for (int i=0; i<2880; i++) {
+#ifdef SD_DEBUG_ON
               Serial.print("Writing record#"); Serial.println(i);
+#endif
               //               time   sa    sad   lad   p      h     wind  sq
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
               dataFile.write("                                                                              \r\n");
             }
             dataFile.close();
-          } else { Serial.println("Failed to create file"); }
+          } else { 
+#ifdef SD_DEBUG_ON
+            Serial.println("Failed to create file"); 
+#endif
+          }
         }
 
         // write to the sdcard file
@@ -105,26 +114,28 @@ void clouds(void) {
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
-          dataFile.write(temp);  dataFile.write(":");                         //00, 8
+          dataFile.write(temp);   dataFile.write(":");                        //00, 8
           dtostrf2(sa,5,1,temp);  dataFile.write(" ");  dataFile.write(temp); //08, 6
           dtostrf2(sad,5,1,temp); dataFile.write(" ");  dataFile.write(temp); //14, 6
           dtostrf2(lad,5,1,temp); dataFile.write(" ");  dataFile.write(temp); //20, 6
           dtostrf2(p,6,1,temp);   dataFile.write(" ");  dataFile.write(temp); //26, 7
           dtostrf2(h,5,1,temp);   dataFile.write(" ");  dataFile.write(temp); //33, 6
-          dtostrf2(weatherWindspeed(),5,1,temp); dataFile.write(temp);        //39, 5
+          dtostrf2(weatherWindspeed(),5,1,temp);  dataFile.write(temp);       //39, 5
           dtostrf2(weatherSkyQuality(),5,2,temp); dataFile.write(temp);       //45, 5
           for (int i=0; i<29; i++) dataFile.write(" ");                       //    29
           dataFile.write("\r\n");                                             //    2
           dataFile.close();
         }
 
-//        int n;
-//        dataFile=SD.open(fn, FILE_READ);
-//        if (dataFile) {
-//          dataFile.seek(logRecordLocation(t)*80L);
-//          n=dataFile.read(temp,80); //Serial.write(temp,n);
-//          dataFile.close();
-//        }
+#ifdef SD_DEBUG_ON
+        int n;
+        dataFile=SD.open(fn, FILE_READ);
+        if (dataFile) {
+          dataFile.seek(logRecordLocation(t)*80L);
+          n=dataFile.read(temp,80); Serial.writeln(temp,n);
+          dataFile.close();
+        }
+#endif
       }
 
       sa=ambientTemp;
