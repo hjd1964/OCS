@@ -6,14 +6,14 @@
 #include <SD.h>
 #endif
 
-EthernetServer server(80);
+EthernetServer _server(80);
 
 void WebServer::init() {
   // start the Ethernet connection and the server:
   setResponseHeader(http_defaultHeader);
 
   Ethernet.begin(mac, ip, myDns, gateway, subnet);
-  server.begin();
+  _server.begin();
 #ifdef WEBSERVER_DEBUG_ON
   Serial.print("www server is at ");
   Serial.println(Ethernet.localIP());
@@ -31,17 +31,18 @@ void WebServer::init() {
 }
 
 void WebServer::handleClient() {
- // listen for incoming clients
-  EthernetClient client = server.available();
-  if (client) {
+  // listen for incoming clients
+  EthernetClient _client;
+  _client = _server.available();
+  if (_client) {
 #ifdef WEBSERVER_DEBUG_ON
     Serial.println("new client");
 #endif
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
-    while (client.connected()) {
-      if (client.available()) {
-        char c = client.read();
+    while (_client.connected()) {
+      if (_client.available()) {
+        char c = _client.read();
 #ifdef WEBSERVER_DEBUG_ON
         Serial.write(c);
 #endif
@@ -89,22 +90,22 @@ void WebServer::handleClient() {
                     Serial.print(thisArg); Serial.print("="); Serial.println(thisVal);
   #endif
                   }
-                  client.print(responseHeader);
-                  (*handlers[i])(&client); // send page content
+                  _client.print(responseHeader);
+                  (*handlers[i])(&_client); // send page content
                   handlerFound=true;
                   break;
                 } else {
 #ifdef SD_CARD_ON
                   // send a 304 header
                   if ((modifiedSinceFound) && true ) {
-                    char temp[255]; strcpy_P(temp,http_js304Header); client.print(temp);
+                    char temp[255]; strcpy_P(temp,http_js304Header); _client.print(temp);
                     handlerFound=true;
                     break;
                   } else {
                     if (handlers_fn[i].indexOf(".js")>0) {
-                      char temp[255]; strcpy_P(temp,http_jsHeader); client.print(temp); 
-                    } else client.print(responseHeader);
-                    sdPage(handlers_fn[i],&client);
+                      char temp[255]; strcpy_P(temp,http_jsHeader); _client.print(temp); 
+                    } else _client.print(responseHeader);
+                    sdPage(handlers_fn[i],&_client);
                     handlerFound=true;
                     break;
                   }
@@ -113,7 +114,7 @@ void WebServer::handleClient() {
               }
             }
             // handle not found
-            if (!handlerFound && (notFoundHandler!=NULL)) (*notFoundHandler)(&client);
+            if (!handlerFound && (notFoundHandler!=NULL)) (*notFoundHandler)(&_client);
 
           } else {
 #ifdef WEBSERVER_DEBUG_ON
@@ -135,7 +136,7 @@ void WebServer::handleClient() {
     // give the web browser time to receive the data
     delay(1);
     // close the connection:
-    client.stop();
+    _client.stop();
     // clear the input buffer
     inputBuffer="";
 #ifdef SD_CARD_ON
