@@ -60,6 +60,7 @@ char CmdServer::read() {
 
 void CmdServer::print(char s[]) {
   if (thisPort==0) return;
+  if (!client.connected()) return;
   lastAccess=millis();
   client.write(s);
 }
