@@ -2,6 +2,7 @@
 // Web server
 
 // misc.
+#define WebSocketTimeOut 10000
 typedef void (* webFunction) (EthernetClient *client);
 
 class WebServer {

@@ -40,7 +40,8 @@ void WebServer::handleClient() {
 #endif
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
-    while (_client.connected()) {
+    unsigned long to=millis()+WebSocketTimeOut;
+    while ((_client.connected()) && (millis()-to>=0)) {
       if (_client.available()) {
         char c = _client.read();
 #ifdef WEBSERVER_DEBUG_ON
@@ -115,7 +116,6 @@ void WebServer::handleClient() {
             }
             // handle not found
             if (!handlerFound && (notFoundHandler!=NULL)) (*notFoundHandler)(&_client);
-
           } else {
 #ifdef WEBSERVER_DEBUG_ON
             Serial.println("Invalid response");
@@ -135,6 +135,9 @@ void WebServer::handleClient() {
     }
     // give the web browser time to receive the data
     delay(1);
+#ifdef WEBSERVER_DEBUG_ON
+    Serial.println("client closing connection");
+#endif
     // close the connection:
     _client.stop();
     // clear the input buffer
