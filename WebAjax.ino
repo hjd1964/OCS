@@ -137,7 +137,9 @@ void ocsstatus(EthernetClient *client) {
 }
 
 double to12V(double d) {
-  d=(d/245.76)*12.0;  // For a voltage divider 12V/10: (1024*1.2)/5=245.76 
+  d=(d/1023.0);                // 0..1 for ADC range
+  d=d*5.0;                     // 0..5 for Volts
+  d=d/(220.0/(220.0+2200.0));  // a resistor divider 220 Ohm and 2.2K Ohm
   return d;
 }
 
