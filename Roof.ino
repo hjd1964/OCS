@@ -34,7 +34,7 @@ void openRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>4000) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_FAIL*1000) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
@@ -100,7 +100,7 @@ void closeRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>4000) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_FAIL*1000) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle
