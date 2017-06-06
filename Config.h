@@ -2,7 +2,7 @@
 // Configure options
 
 // ========= Also remember to see Weather.ino and Thermostat.ino to setup any sensors ==========
-//
+
 // Relay's are mapped to digital output pins: 23,25,27,29,31,33,35,37,39,41,43,45,47,49
 //                                    Relay#:  1  2  3  4  5  6  7  8  9 10 11 12 13 14
 //
@@ -15,6 +15,7 @@
 // Analog inputs are not mapped (at the analog pin#)
 
 #define NTP_DEBUG_OFF
+#define SD_DEBUG_OFF
 #define WEBSERVER_DEBUG_OFF
 #define CMDSERVER_DEBUG_OFF
 #define AJAX_RELAY_DEBUG_OFF
@@ -49,8 +50,8 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 // Status panel is always ON, use _OFF to disable individual items
 #define STAT_MAINS_SENSE_OFF        // Sense# for mains power good, mains power failure is considered UNSAFE
 #define STAT_TIME_NTP_ON            // I use NTP for time, adding an RTC or GPS for time instead should be easy too, see: https://github.com/PaulStoffregen/Time
-#define STAT_12V_BAT_ANALOG 0       // Analog# for 12V roof battery voltage (these have a voltage divider /100 so 12V = 1.2V)
-#define STAT_12V_PS_ANALOG 1        // Analog# for 12V power supply voltage (these have a voltage divider /100 so 12V = 1.2V)
+#define STAT_12V_BAT_ANALOG A0      // Analog# for 12V roof battery voltage (these have a voltage divider /100 so 12V = 1.2V)
+#define STAT_12V_PS_ANALOG A1       // Analog# for 12V power supply voltage (these have a voltage divider /100 so 12V = 1.2V)
 
 // Weather panel (see Weather.ino for more info.)
 // The charts on the Weather and Sky Conditions web pages use "Chart.js" from http://www.chartjs.org/
@@ -139,6 +140,8 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_SOFTSTART_ON
 // Average amount of time to open/close the roof (in seconds), default=220
 #define ROR_TIME_AVG 220
+// Amount of time until limit switch fail to disengage error (in seconds), default=6
+#define ROR_TIME_LIMIT_FAIL 6
 // Additional time +/- (in seconds,) > this range and the roof is stopped/error thrown, default=22
 #define ROR_TIME_TOL 22
 
