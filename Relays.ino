@@ -44,6 +44,7 @@ void RelayPwmISR() {
       if ((!roofMaxPower) && ((roofCurrentPower/10)==slowPwmCycle)) { relayState[ROR_PWR_RELAY]=0; digitalWrite(relayPin[ROR_PWR_RELAY],LOW); }
     }
   } else {
+    count=0; slowPwmCycle=0;
     if (relayState[ROR_PWR_RELAY]==1) { relayState[ROR_PWR_RELAY]=0; digitalWrite(relayPin[ROR_PWR_RELAY],LOW); }
   }
 #endif
