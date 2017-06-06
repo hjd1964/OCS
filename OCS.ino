@@ -34,7 +34,7 @@
  */
 
 // firmware info
-#define FirmwareDate   "04 18 17"
+#define FirmwareDate   "06 06 17"
 #define FirmwareNumber "1.0a"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   "12:00:00"
@@ -159,6 +159,10 @@ float insideTemperature;
 #define invalid -1000
   
 void setup()   {
+
+  // Initialize serial communications
+  Serial.begin(9600);
+  
   #ifdef WATCHDOG_ON
   wdt_enable(WDTO_8S);
   #endif
@@ -201,14 +205,24 @@ void setup()   {
   // get any weather sensors ready to go
   weatherInit();
 
-  // wait for a moment just to be sure ethernet, etc is up
-  delay(2000);
-#ifdef WATCHDOG_ON
-  wdt_reset();
+  // hold ethernet shield in reset
+#ifdef ETHERNET_RESET
+  pinMode(ETHERNET_RESET,OUTPUT);
+  digitalWrite(ETHERNET_RESET,LOW);
 #endif
 
-  // Initialize serial communications
-  Serial.begin(9600);
+  // wait for a bit just to be sure ethernet, etc. is up
+  for (int l=0; l<5; l++) {
+    delay(1000);
+#ifdef WATCHDOG_ON
+    wdt_reset();
+#endif
+  }
+
+  // let ethernet shield run
+#ifdef ETHERNET_RESET
+  digitalWrite(ETHERNET_RESET,HIGH);
+#endif
 
   // Initialize the webserver
   www.setResponseHeader(http_defaultHeader);
@@ -346,4 +360,3 @@ if (now()<365UL*24UL*60UL*60UL) {
 bool validTime() {
   return (now()<315360000);
 }
-
