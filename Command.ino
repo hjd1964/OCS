@@ -256,12 +256,13 @@ void processCommands() {
 //         Returns: status string
         if ((command[1]=='S') && (parameter[0]==0)) {
           quietReply=true;
-          char ws[10];
+          char ws[128];
           senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
           senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
           if ((senseState[ROR_CLOSED_LIMIT_SENSE]) && (!senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(ws,"CLOSED"); else
           if ((!senseState[ROR_CLOSED_LIMIT_SENSE]) && (senseState[ROR_OPENED_LIMIT_SENSE])) strcpy(ws,"OPEN"); else
           strcpy(ws,getRoofStatus().c_str());
+          ws[47]=0; // never longer than 47 chars
           sprintf(reply,"%c,%s",roofState,ws);
         } else
 //  :RSL#  Roof Status Last Error
