@@ -270,11 +270,11 @@ void stopRoof() {
 String getRoofStatus() {
   String s="";
   if (roofStatusRegister&128) s="Open Error: Unknown error"; else
-  if (roofStatusRegister&64) s="Open Error: Closed limit sw fail"; else
+  if (roofStatusRegister&64) s="Open Error: Limit sw fail"; else
   if (roofStatusRegister&32) s="Open Error: Over time"; else
   if (roofStatusRegister&16) s="Open Error: Under time"; else
   if (roofStatusRegister&8) s="Close Error: Unknown error"; else
-  if (roofStatusRegister&4) s="Close Error: Open limit sw fail"; else
+  if (roofStatusRegister&4) s="Close Error: Limit sw fail"; else
   if (roofStatusRegister&2) s="Close Error: Over time"; else
   if (roofStatusRegister&1) s="Close Error: Under time";
   if (s=="") {
