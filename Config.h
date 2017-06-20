@@ -22,6 +22,11 @@
 
 // Network settings ----------------------------------------------------------
 
+// If the reset pins between the Ethernet Shield and Arduino are physically disconnected you can wire
+// the Ethernet Shield reset pin to an Arduino pin (specified here) to perform the reset, default is OFF
+// This shouldn't be used unless the Ethernet Shield is misbehaving.  I use "ETHERNET_RESET 8"
+#define ETHERNET_RESET_OFF
+
 // Enter an MAC address for your controller
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
