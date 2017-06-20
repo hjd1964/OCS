@@ -51,8 +51,8 @@ void RelayPwmISR() {
 
 #ifdef ROR_ON
   // ROR safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
-  if ((relayState[ROR_DIR_RELAY_A]==1) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]))) { digitalWrite(relayState[ROR_DIR_RELAY_A], LOW); relayState[ROR_DIR_RELAY_A]=0; }
-  if ((relayState[ROR_DIR_RELAY_B]==1) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]))) { digitalWrite(relayState[ROR_DIR_RELAY_B], LOW); relayState[ROR_DIR_RELAY_B]=0; }
+  if ((relayState[ROR_DIR_RELAY_A]==1) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]))) { digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW); relayState[ROR_DIR_RELAY_A]=0; roofState='i'; roofSafetyOverride=false; roofMaxPower=false; }
+  if ((relayState[ROR_DIR_RELAY_B]==1) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]))) { digitalWrite(relayPin[ROR_DIR_RELAY_B], LOW); relayState[ROR_DIR_RELAY_B]=0; roofState='i'; roofSafetyOverride=false; roofMaxPower=false; }
 #endif
 
 }
