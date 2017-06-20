@@ -89,7 +89,7 @@ bool fastNTPSync=false;
 // relayPin[12]              Pin output to Relay 12 (Observing room White lights)
 // relayPin[13]              Pin output to Relay 13 (Aux - no relay on my setup)
 // relayPin[14]              Pin output to Relay 14 (Roof MOSFET - no relay on my setup)
-int relayPin[] = {-1,23,25,27,29,31,33,35,37,39,41,43,45,47,49};
+volatile int relayPin[] = {-1,23,25,27,29,31,33,35,37,39,41,43,45,47,49};
 volatile byte relayState[] = {-1,0,0,0,0,0,0,0,0,0,0,0,0};
 
 // sensePin[1]               Pin input from Sense 1 (roof closed limit switch)
@@ -98,7 +98,7 @@ volatile byte relayState[] = {-1,0,0,0,0,0,0,0,0,0,0,0,0};
 // sensePin[4]               Pin input from Sense 4 (power good)
 // sensePin[5]               Pin input from Sense 5 (not used)
 // sensePin[6]               Pin input from Sense 6 (not used)
-int sensePin[] = {-1,22,24,26,28,30,32};
+volatile int sensePin[] = {-1,22,24,26,28,30,32};
 volatile byte senseState[] = {-1,0,0,0,0,0,0};
 
 // Analog0                   Analog input from A0   (12V battery)
@@ -138,10 +138,10 @@ byte roofStatusRegister;
 String roofLastError="";
 
 // Global Roof state
-char    roofState = 'i';
-boolean roofSafetyOverride = false;
-boolean roofMaxPower = false;
-int     roofCurrentPower = 0;
+volatile char    roofState = 'i';
+volatile boolean roofSafetyOverride = false;
+volatile boolean roofMaxPower = false;
+volatile int     roofCurrentPower = 0;
 #ifdef ROR_AUTOCLOSE_DAWN_DEFAULT_ON
 boolean roofAutoClose = true;
 #else
@@ -360,3 +360,4 @@ if (now()<365UL*24UL*60UL*60UL) {
 bool validTime() {
   return (now()<315360000);
 }
+
