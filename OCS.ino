@@ -210,7 +210,7 @@ void setup()   {
   pinMode(ETHERNET_RESET,OUTPUT);
   digitalWrite(ETHERNET_RESET,LOW);
 
-  for (int l=0; l<ETHERNET_RESET; l++) {
+  for (int l=0; l<2; l++) {
     delay(1000);
   #ifdef WATCHDOG_ON
     wdt_reset();
