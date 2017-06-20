@@ -210,10 +210,12 @@ void setup()   {
   pinMode(ETHERNET_RESET,OUTPUT);
   digitalWrite(ETHERNET_RESET,LOW);
 
+  for (int l=0; l<ETHERNET_RESET; l++) {
     delay(1000);
   #ifdef WATCHDOG_ON
     wdt_reset();
   #endif
+  }
 
   // let ethernet shield run
   digitalWrite(ETHERNET_RESET,HIGH);
