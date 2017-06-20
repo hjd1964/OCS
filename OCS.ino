@@ -205,24 +205,27 @@ void setup()   {
   // get any weather sensors ready to go
   weatherInit();
 
-  // hold ethernet shield in reset
 #ifdef ETHERNET_RESET
+  // hold ethernet shield in reset
   pinMode(ETHERNET_RESET,OUTPUT);
   digitalWrite(ETHERNET_RESET,LOW);
+
+    delay(1000);
+  #ifdef WATCHDOG_ON
+    wdt_reset();
+  #endif
+
+  // let ethernet shield run
+  digitalWrite(ETHERNET_RESET,HIGH);
 #endif
 
   // wait for a bit just to be sure ethernet, etc. is up
-  for (int l=0; l<5; l++) {
+  for (int l=0; l<3; l++) {
     delay(1000);
 #ifdef WATCHDOG_ON
     wdt_reset();
 #endif
   }
-
-  // let ethernet shield run
-#ifdef ETHERNET_RESET
-  digitalWrite(ETHERNET_RESET,HIGH);
-#endif
 
   // Initialize the webserver
   www.setResponseHeader(http_defaultHeader);
