@@ -65,10 +65,7 @@ void openRoof() {
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW);
-      relayState[ROR_DIR_RELAY_A]=0;
-      // Reset the status register
-      // roofStatusRegister=0;
+      digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW); relayState[ROR_DIR_RELAY_A]=0;
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -131,10 +128,7 @@ void closeRoof() {
     // Finished closing? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      digitalWrite(relayPin[ROR_DIR_RELAY_B],LOW);
-      relayState[ROR_DIR_RELAY_B]=0;
-      // Reset the status register
-      // roofStatusRegister=0;
+      digitalWrite(relayPin[ROR_DIR_RELAY_B],LOW); relayState[ROR_DIR_RELAY_B]=0;
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
