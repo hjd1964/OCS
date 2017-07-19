@@ -34,7 +34,7 @@
  */
 
 // firmware info
-#define FirmwareDate   "06 06 17"
+#define FirmwareDate   "07 17 17"
 #define FirmwareNumber "1.0a"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   "12:00:00"
@@ -66,7 +66,7 @@ CmdServer Cmd1;
 EthernetUDP Udp;
 // local port to listen for UDP packets
 unsigned int localPort = 8888;
-time_t startupTime;
+time_t startupTime = 0;
 bool fastNTPSync=false;
 #endif
 
@@ -277,7 +277,7 @@ void setup()   {
 #endif
   setSyncProvider(getNtpTime);
   setSyncInterval(24*60*60); // sync time once a day
-  startupTime=now();
+  if (now()>365UL*24UL*60UL*60UL) startupTime=now();
 #endif
 
 }
@@ -293,6 +293,7 @@ void loop()
 if (now()<365UL*24UL*60UL*60UL) {
   if (!fastNTPSync) { setSyncInterval(10*60); fastNTPSync=true; }
 } else {
+  if (startupTime==0) startupTime=now();
   if (fastNTPSync) { setSyncInterval(24*60*60); fastNTPSync=false; }
 }
 #endif
