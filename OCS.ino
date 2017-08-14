@@ -34,7 +34,7 @@
  */
 
 // firmware info
-#define FirmwareDate   "07 17 17"
+#define FirmwareDate   "08 14 17"
 #define FirmwareNumber "1.0a"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   "12:00:00"
@@ -73,33 +73,45 @@ bool fastNTPSync=false;
 // pin assignments
 // Note that pins 4, 10, 50, 51, 52, 53 are used for SD card and W5100 Ethernet (SPI interface on pins 50-53)
 
-// high current mechanical relays (PWM isn't enabled on these)
-// relayPin[1]               Pin output to Relay 1  (Outside flood lights)
-// relayPin[2]               Pin output to Relay 2  (12V Power supply)
-// relayPin[3]               Pin output to Relay 3  (Outlets for computer)
-// relayPin[4]               Pin output to Relay 4  (Heater)
-// relayPin[5]               Pin output to Relay 5  (Outlets for telescope)
-// relayPin[6]               Pin output to Relay 6  (Fan/AC, not used)
-// lower current solid state relays (PWM is enabled on these)
-// relayPin[7]               Pin output to Relay 7  (Roof direction relay, open)
-// relayPin[8]               Pin output to Relay 8  (Roof direction relay, close)
-// relayPin[9]               Pin output to Relay 9  (Warm room Red lights)
-// relayPin[10]              Pin output to Relay 10 (Observing room Red lights)
-// relayPin[11]              Pin output to Relay 11 (Warm room White lights)
-// relayPin[12]              Pin output to Relay 12 (Observing room White lights)
-// relayPin[13]              Pin output to Relay 13 (Aux - no relay on my setup)
-// relayPin[14]              Pin output to Relay 14 (Roof MOSFET - no relay on my setup)
-volatile int relayPin[] = {-1,23,25,27,29,31,33,35,37,39,41,43,45,47,49};
-volatile byte relayState[] = {-1,0,0,0,0,0,0,0,0,0,0,0,0};
+typedef struct {
+  uint8_t pin;
+  uint8_t onState;
+} relay_t;
+const volatile relay_t relay[] {
+  {-1, HIGH},               // not used
+  {23, HIGH},               // Pin output to Relay 1  (Outside flood lights)
+  {25, HIGH},               // Pin output to Relay 2  (12V Power supply)
+  {27, HIGH},               // Pin output to Relay 3  (Outlets for computer)
+  {29, HIGH},               // Pin output to Relay 4  (Heater)
+  {31, HIGH},               // Pin output to Relay 5  (Outlets for telescope)
+  {33, HIGH},               // Pin output to Relay 6  (Fan/AC, not used)
+// solid state relays (PWM is enabled on these)
+  {35, HIGH},               // Pin output to Relay 7  (Roof direction relay, open)
+  {37, HIGH},               // Pin output to Relay 8  (Roof direction relay, close)
+  {39, HIGH},               // Pin output to Relay 9  (Warm room Red lights)
+  {41, HIGH},               // Pin output to Relay 10 (Observing room Red lights)
+  {43, HIGH},               // Pin output to Relay 11 (Warm room White lights)
+  {45, HIGH},               // Pin output to Relay 12 (Observing room White lights)
+  {47, HIGH},               // Pin output to Relay 13 (Aux - no relay on my setup)
+  {49, HIGH}                // Pin output to Relay 14 (Roof MOSFET - no relay on my setup)
+};
+volatile uint8_t relayState[] = {-1,0,0,0,0,0,0,0,0,0,0,0,0};
 
-// sensePin[1]               Pin input from Sense 1 (roof closed limit switch)
-// sensePin[2]               Pin input from Sense 2 (roof open   limit switch)
-// sensePin[3]               Pin input from Sense 3 (wall switch)
-// sensePin[4]               Pin input from Sense 4 (power good)
-// sensePin[5]               Pin input from Sense 5 (not used)
-// sensePin[6]               Pin input from Sense 6 (not used)
-volatile int sensePin[] = {-1,22,24,26,28,30,32};
-volatile byte senseState[] = {-1,0,0,0,0,0,0};
+typedef struct {
+  uint8_t pin;
+  uint8_t mode;
+  uint8_t onState;
+} sense_t;
+const volatile sense_t sense[] {
+  {-1, INPUT, HIGH},        // not used
+  {22, INPUT, HIGH},        // Pin input from Sense 1 (roof closed limit switch)
+  {24, INPUT, HIGH},        // Pin input from Sense 2 (roof open   limit switch)
+  {26, INPUT, HIGH},        // Pin input from Sense 3 (wall switch)
+  {28, INPUT, HIGH},        // Pin input from Sense 4 (power good)
+  {30, INPUT, HIGH},        // Pin input from Sense 5 (not used)
+  {32, INPUT, HIGH}         // Pin input from Sense 6 (not used)
+};
+volatile uint8_t senseState[] = {-1,0,0,0,0,0,0};
 
 // Analog0                   Analog input from A0   (12V battery)
 // Analog1                   Analog input from A1   (12V power supply)
@@ -125,23 +137,7 @@ volatile int analogState[] = {0,0,0,0,0,0};
 #define EE_powerDevice_5   204
 #define EE_powerDevice_6   205
 
-// Roof Status and Errors
-// bit 7 = not used, reserved
-// bit 6 = open roof failed with closed limit switch failure to disengage
-// bit 5 = open roof failed with over time
-// bit 4 = open roof failed with under time
-// bit 3 = not used, reserved
-// bit 2 = close roof failed with open limit switch failure to disengage
-// bit 1 = close roof failed with over time
-// bit 0 = close roof failed with under time
-byte roofStatusRegister;
-String roofLastError="";
-
-// Global Roof state
-volatile char    roofState = 'i';
-volatile boolean roofSafetyOverride = false;
-volatile boolean roofMaxPower = false;
-volatile int     roofCurrentPower = 0;
+// roof
 #ifdef ROR_AUTOCLOSE_DAWN_DEFAULT_ON
 boolean roofAutoClose = true;
 #else
@@ -168,10 +164,10 @@ void setup()   {
   #endif
 
   // Set pins for direct relay control
-  for (int i=1; i<=14; i++) pinMode(relayPin[i],OUTPUT);
+  for (int i=1; i<=14; i++) { pinMode(relay[i].pin,OUTPUT); setRelayOff(i); }
 
   // Set pins for input
-  for (int i=1; i<=6; i++) pinMode(sensePin[i],INPUT);
+  for (int i=1; i<=6; i++) pinMode(sense[i].pin,sense[i].mode);
 
   // Initialize EEPROM if necessary
   if (EEPROM_readLong(EE_key)!=19653291L) {
@@ -184,26 +180,32 @@ void setup()   {
 
   // Restore relay state
   #if defined(POWER_DEVICE1_RELAY) && defined(POWER_DEVICE1_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_1)) { relayState[atoi(POWER_DEVICE1_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE1_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_1)) { setRelayOn(atoi(POWER_DEVICE1_RELAY)); }
   #endif
   #if defined(POWER_DEVICE2_RELAY) && defined(POWER_DEVICE2_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_2)) { relayState[atoi(POWER_DEVICE2_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE2_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_2)) { setRelayOn(atoi(POWER_DEVICE2_RELAY)); }
   #endif
   #if defined(POWER_DEVICE3_RELAY) && defined(POWER_DEVICE3_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_3)) { relayState[atoi(POWER_DEVICE3_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE3_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_3)) { setRelayOn(atoi(POWER_DEVICE3_RELAY)); }
   #endif
   #if defined(POWER_DEVICE4_RELAY) && defined(POWER_DEVICE4_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_4)) { relayState[atoi(POWER_DEVICE4_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE4_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_4)) { setRelayOn(atoi(POWER_DEVICE4_RELAY)); }
   #endif
   #if defined(POWER_DEVICE5_RELAY) && defined(POWER_DEVICE5_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_5)) { relayState[atoi(POWER_DEVICE5_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE5_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_5)) { setRelayOn(atoi(POWER_DEVICE5_RELAY)); }
   #endif
   #if defined(POWER_DEVICE6_RELAY) && defined(POWER_DEVICE6_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_6)) { relayState[atoi(POWER_DEVICE6_RELAY)]=1; digitalWrite(relayPin[atoi(POWER_DEVICE6_RELAY)],HIGH); }
+  if ((bool)EEPROM.read(EE_powerDevice_6)) { setRelayOn(atoi(POWER_DEVICE6_RELAY)); }
   #endif
 
-  // get any weather sensors ready to go
+  // get ready to go
   weatherInit();
+#ifdef ROOF_ON
+  roofInit();
+#endif
+#ifdef THERMOSTAT_ON
+  thermostatInit();
+#endif
 
 #ifdef ETHERNET_RESET
   // hold ethernet shield in reset
@@ -239,17 +241,20 @@ void setup()   {
   www.on("skypage.htm",skyPage);
 #endif
 #endif
-  www.on("relay",relay);
+  www.on("relay",relays);
   www.on("setvar",setvar);
-  www.on("status",ocsstatus);
+  www.on("miscstatus",miscstatus);
 #ifdef WEATHER_ON
   www.on("weather",weather);
 #endif
 #ifdef THERMOSTAT_ON
   www.on("thermostat",thermostat);
+#ifdef THERMOSTAT_HUMIDITY_ON
+  www.on("thermostath",thermostath);
+#endif
 #endif
 #ifdef ROR_ON
-  www.on("roof_stat",roof_stat);
+  www.on("roofstatus",roofstatus);
 #endif
 #ifdef SD_CARD_ON
   www.on("Chart.js");
@@ -261,7 +266,6 @@ void setup()   {
   Cmd1.init(9998,500);
 
   // Set variables
-  roofState          ='i';
   msFiveMinuteCounter=millis()+5000UL;
   tst                =millis()+30000UL;
   insideTemperature  =-999.0;
@@ -313,10 +317,8 @@ if (now()<365UL*24UL*60UL*60UL) {
 
 #ifdef LIGHT_SW_SENSE
   // The wall switch controls LED lights
-  if (digitalRead(sensePin[LIGHT_SW_SENSE])!=senseState[LIGHT_SW_SENSE]) {
-    senseState[LIGHT_SW_SENSE]=digitalRead(sensePin[LIGHT_SW_SENSE]);
-    digitalWrite(relayPin[atoi(LIGHT_WRW_RELAY)], senseState[LIGHT_SW_SENSE]);
-    if (senseState[LIGHT_SW_SENSE]==HIGH) relayState[atoi(LIGHT_WRW_RELAY)]=1; else relayState[atoi(LIGHT_WRW_RELAY)]=0;
+  if (senseChanged(LIGHT_SW_SENSE)) {
+    if (senseIsOn(LIGHT_SW_SENSE)) setRelayOn(atoi(LIGHT_WRW_RELAY)); else setRelayOff(atoi(LIGHT_WRW_RELAY));
   }
 #endif
 
@@ -335,9 +337,9 @@ if (now()<365UL*24UL*60UL*60UL) {
   if ((roofAutoClose) && (validTime())) {
     if ((hour()==8) && (!roofAutoCloseInitiated)) {
       // if motion is idle
-      if (!isRoofMoving()) {
+      if (!roofIsMoving()) {
         // and the roof isn't closed, close it
-        if (!isRoofClosed()) startRoofClose();
+        if (!roofIsClosed()) startRoofClose();
         roofAutoCloseInitiated=true;
       }
     }
@@ -348,19 +350,17 @@ if (now()<365UL*24UL*60UL*60UL) {
   // close the roof if safety status calls for it
   if (!isSafe()) {
     // if the roof isn't closed, and motion is idle, close it
-    if ((!isRoofClosed()) && (!isRoofMoving()) startRoofClose();
+    if ((!roofIsClosed()) && (!roofIsMoving()) startRoofClose();
   }
 #endif
 
-  // Open the roof, keeping track of time limit and sensor status
-  if (roofState=='o') openRoof();
-
-  // Close the roof, keeping track of time limit and sensor status
-  if (roofState=='c') closeRoof();
+  if (roofIsMoving()) moveRoof();
 #endif
 
   // Watch clouds
+#ifdef WEATHER_ON
   clouds();
+#endif
 }
 
 bool validTime() {

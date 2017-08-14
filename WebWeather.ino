@@ -1,3 +1,6 @@
+// -----------------------------------------------------------------------------------
+// Web server, Weather charts
+
 #if defined(WEATHER_ON) && defined(SD_CARD_ON)
 
 const char ChartJs1[] PROGMEM =
@@ -29,7 +32,7 @@ const char ChartJs4[] PROGMEM =
       "}]"
     "}"
   "}"
-"});\r\n";
+"});\n";
 
 const char ChartOptions1a[] PROGMEM = 
 "<form method=\"get\" action=\"/weatherpage.htm\">";
@@ -84,7 +87,11 @@ void weatherPage(EthernetClient *client) {
 #endif
 #endif
 #ifdef WEATHER_WIND_SPD_ON
+#ifdef  IMPERIAL_UNITS_ON
+  makeChartJs(client,"WS","Wind Speed mph (last "+periodStr+")",-39,5,0,50,10,period);
+#else
   makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
+#endif
 #endif
 #ifdef WEATHER_PRESSURE_ON
   makeChartJs(client,"BP","Absolute Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE-40,WEATHER_NOMINAL_PRESSURE+40,10,period);
@@ -207,8 +214,9 @@ void makeChartJs(EthernetClient *client, char chartId[], String chartName, int l
       int j=abs(logColumn); while ((ws1[j]==' ') && (ws1[j]!=0)) j++;
       strcpy(ws2,(char*)&(ws1[j]));
       if (ws2[0]!=0) {
-        double f=atof(ws2); 
-        if (logColumn<0) f=f*(9.0/5.0)+32.0;
+        double f=atof(ws2);
+        if (logColumn==-8) f=f*(9.0/5.0)+32.0; // temperature C to F
+        if (logColumn==-39) f=f*0.621371;      // wind kph to mph
         dtostrf(f,1,1,ws2);
         if (hours==1) dtostrf((120-i)/2.0,1,1,ws1);
         if (hours==24) dtostrf((120-i)/5.0,1,1,ws1);

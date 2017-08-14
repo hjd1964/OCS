@@ -51,12 +51,13 @@ void WebServer::handleClient() {
 
         // if you've gotten to the end of the line (received a newline character) and the line is blank, the http request has ended, send a reply
         if (c == '\n' && currentLineIsBlank) {
-
           // grab the URL
-          int url_start=inputBuffer.indexOf("GET ");
-          int url_end=inputBuffer.indexOf("HTTP/");
+          int url_start=inputBuffer.indexOf("GET ")+4;
+          int url_end=inputBuffer.indexOf("HTTP/")-1;
+          int url_pageEnd=inputBuffer.indexOf("?"); if (url_pageEnd<0) url_pageEnd=url_end;
           if ((url_start!=-1) && (url_end!=-1)) {
             String command=inputBuffer.substring(url_start,url_end);
+            String page=inputBuffer.substring(url_start,url_pageEnd);
 
 #ifdef SD_CARD_ON
             // watch for cache requests
@@ -66,7 +67,9 @@ void WebServer::handleClient() {
             // pass to handlers
             bool handlerFound=false;
             for (int i=0; i<handler_count; i++) {
-              if (command.indexOf(handlers_fn[i])>=0) {
+              String fn=handlers_fn[i];
+              if (!fn.startsWith("/")) fn="/"+fn;
+              if (page==fn) {
                 // but first, isolate any get parameters and their values
                 command=command.substring(command.indexOf(handlers_fn[i])+handlers_fn[i].length()); 
                 while (command[0]==' ') command=command.substring(1);
@@ -134,7 +137,7 @@ void WebServer::handleClient() {
       }
     }
     // give the web browser time to receive the data
-    delay(1);
+    delay(5);
 #ifdef WEBSERVER_DEBUG_ON
     Serial.println("client closing connection");
 #endif

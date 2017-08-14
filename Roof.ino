@@ -1,18 +1,49 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Roof control functions
+// ======= add your roof support code here =======
 
 #ifdef ROR_ON
-// keep track of what the roof is doing
+
+// roof status and errors
+volatile char roofState = 'i';
+// bit 7 = not used, reserved
+// bit 6 = open roof failed with closed limit switch failure to disengage
+// bit 5 = open roof failed with over time
+// bit 4 = open roof failed with under time
+// bit 3 = not used, reserved
+// bit 2 = close roof failed with open limit switch failure to disengage
+// bit 1 = close roof failed with over time
+// bit 0 = close roof failed with under time
+byte roofStatusRegister=0;
+String roofLastError="";
+
+// roof power and safety
+volatile boolean roofSafetyOverride = false;
+volatile boolean roofMaxPower = false;
+volatile int     roofCurrentPower = 0;
+
+// roof timing and travel
 const long roofTimeAvg        = (long)(ROR_TIME_AVG)*1000L;
 const long roofTimeErrorLimit = (long)(ROR_TIME_TOL)*1000L;
-int  roofPower;
-long secondsOfTravel,lastSecondsOfTravel,lastMillis,msOfTravel,roofOpenStartTime,roofCloseStartTime,
-     timeLeftToOpenNow,timeLeftToOpenAtStart,timeLeftToCloseNow,timeLeftToCloseAtStart;
+long lastSecondsOfTravel,roofOpenStartTime,timeLeftToOpenAtStart,roofCloseStartTime,timeLeftToCloseAtStart;
 long roofTravel=0;
-     
-// open the roof
-void openRoof() {
-    cli(); msOfTravel=((long)millis()-roofOpenStartTime); sei();
+
+// this gets called once on startup to initialize roof operation (required)
+void roofInit() {
+}
+
+// called repeatedly if roof is moving (required)
+void moveRoof() {
+  // Open the roof, keeping track of time limit and sensor status
+  if (roofIsOpening()) continueOpeningRoof();
+
+  // Close the roof, keeping track of time limit and sensor status
+  if (roofIsClosing()) continueClosingRoof();
+}
+
+// called repeatedly to open the roof
+void continueOpeningRoof() {
+    cli(); long msOfTravel=((long)millis()-roofOpenStartTime); sei();
 
 #ifdef ROR_SOFTSTART_ON
     if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
@@ -21,12 +52,12 @@ void openRoof() {
 #endif
 
     // calculate how far we are from opening and closing the roof right now
-    timeLeftToOpenNow=timeLeftToOpenAtStart-msOfTravel;
+    long timeLeftToOpenNow=timeLeftToOpenAtStart-msOfTravel;
     if (timeLeftToOpenNow<0) { timeLeftToOpenNow=0; }
-    timeLeftToCloseNow=roofTimeAvg-timeLeftToOpenNow;
+    long timeLeftToCloseNow=roofTimeAvg-timeLeftToOpenNow;
 
     // keep track of where we are (to the nearest five seconds)
-    secondsOfTravel=round(msOfTravel/5000)*5000;
+    long secondsOfTravel=round(msOfTravel/5000)*5000;
     if (lastSecondsOfTravel!=secondsOfTravel) {
       lastSecondsOfTravel=secondsOfTravel;
       EEPROM_writeLong(EE_timeLeftToOpen,timeLeftToOpenNow);
@@ -34,7 +65,7 @@ void openRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_FAIL*1000) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_FAIL*1000) && senseIsOn(ROR_CLOSED_LIMIT_SENSE))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
@@ -53,8 +84,7 @@ void openRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToOpenAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished opening
-    senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-    if (senseState[ROR_OPENED_LIMIT_SENSE]==HIGH) {
+    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,0);
       EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg);
@@ -65,7 +95,7 @@ void openRoof() {
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW); relayState[ROR_DIR_RELAY_A]=0;
+      setRelayOff(ROR_DIR_RELAY_A);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -73,9 +103,9 @@ void openRoof() {
     }
 }
 
-// close the roof
-void closeRoof() {
-    cli(); msOfTravel=(long)millis()-roofCloseStartTime; sei();
+// called repeatedly to close the roof
+void continueClosingRoof() {
+    cli(); long msOfTravel=(long)millis()-roofCloseStartTime; sei();
 
 #ifdef ROR_SOFTSTART_ON
     if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
@@ -84,12 +114,12 @@ void closeRoof() {
 #endif
     
     // calculate how far we are from opening and closing the roof right now
-    timeLeftToCloseNow=timeLeftToCloseAtStart-msOfTravel;
+    long timeLeftToCloseNow=timeLeftToCloseAtStart-msOfTravel;
     if (timeLeftToCloseNow<0) { timeLeftToCloseNow=0; }
-    timeLeftToOpenNow=roofTimeAvg-timeLeftToCloseNow;
+    long timeLeftToOpenNow=roofTimeAvg-timeLeftToCloseNow;
 
     // keep track of where we are, if power goes out, for example
-    secondsOfTravel=round(msOfTravel/5000)*5000;
+    long secondsOfTravel=round(msOfTravel/5000)*5000;
     if (lastSecondsOfTravel!=secondsOfTravel) {
       lastSecondsOfTravel=secondsOfTravel;
       EEPROM_writeLong(EE_timeLeftToOpen,timeLeftToOpenNow);
@@ -97,7 +127,7 @@ void closeRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_FAIL*1000) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_FAIL*1000) && senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle
@@ -116,8 +146,7 @@ void closeRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToCloseAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished closing
-    senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
-    if (senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) {
+    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) {
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg);
       EEPROM_writeLong(EE_timeLeftToClose,0);
@@ -128,7 +157,7 @@ void closeRoof() {
     // Finished closing? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      digitalWrite(relayPin[ROR_DIR_RELAY_B],LOW); relayState[ROR_DIR_RELAY_B]=0;
+      setRelayOff(ROR_DIR_RELAY_B);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -136,15 +165,13 @@ void closeRoof() {
     }
 }
 
-// Check for command to open the roof
+// Start opening the roof, returns true if successful or false otherwise (required)
 bool startRoofOpen() {
-  if ((roofState=='i') && (relayState[ROR_DIR_RELAY_B]!=1)) {
+  if ((roofState=='i') && (!relayIsOn(ROR_DIR_RELAY_A)) && (!relayIsOn(ROR_DIR_RELAY_B))) {
     // Figure out where the roof is right now best as we can tell...
     // Check for limit switch and reset times
-    senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
-    if (senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-    senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-    if (senseState[ROR_OPENED_LIMIT_SENSE]==HIGH) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
     timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
     timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
 //    Serial.println(sense1);
@@ -153,19 +180,19 @@ bool startRoofOpen() {
 
     // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
     if ((!roofSafetyOverride) && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
-      roofLastError="Open Error: Location unknown";
+      roofLastError="Error: Open location unknown";
     } else {
       // Check to see if the roof is already opened
-      if ((senseState[1]==LOW) && (senseState[2]==HIGH)) {
-        roofLastError="Open Warning: Already open";
+      if (senseIsOn(ROR_OPENED_LIMIT_SENSE) && (!senseIsOn(ROR_CLOSED_LIMIT_SENSE))) {
+        roofLastError="Warning: Already open";
       } else {
         // Just one last sanity check before we start moving the roof
-        if ((senseState[1]==HIGH) && (senseState[2]==HIGH)) {
-          roofLastError="Open Error: Limit switch malfunction";
+        if (senseIsOn(ROR_OPENED_LIMIT_SENSE) && senseIsOn(ROR_CLOSED_LIMIT_SENSE)) {
+          roofLastError="Error: Opened/closed limit sw on";
         } else {
           // Set relay/MOSFET
-          relayState[ROR_DIR_RELAY_B]=0; digitalWrite(relayPin[ROR_DIR_RELAY_B],LOW);
-          relayState[ROR_DIR_RELAY_A]=1; digitalWrite(relayPin[ROR_DIR_RELAY_A],HIGH);
+          setRelayOff(ROR_DIR_RELAY_B);
+          setRelayOn(ROR_DIR_RELAY_A);
 
           // Flag status, no errors
           roofState='o';
@@ -186,20 +213,18 @@ bool startRoofOpen() {
       }
     }
   } else {
-    roofLastError="Open Error: Already in motion";
+    roofLastError="Error: Open already in motion";
   }
   return false;
 }
 
-// Check for command to close the roof
+// Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
-  if ((roofState=='i') && (relayState[ROR_DIR_RELAY_A]!=1)) {
+  if ((roofState=='i') && (!relayIsOn(ROR_DIR_RELAY_A)) && (!relayIsOn(ROR_DIR_RELAY_B))) {
     // Figure out where the roof is right now best as we can tell...
     // Check for limit switch and reset times
-    senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
-    if (senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-    senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-    if (senseState[ROR_OPENED_LIMIT_SENSE]==HIGH) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
     timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
     timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
 //    Serial.println(timeLeftToOpenAtStart);
@@ -208,19 +233,19 @@ bool startRoofClose() {
 
     // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
     if ((!roofSafetyOverride) && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
-      roofLastError="Close Error: Location unknown";
+      roofLastError="Error: Close location unknown";
     } else {
       // Check to see if the roof is already closed
-      if ((senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) && (senseState[ROR_OPENED_LIMIT_SENSE]==LOW)) {
-        roofLastError="Close Warning: Already closed";
+      if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
+        roofLastError="Warning: Already closed";
       } else {
         // Just one last sanity check before we start moving the roof
-        if ((senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) && (senseState[ROR_OPENED_LIMIT_SENSE]==HIGH)) {
-          Serial.println("Close Error: Limit switch malfunction");
+        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
+          Serial.println("Error: Closed/opened limit sw on");
         } else {
           // Set relay/MOSFET
-          relayState[ROR_DIR_RELAY_A]=0; digitalWrite(relayPin[ROR_DIR_RELAY_A],LOW);
-          relayState[ROR_DIR_RELAY_B]=1; digitalWrite(relayPin[ROR_DIR_RELAY_B],HIGH);
+          setRelayOff(ROR_DIR_RELAY_A);
+          setRelayOn(ROR_DIR_RELAY_B);
 
           // Flag status, no errors
           roofState='c';
@@ -241,15 +266,13 @@ bool startRoofClose() {
       }
     }
   } else {
-    roofLastError="Close Error: Already in motion";
+    roofLastError="Error: Close already in motion";
   }
   return false;
 }
 
+// stop the roof, this must be ISR safe! (required)
 void stopRoof() {
-  // Reset the status register
-  roofStatusRegister=0;
-  roofLastError="";
   // Reset possible override of roof timer
   roofSafetyOverride=false;
   // Reset roof power to normal level
@@ -257,46 +280,95 @@ void stopRoof() {
   // Set the state to idle
   roofState='i';
   // Stop the winch
-  relayState[ROR_DIR_RELAY_A]=0; digitalWrite(relayPin[ROR_DIR_RELAY_A], LOW);
-  relayState[ROR_DIR_RELAY_B]=0; digitalWrite(relayPin[ROR_DIR_RELAY_B], LOW);
+  setRelayOff(ROR_DIR_RELAY_A);
+  setRelayOff(ROR_DIR_RELAY_B);
 }
 
+// clear errors (required)
+void clearRoofStatus() {
+  // Reset the status register
+  roofStatusRegister=0;
+  roofLastError="";
+}
+
+// returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error" (required)
 String getRoofStatus() {
+  String s=getRoofLastError();
+  if ((s=="") && roofIsMoving()) { s="Travel: "+String(roofTravel)+"%"; } else s="No Error";
+  return s;
+}
+
+// returns an error description string if an error has occured, "" if no error (required)
+String getRoofLastError() {
   String s="";
-  if (roofStatusRegister&128) s="Open Error: Unknown error"; else
-  if (roofStatusRegister&64) s="Open Error: Limit sw fail"; else
-  if (roofStatusRegister&32) s="Open Error: Over time"; else
-  if (roofStatusRegister&16) s="Open Error: Under time"; else
-  if (roofStatusRegister&8) s="Close Error: Unknown error"; else
-  if (roofStatusRegister&4) s="Close Error: Limit sw fail"; else
-  if (roofStatusRegister&2) s="Close Error: Over time"; else
-  if (roofStatusRegister&1) s="Close Error: Under time";
+  if (roofStatusRegister&128) s="Error: Open unknown error"; else
+  if (roofStatusRegister&64) s="Error: Open limit sw fail"; else
+  if (roofStatusRegister&32) s="Error: Open over time"; else
+  if (roofStatusRegister&16) s="Error: Open under time"; else
+  if (roofStatusRegister&8) s="Error: Close unknown error"; else
+  if (roofStatusRegister&4) s="Error: Close limit sw fail"; else
+  if (roofStatusRegister&2) s="Error: Close over time"; else
+  if (roofStatusRegister&1) s="Error: Close under time";
   if (s=="") {
     if (roofState=='i') {
       if (roofLastError=="") {
         // one final check for any wierd relay stuff going on
-        senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
-        senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-        if ((senseState[ROR_CLOSED_LIMIT_SENSE]==HIGH) && (senseState[ROR_OPENED_LIMIT_SENSE]==HIGH)) { s="Error: Limit switch malfunction"; } else s="No Error";
+        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) { s="Error: Limit switch malfunction"; }
       } else s=roofLastError;
-    } else { s="Travel: "+String(roofTravel)+"%"; }
+    }
   }
   return s;
 }
 
-bool isRoofClosed() {
-  senseState[ROR_CLOSED_LIMIT_SENSE]=digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE]);
-  return senseState[ROR_CLOSED_LIMIT_SENSE];
+// true if the roof is closed (required)
+bool roofIsClosed() {
+  return senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE));
 }
 
-bool isRoofOpened() {
-  senseState[ROR_OPENED_LIMIT_SENSE]=digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE]);
-  return senseState[ROR_OPENED_LIMIT_SENSE];
+// true if the roof is opened (required)
+bool roofIsOpened() {
+  return senseIsOn(ROR_OPENED_LIMIT_SENSE) && (!senseIsOn(ROR_CLOSED_LIMIT_SENSE));
 }
 
-bool isRoofMoving() {
+// true if the roof is moving (required)
+bool roofIsMoving() {
   return (roofState!='i');
 }
 
+// true if the roof is moving (closing, required)
+bool roofIsClosing() {
+  return (roofState=='c');
+}
+
+// true if the roof is moving (opening, required)
+bool roofIsOpening() {
+  return (roofState=='o');
+}
+
+// safety override, ignores stuck limit switch and timeout (required)
+void setRoofSafetyOverride() {
+  roofSafetyOverride=true;
+}
+
+// required
+bool roofIsSafetyOverride() {
+  return roofSafetyOverride;
+}
+
+// forces pwm power to 100%
+void setRoofMaxPower() {
+  roofMaxPower=true;
+}
+
+// required
+bool roofMaxPowerOn() {
+  return roofMaxPower;
+}
+
+// for soft start etc, pwm power level (required)
+int roofPowerLevel() {
+  return roofCurrentPower;
+}
+     
 #endif
 

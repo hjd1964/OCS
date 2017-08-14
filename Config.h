@@ -43,6 +43,10 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 
 // Your time zone, default = -5 (US Eastern Standard Time)
 #define TimeZone -5
+// display daylight time on webpage...
+#define DST_OFF
+// OR display UTC time on webpage
+#define UTC_OFF
 
 // Status Panel Features -----------------------------------------------------
 
@@ -50,21 +54,26 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define WATCHDOG_OFF
 
 // The OCS uses METRIC units by default
-#define IMPERIAL_UNITS_ON
+#define IMPERIAL_UNITS_OFF
 
 // Status panel is always ON, use _OFF to disable individual items
-#define STAT_MAINS_SENSE_OFF        // Sense# for mains power good, mains power failure is considered UNSAFE
-#define STAT_TIME_NTP_ON            // I use NTP for time, adding an RTC or GPS for time instead should be easy too, see: https://github.com/PaulStoffregen/Time
-#define STAT_12V_BAT_ANALOG A0      // Analog# for 12V roof battery voltage (these have a voltage divider /100 so 12V = 1.2V)
-#define STAT_12V_PS_ANALOG A1       // Analog# for 12V power supply voltage (these have a voltage divider /100 so 12V = 1.2V)
+// See Misc.ino for user voltage and current conversion functions
+#define STAT_TIME_NTP_ON                  // I use NTP for time, adding an RTC or GPS for time instead should be easy too, see: https://github.com/PaulStoffregen/Time
+#define STAT_MAINS_SENSE_OFF              // Sense# for mains power good, mains power failure is considered UNSAFE
+#define STAT_MAINS_CURRENT_ANALOG_OFF     // Analog# for current on mains
+#define STAT_MAINS_AUX_CURRENT_ANALOG_OFF // Analog# for current on mains (Aux.)
+#define STAT_DC_PS_ANALOG A1              // Analog# for 12V power supply voltage (these have a voltage divider /100 so 12V = 1.2V)
+#define STAT_DC_CURRENT_ANALOG_OFF        // Analog# for current sense of DC PS
+#define STAT_BATTERY_ANALOG A0            // Analog# for 12V roof battery voltage (these have a voltage divider /100 so 12V = 1.2V)
+#define STAT_BATTERY_CURRENT_ANALOG_OFF   // Analog# for current sense of DC Battery
 
 // Weather panel (see Weather.ino for more info.)
 // The charts on the Weather and Sky Conditions web pages use "Chart.js" from http://www.chartjs.org/
 // Specifically, version 2.5 of "Chart.min.js" renamed to "Chart.js" and placed in the root directory of the SD card:
 // It can be downloaded from here: https://github.com/chartjs/Chart.js/releases/tag/v2.5.0 (scroll to bottom of page for download links)
 #define WEATHER_ON
-#define SD_CARD_OFF                  // for logging weather an SD card must be present
-#define WEATHER_ALTITUDE 120        // site altitude in meters
+#define SD_CARD_OFF                   // for logging weather an SD card must be present
+#define WEATHER_ALTITUDE 120          // site altitude in meters
 #define WEATHER_INS_TEMP_ON
 #define WEATHER_OUT_TEMP_ON
 #define WEATHER_PRESSURE_ON
@@ -73,9 +82,9 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define WEATHER_WIND_SPD_ON
 #define WEATHER_WIND_SPD_THRESHOLD 10 // above this wind speed (kph) is considered to be UNSAFE
 #define WEATHER_SKY_QUAL_ON
-#define WEATHER_CLOUD_CVR_ON
-#define WEATHER_RAIN_ON              // a "wet" condition is considered to be UNSAFE, default location is on Analog 2
-#define WEATHER_SAFE_THRESHOLD -14  // above this temperature (deg C) is considered to be UNSAFE
+#define WEATHER_CLOUD_CVR_OFF
+#define WEATHER_RAIN_ON               // a "wet" condition is considered to be UNSAFE, default location is on Analog 2
+#define WEATHER_SAFE_THRESHOLD -14    // above this temperature (deg C) is considered to be UNSAFE
 #define WEATHER_VCLR_THRESHOLD -19
 #define WEATHER_CLER_THRESHOLD -17
 #define WEATHER_HAZE_THRESHOLD -14
@@ -109,6 +118,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define THERMOSTAT_ON
 #define HEAT_RELAY 4                // Relay# for heating
 #define COOL_RELAY_OFF              // Relay# for cooling/venting, default=OFF
+#define THERMOSTAT_HUMIDITY_ON      // to display set _ON and add sensor support to Thermostat.ino's thermostatInsideHumidity() function
 
 // Lighting panel (relay number in dbl quotes "",) use _OFF to disable individual items
 #define LIGHT_ON
@@ -121,6 +131,8 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 
 // Roll-off roof panel
 #define ROR_ON
+// allow user safety override, show the "Safety Override" button
+#define ROR_USER_SAFETY_OVERRIDE_ON
 // allow the option of closing the roof automatically at dawn and set it's default state
 #define ROR_AUTOCLOSE_DAWN_OFF
 #define ROR_AUTOCLOSE_DAWN_DEFAULT_OFF
@@ -149,5 +161,4 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_TIME_LIMIT_FAIL 6
 // Additional time +/- (in seconds,) > this range and the roof is stopped/error thrown, default=22
 #define ROR_TIME_TOL 22
-
 

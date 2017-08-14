@@ -1,8 +1,32 @@
 // ----------------------------------------------------------------------------------------------------------------------------------
 // Misc support functions
+// ======== add your adc voltage and current support here =========
+
+// converts a raw analog reading into voltage for STAT_12V_PS_ANALOG and STAT_12V_BAT_ANALOG
+// return (invalid) if not implemented or if there's an error
+double toDC(double d) {
+  d=(d/1023.0);                // 0..1 for ADC range
+  d=d*5.0;                     // 0..5 for Volts
+  d=d/(220.0/(220.0+2200.0));  // a resistor divider 220 Ohm and 2.2K Ohm
+  return d;
+}
+
+// converts a raw analog reading into current for STAT_MAINS_CURRENT_ANALOG and STAT_MAINS_AUX_CURRENT_ANALOG
+// return (invalid) if not implemented or if there's an error
+double toAmps(double d) {
+  return (invalid);
+}
+
+// converts a raw analog reading into current for STAT_DC_CURRENT_ANALOG and STAT_BATTERY_CURRENT_ANALOG
+// return (invalid) if not implemented or if there's an error
+double toDCAmps(double d) {
+  return (invalid);
+}
+// =================================================================
 
 // gets cloud cover in %
 double weatherCloudCover() {
+#if defined(WEATHER_CLOUD_CVR_ON) && defined(WEATHER_ON)
   double s=getAvgSkyDiffTemp();
   if (s <= -200) return (invalid); else
   if (s <= WEATHER_VCLR_THRESHOLD) return 10; else
@@ -15,6 +39,9 @@ double weatherCloudCover() {
   if (s <= (WEATHER_CLDY_THRESHOLD+WEATHER_VCLD_THRESHOLD)/2.0) return 80; else
   if (s <= WEATHER_VCLD_THRESHOLD) return 90; else
   if (s >  WEATHER_VCLD_THRESHOLD) return 100;
+#else
+  return 100;
+#endif
 }
 
 // gets cloud cover text

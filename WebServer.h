@@ -60,7 +60,7 @@ const char html_main_css9[]  PROGMEM = "button { background-color: #A01010; font
 const char html_main_css10[] PROGMEM = ".obsControl { position: relative; font-size: 14px; width: 260px; height: 170px; float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red; }"
                                        ".aStatus { color: #505090; width: 60px; height: 2px; float: right; padding: 0px; margin: 2px; background-color: #CCCCCC;} </STYLE>\r\n";
 
-const char html_head3[]      PROGMEM = "</head>\r\n<body bgcolor=\"#26262A\" \">\r\n";
+const char html_head3[]      PROGMEM = "</head>\r\n<body bgcolor=\"#26262A\">\r\n";
 
 const char html_pageHeader1[] PROGMEM = "<div class=\"t\"><table width=\"100%\"><tr><td><b><font size=\"5\">Observatory Control System</font></b></td><td align=\"right\"><b>" FirmwareName " " FirmwareNumber "</b>";
 const char html_pageHeader2[] PROGMEM = "</td></tr></table>";

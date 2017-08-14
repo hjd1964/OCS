@@ -2,7 +2,7 @@
 // Web server, Index page
 
 const char htmlStatus1[] PROGMEM =
-"<div id=\"Status\" class=\"obsControl\">";
+"<div id=\"MiscStatus\" class=\"obsControl\">";
 const char htmlStatus3[] PROGMEM =
 "</div>\r\n";
 
@@ -19,9 +19,13 @@ const char htmlPower3[] PROGMEM =
 const char htmlThermostat1[] PROGMEM =
 "<div class=\"obsControl\">"
 "<b>Thermostat</b><br />"
-"&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\">%s%s</div><br /><br />"
-"<form name=\"thermostat\" >";
+"&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\">%s%s</div><br />";
+#ifdef THERMOSTAT_HUMIDITY_ON
+const char htmlThermostatHumidity[] PROGMEM =
+"&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\">%s%s</div><br />";
+#endif
 const char htmlThermostatHeat1[] PROGMEM =
+"<form name=\"thermostat\" >"
 "<div>"
 "&nbsp;&nbsp;&nbsp;Heat <span id=\"HeatStatus\"></span>"
 "<select style=\"float:right; margin-right:20px\" onchange='SetVar(\"thermostat_heat\",value)' >";
@@ -53,8 +57,10 @@ const char htmlRoof2[] PROGMEM =
 "</div>"
 "<div style=\"text-align: center\">"
 "<br />"
-"<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />&nbsp;&nbsp;&nbsp;"
-"<input type=\"button\" onclick='SetVar(\"press\",\"roof_override\")' value=\"Safety Override\" />"
+"<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />"
+#ifdef ROR_USER_SAFETY_OVERRIDE_ON
+"&nbsp;&nbsp;&nbsp;<input type=\"button\" onclick='SetVar(\"press\",\"roof_override\")' value=\"Safety Override\" />"
+#endif
 "<br />"
 "<input type=\"button\" onclick='SetVar(\"press\",\"roof_open\")' value=\"Open Roof\" />&nbsp;&nbsp;&nbsp;"
 "<input type=\"button\" onclick='SetVar(\"press\",\"roof_close\")' value=\"Close Roof\" /><br />"
@@ -62,115 +68,119 @@ const char htmlRoof2[] PROGMEM =
 #ifdef ROR_AUTOCLOSE_DAWN_ON
 "<input type=\"checkbox\"  onclick='SetVar(\"auto_close\",this.checked)' %___ACL />&nbsp;Automatically close at dawn<br />"
 #endif
+"</div>"
 "</div>\r\n";
 
 // Javascript for Ajax
-const char html_ajax_active1[] PROGMEM = 
-"<script>"
-"var autoStatus=setInterval(Status,10000);"
-"function Status() {"
-" nocache='?nocache='+Math.random()*1000000;"
-" var request = new XMLHttpRequest();"
-" request.onreadystatechange = function() {"
-" if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Status').innerHTML=this.responseText;}};"
-" request.open('GET','status'+nocache,true); request.send(null);}";
-const char html_ajax_active2[] PROGMEM = 
-#ifdef WEATHER_ON
-"var autoWeather=setInterval(Weather,30000);"
-"function Weather() {"
-" nocache='?nocache='+Math.random()*1000000;"
-" var request = new XMLHttpRequest();"
-" request.onreadystatechange = function() {"
-" if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Weather').innerHTML=this.responseText;}};"
-" request.open('GET','weather'+nocache,true); request.send(null);}";
-#else
-"";
-#endif
-const char html_ajax_active3[] PROGMEM = 
-#ifdef THERMOSTAT_ON
-"var autoTS=setInterval(InsideTemp,30000);"
-"function InsideTemp() {"
-" nocache='?nocache='+Math.random()*1000000;"
-" var request = new XMLHttpRequest();"
-" request.onreadystatechange = function() {"
-" if ((this.readyState==4)&&(this.status==200)) {document.getElementById('Thermostat').innerHTML=this.responseText;}};"
-" request.open('GET','thermostat'+nocache,true); request.send(null);}";
-#else
-"";
-#endif
-const char html_ajax_active4[] PROGMEM = 
-#ifdef ROR_ON
-"var autoRoofStat = setInterval(RoofStatus,2000);"
-"function RoofStatus() {"
-" nocache='?nocache='+Math.random()*1000000;"
-" var request = new XMLHttpRequest();"
-" request.onreadystatechange = function() {"
-" if ((this.readyState==4)&&(this.status==200)) {document.getElementById('RoofStatus').innerHTML=this.responseText;}};"
-" request.open('GET','roof_stat'+nocache,true); request.send(null);}"
-"</script>\r\n";
-#else
-"</script>\r\n";
-#endif
+const char html_ajax_active[] PROGMEM =
+"<script>\n"
+"var auto1Tick=0;\n"
+"var auto1=setInterval(autoRun1s,1000);\n"
+
+"function autoRun1s() {\n"
+  "var pageList = ["
+  "'MiscStatus',15,"
+  #ifdef WEATHER_ON
+  "'Weather',32,"
+  #endif
+  #ifdef THERMOSTAT_ON
+  "'Thermostat',61,"
+  #ifdef THERMOSTAT_HUMIDITY_ON
+  "'ThermostatH',118,"
+  #endif
+  #endif
+  #ifdef ROR_ON
+  "'RoofStatus',3,"
+  #endif
+  "'',0"
+  "];\n"
+
+  "auto1Tick++;\n"
+  "var i;\n"
+  "for (i=0; i<pageList.length-1; i+=2) {\n"
+    "if (auto1Tick%pageList[i+1]==0) {\n"
+      "thisPage=pageList[i];\n"
+      "nocache='?nocache='+Math.random()*1000000;\n"
+      "var request = new XMLHttpRequest();\n"
+      "request.onreadystatechange = pageReady(thisPage);\n"
+      "request.open('GET',thisPage.toLowerCase()+nocache,true); request.send(null);\n"
+    "}"
+  "}"
+"}\n"
+"function pageReady(aPage) {\n"
+  "return function() {\n"
+    "if ((this.readyState==4)&&(this.status==200)) {\n"
+      "document.getElementById(aPage).innerHTML=this.responseText;\n"
+    "}"
+  "}"
+"}\n"
+"</script>\n";
 const char html_ajax_setRelay[] PROGMEM = 
-"<script>function SetRelay(relay,value) {"
-" nocache = '&nocache=' + Math.random() * 1000000;"
-" var request = new XMLHttpRequest();"
-" request.open('GET','relay?r'+relay+'='+value+nocache,true);"
-" request.send(null);"
-"}</script>";
+"<script>\n"
+"function SetRelay(relay,value) {\n"
+  "nocache = '&nocache=' + Math.random() * 1000000;\n"
+  "var request = new XMLHttpRequest();\n"
+  "request.open('GET','relay?r'+relay+'='+value+nocache,true);\n"
+  "request.send(null);\n"
+"}\n"
+"</script>\n";
 const char html_ajax_setVar[] PROGMEM = 
-"<script>function SetVar(name,value) {"
-" nocache = '&nocache=' + Math.random() * 1000000;"
-" var request = new XMLHttpRequest();"
-" request.open('GET','setvar?'+name+'='+value+nocache,true);"
-" request.send(null);"
-"}</script>\r\n";
+"<script>\n"
+"function SetVar(name,value) {\n"
+  "nocache = '&nocache=' + Math.random() * 1000000;\n"
+  "var request = new XMLHttpRequest();\n"
+  "request.open('GET','setvar?'+name+'='+value+nocache,true);\n"
+  "request.send(null);\n"
+"}\n"
+"</script>\n";
 
 void index(EthernetClient *client) {
-  char temp[800]="";
+  {
+    char temp[800]="";
+    // send a standard http response header with some css
+    strcpy_P(temp,html_head1); client->print(temp);
+    strcpy_P(temp,html_main_css1); client->print(temp); 
+    strcpy_P(temp,html_main_css2); client->print(temp);
+    strcpy_P(temp,html_main_css4); client->print(temp);
+    strcpy_P(temp,html_main_css6); client->print(temp);
+    strcpy_P(temp,html_main_css7); client->print(temp);
+    strcpy_P(temp,html_main_css8); client->print(temp);
+    strcpy_P(temp,html_main_css10); client->print(temp);
   
-  // send a standard http response header with some css
-  strcpy_P(temp,html_head1); client->print(temp);
-  strcpy_P(temp,html_main_css1); client->print(temp); 
-  strcpy_P(temp,html_main_css2); client->print(temp);
-  strcpy_P(temp,html_main_css4); client->print(temp);
-  strcpy_P(temp,html_main_css6); client->print(temp);
-  strcpy_P(temp,html_main_css7); client->print(temp);
-  strcpy_P(temp,html_main_css8); client->print(temp);
-  strcpy_P(temp,html_main_css10); client->print(temp);
-
-  strcpy_P(temp,html_head3); client->print(temp);
-
-  strcpy_P(temp,html_pageHeader1); client->print(temp);
-  strcpy_P(temp,html_pageHeader2); client->print(temp);
-  strcpy_P(temp,html_links1s); client->print(temp);
-#if defined(WEATHER_ON) && defined(SD_CARD_ON)
-  strcpy_P(temp,html_links2); client->print(temp);
-#if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
-  strcpy_P(temp,html_links3); client->print(temp);
-#endif
-#endif
-  strcpy_P(temp,html_pageHeader3); client->print(temp);
-
-  // Status
-  strcpy_P(temp,htmlStatus1); client->print(temp);
-  ocsstatus(client);
-  strcpy_P(temp,htmlStatus3); client->print(temp);
+    strcpy_P(temp,html_head3); client->print(temp);
+  
+    strcpy_P(temp,html_pageHeader1); client->print(temp);
+    strcpy_P(temp,html_pageHeader2); client->print(temp);
+    strcpy_P(temp,html_links1s); client->print(temp);
+  #if defined(WEATHER_ON) && defined(SD_CARD_ON)
+    strcpy_P(temp,html_links2); client->print(temp);
+  #if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
+    strcpy_P(temp,html_links3); client->print(temp);
+  #endif
+  #endif
+    strcpy_P(temp,html_pageHeader3); client->print(temp);
+  
+    // Status
+    strcpy_P(temp,htmlStatus1); client->print(temp);
+  }
+  miscstatus(client);
+  { char temp[800]=""; strcpy_P(temp,htmlStatus3); client->print(temp); }
 
 #ifdef WEATHER_ON
-  strcpy_P(temp,htmlWeather1); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlWeather1); client->print(temp); }
   weather(client);
-  strcpy_P(temp,htmlWeather3); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlWeather3); client->print(temp); }
 #endif
 
 #ifdef POWER_ON
-  strcpy_P(temp,htmlPower1); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlPower1); client->print(temp); }
   power(client);
-  strcpy_P(temp,htmlPower3); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlPower3); client->print(temp); }
 #endif
 
 #ifdef THERMOSTAT_ON
   {
+    char temp[512]="";
     char temp1[255]="";
     char ws1[20]="";
     char ws2[20]="";
@@ -188,6 +198,18 @@ void index(EthernetClient *client) {
       dtostrf(T,6,1,ws1);
     }
     strcpy_P(temp1,htmlThermostat1); sprintf(temp,temp1,ws1,ws2); client->print(temp);
+#ifdef THERMOSTAT_HUMIDITY_ON
+    double H=thermostatInsideHumidity();
+    if (H==invalid) {
+      strcpy(ws2,"");
+      strcpy(ws1,"Invalid");
+    } else {
+      strcpy(ws2," %");
+      dtostrf(H,5,1,ws1);
+    }
+    strcpy_P(temp1,htmlThermostatHumidity); sprintf(temp,temp1,ws1,ws2); client->print(temp);
+#endif
+    client->print("<br />");
 #ifdef HEAT_RELAY
     strcpy_P(temp,htmlThermostatHeat1); client->print(temp);
 #ifdef IMPERIAL_UNITS_ON
@@ -215,7 +237,7 @@ void index(EthernetClient *client) {
 #ifdef COOL_RELAY
     strcpy_P(temp,htmlThermostatCool1); client->print(temp);
 #ifdef IMPERIAL_UNITS_ON
-    int c=round(getCeatSetpoint()*(9.0/5.0)+32.0);
+    int c=round(getCoolSetpoint()*(9.0/5.0)+32.0);
     if (getCoolSetpoint()==0) c=0;
 #else
     int c=round(getCoolSetpoint());
@@ -241,30 +263,33 @@ void index(EthernetClient *client) {
 #endif
 
 #ifdef LIGHT_ON
-  strcpy_P(temp,htmlLight1); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlLight1); client->print(temp); }
   light(client);
-  strcpy_P(temp,htmlLight3); client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlLight3); client->print(temp); }
 #endif
 
 #ifdef ROR_ON
-  strcpy_P(temp,htmlRoof1); client->print(temp);
-  roof_stat(client);
-  strcpy_P(temp,htmlRoof2);
-#ifdef ROR_AUTOCLOSE_DAWN_ON
-  if (roofAutoClose) check(temp,"%___ACL"); else erase(temp,"%___ACL");
-#endif
-  client->print(temp);
+  { char temp[800]=""; strcpy_P(temp,htmlRoof1); client->print(temp); }
+  roofstatus(client);
+  { 
+    char temp[800]=""; 
+    strcpy_P(temp,htmlRoof2);
+  #ifdef ROR_AUTOCLOSE_DAWN_ON
+    if (roofAutoClose) check(temp,"%___ACL"); else erase(temp,"%___ACL");
+  #endif
+    client->print(temp);
+  }
 #endif
 
   client->print("</div>\r\n");
   
-  // javascript for ajax relay control
-  strcpy_P(temp,html_ajax_active1); client->print(temp);
-  strcpy_P(temp,html_ajax_active2); client->print(temp);
-  strcpy_P(temp,html_ajax_active3); client->print(temp);
-  strcpy_P(temp,html_ajax_active4); client->print(temp);
-  strcpy_P(temp,html_ajax_setRelay); client->print(temp);
-  strcpy_P(temp,html_ajax_setVar); client->print(temp);
+  { 
+    char temp[800]=""; 
+    // javascript for ajax relay control
+    strcpy_P(temp,html_ajax_active); client->print(temp);
+    strcpy_P(temp,html_ajax_setRelay); client->print(temp);
+    strcpy_P(temp,html_ajax_setVar); client->print(temp);
+  }
 
   client->print("</body></html>\r\n");
 }

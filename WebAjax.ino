@@ -1,20 +1,20 @@
 // -----------------------------------------------------------------------------------
-// Web server, Ajax Pages
+// Web server, Ajax pages
 
-void relay(EthernetClient *client) {
+void relays(EthernetClient *client) {
   for (int i=1; i<=14; i++) {
     String s="r"+String(i);
     String a=www.arg(s);
-    byte state=0;
+    uint8_t state=0;
     if (a!="") {
       if (a=="true") {
-        relayState[i]=1; digitalWrite(relayPin[i],HIGH); state=HIGH;
+        setRelayOn(i); state=(uint8_t)true;
 #ifdef AJAX_RELAY_DEBUG_ON
         Serial.print(s); Serial.println("=on");  
 #endif
       }
       if (a=="false") {
-        relayState[i]=0; digitalWrite(relayPin[i],LOW); state=LOW;
+        setRelayOff(i); state=(uint8_t)false;
 #ifdef AJAX_RELAY_DEBUG_ON
         Serial.print(s); Serial.println("=off"); 
 #endif
@@ -49,23 +49,27 @@ void relay(EthernetClient *client) {
 void setvar(EthernetClient *client) {
   String a=www.arg("press");
   
+// lights
 #ifdef LIGHT_ON
 #ifdef LIGHT_OUTSIDE_RELAY
-  if (a=="light_exit") { relayState[atoi(LIGHT_OUTSIDE_RELAY)]=5; digitalWrite(relayPin[atoi(LIGHT_OUTSIDE_RELAY)],HIGH); }
+  if (a=="light_exit") { 
+    setRelayOnDelayedOff(atoi(LIGHT_OUTSIDE_RELAY),10); // turn off after 10 minutes
+  }
 #endif
 #endif
 
-
+// roll-off roof
 #ifdef ROR_ON
   if (a=="roof_open") { startRoofOpen(); }
   if (a=="roof_close") { startRoofClose(); }
-  if (a=="roof_override") { roofSafetyOverride=true; }
-  if (a=="roof_stop") { stopRoof(); }
+  if (a=="roof_override") { setRoofSafetyOverride(); }
+  if (a=="roof_stop") { stopRoof(); clearRoofStatus(); }
   a=www.arg("auto_close");
   if (a=="true") { roofAutoClose=true; }
   if (a=="false") { roofAutoClose=false; }
 #endif
 
+// thermostat
 #ifdef THERMOSTAT_ON
 #ifdef HEAT_RELAY
   a=www.arg("thermostat_heat");
@@ -96,51 +100,92 @@ void setvar(EthernetClient *client) {
 const char htmlInnerStatus1[] PROGMEM =
 "<b>Status</b><br />";
 const char htmlInnerStatus2[] PROGMEM =
-"&nbsp;&nbsp;Date (Std Time)<div class=\"aStatus\">%s</div><br />";
+"&nbsp;&nbsp;Date (%s Time)<div class=\"aStatus\">%s</div><br />";
 const char htmlInnerStatus3[] PROGMEM =
-"&nbsp;&nbsp;Time (Std Time)<div class=\"aStatus\">%s</div><br />";
+"&nbsp;&nbsp;Time (%s Time)<div class=\"aStatus\">%s</div><br />";
 const char htmlInnerStatus4[] PROGMEM =
 "&nbsp;&nbsp;Up Time (Minutes)<div class=\"aStatus\">%s</div><br /><br />";
 #ifdef STAT_MAINS_SENSE
-const char htmlInnerStatus5[] PROGMEM =
+const char htmlInnerStatusMains[] PROGMEM =
 "&nbsp;&nbsp;Mains Power<div class=\"aStatus\">%s</div><br />";
 #endif
-#ifdef STAT_12V_PS_ANALOG
-const char htmlInnerStatus6[] PROGMEM =
-"&nbsp;&nbsp;Low Voltage Power Supply<div class=\"aStatus\">%sV</div><br />";
+#ifdef STAT_MAINS_CURRENT_ANALOG
+const char htmlInnerStatusMainsA[] PROGMEM =
+"&nbsp;&nbsp;Mains Current<div class=\"aStatus\">%s</div><br />";
 #endif
-#ifdef STAT_12V_BAT_ANALOG
-const char htmlInnerStatus7[] PROGMEM =
-"&nbsp;&nbsp;Roof Battery<div class=\"aStatus\">%sV</div><br />";
+#ifdef STAT_MAINS_AUX_CURRENT_ANALOG
+const char htmlInnerStatusMainsAA[] PROGMEM =
+"&nbsp;&nbsp;Mains Aux Current<div class=\"aStatus\">%s</div><br />";
+#endif
+#ifdef STAT_DC_PS_ANALOG
+const char htmlInnerStatusDC[] PROGMEM =
+"&nbsp;&nbsp;DC Power Supply<div class=\"aStatus\">%s</div><br />";
+#endif
+#ifdef STAT_DC_CURRENT_ANALOG
+const char htmlInnerStatusDCA[] PROGMEM =
+"&nbsp;&nbsp;DC Current<div class=\"aStatus\">%s</div><br />";
+#endif
+#ifdef STAT_BATTERY_ANALOG
+const char htmlInnerStatusBat[] PROGMEM =
+"&nbsp;&nbsp;Battery<div class=\"aStatus\">%s</div><br />";
+#endif
+#ifdef STAT_BATTERY_CURRENT_ANALOG
+const char htmlInnerStatusBatA[] PROGMEM =
+"&nbsp;&nbsp;Battery Current<div class=\"aStatus\">%s</div><br />";
 #endif
 
-void ocsstatus(EthernetClient *client) {
+void miscstatus(EthernetClient *client) {
   char temp[128]="";
   char temp1[128]="";
   char ws1[20]="";
+  char ws2[4]="Std";
+  double f;
 
   strcpy_P(temp,htmlInnerStatus1); client->print(temp);
+
   time_t t=now();
-  strcpy_P(temp1,htmlInnerStatus2); sprintf(ws1,"%02d/%02d/%04d",month(t),day(t),year(t)); sprintf(temp,temp1,ws1); client->print(temp);
-  strcpy_P(temp1,htmlInnerStatus3); sprintf(ws1,"%02d:%02d",hour(t),minute(t)); sprintf(temp,temp1,ws1); client->print(temp);
+#ifdef UTC_ON
+  t-=timeZone*SECS_PER_HOUR; // UTC
+  strcpy(ws2,"UTC");
+#elif defined(DST_ON)
+  t-=timeZone*SECS_PER_HOUR; // UTC
+  if (isDst(year(t),month(t),day(t),hour(t),TimeZone)) {
+    t=now()+SECS_PER_HOUR;   // +1 hour, Daylight Time
+    strcpy(ws2,"Dst");
+  } else t=now();
+#endif
+
+  strcpy_P(temp1,htmlInnerStatus2); sprintf(ws1,"%02d/%02d/%04d",month(t),day(t),year(t)); sprintf(temp,temp1,ws2,ws1); client->print(temp);
+  strcpy_P(temp1,htmlInnerStatus3); sprintf(ws1,"%02d:%02d",hour(t),minute(t)); sprintf(temp,temp1,ws2,ws1); client->print(temp);
   t=(now()-startupTime);
   strcpy_P(temp1,htmlInnerStatus4); sprintf(ws1,"%08lu",(unsigned long)(t/60UL)); sprintf(temp,temp1,ws1); client->print(temp);
 #ifdef STAT_MAINS_SENSE
-  strcpy_P(temp1,htmlInnerStatus5); if (digitalRead(sensePin[STAT_MAINS_SENSE])==HIGH) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT"); sprintf(temp,temp1,ws1); client->print(temp);
+  strcpy_P(temp1,htmlInnerStatusMains);  if (senseIsOn(STAT_MAINS_SENSE)) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT"); sprintf(temp,temp1,ws1); client->print(temp);
 #endif
-#ifdef STAT_12V_PS_ANALOG
-  strcpy_P(temp1,htmlInnerStatus6); dtostrf(to12V(analogRead(STAT_12V_PS_ANALOG)),6,1,ws1); sprintf(temp,temp1,ws1); client->print(temp);
+#ifdef STAT_MAINS_CURRENT_ANALOG
+  f=toAmps(analogRead(STAT_MAINS_CURRENT_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusMainsA);  dtostrf(f,6,1,ws1); strcat(ws1,"A"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
 #endif
-#ifdef STAT_12V_BAT_ANALOG
-  strcpy_P(temp1,htmlInnerStatus7); dtostrf(to12V(analogRead(STAT_12V_BAT_ANALOG)),6,1,ws1); sprintf(temp,temp1,ws1); client->print(temp);
+#ifdef STAT_MAINS_AUX_CURRENT_ANALOG
+  f=toAmps(analogRead(STAT_MAINS_AUX_CURRENT_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusMainsAA); dtostrf(f,6,1,ws1); strcat(ws1,"A"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
 #endif
-}
-
-double to12V(double d) {
-  d=(d/1023.0);                // 0..1 for ADC range
-  d=d*5.0;                     // 0..5 for Volts
-  d=d/(220.0/(220.0+2200.0));  // a resistor divider 220 Ohm and 2.2K Ohm
-  return d;
+#ifdef STAT_DC_PS_ANALOG
+  f=toDC(analogRead(STAT_DC_PS_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusDC);      dtostrf(f,6,1,ws1); strcat(ws1,"V"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
+#endif
+#ifdef STAT_DC_CURRENT_ANALOG
+  f=toDCAmps(analogRead(STAT_DC_CURRENT_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusDCA);     dtostrf(f,6,1,ws1); strcat(ws1,"A"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
+#endif
+#ifdef STAT_BATTERY_ANALOG
+  f=toDC(analogRead(STAT_BATTERY_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusBat);     dtostrf(f,6,1,ws1); strcat(ws1,"V"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
+#endif
+#ifdef STAT_BATTERY_CURRENT_ANALOG
+  f=toDCAmps(analogRead(STAT_BATTERY_CURRENT_ANALOG));
+  strcpy_P(temp1,htmlInnerStatusBatA);    dtostrf(f,6,1,ws1); strcat(ws1,"A"); if (f==invalid) strcpy(ws1,"Invalid"); sprintf(temp,temp1,ws1); client->print(temp);
+#endif
 }
 
 // weather -------------------------------------------------------------------------------------------------------------------
@@ -219,7 +264,7 @@ void weather(EthernetClient *client) {
 #ifdef WEATHER_WIND_SPD_ON
   f=weatherWindspeed(); strcpy(ws2," kph");
 #ifdef IMPERIAL_UNITS_ON
-  f=f/0.621371; strcpy(ws2," mph");
+  f=f*0.621371; strcpy(ws2," mph");
 #endif
   if (f<0) { strcpy(ws2,""); strcpy(ws1,"Invalid"); } else dtostrf(f,6,0,ws1);
   strcpy_P(temp1,htmlInnerWeatherWind); sprintf(temp,temp1,ws1,ws2); client->print(temp);
@@ -254,6 +299,7 @@ void weather(EthernetClient *client) {
 #endif
 
 // thermostat ----------------------------------------------------------------------------------------------------------------
+#ifdef THERMOSTAT_ON
 void thermostat(EthernetClient *client) {
   char temp[80]="";
   char ws1[20]="";
@@ -273,6 +319,25 @@ void thermostat(EthernetClient *client) {
   }
   sprintf(temp,"%s%s",ws1,ws2); client->print(temp);
 }
+
+#ifdef THERMOSTAT_HUMIDITY_ON
+void thermostath(EthernetClient *client) {
+  char temp[80]="";
+  char ws1[20]="";
+  char ws2[20]="";
+  
+  double H=thermostatInsideHumidity();
+  if (H==invalid) {
+    strcpy(ws2,"");
+    strcpy(ws1,"Invalid");
+  } else {
+    strcpy(ws2," %");
+    dtostrf(H,5,1,ws1);
+  }
+  sprintf(temp,"%s%s",ws1,ws2); client->print(temp);
+}
+#endif
+#endif
 
 // power ---------------------------------------------------------------------------------------------------------------------
 #ifdef POWER_ON
@@ -305,22 +370,22 @@ void power(EthernetClient *client) {
 
   strcpy_P(temp,htmlPower);
   #ifdef POWER_DEVICE1_RELAY
-  if (relayOn(POWER_DEVICE1_RELAY)) check(temp,"%___PD1"); else erase(temp,"%___PD1");
+  if (relayIsOn(POWER_DEVICE1_RELAY)) check(temp,"%___PD1"); else erase(temp,"%___PD1");
   #endif
   #ifdef POWER_DEVICE2_RELAY
-  if (relayOn(POWER_DEVICE2_RELAY)) check(temp,"%___PD2"); else erase(temp,"%___PD2");
+  if (relayIsOn(POWER_DEVICE2_RELAY)) check(temp,"%___PD2"); else erase(temp,"%___PD2");
   #endif
   #ifdef POWER_DEVICE3_RELAY
-  if (relayOn(POWER_DEVICE3_RELAY)) check(temp,"%___PD3"); else erase(temp,"%___PD3");
+  if (relayIsOn(POWER_DEVICE3_RELAY)) check(temp,"%___PD3"); else erase(temp,"%___PD3");
   #endif
   #ifdef POWER_DEVICE4_RELAY
-  if (relayOn(POWER_DEVICE4_RELAY)) check(temp,"%___PD4"); else erase(temp,"%___PD4");
+  if (relayIsOn(POWER_DEVICE4_RELAY)) check(temp,"%___PD4"); else erase(temp,"%___PD4");
   #endif
   #ifdef POWER_DEVICE5_RELAY
-  if (relayOn(POWER_DEVICE5_RELAY)) check(temp,"%___PD5"); else erase(temp,"%___PD5");
+  if (relayIsOn(POWER_DEVICE5_RELAY)) check(temp,"%___PD5"); else erase(temp,"%___PD5");
   #endif
   #ifdef POWER_DEVICE6_RELAY
-  if (relayOn(POWER_DEVICE6_RELAY)) check(temp,"%___PD6"); else erase(temp,"%___PD6");
+  if (relayIsOn(POWER_DEVICE6_RELAY)) check(temp,"%___PD6"); else erase(temp,"%___PD6");
   #endif
   client->print(temp);
 }
@@ -355,16 +420,16 @@ void light(EthernetClient *client) {
   
   strcpy_P(temp,htmlLighting);
   #ifdef LIGHT_WRW_RELAY
-  if (relayOn(LIGHT_WRW_RELAY)) check(temp,"%___WRW"); else erase(temp,"%___WRW");
+  if (relayIsOn(LIGHT_WRW_RELAY)) check(temp,"%___WRW"); else erase(temp,"%___WRW");
   #endif
   #ifdef LIGHT_WRR_RELAY
-  if (relayOn(LIGHT_WRR_RELAY)) check(temp,"%___WRR"); else erase(temp,"%___WRR");
+  if (relayIsOn(LIGHT_WRR_RELAY)) check(temp,"%___WRR"); else erase(temp,"%___WRR");
   #endif
   #ifdef LIGHT_ORW_RELAY
-  if (relayOn(LIGHT_ORW_RELAY)) check(temp,"%___ORW"); else erase(temp,"%___ORW");
+  if (relayIsOn(LIGHT_ORW_RELAY)) check(temp,"%___ORW"); else erase(temp,"%___ORW");
   #endif
   #ifdef LIGHT_ORR_RELAY
-  if (relayOn(LIGHT_ORR_RELAY)) check(temp,"%___ORR"); else erase(temp,"%___ORR");
+  if (relayIsOn(LIGHT_ORR_RELAY)) check(temp,"%___ORR"); else erase(temp,"%___ORR");
   #endif
   client->print(temp);
 }
@@ -376,18 +441,18 @@ const char htmlInnerRoofStat[] PROGMEM =
 "&nbsp;&nbsp;Status <div class=\"aStatus\">%s</div><br />"
 "<div style=\"text-align:center\">%s</div>";
 
-void roof_stat(EthernetClient *client) {
+void roofstatus(EthernetClient *client) {
   char temp[200]="";
   char temp1[200]="";
   char ws1[20]="";
 
   strcpy_P(temp1,htmlInnerRoofStat);
-  if (roofState=='i') {
-    if ((digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==HIGH) && (digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==LOW)) strcpy(ws1,"Closed"); else
-    if ((digitalRead(sensePin[ROR_OPENED_LIMIT_SENSE])==HIGH) && (digitalRead(sensePin[ROR_CLOSED_LIMIT_SENSE])==LOW)) strcpy(ws1,"Open"); else strcpy(ws1,"Stopped");
-  }
-  if (roofState=='o') strcpy(ws1,"Opening");
-  if (roofState=='c') strcpy(ws1,"Closing");
+  if (!roofIsMoving()) {
+    if (roofIsClosed()) strcpy(ws1,"Closed"); else
+    if (roofIsOpened()) strcpy(ws1,"Open"); else strcpy(ws1,"Stopped");
+  } else
+  if (roofIsOpening()) strcpy(ws1,"Opening"); else
+  if (roofIsClosing()) strcpy(ws1,"Closing");
 
   String s=getRoofStatus();
   if ((s=="No Error") || (s.indexOf("Travel: ")>=0))  s="<div style=\"color: #505090;\">"+s+"</div>"; else s="<div style=\"color: red;\">"+s+"</div>";

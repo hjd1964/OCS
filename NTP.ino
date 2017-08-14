@@ -8,8 +8,10 @@ byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 time_t getNtpTime()
 {
+  #ifdef ROR_ON
   // no updates if the roof is moving
-  if (roofState!='i') return 0;
+  if (roofIsMoving()) return 0;
+  #endif
   
   unsigned long tOut=millis()+3000;
   while ((Udp.parsePacket() > 0) && (millis() - tOut < 0)) ; // discard any previously received packets

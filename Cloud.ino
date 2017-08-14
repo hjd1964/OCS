@@ -5,12 +5,8 @@
 #include <SD.h>
 #endif
 
-#ifdef WEATHER_CLOUD_CVR_ON
-// Adjust the log resolution here, must be in 2's 2,4,6,8...120,122
-// keep in mind that EEPROM is spec'd to last for 100,000 writes
-// since a given location gets written to once in 64 readings that amounts to
-// a write of a given location once every 2 hours (64 * 120 seconds) * 100,000 which is 22 years
-// at 60 it's 11 years, at 30 5 years life.  These are minimums according to the spec.
+#ifdef WEATHER_ON
+
 #define SecondsBetweenLogEntries 30
 
 // this is the response time required to cover approximately 2/3 of a change in cloud temperature
@@ -99,6 +95,8 @@ void clouds(void) {
 #endif
               //               time   sa    sad   lad   p      h     wind  sq
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
+              //              01234567890123456789012345678901234567890123456789
+              //              0         1         2         3         4
               dataFile.write("                                                                              \r\n");
             }
             dataFile.close();
@@ -114,16 +112,16 @@ void clouds(void) {
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
-          dataFile.write(temp);   dataFile.write(":");                        //00, 8
-          dtostrf2(sa,5,1,temp);  dataFile.write(" ");  dataFile.write(temp); //08, 6
-          dtostrf2(sad,5,1,temp); dataFile.write(" ");  dataFile.write(temp); //14, 6
-          dtostrf2(lad,5,1,temp); dataFile.write(" ");  dataFile.write(temp); //20, 6
-          dtostrf2(p,6,1,temp);   dataFile.write(" ");  dataFile.write(temp); //26, 7
-          dtostrf2(h,5,1,temp);   dataFile.write(" ");  dataFile.write(temp); //33, 6
-          dtostrf2(weatherWindspeed(),5,1,temp);  dataFile.write(temp);       //39, 5
-          dtostrf2(weatherSkyQuality(),5,2,temp); dataFile.write(temp);       //45, 5
-          for (int i=0; i<29; i++) dataFile.write(" ");                       //    29
-          dataFile.write("\r\n");                                             //    2
+          dataFile.write(temp); dataFile.write(":");                                                      //00, 8 (time)
+          dtostrf2(sa,5,1,-99.9,999.9,temp);                   dataFile.write(" "); dataFile.write(temp); //07, 6 (short term average ambient temperature)
+          dtostrf2(sad,5,1,-99.9,999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //13, 6 (short term average dif (sky) temperature)
+          dtostrf2(lad,5,1,-99.9,999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //19, 6 (long term average dif (sky) temperature)
+          dtostrf2(p,6,1,-999.9,9999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //25, 7 (pressure)
+          dtostrf2(h,5,1,-99.9,999.9,temp);                    dataFile.write(" "); dataFile.write(temp); //32, 6 (humidity)
+          dtostrf2(weatherWindspeed(),5,1,-99.9,999.9,temp);   dataFile.write(" "); dataFile.write(temp); //38, 5 (windspeed)
+          dtostrf2(weatherSkyQuality(),5,2,-9.99,999.99,temp); dataFile.write(" "); dataFile.write(temp); //44, 5 (sky quality)
+          for (int i=0; i<29; i++) dataFile.write(" ");                                                   //  ,29
+          dataFile.write("\r\n");                                                                         //  , 2
           dataFile.close();
         }
 
@@ -165,7 +163,7 @@ bool isSafe() {
 
 #ifdef STAT_MAINS_SENSE
   // check for mains power out
-  if (digitalRead(sensePin[STAT_MAINS_SENSE])!=HIGH) safe=false;
+  if (!senseIsOn(STAT_MAINS_SENSE)) safe=false;
 #endif
 
 #ifdef WEATHER_ON
@@ -190,10 +188,13 @@ bool isSafe() {
   if (mainDeviceCount==0) return false; else return safe;
 }
 
-void dtostrf2(double d, int i, int i1, char result[]) {
-  if (d==invalid) 
+void dtostrf2(double d, int i, int i1, double l, double h, char result[]) {
+  if (d==invalid)
     for (int j=0; j<i; j++) { result[j]=' '; result[j+1]=0; }
-  else
+  else {
+    if (d<=l) d=l;
+    if (d>=h) d=h;
     dtostrf(d,i,i1,result);
+  }
 }
 

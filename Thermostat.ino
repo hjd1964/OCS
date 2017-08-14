@@ -2,10 +2,15 @@
 // Thermostat functions
 
 #ifdef THERMOSTAT_ON
+// ======= add your inside temperature sensor support here ========
+
+// this gets called once on startup to initialize any weather sensors
+void thermostatInit() {
+  analogReference(DEFAULT);
+}
 
 // gets inside temperature in deg. C
-// I'm using an LM335
-// ======= add your inside temperature sensor support here ========
+// return (invalid) if not implemented or if there's an error
 double thermostatInsideTemp() {
   // read lm335 temperature
   // 0..5 volts for 4096 count DA converter
@@ -13,6 +18,13 @@ double thermostatInsideTemp() {
   if ((t<-60.0) || (t>60.0)) t=invalid;
   return t;
 }
+
+// gets inside RH in %
+// return (invalid) if not implemented or if there's an error
+double thermostatInsideHumidity() {
+  return (invalid);
+}
+// =================================================================
 
 double t1=-999;
 double t2=-999;
@@ -27,27 +39,26 @@ void thermostat() {
 
     if (abs(insideTemperature-invalid)<0.1) {
 #ifdef HEAT_RELAY
-      relayState[HEAT_RELAY]=0; digitalWrite(relayPin[HEAT_RELAY],LOW);
+      setRelayOff(HEAT_RELAY);
 #endif
 #ifdef COOL_RELAY
-      relayState[COOL_RELAY]=0; digitalWrite(relayPin[COOL_RELAY], LOW);
+      setRelayOff(COOL_RELAY);
 #endif
       return;
     }
 
 #ifdef HEAT_RELAY
     if (insideTemperature<getHeatSetpoint() && (getHeatSetpoint()!=0)) {
-      relayState[HEAT_RELAY]=1; digitalWrite(relayPin[HEAT_RELAY],HIGH);
+      setRelayOn(HEAT_RELAY);
     } else {
-      relayState[HEAT_RELAY]=0; digitalWrite(relayPin[HEAT_RELAY],LOW);
+      setRelayOff(HEAT_RELAY);
     }
 #endif
-
 #ifdef COOL_RELAY
     if (insideTemperature>getCoolSetpoint() && (getCoolSetpoint()!=0)) {
-      relayState[COOL_RELAY]=1; digitalWrite(relayPin[COOL_RELAY], HIGH);
+      setRelayOn(COOL_RELAY);
     } else {
-      relayState[COOL_RELAY]=0; digitalWrite(relayPin[COOL_RELAY], LOW);
+      setRelayOff(COOL_RELAY);
     }
 #endif
   }
