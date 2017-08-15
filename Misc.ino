@@ -2,7 +2,7 @@
 // Misc support functions
 // ======== add your adc voltage and current support here =========
 
-// converts a raw analog reading into voltage for STAT_12V_PS_ANALOG and STAT_12V_BAT_ANALOG
+// converts a raw analog reading into voltage for STAT_DC_PS_ANALOG and STAT_BATTERY_ANALOG
 // return (invalid) if not implemented or if there's an error
 double toDC(double d) {
   d=(d/1023.0);                // 0..1 for ADC range
