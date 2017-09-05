@@ -266,8 +266,8 @@ void processCommands() {
         if ((command[1]=='S') && (parameter[0]==0)) {
           quietReply=true;
           char ws[128];
-          if (roofIsClosed) strcpy(ws,"CLOSED"); else
-            if (roofIsOpened) strcpy(ws,"OPEN"); else
+          if (roofIsClosed()) strcpy(ws,"CLOSED"); else
+            if (roofIsOpened()) strcpy(ws,"OPEN"); else
               strcpy(ws,getRoofStatus().c_str()); 
           ws[47]=0; // never longer than 47 chars
           if (roofIsClosing()) sprintf(reply,"c,%s",ws); else
