@@ -34,7 +34,7 @@
  */
 
 // firmware info
-#define FirmwareDate   "08 14 17"
+#define FirmwareDate   "09 28 17"
 #define FirmwareNumber "1.0a"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   "12:00:00"
