@@ -49,12 +49,12 @@
 #ifdef WATCHDOG_ON
 #include <avr/wdt.h>
 #endif
-#include "string.h";
-#include "EEPROM.h";
-#include "TimerOne.h";
-#include "WebServer.h";
-#include "CmdServer.h";
-#include "Command.h";
+#include "string.h"
+#include "EEPROM.h"
+#include "TimerOne.h"
+#include "WebServer.h"
+#include "CmdServer.h"
+#include "Command.h"
 
 const int timeZone = TimeZone;
 
