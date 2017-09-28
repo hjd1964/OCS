@@ -88,7 +88,7 @@ void setRelayOff(int r, bool updateState) {
   }
 }
 
-bool relayIsOn(char rs[]) { return relayIsOn(atoi(rs)); }
+bool relayIsOn(const char *rs) { return relayIsOn(atoi(rs)); }
 
 bool relayIsOn(int r) {
   if ((r>=1) && (r<=14)) return !(relayState[r]==0); else return false;

@@ -39,6 +39,8 @@
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   "12:00:00"
 
+#define invalid -1000
+
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 #include <SPI.h>
 #include <Ethernet.h>
@@ -151,9 +153,6 @@ unsigned long tst;
 unsigned long msFiveMinuteCounter;
 float insideTemperature;
 
-// etc
-#define invalid -1000
-  
 void setup()   {
 
   // Initialize serial communications
