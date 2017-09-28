@@ -13,8 +13,8 @@ time_t getNtpTime()
   if (roofIsMoving()) return 0;
   #endif
   
-  unsigned long tOut=millis()+3000;
-  while ((Udp.parsePacket() > 0) && (millis() - tOut < 0)) ; // discard any previously received packets
+  unsigned long tOut=millis()+3000L;
+  while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
 #ifdef NTP_DEBUG_ON
   Serial.println("Transmit NTP Request");
 #endif

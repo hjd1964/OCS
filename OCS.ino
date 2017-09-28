@@ -78,7 +78,7 @@ typedef struct {
   uint8_t onState;
 } relay_t;
 const volatile relay_t relay[] {
-  {-1, HIGH},               // not used
+  { 0, HIGH},               // not used
   {23, HIGH},               // Pin output to Relay 1  (Outside flood lights)
   {25, HIGH},               // Pin output to Relay 2  (12V Power supply)
   {27, HIGH},               // Pin output to Relay 3  (Outlets for computer)
@@ -95,7 +95,7 @@ const volatile relay_t relay[] {
   {47, HIGH},               // Pin output to Relay 13 (Aux - no relay on my setup)
   {49, HIGH}                // Pin output to Relay 14 (Roof MOSFET - no relay on my setup)
 };
-volatile uint8_t relayState[] = {-1,0,0,0,0,0,0,0,0,0,0,0,0};
+volatile uint8_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 typedef struct {
   uint8_t pin;
@@ -103,7 +103,7 @@ typedef struct {
   uint8_t onState;
 } sense_t;
 const volatile sense_t sense[] {
-  {-1, INPUT, HIGH},        // not used
+  { 0, INPUT, HIGH},        // not used
   {22, INPUT, HIGH},        // Pin input from Sense 1 (roof closed limit switch)
   {24, INPUT, HIGH},        // Pin input from Sense 2 (roof open   limit switch)
   {26, INPUT, HIGH},        // Pin input from Sense 3 (wall switch)
@@ -111,7 +111,7 @@ const volatile sense_t sense[] {
   {30, INPUT, HIGH},        // Pin input from Sense 5 (not used)
   {32, INPUT, HIGH}         // Pin input from Sense 6 (not used)
 };
-volatile uint8_t senseState[] = {-1,0,0,0,0,0,0};
+volatile uint8_t senseState[] = {0,0,0,0,0,0,0};
 
 // Analog0                   Analog input from A0   (12V battery)
 // Analog1                   Analog input from A1   (12V power supply)
@@ -280,7 +280,7 @@ void setup()   {
   Serial.println("waiting for sync");
 #endif
   setSyncProvider(getNtpTime);
-  setSyncInterval(24*60*60); // sync time once a day
+  setSyncInterval(24L*60L*60L); // sync time once a day
   if (now()>365UL*24UL*60UL*60UL) startupTime=now();
 #endif
 
@@ -295,10 +295,10 @@ void loop()
 #ifdef STAT_TIME_NTP_ON
   // double check time if it looks like it's not set go back and ask for it again every 10 minutes
 if (now()<365UL*24UL*60UL*60UL) {
-  if (!fastNTPSync) { setSyncInterval(10*60); fastNTPSync=true; }
+  if (!fastNTPSync) { setSyncInterval(10L*60L); fastNTPSync=true; }
 } else {
   if (startupTime==0) startupTime=now();
-  if (fastNTPSync) { setSyncInterval(24*60*60); fastNTPSync=false; }
+  if (fastNTPSync) { setSyncInterval(24L*60L*60L); fastNTPSync=false; }
 }
 #endif
 

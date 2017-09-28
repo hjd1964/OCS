@@ -16,7 +16,6 @@ cb cmde1;
 // process commands
 void processCommands() {
     boolean supress_frame = false;
-    char *conv_end;
 
     // accumulate the command
     if ((Serial.available()>0) && (!cmd.ready())) cmd.add(Serial.read());
