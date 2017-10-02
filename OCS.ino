@@ -154,6 +154,10 @@ unsigned long msFiveMinuteCounter;
 float insideTemperature;
 
 void setup()   {
+#ifdef NexDomeSetup
+  // Get dome ready
+  NexDomeSetup();
+#endif
 
   // Initialize serial communications
   Serial.begin(9600);
@@ -287,6 +291,11 @@ void setup()   {
 
 void loop()                     
 {
+#ifdef NexDomeLoop
+  // keep NexDome alive
+  NexDomeLoop();
+#endif
+  
 #ifdef WATCHDOG_ON
   wdt_reset();
 #endif

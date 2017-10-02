@@ -41,7 +41,7 @@ void WebServer::handleClient() {
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     unsigned long to=millis()+WebSocketTimeOut;
-    while ((_client.connected()) && (millis()-to>=0)) {
+    while ((_client.connected()) && ((long)(millis()-to) < 0)) {
       if (_client.available()) {
         char c = _client.read();
 #ifdef WEBSERVER_DEBUG_ON

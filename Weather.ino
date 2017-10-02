@@ -41,7 +41,7 @@ double weatherPressureSeaLevel() {
 // gets relative humidity in %
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
-  return (invalid);
+  return (51);
 }
 
 // gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
