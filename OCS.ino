@@ -65,12 +65,16 @@ WebServer www;
 CmdServer Cmd;
 CmdServer Cmd1;
 
-#ifdef STAT_TIME_NTP_ON
+#if defined(STAT_TIME_NTP_ON)
 EthernetUDP Udp;
 // local port to listen for UDP packets
 unsigned int localPort = 8888;
 time_t startupTime = 0;
 bool fastNTPSync=false;
+#elif defined(STAT_TIME_DS3234_ON) || defined(STAT_TIME_DS3234_INIT)
+#include <SparkFunDS3234RTC.h>  // https://github.com/sparkfun/SparkFun_DS3234_RTC_Arduino_Library/archive/master.zip
+#define DS3234_CS_PIN 53
+time_t startupTime = 0;
 #endif
 
 // pin assignments
@@ -163,9 +167,9 @@ void setup()   {
   // Initialize serial communications
   Serial.begin(9600);
   
-  #ifdef WATCHDOG_ON
+#ifdef WATCHDOG_ON
   wdt_enable(WDTO_8S);
-  #endif
+#endif
 
   // Set pins for direct relay control
   for (int i=1; i<=14; i++) { pinMode(relay[i].pin,OUTPUT); setRelayOff(i); }
@@ -288,6 +292,12 @@ void setup()   {
   if (now()>365UL*24UL*60UL*60UL) startupTime=now();
 #endif
 
+#if defined(STAT_TIME_DS3234_ON) || defined(STAT_TIME_DS3234_INIT)
+  setSyncProvider(getDs3234Time);
+  setSyncInterval(24L*60L*60L); // sync time once a day
+  startupTime=now();
+#endif
+
 }
 
 void loop()                     
@@ -310,7 +320,6 @@ if (now()<365UL*24UL*60UL*60UL) {
   if (fastNTPSync) { setSyncInterval(24L*60L*60L); fastNTPSync=false; }
 }
 #endif
-
   // ------------------------------------------------------------------------------------------
   // Handle comms
 

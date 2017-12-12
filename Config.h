@@ -15,6 +15,7 @@
 // Analog inputs are not mapped (at the analog pin#)
 
 #define NTP_DEBUG_OFF
+#define DS3234_DEBUG_OFF
 #define SD_DEBUG_OFF
 #define WEBSERVER_DEBUG_OFF
 #define CMDSERVER_DEBUG_OFF
@@ -58,7 +59,9 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 
 // Status panel is always ON, use _OFF to disable individual items
 // See Misc.ino for user voltage and current conversion functions
-#define STAT_TIME_NTP_ON                  // I use NTP for time, adding an RTC or GPS for time instead should be easy too, see: https://github.com/PaulStoffregen/Time
+                                          // Adding other RTC or GPS for time instead should be easy, see: https://github.com/PaulStoffregen/Time
+#define STAT_TIME_NTP_ON                  // NTP time, use STAT_TIME_NTP_ON (use only ONE time source)
+#define STAT_TIME_DS3234_OFF              // DS3234 time, use STAT_TIME_DS3234_ON (use only ONE time source, temporarily use STAT_TIME_DS3234_INIT to set the RTC clock on upload then set _ON and upload again.)
 #define STAT_MAINS_SENSE_OFF              // Sense# for mains power good, mains power failure is considered UNSAFE
 #define STAT_MAINS_CURRENT_ANALOG_OFF     // Analog# for current on mains
 #define STAT_MAINS_AUX_CURRENT_ANALOG_OFF // Analog# for current on mains (Aux.)
