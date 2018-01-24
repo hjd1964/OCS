@@ -317,9 +317,20 @@ void thermostat(EthernetClient *client) {
 #endif
     dtostrf(T,6,1,ws1);
   }
-  if (relayIsOn(HEAT_RELAY)) {
+
+#ifdef HEAT_RELAY
+  if (relayIsOn(HEAT_RELAY)) 
+  {
     sprintf(temp,"%s%s ^",ws1,ws2); client->print(temp);
-  } else {
+  } else
+#endif
+#ifdef COOL_RELAY
+  if (relayIsOn(COOL_RELAY)) 
+  {
+    sprintf(temp,"%s%s *",ws1,ws2); client->print(temp);
+  } else 
+#endif
+  {
     sprintf(temp,"%s%s -",ws1,ws2); client->print(temp);
   }
 }
