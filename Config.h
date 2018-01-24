@@ -5,14 +5,16 @@
 
 // Relay's are mapped to digital output pins: 23,25,27,29,31,33,35,37,39,41,43,45,47,49
 //                                    Relay#:  1  2  3  4  5  6  7  8  9 10 11 12 13 14
-//
-// note: PWM can be activated (if you choose) on relay's 7 to 14 (I use SSR's for most of those)
+// Note: PWM can be activated (if you choose) on relay's 7 to 14 (I use SSR's, solid state relays, for those)
+// By default "ON" sets the pin HIGH (5V) and "OFF" sends it LOW (0V,) this can be changed in OCS.ino
 
 // Sense's are mapped to digital input pins: 22,24,26,28,30,32
 //                                   Sense#:  1  2  3  4  5  6
-// (I use an optocoupler on these)
+// By default a sensed "ON" state occurs when the input pin is logic HIGH (5V) and "OFF" is logic LOW (0V,) this can be reversed in OCS.ino
+// You can also enable the Mega2560's internal pull-up resistors in OCS.ino so that, for example an OPEN pin is "OFF" (pulled HIGH) and a pin shorted to ground is "ON" (LOW)
 
-// Analog inputs are not mapped (at the analog pin#)
+// Analog inputs are not mapped (at their Arduino defined pin#'s)
+//                                   Analog: A0, A1, A2, A3, A4, A5
 
 #define NTP_DEBUG_OFF
 #define DS3234_DEBUG_OFF
