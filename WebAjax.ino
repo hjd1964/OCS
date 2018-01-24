@@ -317,7 +317,11 @@ void thermostat(EthernetClient *client) {
 #endif
     dtostrf(T,6,1,ws1);
   }
-  sprintf(temp,"%s%s",ws1,ws2); client->print(temp);
+  if (relayIsOn(HEAT_RELAY)) {
+    sprintf(temp,"%s%s ^",ws1,ws2); client->print(temp);
+  } else {
+    sprintf(temp,"%s%s -",ws1,ws2); client->print(temp);
+  }
 }
 
 #ifdef THERMOSTAT_HUMIDITY_ON
