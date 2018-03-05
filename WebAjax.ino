@@ -250,9 +250,13 @@ void weather(EthernetClient *client) {
   strcpy_P(temp1,htmlInnerWeatherTemp); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
 #ifdef WEATHER_PRESSURE_ON
-  f=weatherPressure();
-  strcpy(ws2," mb");
+#ifdef IMPERIAL_UNITS_ON
+  f=weatherPressureSeaLevel()*0.02953; strcpy(ws2," in");
+  if (f==invalid) { strcpy(ws1,"Invalid"); strcpy(ws2,""); } else dtostrf(f,6,2,ws1);
+#else
+  f=weatherPressureSeaLevel(); strcpy(ws2," mb");
   if (f==invalid) { strcpy(ws1,"Invalid"); strcpy(ws2,""); } else dtostrf(f,6,0,ws1);
+#endif
   strcpy_P(temp1,htmlInnerWeatherPres); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
 #ifdef WEATHER_HUMIDITY_ON
