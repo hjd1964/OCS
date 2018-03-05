@@ -132,7 +132,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define LIGHT_ORW_RELAY "12"        // Observing room white lights, default="12"
 #define LIGHT_ORR_RELAY "10"        // Observing room red lights, default="10"
 #define LIGHT_OUTSIDE_RELAY "1"     // Outside flood, default="1"
-#define LIGHT_SW_SENSE 4            // A switch to turn WRW lights on/off (ON when input is HIGH), default=4
+#define LIGHT_SW_SENSE 4            // A switch to turn WRW lights on/off, default=4
 
 // Roll-off roof panel
 #define ROR_ON
@@ -152,8 +152,8 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 // as a backup to the relay's above
 #define ROR_PWR_RELAY   13
 // these sense the roof limits, inputs are normally LOW but go HIGH when the roof is fully opened or closed
-#define ROR_CLOSED_LIMIT_SENSE 1    // Sense# for closed switch (CLOSED when input is HIGH)
-#define ROR_OPENED_LIMIT_SENSE 3    // Sense# for open switch (OPEN when input is HIGH)
+#define ROR_CLOSED_LIMIT_SENSE 1    // Sense# for closed switch (CLOSED when "ON")
+#define ROR_OPENED_LIMIT_SENSE 3    // Sense# for open switch (OPEN when "ON")
 // PWM frequency for roof control, set to _OFF to disable, default=5, range 1 to 100
 #define ROR_PWM_SPEED_HZ 10
 // PWM power levels for DC control, default=20, this gets rounded at tens for 10%, 20%, 30%, etc.
