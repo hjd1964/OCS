@@ -130,7 +130,7 @@ void clouds(void) {
         dataFile=SD.open(fn, FILE_READ);
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
-          n=dataFile.read(temp,80); Serial.writeln(temp,n);
+          n=dataFile.read(temp,80); Serial.write(temp,n); Serial.println();
           dataFile.close();
         }
 #endif
