@@ -90,6 +90,8 @@ void processCommands() {
           quietReply=true;
           strcpy(reply,weatherCloudCoverDescription().c_str());
         } else
+#else
+          strcpy(reply,"N/A");
 #endif
 #if defined(THERMOSTAT_ON) && defined(HEAT_RELAY)
 //  :GH#  Get Heat setpoint
