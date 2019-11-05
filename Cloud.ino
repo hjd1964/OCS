@@ -108,7 +108,7 @@ void clouds(void) {
         }
 
         // write to the sdcard file
-        dataFile=SD.open(fn, FILE_WRITE);
+        dataFile=SD.open(fn, O_READ | O_WRITE);
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
