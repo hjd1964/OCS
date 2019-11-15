@@ -130,7 +130,7 @@ void clouds(void) {
         dataFile=SD.open(fn, FILE_READ);
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
-          n=dataFile.read(temp,80); Serial.write(temp,n); Serial.println();
+          n=dataFile.read(temp,80); Serial.write(temp,n); Serial.write(temp,"\r\n");
           dataFile.close();
         }
 #endif
@@ -197,4 +197,3 @@ void dtostrf2(double d, int i, int i1, double l, double h, char result[]) {
     dtostrf(d,i,i1,result);
   }
 }
-
