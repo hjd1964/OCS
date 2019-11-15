@@ -2,7 +2,7 @@
  * Title       Observatory-Control-System
  * by          Howard Dutton
  *
- * Copyright (C) 2012 to 2017 Howard Dutton
+ * Copyright (C) 2012 to 2019 Howard Dutton
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 // firmware info
 #define ONCUE_OCS
 #define FirmwareDate   __DATE__
-#define FirmwareNumber "1.1d"
+#define FirmwareNumber "1.1e"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   __TIME__
 
