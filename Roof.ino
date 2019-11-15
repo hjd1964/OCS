@@ -241,7 +241,7 @@ bool startRoofClose() {
       } else {
         // Just one last sanity check before we start moving the roof
         if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
-          Serial.println("Error: Closed/opened limit sw on");
+          roofLastError="Error: Closed/opened limit sw on";
         } else {
           // Set relay/MOSFET
           setRelayOff(ROR_DIR_RELAY_A);
