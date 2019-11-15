@@ -86,11 +86,11 @@ typedef struct {
 } relay_t;
 const volatile relay_t relay[] {
   { 0, HIGH},               // not used
-  {23, HIGH},               // Pin output to Relay 1  (Outside flood lights)
+  {23, HIGH},               // Pin output to Relay 1  (Outlets for computer)
   {25, HIGH},               // Pin output to Relay 2  (12V Power supply)
-  {27, HIGH},               // Pin output to Relay 3  (Outlets for computer)
+  {27, HIGH},               // Pin output to Relay 3  (Outlets for telescope)
   {29, HIGH},               // Pin output to Relay 4  (Heater)
-  {31, HIGH},               // Pin output to Relay 5  (Outlets for telescope)
+  {31, HIGH},               // Pin output to Relay 5  (Outside flood lights)
   {33, HIGH},               // Pin output to Relay 6  (Fan/AC, not used)
 // solid state relays (PWM is enabled on these)
   {35, HIGH},               // Pin output to Relay 7  (Roof direction relay, open)
