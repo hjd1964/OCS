@@ -5,18 +5,18 @@
 // the see the SparkFun, Adafruit, etc. product setup guides to find the libraries and instructions for installing them
 #include <Wire.h>
 #include <Adafruit_MLX90614.h>
-#include <SparkFun_Si7021_Breakout_Library.h>
+#include <Adafruit_Si7021.h>
 #include <SFE_BMP180.h>
 
 bool skyGood=false;
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 
-SFE_BMP180 pressure;
 bool pressureGood=false;
-#define DEBUG_PRESSURE_OFF
+SFE_BMP180 pressure;
+#define DEBUG_WEATHER_OFF
 
-Weather tempHumidity;
 bool tempHumidityGood=false;
+Adafruit_Si7021 tempHumidity = Adafruit_Si7021();
 
 // this gets called once on startup to initialize any weather sensors
 void weatherInit() {
@@ -25,21 +25,39 @@ void weatherInit() {
   // wiring has pullups enabled, for a 3.3V I2C device this isn't a good thing
   // even this hack isn't 100% perfect since 5V is applied for an instant at startup
   // use a level converter if this causes you to loose sleep
+
+#ifdef DEBUG_WEATHER_ON
+  Serial.println("Debug weather start");
+#endif
+
   tempHumidity.begin(); tempHumidityGood=true;
   pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  Serial.println("THU done");
+#endif
   
   if (pressure.begin()) pressureGood=true;
   pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  Serial.println("PRE done");
+#endif
 
   mlx.begin(); skyGood=true;
   pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  Serial.println("MLX done");
+#endif
+
+  Wire.setClock(20000); // slow down i2c so long distances work, still plenty fast for our little data being moved around
 }
 
 // gets outside temperature in deg. C
 // return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
   if (!tempHumidityGood) return invalid;
-  return tempHumidity.getTemp();
+  double t = tempHumidity.readTemperature();
+  if ((t<-60.0) || (t>60.0)) t=invalid;
+  return t;
 }
 
 // gets sky IR temperature in deg. C
@@ -131,7 +149,9 @@ double weatherPressureSeaLevel() {
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
   if (!tempHumidityGood) return (invalid);
-  return tempHumidity.getRH();
+  double h=tempHumidity.readHumidity();
+  if ((h<0.0) || (h>100.0)) h=invalid;
+  return h;
 }
 
 // gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
