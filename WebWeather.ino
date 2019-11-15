@@ -177,7 +177,7 @@ void skyPage(EthernetClient *client) {
 }
 #endif
 
-void makeChartJs(EthernetClient *client, char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
+void makeChartJs(EthernetClient *client, const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
   char temp[256]="";
   char temp1[256]="";
   char ws1[90]="";
@@ -231,7 +231,7 @@ void makeChartJs(EthernetClient *client, char chartId[], String chartName, int l
   strcpy_P(temp1,ChartJs4); sprintf(temp,temp1,rangeMax,rangeMin,rangeStep); client->print(temp);
 }
 
-void makeChartCanvas(EthernetClient *client, char chartId[]) {
+void makeChartCanvas(EthernetClient *client, const char chartId[]) {
   client->print(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
   client->print(F("<canvas id=\"")); client->print(chartId); client->print(F("\" width=\"600\" height=\"200\"></canvas>\r\n"));
   client->print(F("</div>\r\n"));
