@@ -77,7 +77,7 @@ bool fastNTPSync=false;
 time_t startupTime = 0;
 #endif
 
-// pin assignments
+// Pin assignments
 // Note that pins 4, 10, 50, 51, 52, 53 are used for SD card and W5100 Ethernet (SPI interface on pins 50-53)
 
 typedef struct {
@@ -283,6 +283,7 @@ void setup()   {
   Timer1.attachInterrupt(RelayPwmISR);
 
 #ifdef STAT_TIME_NTP_ON
+  delay(3000);
   Udp.begin(localPort);
 #ifdef NTP_DEBUG_ON
   Serial.println("waiting for sync");
@@ -384,4 +385,3 @@ if (now()<365UL*24UL*60UL*60UL) {
 bool validTime() {
   return (now()<315360000);
 }
-
