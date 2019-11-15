@@ -378,7 +378,7 @@ if (now()<365UL*24UL*60UL*60UL) {
 
   // Watch clouds
 #ifdef WEATHER_ON
-  clouds();
+  weatherPoll();
 #endif
 }
 

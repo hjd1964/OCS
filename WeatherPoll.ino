@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------
-// Cloud/Safety monitor and logging
+// Weather/Safety monitor and logging
 
 #ifdef SD_CARD_ON
 #include <SD.h>
@@ -21,8 +21,9 @@ double sa=invalid;
 double ss=invalid;
 double sad=invalid;
 double lad=invalid;
+double wa=invalid;
 
-void clouds(void) {
+void weatherPoll(void) {
   unsigned long m = millis();
   if ((m-last)>2000L) {
     last=m;
@@ -54,6 +55,13 @@ void clouds(void) {
 
     // Humidity ----------------------------------------------------------------
     double h = weatherHumidity();
+
+    // Wind speed --------------------------------------------------------------
+    double w = weatherWindspeed();
+    if (wa==invalid) wa=w;
+    if (wa!=invalid) wa = ((wa*((double)SecondsBetweenLogEntries/2.0-1.0)) + w)/((double)SecondsBetweenLogEntries/2.0);
+
+    // short-term sky temp
 
 #ifdef SD_CARD_ON
     // Logging ------------------------------------------------------------------
@@ -118,7 +126,7 @@ void clouds(void) {
           dtostrf2(lad,5,1,-99.9,999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //19, 6 (long term average dif (sky) temperature)
           dtostrf2(p,6,1,-999.9,9999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //25, 7 (pressure)
           dtostrf2(h,5,1,-99.9,999.9,temp);                    dataFile.write(" "); dataFile.write(temp); //32, 6 (humidity)
-          dtostrf2(weatherWindspeed(),5,1,-99.9,999.9,temp);   dataFile.write(" "); dataFile.write(temp); //38, 6 (windspeed)
+          dtostrf2(wa,5,1,-99.9,999.9,temp);                   dataFile.write(" "); dataFile.write(temp); //38, 6 (short term average windspeed)
           dtostrf2(weatherSkyQuality(),5,2,-9.99,999.99,temp); dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
           for (int i=0; i<29; i++) dataFile.write(" ");                                                   //  ,29
           dataFile.write("\r\n");                                                                         //  , 2

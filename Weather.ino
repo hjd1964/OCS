@@ -20,7 +20,6 @@ double weatherSkyTemp() {
 }
 
 // gets windspeed in kph
-// the returned value should be the highest measured speed over a 1 minute period
 // return (invalid) if not implemented or if there's an error
 double weatherWindspeed() {
   return (invalid);
