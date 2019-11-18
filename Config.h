@@ -25,6 +25,9 @@
 
 // Network settings ----------------------------------------------------------
 
+// base rate of control updates, in milliseconds.  Default "1000" for LAN operation.  For Internet connections use "5000".
+#define RESPONSE_INTERVAL "5000"
+
 // If the reset pins between the Ethernet Shield and Arduino are physically disconnected you can wire
 // the Ethernet Shield reset pin to an Arduino pin (specified here) to perform the reset, default is OFF
 // This shouldn't be used unless the Ethernet Shield is misbehaving.  I use "ETHERNET_RESET 8"
