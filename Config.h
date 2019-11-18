@@ -34,7 +34,7 @@
 #define ETHERNET_RESET_OFF
 
 // Enter an MAC address for your controller
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF };
 
 // The IP address, etc. will be dependent on your local network
 IPAddress ip(192, 168, 1, 50);
