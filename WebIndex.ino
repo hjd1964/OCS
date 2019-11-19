@@ -71,11 +71,15 @@ const char htmlRoof2[] PROGMEM =
 "</div>"
 "</div>\r\n";
 
+#ifndef RESPONSE_INTERVAL
+  #define RESPONSE_INTERVAL "1000"
+#endif
+
 // Javascript for Ajax
 const char html_ajax_active[] PROGMEM =
 "<script>\n"
 "var auto1Tick=0;\n"
-"var auto1=setInterval(autoRun1s,1000);\n"
+"var auto1=setInterval(autoRun1s," RESPONSE_INTERVAL ");\n"
 
 "function autoRun1s() {\n"
   "var pageList = ["
@@ -301,4 +305,3 @@ void check(char *ss, const char *rs) {
 void erase(char *ss, const char *rs) {
   char *w=strstr(ss,rs); if (w!=NULL) { w[0]=' '; w[1]=' '; w[2]=' '; w[3]=' '; w[4]=' '; w[5]=' '; w[6]=' '; }
 }
-
