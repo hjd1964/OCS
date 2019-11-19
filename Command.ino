@@ -82,15 +82,17 @@ void processCommands() {
           quietReply=true;
         } else
 #endif
-#if defined(WEATHER_ON) && defined(WEATHER_CLOUD_CVR_ON)
 //  :GC#  Get cloud description
 //         Example: :GC#
 //         Returns: sssss...#
         if ((command[1]=='C') && (parameter[0]==0)) {
+#if defined(WEATHER_ON) && defined(WEATHER_CLOUD_CVR_ON)
           quietReply=true;
           strcpy(reply,weatherCloudCoverDescription().c_str());
-        } else
+#else
+          strcpy(reply,"N/A");
 #endif
+        } else
 #if defined(THERMOSTAT_ON) && defined(HEAT_RELAY)
 //  :GH#  Get Heat setpoint
 //         Example: :GH#
@@ -388,4 +390,3 @@ void checksum(char s[]) {
   sprintf(HEXS,"%02X",cks);
   strcat(s,HEXS);
 }
-
