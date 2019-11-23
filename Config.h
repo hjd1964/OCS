@@ -141,15 +141,17 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_ON
 // allow user safety override, show the "Safety Override" button
 #define ROR_USER_SAFETY_OVERRIDE_ON
-// allow the option of closing the roof automatically at dawn and set it's default state
+// allow the option of closing the roof automatically at dawn and set its default state
 #define ROR_AUTOCLOSE_DAWN_OFF
 #define ROR_AUTOCLOSE_DAWN_DEFAULT_OFF
 // allow the option of closing the roof automatically if UNSAFE condition is detected
 #define ROR_AUTOCLOSE_SAFETY_OFF
 // set relays to cause roof to open or close, A=HIGH and B=LOW to OPEN, A=LOW and B=HIGH to CLOSE
-// both A and B are normally LOW to stop the roof motor and this is it's default state
-#define ROR_DIR_RELAY_A 7
-#define ROR_DIR_RELAY_B 8
+// both A and B are normally LOW to stop the roof motor and this is its default state
+#define ROR_DIR_RELAY_A 7          // Set to 0 to disable this feature
+#define ROR_DIR_RELAY_B 8          // Set to 0 to disable this feature
+// *OR* use a momentary switch closure (~1.5 seconds) to trigger an open or close (for an garage door opener, for instance)
+#define ROR_OPEN_CLOSE_MOMENTARY 0 // Set to 0 to disable this feature
 // this "relay", a MOSFET power transistor on my ROR, is setup to do slow PWM on the 12VDC roof motor
 // to control the motor speed.  It can also be used with a relay to just enable/disable the roof motor
 // as a backup to the relay's above

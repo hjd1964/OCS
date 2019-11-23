@@ -53,7 +53,7 @@ void setvar(EthernetClient *client) {
 #ifdef LIGHT_ON
 #ifdef LIGHT_OUTSIDE_RELAY
   if (a=="light_exit") { 
-    setRelayOnDelayedOff(atoi(LIGHT_OUTSIDE_RELAY),10); // turn off after 10 minutes
+    setRelayOnDelayedOff(atoi(LIGHT_OUTSIDE_RELAY),236); // turn off after about 4 minutes
   }
 #endif
 #endif
@@ -478,4 +478,3 @@ void roofstatus(EthernetClient *client) {
   sprintf(temp,temp1,ws1,s.c_str()); client->print(temp);
 }
 #endif
-

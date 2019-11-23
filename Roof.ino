@@ -94,7 +94,7 @@ void continueOpeningRoof() {
 
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
-      // Stop the winch
+      // Stop the roof motor
       setRelayOff(ROR_DIR_RELAY_A);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
@@ -193,6 +193,7 @@ bool startRoofOpen() {
           // Set relay/MOSFET
           setRelayOff(ROR_DIR_RELAY_B);
           setRelayOn(ROR_DIR_RELAY_A);
+          setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
 
           // Flag status, no errors
           roofState='o';
@@ -246,7 +247,8 @@ bool startRoofClose() {
           // Set relay/MOSFET
           setRelayOff(ROR_DIR_RELAY_A);
           setRelayOn(ROR_DIR_RELAY_B);
-
+          setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
+          
           // Flag status, no errors
           roofState='c';
           roofStatusRegister=0;
@@ -279,7 +281,7 @@ void stopRoof() {
   roofMaxPower=false;
   // Set the state to idle
   roofState='i';
-  // Stop the winch
+  // Stop the motor
   setRelayOff(ROR_DIR_RELAY_A);
   setRelayOff(ROR_DIR_RELAY_B);
 }
@@ -371,4 +373,3 @@ int roofPowerLevel() {
 }
      
 #endif
-
