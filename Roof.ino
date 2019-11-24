@@ -222,48 +222,53 @@ bool startRoofOpen() {
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
   if ((roofState=='i') && (!relayIsOn(ROR_DIR_RELAY_A)) && (!relayIsOn(ROR_DIR_RELAY_B))) {
-    // Figure out where the roof is right now best as we can tell...
-    // Check for limit switch and reset times
-    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
-    timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
-    timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
-//    Serial.println(timeLeftToOpenAtStart);
-//    Serial.println(timeLeftToCloseAtStart);
-//    Serial.println(roofTimeAvg);
-
-    // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
-    if ((!roofSafetyOverride) && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
-      roofLastError="Error: Close location unknown";
+    // Check roof interlock...
+    if (ROR_CLOSE_OK != 0 && !senseIsOn(ROR_CLOSE_OK)) {
+      roofLastError="Error: Close safety interlock";
     } else {
-      // Check to see if the roof is already closed
-      if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
-        roofLastError="Warning: Already closed";
+      // Figure out where the roof is right now best as we can tell...
+      // Check for limit switch and reset times
+      if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+      if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+      timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
+      timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
+  //    Serial.println(timeLeftToOpenAtStart);
+  //    Serial.println(timeLeftToCloseAtStart);
+  //    Serial.println(roofTimeAvg);
+  
+      // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
+      if ((!roofSafetyOverride) && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
+        roofLastError="Error: Close location unknown";
       } else {
-        // Just one last sanity check before we start moving the roof
-        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
-          roofLastError="Error: Closed/opened limit sw on";
+        // Check to see if the roof is already closed
+        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
+          roofLastError="Warning: Already closed";
         } else {
-          // Set relay/MOSFET
-          setRelayOff(ROR_DIR_RELAY_A);
-          setRelayOn(ROR_DIR_RELAY_B);
-          setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
-          
-          // Flag status, no errors
-          roofState='c';
-          roofStatusRegister=0;
-
-          // Log start time
-          roofCloseStartTime=(long)millis();
-
+          // Just one last sanity check before we start moving the roof
+          if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
+            roofLastError="Error: Closed/opened limit sw on";
+          } else {
+            // Set relay/MOSFET
+            setRelayOff(ROR_DIR_RELAY_A);
+            setRelayOn(ROR_DIR_RELAY_B);
+            setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
+  
+            // Flag status, no errors
+            roofState='c';
+            roofStatusRegister=0;
+  
+            // Log start time
+            roofCloseStartTime=(long)millis();
+  
 #ifdef ROR_SOFTSTART_ON
-          roofCurrentPower=0;
+            roofCurrentPower=0;
 #else
-          roofCurrentPower=ROR_PWM_POWER_PERCENT;
+            roofCurrentPower=ROR_PWM_POWER_PERCENT;
 #endif
-
-          roofLastError="";
-          return true;
+  
+            roofLastError="";
+            return true;
+          }
         }
       }
     }

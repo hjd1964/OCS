@@ -165,6 +165,7 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define ROR_PWM_POWER_PERCENT 20
 // PWM soft start, begins at 0% and adds 5% per second until ROR_PWM_POWER_PERCENT is reached
 #define ROR_SOFTSTART_ON
+#define ROR_CLOSE_OK 0              // Sense# for roof safety interlock roof close is allowed only when "ON" (set to 0 to disable this feature)
 // Average amount of time to open/close the roof (in seconds), default=220
 #define ROR_TIME_AVG 220
 // Amount of time until limit switch fail to disengage error (in seconds), default=6
