@@ -159,7 +159,8 @@ double weatherPressureSeaLevel() {
 double weatherHumidity() {
   if (!tempHumidityGood) return (invalid);
   double h=tempHumidity.readHumidity();
-  if ((h<0.0) || (h>100.0)) h=invalid;
+  if (h<0.0) h=invalid;
+  if (h>100.0) h=100.0;
   return h;
 }
 
