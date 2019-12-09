@@ -80,19 +80,19 @@ void weatherPage(EthernetClient *client) {
   client->print(F("<script>\r\n"));
   client->print(F("window.onload = function(){\r\n"));
 #ifdef WEATHER_OUT_TEMP_ON
-#ifdef  IMPERIAL_UNITS_ON
-  // a negative column# means this is a temperature and needs conversion to degrees F
-  makeChartJs(client,"ambientT","Outside Temperature F (last "+periodStr+")",-8,5,-40,120,20,period);
-#else
-  makeChartJs(client,"ambientT","Outside Temperature C (last "+periodStr+")",8,5,-40,50,10,period);
-#endif
+  #ifdef  IMPERIAL_UNITS_ON
+    // a negative column# means this is a temperature and needs conversion to degrees F
+    makeChartJs(client,"ambientT","Outside Temperature F (last "+periodStr+")",-8,5,-40,120,20,period);
+  #else
+    makeChartJs(client,"ambientT","Outside Temperature C (last "+periodStr+")",8,5,-40,50,10,period);
+  #endif
 #endif
 #ifdef WEATHER_WIND_SPD_ON
-#ifdef  IMPERIAL_UNITS_ON
-  makeChartJs(client,"WS","Wind Speed mph (last "+periodStr+")",-39,5,0,50,10,period);
-#else
-  makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
-#endif
+  #ifdef  IMPERIAL_UNITS_ON
+    makeChartJs(client,"WS","Wind Speed mph (last "+periodStr+")",-39,5,0,50,10,period);
+  #else
+    makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
+  #endif
 #endif
 #ifdef WEATHER_PRESSURE_ON
   #ifdef IMPERIAL_UNITS_ON
