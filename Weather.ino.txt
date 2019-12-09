@@ -74,6 +74,7 @@ double weatherWindspeed() {
   const int OutPin = A6;   // wind sensor analog pin hooked up to Wind P sensor "OUT" pin
   int windADunits = analogRead(OutPin);
   double windMPH = pow((((float)windADunits - 264.0) / 85.6814), 3.36814);
+  if (isnan(windMPH)) windMPH=0;
   double windKPH = windMPH * 1.60934;
 // Temperature compensation isn't implemented
 // const int TempPin = A7;   // temp sensor analog pin hooked up to Wind P sensor "TMP" pin
