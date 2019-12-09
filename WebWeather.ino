@@ -2,6 +2,7 @@
 // Web server, Weather charts
 
 #if defined(WEATHER_ON) && defined(SD_CARD_ON)
+#define WEATHER_NOMINAL_PRESSURE_SEA_LEVEL 1013.25  // in mb
 
 const char ChartJs1[] PROGMEM =
 "ctx%s=document.getElementById(\"%s\");"
