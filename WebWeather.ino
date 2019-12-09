@@ -96,9 +96,9 @@ void weatherPage(EthernetClient *client) {
 #endif
 #ifdef WEATHER_PRESSURE_ON
   #ifdef IMPERIAL_UNITS_ON
-    makeChartJs(client,"BP","Barometric Pressure in inches (last "+periodStr+")",-26,6,floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50)*0.02953),ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40)*0.02953),1,period);
+    makeChartJs(client,"BP","Barometric Pressure inches Hg (last "+periodStr+")",-26,6,floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50)*0.02953),ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40)*0.02953),1,period);
   #else
-    makeChartJs(client,"BP","Barometric Pressure in mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40,10,period);
+    makeChartJs(client,"BP","Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40,10,period);
   #endif
 #endif
 #ifdef WEATHER_HUMIDITY_ON
