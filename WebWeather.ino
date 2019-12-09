@@ -162,7 +162,7 @@ void skyPage(EthernetClient *client) {
   makeChartJs(client,"SQ","Sky Quality mag/sq arc-sec (last "+periodStr+")",45,5,-30,5,5,period);
 #endif
 #ifdef WEATHER_CLOUD_CVR_ON
-  makeChartJs(client,"skyT","Sky IR Temperature C (last "+periodStr+")",14,5,-30,5,5,period);
+  makeChartJs(client,"skyT","Sky IR Temperature C (last "+periodStr+")",14,5,-40,5,5,period);
 #endif
   client->print(F("}\r\n"));
   client->print(F("</script>\r\n"));
