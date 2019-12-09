@@ -94,7 +94,11 @@ void weatherPage(EthernetClient *client) {
 #endif
 #endif
 #ifdef WEATHER_PRESSURE_ON
-  makeChartJs(client,"BP","Absolute Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE-40,WEATHER_NOMINAL_PRESSURE+40,10,period);
+  #ifdef IMPERIAL_UNITS_ON
+    makeChartJs(client,"BP","Barometric Pressure in inches (last "+periodStr+")",-26,6,floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50)*0.02953),ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40)*0.02953),1,period);
+  #else
+    makeChartJs(client,"BP","Barometric Pressure in mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40,10,period);
+  #endif
 #endif
 #ifdef WEATHER_HUMIDITY_ON
   makeChartJs(client,"RH","Relative Humidity % (last "+periodStr+")",33,5,0,100,10,period);
@@ -217,7 +221,8 @@ void makeChartJs(EthernetClient *client, const char chartId[], String chartName,
         double f=atof(ws2);
         if (logColumn==-8) f=f*(9.0/5.0)+32.0; // temperature C to F
         if (logColumn==-39) f=f*0.621371;      // wind kph to mph
-        dtostrf(f,1,1,ws2);
+        if (logColumn==-26) f=f*0.02953;       // pressure in inches
+        if (logColumn==-26) dtostrf(f,1,3,ws2); else dtostrf(f,1,1,ws2);
         if (hours==1) dtostrf((120-i)/2.0,1,1,ws1);
         if (hours==24) dtostrf((120-i)/5.0,1,1,ws1);
         if (hours==48) dtostrf((120-i)/2.5,1,1,ws1);

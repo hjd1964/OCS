@@ -51,7 +51,7 @@ void weatherPoll(void) {
     // End cloud sensor
 
     // Pressure ----------------------------------------------------------------
-    double p = weatherPressure();
+    double p = weatherPressureSeaLevel();
 
     // Humidity ----------------------------------------------------------------
     double h = weatherHumidity();
