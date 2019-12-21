@@ -91,6 +91,8 @@ IPAddress timeServer(132, 163, 4, 101);   // time-a.timefreq.bldrdoc.gov
 #define WEATHER_SKY_QUAL_ON
 #define WEATHER_CLOUD_CVR_OFF
 #define WEATHER_RAIN_ON               // a "wet" condition is considered to be UNSAFE, default location is on Analog 2
+#define WEATHER_SKY_QUAL_ZERO     0.0 // an offset (in mpsas)
+#define WEATHER_SKY_QUAL_SCALE    1.0 // an sensitivity scale factor
 #define WEATHER_SAFE_THRESHOLD -14    // above this temperature (deg C) is considered to be UNSAFE
 #define WEATHER_VCLR_THRESHOLD -19
 #define WEATHER_CLER_THRESHOLD -17

@@ -283,7 +283,7 @@ void weather(EthernetClient *client) {
   if (f==invalid) {
     strcpy(ws1,"Invalid"); strcpy(ws2,"");
   } else {
-    dtostrf(weatherSkyQuality(),5,2,ws1); strcpy(ws2," m\"^2"); 
+    dtostrf(weatherSkyQuality(),4,1,ws1); strcpy(ws2,"mpsas"); 
   }
   strcpy_P(temp1,htmlInnerWeatherSq); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
