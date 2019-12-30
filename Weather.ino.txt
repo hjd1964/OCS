@@ -1,88 +1,63 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Weather functions
+
+#include <Wire.h>
+bool outsideTempGood=false, skyTempGood=false, windspeedGood=false, pressureGood=false, humidityGood=false, rainGood=false, skyQualityGood=false;
+
+// =================================================================================================================
+// =================================== add your weather sensor support below =======================================
+
 // this is the Weather.ino file for my setup
 
-// the see the SparkFun, Adafruit, etc. product setup guides to find the libraries and instructions for installing them
-#include <Wire.h>
 #include <Adafruit_Sensor.h>
 
-bool skyGood=false;
-#include <Adafruit_MLX90614.h>
-Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+// -----------------------------------------------------------------------------------------------------------------
+// gets outside temperature in deg. C
 
-bool pressureGood=false;
-#include <SFE_BMP180.h>
-SFE_BMP180 pressure;
-#define DEBUG_WEATHER_OFF
-
-bool tempHumidityGood=false;
 #include <Adafruit_Si7021.h>
 Adafruit_Si7021 tempHumidity = Adafruit_Si7021();
 
-bool skyQualityGood=false;
-#include <Adafruit_TSL2591.h> // my customized version from https://github.com/hjd1964/Adafruit_TSL2591_Library
-Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
-
-// this gets called once on startup to initialize any weather sensors
-void weatherInit() {
-  Wire.setClock(20000); // slow down i2c so long distances work, still plenty fast for our little data being moved around
-  analogReference(DEFAULT);
-
-  // wiring has pullups enabled, for a 3.3V I2C device this isn't a good thing
-  // even this hack isn't 100% perfect since 5V is applied for an instant at startup
-  // use a level converter if this causes you to loose sleep
-
-#ifdef DEBUG_WEATHER_ON
-  Serial.println("Debug weather start");
-#endif
-
-  tempHumidity.begin(); tempHumidityGood=true;
-  pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
-  if (tempHumidityGood) Serial.println("TEMP HUMD up"); else Serial.println("TEMP HUMD fail");
-#endif
-  
-  if (pressure.begin()) pressureGood=true;
-  pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
-  if (pressureGood) Serial.println("PRESSURE up"); else Serial.println("PRESSURE fail");
-#endif
-
-  mlx.begin(); skyGood=true;
-  pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
-  if (skyGood) Serial.println("SKY IR up"); else Serial.println("SKY IR fail");
-#endif
-
-  if (tsl.begin()) skyQualityGood=true;
-  tsl.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
-  tsl.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
-#ifdef DEBUG_WEATHER_ON
-  if (skyQualityGood) Serial.println("SKY QUAL up"); else Serial.println("SKY QUAL fail");
-#endif
-}
-
-// gets outside temperature in deg. C
 // return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
-  if (!tempHumidityGood) return invalid;
+  if (!outsideTempGood) return invalid;
+
   double t = tempHumidity.readTemperature();
   if (t<-60.0 || t>60.0) t=invalid;
   return t;
 }
 
+bool initOutsideTemp() {
+  tempHumidity.begin();
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
 // gets sky IR temperature in deg. C
+
+#include <Adafruit_MLX90614.h>
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+
 // return (invalid) if not implemented or if there's an error
 double weatherSkyTemp() {
-  if (!skyGood) return (invalid);
+  if (!skyTempGood) return (invalid);
+
   double t = mlx.readObjectTempC(); 
   if (t<-100.0 || t>100.0) t=invalid;
   return t;
 }
 
+bool initSkyTemp() {
+  mlx.begin();
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
 // gets windspeed in kph
+
 // return (invalid) if not implemented or if there's an error
 double weatherWindspeed() {
+  if (!windspeedGood) return (invalid);
+
   // for the Modern Devices wind sensor, https://moderndevice.com/product/wind-sensor-rev-p/
   const int OutPin = A6;   // wind sensor analog pin hooked up to Wind P sensor "OUT" pin
   int windADunits = analogRead(OutPin);
@@ -97,8 +72,18 @@ double weatherWindspeed() {
   return (windKPH);
 }
 
-// gets absolute barometric pressure in mb (not sea-level adjusted)
-// return (invalid) if not implemented or if there's an error
+bool initWindspeed() {
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
+// gets barometric pressure in mb
+
+#include <SFE_BMP180.h>
+SFE_BMP180 pressure;
+#define DEBUG_WEATHER_OFF
+
+// return (invalid) if not implemented or if there's an error; absolute pressure
 double weatherPressure() {
   if (!pressureGood) return (invalid);
 
@@ -151,62 +136,89 @@ double weatherPressure() {
   return p0;
 }
 
-// gets barometric pressure in mb (sea-level adjusted)
-// return (invalid) if not implemented or if there's an error
+// return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
 double weatherPressureSeaLevel() {
-  {
-    double P=weatherPressure();
-    if (P==invalid) return P;
-    
-    // The pressure sensor returns abolute pressure, which varies with altitude.
-    // To remove the effects of altitude, use the sealevel function and your current altitude.
-    // This number is commonly used in weather reports.
-    // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
-    // Result: p0 = sea-level compensated pressure in mb
-    double p0 = pressure.sealevel(P,WEATHER_ALTITUDE);
-    return p0;
-  }
+  if (!pressureGood) return (invalid);
+
+  double P=weatherPressure();
+  if (P==invalid) return P;
+  
+  // The pressure sensor returns abolute pressure, which varies with altitude.
+  // To remove the effects of altitude, use the sealevel function and your current altitude.
+  // This number is commonly used in weather reports.
+  // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
+  // Result: p0 = sea-level compensated pressure in mb
+  double p0 = pressure.sealevel(P,WEATHER_ALTITUDE);
+  return p0;
 }
 
+bool initPressure() {
+  return pressure.begin();
+}
+
+// -----------------------------------------------------------------------------------------------------------------
 // gets relative humidity in %
+
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
-  if (!tempHumidityGood) return (invalid);
+  if (!humidityGood) return (invalid);
+
   double h=tempHumidity.readHumidity();
   if (h<0.0) h=invalid;
   if (h>100.0) h=100.0;
   return h;
 }
 
+bool initHumidity() {
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
 // gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
-// return (invalid) if not implemented or if there's an error
-// this is for the typical eBay rain sensor like this one:
-// http://www.ebay.com/itm/Raindrops-Detection-sensor-modue-rain-module-weather-module-Humidity-For-Arduino-/400439668701
+
 #define WEATHER_RAIN_THRESHOLD_LOW 0.25
 #define WEATHER_RAIN_THRESHOLD_HIGH 0.75
+
+// return (invalid) if not implemented or if there's an error
 int weatherRain() {
+  // this is for the typical eBay rain sensor like this one:
+  // http://www.ebay.com/itm/Raindrops-Detection-sensor-modue-rain-module-weather-module-Humidity-For-Arduino-/400439668701
+  
   double rain = (double)analogRead(A2)/1023.0; // scale for 0.0 to 1.0 range
 
   if (rain <= WEATHER_RAIN_THRESHOLD_LOW) return 1; else
   if (rain > WEATHER_RAIN_THRESHOLD_HIGH) return 3; else return 2;
 }
 
+bool initRain() {
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
 // gets sky brightness in mag/arc-sec^2
-// return (invalid) if not implemented or if there's an error
+
 double last_mag_per_sq_arcsec = invalid;
 unsigned long last_mag_per_sq_arcsec_time = 0;
+#include <Adafruit_TSL2591.h> // my customized version from https://github.com/hjd1964/Adafruit_TSL2591_Library
+Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
+
+// return (invalid) if not implemented or if there's an error
 double weatherSkyQuality() {
-  uint32_t lum;
+  if (!skyQualityGood) return (invalid);
 
   // safe-guard to invalidate stale readings after 30 seconds
   if ((long)((last_mag_per_sq_arcsec_time+30000UL)-millis()) < 0) last_mag_per_sq_arcsec = invalid;
   
+/*
   // read data from TSL2591 (blocking)
+  uint32_t lum;
   // this routine blocks for almost a full second in some cases, so fall back to last value if the roof is moving
-//  if (roofIsMoving()) return last_mag_per_sq_arcsec;
-//  lum = tsl.getFullLuminosity();
+  if (roofIsMoving()) return last_mag_per_sq_arcsec;
+  lum = tsl.getFullLuminosity();
+*/
 
   // read data from TSL2591 (non-blocking)
+  uint32_t lum;
   static int stage = 1;
   if (stage == 1) { tsl.getFullLuminosity(TSL2591_GFL_INIT); stage++; return last_mag_per_sq_arcsec; }
   if (stage == 2) { if (tsl.getFullLuminosity(TSL2591_GFL_WAIT)) return last_mag_per_sq_arcsec; stage++; }
@@ -239,4 +251,74 @@ double weatherSkyQuality() {
   last_mag_per_sq_arcsec_time = millis();
   
   return (last_mag_per_sq_arcsec);
+}
+
+bool initSkyQuality() {
+  boolean ok=false;
+  ok=tsl.begin();
+  if (ok) {
+    tsl.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
+    tsl.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
+  }
+  return ok;
+}
+
+// ============================= no user changes are required beyond this point ====================================
+// =================================================================================================================
+
+// -----------------------------------------------------------------------------------------------------------------
+// this gets called once on startup to initialize any weather sensors
+void weatherInit() {
+  // slow down i2c so long distances work, still plenty fast for our little data being moved around
+  Wire.setClock(20000);
+  analogReference(DEFAULT);
+
+  // wiring has pullups enabled, for a 3.3V I2C device this isn't a good thing even this hack isn't 100% perfect 
+  // since 5V is applied for an instant at startup use a level converter if this causes you to loose sleep
+
+#ifdef DEBUG_WEATHER_ON
+  Serial.println("Debug weather start");
+#endif
+
+  outsideTempGood=initOutsideTemp();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (outsideTempGood) Serial.println("OUTSIDE TEMP sense up"); else Serial.println("OUTSIDE TEMP sense fail");
+#endif
+
+  skyTempGood=initSkyTemp();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (skyTempGood) Serial.println("SKY IR sense up"); else Serial.println("SKY IR sense fail");
+#endif
+
+  windspeedGood=initWindspeed();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (windspeedGood) Serial.println("WINDSPEED sense up"); else Serial.println("WINDSPEED sense fail");
+#endif
+
+  pressureGood=initPressure();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (pressureGood) Serial.println("PRESSURE sense up"); else Serial.println("PRESSURE sense fail");
+#endif
+
+  humidityGood=initHumidity();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (humidityGood) Serial.println("HUMIDITY sense up"); else Serial.println("HUMIDITY sense fail");
+#endif
+
+  rainGood=initRain();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (rainGood) Serial.println("RAIN sense up"); else Serial.println("RAIN sense fail");
+#endif
+
+  skyQualityGood=initSkyQuality();
+  pinMode(20,INPUT); pinMode(21,INPUT);
+#ifdef DEBUG_WEATHER_ON
+  if (skyQualityGood) Serial.println("SKY QUAL up"); else Serial.println("SKY QUAL fail");
+#endif
 }

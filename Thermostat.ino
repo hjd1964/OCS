@@ -2,7 +2,9 @@
 // Thermostat functions
 
 #ifdef THERMOSTAT_ON
-// ======= add your inside temperature sensor support here ========
+
+// =================================================================================================================
+// ============================== add your inside temperature sensor support here ==================================
 
 // this gets called once on startup to initialize any weather sensors
 void thermostatInit() {
@@ -24,7 +26,9 @@ double thermostatInsideTemp() {
 double thermostatInsideHumidity() {
   return (invalid);
 }
-// =================================================================
+
+// ============================== no user changes are required beyond this point ===================================
+// =================================================================================================================
 
 double t1=-999;
 double t2=-999;
@@ -81,4 +85,3 @@ float getCoolSetpoint() {
 }
 #endif
 #endif
-
