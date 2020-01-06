@@ -98,7 +98,7 @@ bool initRain() {
 
 // return (invalid) if not implemented or if there's an error
 double weatherSkyQuality() {
-  if (!rainGood) return invalid;
+  if (!skyQualityGood) return invalid;
   return invalid;
 }
 
