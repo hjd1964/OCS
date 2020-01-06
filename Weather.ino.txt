@@ -15,7 +15,7 @@ bool outsideTempGood=false, skyTempGood=false, windspeedGood=false, pressureGood
 // gets outside temperature in deg. C
 
 #include <Adafruit_Si7021.h>
-Adafruit_Si7021 tempHumidity = Adafruit_Si7021();
+Adafruit_Si7021 tempHumidity = Adafruit_Si7021(); // I2C address 0x40
 
 // return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
@@ -35,7 +35,7 @@ bool initOutsideTemp() {
 // gets sky IR temperature in deg. C
 
 #include <Adafruit_MLX90614.h>
-Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();  // I2C address 0x5A
 
 // return (invalid) if not implemented or if there's an error
 double weatherSkyTemp() {
@@ -79,7 +79,7 @@ bool initWindspeed() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets barometric pressure in mb
 
-#include <SFE_BMP180.h>
+#include <SFE_BMP180.h> // I2C address 0x77
 SFE_BMP180 pressure;
 #define DEBUG_WEATHER_OFF
 
@@ -199,7 +199,7 @@ bool initRain() {
 
 double last_mag_per_sq_arcsec = invalid;
 unsigned long last_mag_per_sq_arcsec_time = 0;
-#include <Adafruit_TSL2591.h> // my customized version from https://github.com/hjd1964/Adafruit_TSL2591_Library
+#include <Adafruit_TSL2591.h> // I2C addresses 0x28 and 0x29; using my customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
 
 // return (invalid) if not implemented or if there's an error
