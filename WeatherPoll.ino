@@ -127,7 +127,7 @@ void weatherPoll(void) {
           dtostrf2(p,6,1,-999.9,9999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //25, 7 (pressure)
           dtostrf2(h,5,1,-99.9,999.9,temp);                    dataFile.write(" "); dataFile.write(temp); //32, 6 (humidity)
           dtostrf2(wa,5,1,-99.9,999.9,temp);                   dataFile.write(" "); dataFile.write(temp); //38, 6 (short term average windspeed)
-          dtostrf2(weatherSkyQuality(),5,2,-9.99,999.99,temp); dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
+          dtostrf2(weatherSkyQuality(),5,2,-9.99,99.99,temp);  dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
           for (int i=0; i<29; i++) dataFile.write(" ");                                                   //  ,29
           dataFile.write("\r\n");                                                                         //  , 2
           dataFile.close();
