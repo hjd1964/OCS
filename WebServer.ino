@@ -12,6 +12,10 @@ void WebServer::init() {
   // start the Ethernet connection and the server:
   setResponseHeader(http_defaultHeader);
 
+  // disable the SDCARD and Ethernet at start up
+  pinMode(4,OUTPUT); digitalWrite(4,HIGH);
+  pinMode(10,OUTPUT); digitalWrite(10,HIGH);
+
   Ethernet.begin(mac, ip, myDns, gateway, subnet);
   _server.begin();
 #ifdef WEBSERVER_DEBUG_ON
@@ -21,10 +25,6 @@ void WebServer::init() {
 
 #ifdef SD_CARD_ON
   SDfound=SD.begin(4);
-#else
-  // disable the SDCARD if not using
-  pinMode(4,OUTPUT);
-  digitalWrite(4,HIGH);
 #endif
 
   handler_count=0;
@@ -200,4 +200,3 @@ void WebServer::sdPage(String fn, EthernetClient *client) {
   }
 }
 #endif
-
