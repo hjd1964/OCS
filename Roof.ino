@@ -14,7 +14,7 @@ volatile char roofState = 'i';
 // bit 2 = close roof failed with open limit switch failure to disengage
 // bit 1 = close roof failed with over time
 // bit 0 = close roof failed with under time
-byte roofStatusRegister=0;
+uint16_t roofStatusRegister=0;
 String roofLastError="";
 
 // roof power and safety
@@ -85,6 +85,8 @@ void continueOpeningRoof() {
 
     // Detect that the roof has finished opening
     if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
+      // wait for two seconds before powering off the roof motor (for garage door opener)
+      if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,0);
       EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg);
@@ -134,6 +136,14 @@ void continueClosingRoof() {
       roofState='i';
     }
 
+    // Or interlock was triggered
+    if (ROR_CLOSE_OK != 0 && !senseIsOn(ROR_CLOSE_OK)) {
+      // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
+      roofStatusRegister=roofStatusRegister|0b100000000; // 256
+      // Go idle
+      roofState='i';
+    }
+
     // Or the whole process is taking too long
     if ((!roofSafetyOverride) && ((timeLeftToCloseAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
@@ -141,12 +151,14 @@ void continueClosingRoof() {
       // Go idle
       roofState='i';
     }
-    
+
     // Calculate a percentage of roof travel
     roofTravel=((double)(roofTimeAvg-(timeLeftToCloseAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished closing
     if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) {
+      // wait for two seconds before powering off the roof motor (for garage door opener)
+      if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg);
       EEPROM_writeLong(EE_timeLeftToClose,0);
@@ -193,11 +205,14 @@ bool startRoofOpen() {
           // Set relay/MOSFET
           setRelayOff(ROR_DIR_RELAY_B);
           setRelayOn(ROR_DIR_RELAY_A);
-          setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
 
           // Flag status, no errors
           roofState='o';
           roofStatusRegister=0;
+
+          // wait for two seconds after powering on the roof motor (for garage door opener)
+          if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000); 
+          setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
 
           // Log start time
           roofOpenStartTime=(long)millis();
@@ -251,11 +266,14 @@ bool startRoofClose() {
             // Set relay/MOSFET
             setRelayOff(ROR_DIR_RELAY_A);
             setRelayOn(ROR_DIR_RELAY_B);
-            setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
   
             // Flag status, no errors
             roofState='c';
             roofStatusRegister=0;
+
+            // wait for two seconds after powering on the roof motor (for garage door opener)
+            if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000); 
+            setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
   
             // Log start time
             roofCloseStartTime=(long)millis();
@@ -301,13 +319,15 @@ void clearRoofStatus() {
 // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error" (required)
 String getRoofStatus() {
   String s=getRoofLastError();
-  if ((s=="") && roofIsMoving()) { s="Travel: "+String(roofTravel)+"%"; } else s="No Error";
+  if (s=="" && roofIsMoving()) { s="Travel: "+String(roofTravel)+"%"; return s; }
+  if (s=="") s="No Error";
   return s;
 }
 
 // returns an error description string if an error has occured, "" if no error (required)
 String getRoofLastError() {
   String s="";
+  if (roofStatusRegister&256) s="Error: Close safety interlock";
   if (roofStatusRegister&128) s="Error: Open unknown error"; else
   if (roofStatusRegister&64) s="Error: Open limit sw fail"; else
   if (roofStatusRegister&32) s="Error: Open over time"; else
