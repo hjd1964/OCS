@@ -165,6 +165,7 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define WATCHDOG                      OFF //    OFF, ON to reset the Mega2560 after 8 seconds if it hangs for any reason.     Infreq
 
 // THAT'S IT FOR USER CONFIGURATION!
+// -------------------------------------------------------------------------------------------------------------------------
 
 // DEBUGGING -----------------------------------------------------------------------------------------------------------------------
 #define DEBUG_NPT                     OFF //    OFF, ON to enable debug code for network time protocol.                       Infreq
