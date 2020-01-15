@@ -133,11 +133,11 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 
 // ROLL-OFF ROOF CONTROL PANEL -----------------------------------------------------------------------------------------------------
 #define ROR                           OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
-#define ROR_USER_SAFETY_OVERRIDE      OFF //    OFF, ON allows user safety override showing the "Safety Override" button.     Option
+#define ROR_USER_SAFETY_OVERRIDE      OFF //    OFF, ON displays safety override button.                                      Option
 
-#define ROR_AUTOCLOSE_DAWN            OFF //    OFF, ON allow option of closing roof automatically at dawn.                   Option
-#define ROR_AUTOCLOSE_DAWN_DEFAULT    OFF //    OFF, ON enables autoclose at power on.  Disabled at startup otherwise.        Option
-#define ROR_AUTOCLOSE_SAFETY          OFF //    OFF, ON closes the roof automatically if UNSAFE condition is detected.        Option
+#define ROR_AUTOCLOSE_DAWN            OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
+#define ROR_AUTOCLOSE_DAWN_DEFAULT    OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
+#define ROR_AUTOCLOSE_SAFETY          OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
 
 #define ROR_DC_MOTOR_RELAY_A          OFF //    OFF, n. Where n=1..14 (Relay#) Sets relays to cause roof to open or close.    Option
 #define ROR_DC_MOTOR_RELAY_B          OFF //    OFF, n. Where n=1..14 (Relay#) A=HIGH/B=LOW to OPEN, A=LOW/B=HIGH to CLOSE.   Option
