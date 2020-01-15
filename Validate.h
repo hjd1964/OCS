@@ -327,8 +327,8 @@
   #error "Configuration (Config.h): ROR_CLOSE_OK must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if ROR_LIMIT_SENSE_CLOSED == OFF || ROR_LIMIT_SENSE_OPENED == OFF
-  #error "Configuration (Config.h): Roof open and close limit sensors are both required."
+#if ROR == ON && ROR_LIMIT_SENSE_CLOSED == OFF && ROR_LIMIT_SENSE_OPENED == OFF
+  #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROR control is enabled."
 #endif
 
 #if (ROR_LIMIT_SENSE_CLOSED < 1 || ROR_LIMIT_SENSE_CLOSED > 6) && ROR_LIMIT_SENSE_CLOSED != OFF
