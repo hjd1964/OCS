@@ -67,69 +67,69 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define WEATHER_TEMPERATURE           OFF //    OFF, ON for measuring outside temperature.                                    Option
 
 #define WEATHER_PRESSURE              OFF //    OFF, ON for measuring barometric pressure.                                    Option
-#define WEATHER_NOMINAL_PRESSURE     1010 //   1010, n. Where n=500 to 1050 (in mb) site nominal pressure for Chart.          Adjust
-#define WEATHER_ALTITUDE              100 //    100, n. Where n=-86 to 5000 (meters) site altitude.                           Adjust
+#define WEATHER_NOMINAL_PRESSURE     1010 //   1010, n. Where n=500..1050 (in mb) site nominal pressure for Chart.            Adjust
+#define WEATHER_ALTITUDE              100 //    100, n. Where n=-86..5000 (meters) site altitude.                             Adjust
 
 #define WEATHER_HUMIDITY              OFF //    OFF, ON for measuring outside humidity.                                       Option
 
 #define WEATHER_WIND_SPD              OFF //    OFF, ON for measuring wind speed.                                             Option
-#define WEATHER_WIND_SPD_THRESHOLD     20 //     20, n. Where n=0 to 100 (in kph) wind speed above this is considered UNSAFE. Adjust
+#define WEATHER_WIND_SPD_THRESHOLD     20 //     20, n. Where n=0..100 (in kph) wind speed above this is considered UNSAFE.   Adjust
 
 #define WEATHER_SKY_QUAL              OFF //    OFF, ON for measuring sky quality (darkness in magnitudes per sq arc-sec.)    Option
 
 #define WEATHER_RAIN                  OFF //    OFF, ON to enable rain sensor, a "wet" condition is considered to be UNSAFE.  Option
 
 #define WEATHER_CLOUD_CVR             OFF //    OFF, ON to enable the cloud sensor, above WEATHER_SAFE_THRESHOLD is UNSAFE.   Option
-#define WEATHER_SAFE_THRESHOLD        -14 //    -14, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_VCLR_THRESHOLD        -19 //    -19, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_CLER_THRESHOLD        -17 //    -17, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_HAZE_THRESHOLD        -14 //    -14, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_OVRC_THRESHOLD        -11 //    -11, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_CLDY_THRESHOLD         -8 //     -8, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
-#define WEATHER_VCLD_THRESHOLD         -5 //     -5, n. Where n=-25 to 0 (in Deg. C)                                          Adjust
+#define WEATHER_SAFE_THRESHOLD        -14 //    -14, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_VCLR_THRESHOLD        -19 //    -19, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_CLER_THRESHOLD        -17 //    -17, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_HAZE_THRESHOLD        -14 //    -14, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_OVRC_THRESHOLD        -11 //    -11, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_CLDY_THRESHOLD         -8 //     -8, n. Where n=-25..0 (in Deg. C)                                            Adjust
+#define WEATHER_VCLD_THRESHOLD         -5 //     -5, n. Where n=-25..0 (in Deg. C)                                            Adjust
 
 // POWER PANEL ---------------------------------------------------------------------------------------------------------------------
 #define POWER                         OFF //    OFF, ON to enable the OCS website power panel display.                        Option
 
-#define POWER_DEVICE1_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below.                            Option
+#define POWER_DEVICE1_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE1_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE1_NAME ""
 
-#define POWER_DEVICE2_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below.                            Option
+#define POWER_DEVICE2_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE2_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE2_NAME ""
 
-#define POWER_DEVICE3_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below.                            Option
+#define POWER_DEVICE3_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE3_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE3_NAME ""
 
-#define POWER_DEVICE4_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below.                            Option
+#define POWER_DEVICE4_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE4_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE4_NAME ""
 
-#define POWER_DEVICE5_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below.                            Option
+#define POWER_DEVICE5_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE5_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE5_NAME ""
 
-#define POWER_DEVICE6_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) with _NAME below                             Option
+#define POWER_DEVICE6_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) with _NAME below                               Option
 #define POWER_DEVICE6_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE6_NAME ""
 
 // THERMOSTAT PANEL ----------------------------------------------------------------------------------------------------------------
 // See Thermostat.ino for user inside temperature and humidity sensor functions
 #define THERMOSTAT                    OFF //    OFF, ON to enable the OCS website thermostat panel display.                   Option
-#define HEAT_RELAY                    OFF //    OFF, n. Where n=1 to 14 (Relay#) for indoor heat.                             Option
-#define COOL_RELAY                    OFF //    OFF, n. Where n=1 to 14 (Relay#) for cooling/venting.                         Option
+#define HEAT_RELAY                    OFF //    OFF, n. Where n=1..14 (Relay#) for indoor heat.                               Option
+#define COOL_RELAY                    OFF //    OFF, n. Where n=1..14 (Relay#) for cooling/venting.                           Option
 #define THERMOSTAT_HUMIDITY           OFF //    OFF, ON displays indoor humidity.                                             Option
 
 // LIGHTING PANEL ------------------------------------------------------------------------------------------------------------------
 #define LIGHT                         OFF //    OFF, ON to enable the OCS website lighting panel display.                     Option
-#define LIGHT_WRW_RELAY               OFF //    OFF, n. Where n=1 to 14 (Relay#) for Warm room white lights.                  Option
-#define LIGHT_WRR_RELAY               OFF //    OFF, n. Where n=1 to 14 (Relay#) for Warm room red lights.                    Option
-#define LIGHT_ORW_RELAY               OFF //    OFF, n. Where n=1 to 14 (Relay#) for Observing room white lights.             Option
-#define LIGHT_ORR_RELAY               OFF //    OFF, n. Where n=1 to 14 (Relay#) for Observing room red lights.               Option
-#define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1 to 14 (Relay#) for Outside flood.                           Option
-#define LIGHT_SW_SENSE                OFF //    OFF, n. A switch to turn WRW lights on/off.                                   Option
+#define LIGHT_WRW_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) for Warm room white lights.                    Option
+#define LIGHT_WRR_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) for Warm room red lights.                      Option
+#define LIGHT_ORW_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) for Observing room white lights.               Option
+#define LIGHT_ORR_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) for Observing room red lights.                 Option
+#define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1..14 (Relay#) for Outside flood.                             Option
+#define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..6 (Sense#) for switch to turn WRW lights on/off.           Option
 
 // ROLL-OFF ROOF CONTROL PANEL -----------------------------------------------------------------------------------------------------
 #define ROR                           OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
@@ -139,18 +139,18 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define ROR_AUTOCLOSE_DAWN_DEFAULT    OFF //    OFF, ON enables autoclose at power on.  Disabled at startup otherwise.        Option
 #define ROR_AUTOCLOSE_SAFETY          OFF //    OFF, ON closes the roof automatically if UNSAFE condition is detected.        Option
 
-#define ROR_DC_MOTOR_RELAY_A          OFF //    OFF, n. Where n=1 to 14 (Relay#) Sets relays to cause roof to open or close.  Option
-#define ROR_DC_MOTOR_RELAY_B          OFF //    OFF, n. Where n=1 to 14 (Relay#) A=HIGH/B=LOW to OPEN, A=LOW/B=HIGH to CLOSE. Option
+#define ROR_DC_MOTOR_RELAY_A          OFF //    OFF, n. Where n=1..14 (Relay#) Sets relays to cause roof to open or close.    Option
+#define ROR_DC_MOTOR_RELAY_B          OFF //    OFF, n. Where n=1..14 (Relay#) A=HIGH/B=LOW to OPEN, A=LOW/B=HIGH to CLOSE.   Option
                                           //         Default state both A and B LOW stops the DC roof motor (for example.)
 
-#define ROR_OPEN_CLOSE_MOMENTARY      OFF //    OFF, n. Where n=1 to 14 (Relay#) A momentary switch closure (~1.5 seconds.)   Option
+#define ROR_OPEN_CLOSE_MOMENTARY      OFF //    OFF, n. Where n=1..14 (Relay#) A momentary switch closure (~1.5 seconds.)     Option
                                           //         To trigger a garage door opener (for example) to either open or close.
 
-#define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1 to 14 (Relay#) This controls roof motor pwr. For DC motor.  Option
+#define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) This controls roof motor pwr. For DC motor.    Option
                                           //         SSR/MOSFET PWM controls speed. For garage door openers, SW on/off only.
 
-#define ROR_PWM_SPEED_HZ              OFF //    OFF, n. Where n=1 to 100 (Hz) PWM frequency for roof motor DC control.        Option
-#define ROR_PWM_POWER_PERCENT         OFF //    OFF, n. Where n=10 to 100 (%) PWM power level for roof motor DC control.      Option
+#define ROR_PWM_SPEED_HZ              OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
+#define ROR_PWM_POWER_PERCENT         OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
 #define ROR_PWM_SOFTSTART             OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROR_PWM_POWER_PERCENT. Option
 
 #define ROR_CLOSE_OK                  OFF //    OFF, n. Where n=1..6 (Sense#) Roof safety interlock, close allowed when ON.   Option
