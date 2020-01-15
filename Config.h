@@ -153,7 +153,8 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define ROR_PWM_POWER_PERCENT         OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
 #define ROR_PWM_SOFTSTART             OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROR_PWM_POWER_PERCENT. Option
 
-#define ROR_CLOSE_OK                  OFF //    OFF, n. Where n=1..6 (Sense#) Roof safety interlock, close allowed when ON.   Option
+#define ROR_CLOSE_INTERLOCK           OFF //    OFF, n. Where n=1..6 (Sense#) Roof safety interlock, close allowed when ON.   Option
+
 #define ROR_LIMIT_SENSE_CLOSED        OFF //    OFF, n. Where n=1..6 (Sense#) Roof closed switch (CLOSED when ON.)            Option
 #define ROR_LIMIT_SENSE_OPENED        OFF //    OFF, n. Where n=1..6 (Sense#) Roof open switch (OPEN when ON.)                Option
 

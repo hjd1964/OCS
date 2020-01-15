@@ -323,8 +323,8 @@
   #endif
 #endif
 
-#if (ROR_CLOSE_OK < 1 || ROR_CLOSE_OK > 6) && ROR_CLOSE_OK != OFF
-  #error "Configuration (Config.h): ROR_CLOSE_OK must OFF or a number between 1 and 6 (Sense#.)"
+#if (ROR_CLOSE_INTERLOCK < 1 || ROR_CLOSE_INTERLOCK > 6) && ROR_CLOSE_INTERLOCK != OFF
+  #error "Configuration (Config.h): ROR_CLOSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
 #if ROR == ON && ROR_LIMIT_SENSE_CLOSED == OFF && ROR_LIMIT_SENSE_OPENED == OFF
