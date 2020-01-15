@@ -331,7 +331,7 @@ String getRoofLastError() {
     if (roofState=='i') {
       if (roofLastError=="") {
         // one final check for any wierd relay stuff going on
-        if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) { s="Error: Limit switch malfunction"; }
+        if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) s="Error: Limit switch malfunction";
       } else s=roofLastError;
     }
   }
