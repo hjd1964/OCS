@@ -106,7 +106,6 @@ const volatile relay_t relay[] {
 };
 volatile uint8_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-// This section is specific to V1 of the OCS hardware
 typedef struct {
   uint8_t pin;
   uint8_t mode;
