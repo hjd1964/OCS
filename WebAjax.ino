@@ -422,14 +422,18 @@ const char htmlLighting[] PROGMEM =
 #if LIGHT_WRW_RELAY != OFF
 "<input type=\"checkbox\" onclick='SetRelay(\"" STR(LIGHT_WRW_RELAY) "\",this.checked)' %___WRW />&nbsp;White"
 #endif
+#if LIGHT_WRR_RELAY != OFF || LIGHT_WRW_RELAY != OFF
 " Warm Rm Lights<br />&nbsp;&nbsp;"
+#endif
 #if LIGHT_ORR_RELAY != OFF
 "<input type=\"checkbox\" onclick='SetRelay(\"" STR(LIGHT_ORR_RELAY) "\",this.checked)' %___ORR />&nbsp;Red "
 #endif
 #if LIGHT_ORW_RELAY != OFF
 "<input type=\"checkbox\" onclick='SetRelay(\"" STR(LIGHT_ORW_RELAY) "\",this.checked)' %___ORW />&nbsp;White"
 #endif
+#if LIGHT_ORR_RELAY != OFF || LIGHT_ORW_RELAY != OFF
 " Obs Rm Lights<br />&nbsp;&nbsp;"
+#endif
 "<br />"
 #if LIGHT_OUTSIDE_RELAY != OFF
 "<br />"
