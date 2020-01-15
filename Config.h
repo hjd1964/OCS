@@ -23,7 +23,7 @@
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
 //      Parameter Name              Value   Default  Notes                                                                      Hint
-#define RESPONSE_INTERVAL            1000 //   1000, n. Where n=500..10000 (milliseconds.) Default LAN, Internet 5000.        Option
+#define RESPONSE_INTERVAL            1000 //   1000, n. Where n=500..10000 (ms.) Default for LAN latency, Internet use 5000.  Option
 #define ETHERNET_RESET                OFF //    OFF, n. Where n=unused Mega2560 pin #, activates feature and allows the OCS   Infreq
                                           //         to force an reset of the W5100 Ethernet Shield at startup using this pin.
                                           //         W5100 reset pin must be connected to the pin# specified here and no other.
