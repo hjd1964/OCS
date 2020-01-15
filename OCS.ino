@@ -87,22 +87,22 @@ typedef struct {
   uint8_t onState;
 } relay_t;
 const volatile relay_t relay[] {
-  { 0, HIGH},         // not used
-  {23, HIGH},         // Relay 1: pin#, ON state
-  {25, HIGH},         // Relay 2: pin#, ON state
-  {27, HIGH},         // Relay 3: pin#, ON state
-  {29, HIGH},         // Relay 4: pin#, ON state
-  {31, HIGH},         // Relay 5: pin#, ON state
-  {33, HIGH},         // Relay 6: pin#, ON state
+  { 0, HIGH},  // not used
+  {23, HIGH},  // Relay 1: pin#, ON state
+  {25, HIGH},  // Relay 2: pin#, ON state
+  {27, HIGH},  // Relay 3: pin#, ON state
+  {29, HIGH},  // Relay 4: pin#, ON state
+  {31, HIGH},  // Relay 5: pin#, ON state
+  {33, HIGH},  // Relay 6: pin#, ON state
 // solid state relays (PWM is enabled on these)
-  {35, HIGH},         // Relay 7: pin#, ON state
-  {37, HIGH},         // Relay 8: pin#, ON state
-  {39, HIGH},         // Relay 9: pin#, ON state
-  {41, HIGH},         // Relay 10: pin#, ON state
-  {43, HIGH},         // Relay 11: pin#, ON state
-  {45, HIGH},         // Relay 12: pin#, ON state
-  {47, HIGH},         // Relay 13: pin#, ON state
-  {49, HIGH}          // Relay 14: pin#, ON state
+  {35, HIGH},  // Relay 7: pin#, ON state
+  {37, HIGH},  // Relay 8: pin#, ON state
+  {39, HIGH},  // Relay 9: pin#, ON state
+  {41, HIGH},  // Relay 10: pin#, ON state
+  {43, HIGH},  // Relay 11: pin#, ON state
+  {45, HIGH},  // Relay 12: pin#, ON state
+  {47, HIGH},  // Relay 13: pin#, ON state
+  {49, HIGH}   // Relay 14: pin#, ON state
 };
 volatile uint8_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
