@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Thermostat functions
 
-#ifdef THERMOSTAT_ON
+#if THERMOSTAT == ON
 
 // =================================================================================================================
 // ============================== add your inside temperature sensor support here ==================================
@@ -14,11 +14,14 @@ void thermostatInit() {
 // gets inside temperature in deg. C
 // return (invalid) if not implemented or if there's an error
 double thermostatInsideTemp() {
+  return invalid;
+/*  
   // read lm335 temperature
   // 0..5 volts for 4096 count DA converter
-  double t=25.0+(((analogRead(3)/1024.0)*5.0)-2.982)*100.0;
+  double t=25.0+(((analogRead(7)/1024.0)*5.0)-2.982)*100.0;
   if ((t<-60.0) || (t>60.0)) t=invalid;
   return t;
+*/
 }
 
 // gets inside RH in %
@@ -42,23 +45,23 @@ void thermostat() {
     insideTemperature=(t1+t2)/2.0; // average last two readings
 
     if (abs(insideTemperature-invalid)<0.1) {
-#ifdef HEAT_RELAY
+#if HEAT_RELAY != OFF
       setRelayOff(HEAT_RELAY);
 #endif
-#ifdef COOL_RELAY
+#if COOL_RELAY != OFF
       setRelayOff(COOL_RELAY);
 #endif
       return;
     }
 
-#ifdef HEAT_RELAY
+#if HEAT_RELAY != OFF
     if (insideTemperature<getHeatSetpoint() && (getHeatSetpoint()!=0)) {
       setRelayOn(HEAT_RELAY);
     } else {
       setRelayOff(HEAT_RELAY);
     }
 #endif
-#ifdef COOL_RELAY
+#if COOL_RELAY != OFF
     if (insideTemperature>getCoolSetpoint() && (getCoolSetpoint()!=0)) {
       setRelayOn(COOL_RELAY);
     } else {
@@ -68,7 +71,7 @@ void thermostat() {
   }
 }
 
-#ifdef HEAT_RELAY
+#if HEAT_RELAY != OFF
 void setHeatSetpoint(float f) {
   EEPROM_writeFloat(EE_heatSetpoint,f);
 }
@@ -76,7 +79,7 @@ float getHeatSetpoint() {
   return EEPROM_readFloat(EE_heatSetpoint);
 }
 #endif
-#ifdef COOL_RELAY
+#if COOL_RELAY != OFF
 void setCoolSetpoint(float f) {
   EEPROM_writeFloat(EE_coolSetpoint,f);
 }

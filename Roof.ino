@@ -2,7 +2,7 @@
 // Roof control functions
 // ======= add your roof support code here =======
 
-#ifdef ROR_ON
+#if ROR == ON
 
 // roof status and errors
 volatile char roofState = 'i';
@@ -45,9 +45,9 @@ void moveRoof() {
 void continueOpeningRoof() {
     cli(); long msOfTravel=((long)millis()-roofOpenStartTime); sei();
 
-#ifdef ROR_SOFTSTART_ON
-    if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+#if ROR_PWM_SOFTSTART == ON
+    if (roofCurrentPower < ROR_PWM_POWER_PERCENT) {
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
     }
 #endif
 
@@ -65,7 +65,7 @@ void continueOpeningRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_FAIL*1000) && senseIsOn(ROR_CLOSED_LIMIT_SENSE))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_LIMIT_SENSE_CLOSED))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
@@ -84,9 +84,9 @@ void continueOpeningRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToOpenAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished opening
-    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
+    if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) {
       // wait for two seconds before powering off the roof motor (for garage door opener)
-      if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000);
+      if (ROR_OPEN_CLOSE_MOMENTARY != OFF) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,0);
       EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg);
@@ -97,7 +97,7 @@ void continueOpeningRoof() {
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
       // Stop the roof motor
-      setRelayOff(ROR_DIR_RELAY_A);
+      setRelayOff(ROR_DC_MOTOR_RELAY_A);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -109,9 +109,9 @@ void continueOpeningRoof() {
 void continueClosingRoof() {
     cli(); long msOfTravel=(long)millis()-roofCloseStartTime; sei();
 
-#ifdef ROR_SOFTSTART_ON
-    if (roofCurrentPower<ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower>ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+#if ROR_PWM_SOFTSTART == ON
+    if (roofCurrentPower < ROR_PWM_POWER_PERCENT) {
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
     }
 #endif
     
@@ -129,7 +129,7 @@ void continueClosingRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_FAIL*1000) && senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_LIMIT_SENSE_OPENED))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle
@@ -156,9 +156,9 @@ void continueClosingRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToCloseAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished closing
-    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) {
+    if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) {
       // wait for two seconds before powering off the roof motor (for garage door opener)
-      if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000);
+      if (ROR_OPEN_CLOSE_MOMENTARY != OFF) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg);
       EEPROM_writeLong(EE_timeLeftToClose,0);
@@ -169,7 +169,7 @@ void continueClosingRoof() {
     // Finished closing? stop the motion and clear state
     if (roofState=='i') {
       // Stop the winch
-      setRelayOff(ROR_DIR_RELAY_B);
+      setRelayOff(ROR_DC_MOTOR_RELAY_B);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -179,11 +179,11 @@ void continueClosingRoof() {
 
 // Start opening the roof, returns true if successful or false otherwise (required)
 bool startRoofOpen() {
-  if ((roofState=='i') && (!relayIsOn(ROR_DIR_RELAY_A)) && (!relayIsOn(ROR_DIR_RELAY_B))) {
+  if (roofState == 'i' && !relayIsOn(ROR_DC_MOTOR_RELAY_A) && !relayIsOn(ROR_DC_MOTOR_RELAY_B)) {
     // Figure out where the roof is right now best as we can tell...
     // Check for limit switch and reset times
-    if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-    if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+    if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+    if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
     timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
     timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
 //    Serial.println(sense1);
@@ -191,33 +191,33 @@ bool startRoofOpen() {
 //    Serial.println(roofTimeAvg);
 
     // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
-    if ((!roofSafetyOverride) && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
+    if (!roofSafetyOverride && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) {
       roofLastError="Error: Open location unknown";
     } else {
       // Check to see if the roof is already opened
-      if (senseIsOn(ROR_OPENED_LIMIT_SENSE) && (!senseIsOn(ROR_CLOSED_LIMIT_SENSE))) {
+      if (senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) {
         roofLastError="Warning: Already open";
       } else {
         // Just one last sanity check before we start moving the roof
-        if (senseIsOn(ROR_OPENED_LIMIT_SENSE) && senseIsOn(ROR_CLOSED_LIMIT_SENSE)) {
+        if (senseIsOn(ROR_LIMIT_SENSE_OPENED) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) {
           roofLastError="Error: Opened/closed limit sw on";
         } else {
           // Set relay/MOSFET
-          setRelayOff(ROR_DIR_RELAY_B);
-          setRelayOn(ROR_DIR_RELAY_A);
+          setRelayOff(ROR_DC_MOTOR_RELAY_B);
+          setRelayOn(ROR_DC_MOTOR_RELAY_A);
 
           // Flag status, no errors
           roofState='o';
           roofStatusRegister=0;
 
           // wait for two seconds after powering on the roof motor (for garage door opener)
-          if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000); 
+          if (ROR_OPEN_CLOSE_MOMENTARY != OFF) delay(2000); 
           setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
 
           // Log start time
           roofOpenStartTime=(long)millis();
 
-#ifdef ROR_SOFTSTART_ON
+#if ROR_PWM_SOFTSTART == ON
           roofCurrentPower=0;
 #else
           roofCurrentPower=ROR_PWM_POWER_PERCENT;
@@ -236,15 +236,15 @@ bool startRoofOpen() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
-  if ((roofState=='i') && (!relayIsOn(ROR_DIR_RELAY_A)) && (!relayIsOn(ROR_DIR_RELAY_B))) {
+  if ((roofState=='i') && (!relayIsOn(ROR_DC_MOTOR_RELAY_A)) && (!relayIsOn(ROR_DC_MOTOR_RELAY_B))) {
     // Check roof interlock...
     if (ROR_CLOSE_OK != 0 && !senseIsOn(ROR_CLOSE_OK)) {
       roofLastError="Error: Close safety interlock";
     } else {
       // Figure out where the roof is right now best as we can tell...
       // Check for limit switch and reset times
-      if (senseIsOn(ROR_CLOSED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-      if (senseIsOn(ROR_OPENED_LIMIT_SENSE)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+      if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+      if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
       timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
       timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
   //    Serial.println(timeLeftToOpenAtStart);
@@ -256,29 +256,29 @@ bool startRoofClose() {
         roofLastError="Error: Close location unknown";
       } else {
         // Check to see if the roof is already closed
-        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE))) {
+        if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && (!senseIsOn(ROR_LIMIT_SENSE_OPENED))) {
           roofLastError="Warning: Already closed";
         } else {
           // Just one last sanity check before we start moving the roof
-          if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) {
+          if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) {
             roofLastError="Error: Closed/opened limit sw on";
           } else {
             // Set relay/MOSFET
-            setRelayOff(ROR_DIR_RELAY_A);
-            setRelayOn(ROR_DIR_RELAY_B);
+            setRelayOff(ROR_DC_MOTOR_RELAY_A);
+            setRelayOn(ROR_DC_MOTOR_RELAY_B);
   
             // Flag status, no errors
             roofState='c';
             roofStatusRegister=0;
 
             // wait for two seconds after powering on the roof motor (for garage door opener)
-            if (ROR_OPEN_CLOSE_MOMENTARY > 0) delay(2000); 
+            if (ROR_OPEN_CLOSE_MOMENTARY != OFF) delay(2000); 
             setRelayOnDelayedOff(ROR_OPEN_CLOSE_MOMENTARY,2);
   
             // Log start time
             roofCloseStartTime=(long)millis();
   
-#ifdef ROR_SOFTSTART_ON
+#if ROR_PWM_SOFTSTART == ON
             roofCurrentPower=0;
 #else
             roofCurrentPower=ROR_PWM_POWER_PERCENT;
@@ -305,8 +305,8 @@ void stopRoof() {
   // Set the state to idle
   roofState='i';
   // Stop the motor
-  setRelayOff(ROR_DIR_RELAY_A);
-  setRelayOff(ROR_DIR_RELAY_B);
+  setRelayOff(ROR_DC_MOTOR_RELAY_A);
+  setRelayOff(ROR_DC_MOTOR_RELAY_B);
 }
 
 // clear errors (required)
@@ -340,7 +340,7 @@ String getRoofLastError() {
     if (roofState=='i') {
       if (roofLastError=="") {
         // one final check for any wierd relay stuff going on
-        if (senseIsOn(ROR_CLOSED_LIMIT_SENSE) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) { s="Error: Limit switch malfunction"; }
+        if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) { s="Error: Limit switch malfunction"; }
       } else s=roofLastError;
     }
   }
@@ -349,12 +349,12 @@ String getRoofLastError() {
 
 // true if the roof is closed (required)
 bool roofIsClosed() {
-  return senseIsOn(ROR_CLOSED_LIMIT_SENSE) && (!senseIsOn(ROR_OPENED_LIMIT_SENSE));
+  return senseIsOn(ROR_LIMIT_SENSE_CLOSED) && (!senseIsOn(ROR_LIMIT_SENSE_OPENED));
 }
 
 // true if the roof is opened (required)
 bool roofIsOpened() {
-  return senseIsOn(ROR_OPENED_LIMIT_SENSE) && (!senseIsOn(ROR_CLOSED_LIMIT_SENSE));
+  return senseIsOn(ROR_LIMIT_SENSE_OPENED) && (!senseIsOn(ROR_LIMIT_SENSE_CLOSED));
 }
 
 // true if the roof is moving (required)

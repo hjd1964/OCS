@@ -9,46 +9,40 @@ bool outsideTempGood=false, skyTempGood=false, windspeedGood=false, pressureGood
 
 // this is the Weather.ino file for my setup
 
-#include <Adafruit_Sensor.h>
+#include <Adafruit_Sensor.h> // https://github.com/adafruit/Adafruit_Sensor
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets outside temperature in deg. C
 
-#include <Adafruit_Si7021.h>
-Adafruit_Si7021 tempHumidity = Adafruit_Si7021(); // I2C address 0x40
+#include <Adafruit_BME280.h> // I2C address 0x76 or 0x77; https://github.com/adafruit/Adafruit_BME280_Library
+Adafruit_BME280 bme;
 
 // return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
   if (!outsideTempGood) return invalid;
 
-  double t = tempHumidity.readTemperature();
+  double t = bme.readTemperature();
   if (t<-60.0 || t>60.0) t=invalid;
   return t;
 }
 
 bool initOutsideTemp() {
-  tempHumidity.begin();
-  return true;
+  bool success=true;
+  if (!bme.begin(0x76,&Wire)) success=false;
+  return success;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky IR temperature in deg. C
 
-#include <Adafruit_MLX90614.h>
-Adafruit_MLX90614 mlx = Adafruit_MLX90614();  // I2C address 0x5A
-
 // return (invalid) if not implemented or if there's an error
 double weatherSkyTemp() {
-  if (!skyTempGood) return (invalid);
-
-  double t = mlx.readObjectTempC(); 
-  if (t<-100.0 || t>100.0) t=invalid;
-  return t;
+  if (!skyTempGood) return invalid;
+  return invalid;
 }
 
 bool initSkyTemp() {
-  mlx.begin();
-  return true;
+  return false;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -56,10 +50,10 @@ bool initSkyTemp() {
 
 // return (invalid) if not implemented or if there's an error
 double weatherWindspeed() {
-  if (!windspeedGood) return (invalid);
+  if (!windspeedGood) return invalid;
 
   // for the Modern Devices wind sensor, https://moderndevice.com/product/wind-sensor-rev-p/
-  const int OutPin = A6;   // wind sensor analog pin hooked up to Wind P sensor "OUT" pin
+  const int OutPin = A5;   // wind sensor analog pin hooked up to Wind P sensor "OUT" pin
   int windADunits = analogRead(OutPin);
   double windMPH = pow((((float)windADunits - 264.0) / 85.6814), 3.36814);
   if (isnan(windMPH)) windMPH=0;
@@ -69,7 +63,7 @@ double weatherWindspeed() {
 // int tempRawAD = analogRead(TempPin);
 // double tempC = ((((float)tempRawAD * 5.0) / 1024.0) - 0.400) / .0195;
   if (windKPH<0 || windKPH>350) windKPH=invalid;
-  return (windKPH);
+  return windKPH;
 }
 
 bool initWindspeed() {
@@ -79,81 +73,25 @@ bool initWindspeed() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets barometric pressure in mb
 
-#include <SFE_BMP180.h> // I2C address 0x77
-SFE_BMP180 pressure;
-#define DEBUG_WEATHER_OFF
-
 // return (invalid) if not implemented or if there's an error; absolute pressure
 double weatherPressure() {
-  if (!pressureGood) return (invalid);
-
-  char status;
-  double T,P,p0,a;
-  p0=-1000;
-  status = pressure.startTemperature();
-  if (status != 0)
-  {
-    delay(status); // Wait for the measurement to complete
-
-    // Retrieve the completed temperature measurement:
-    // Note that the measurement is stored in the variable T.
-    // Function returns 1 if successful, 0 if failure.
-    status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      // Start a pressure measurement:
-      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
-      // If request is successful, the number of ms to wait is returned.
-      // If request is unsuccessful, 0 is returned.
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        delay(status); // Wait for the measurement to complete
-
-        // Retrieve the completed pressure measurement:
-        // Note that the measurement is stored in the variable P.
-        // Note also that the function requires the previous temperature measurement (T).
-        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
-        // Function returns 1 if successful, 0 if failure.
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-          p0=P;
-        } else p0=-1003;
-      } else p0=-1002;
-    } else p0=-1001;
-  } else p0=-1000;
-
-#ifdef DEBUG_PRESSURE_ON
-  if (p0==-1003) Serial.println("Error retrieving pressure measurement");
-  if (p0==-1002) Serial.println("Error starting pressure measurement");
-  if (p0==-1001) Serial.println("Error retrieving temperature measurement");
-  if (p0==-1000) Serial.println("Error starting temperature measurement");
-#endif
-
-  if (p0<invalid) p0=invalid;
+  if (!pressureGood) return invalid;
   
+  double p0 = bme.readPressure()/100.0;  // hpa to millibar
   return p0;
 }
 
 // return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
 double weatherPressureSeaLevel() {
-  if (!pressureGood) return (invalid);
-
-  double P=weatherPressure();
-  if (P==invalid) return P;
+  if (!pressureGood) return invalid;
   
-  // The pressure sensor returns abolute pressure, which varies with altitude.
-  // To remove the effects of altitude, use the sealevel function and your current altitude.
-  // This number is commonly used in weather reports.
-  // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
-  // Result: p0 = sea-level compensated pressure in mb
-  double p0 = pressure.sealevel(P,WEATHER_ALTITUDE);
-  return p0;
+  double p0=bme.readPressure();
+  double p1=(p0/pow((1.0-((float)(WEATHER_ALTITUDE))/44330.0), 5.255))/100.0;
+  return p1;
 }
 
 bool initPressure() {
-  return pressure.begin();
+  return true;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -161,9 +99,9 @@ bool initPressure() {
 
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
-  if (!humidityGood) return (invalid);
+  if (!humidityGood) return invalid;
 
-  double h=tempHumidity.readHumidity();
+  double h=bme.readHumidity();
   if (h<0.0) h=invalid;
   if (h>100.0) h=100.0;
   return h;
@@ -185,7 +123,7 @@ int weatherRain() {
   // http://www.ebay.com/itm/Raindrops-Detection-sensor-modue-rain-module-weather-module-Humidity-For-Arduino-/400439668701
   
   double rain = (double)analogRead(A2)/1023.0; // scale for 0.0 to 1.0 range
-
+  rain = 0.1;
   if (rain <= WEATHER_RAIN_THRESHOLD_LOW) return 1; else
   if (rain > WEATHER_RAIN_THRESHOLD_HIGH) return 3; else return 2;
 }
@@ -197,6 +135,9 @@ bool initRain() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky brightness in mag/arc-sec^2
 
+#define WEATHER_SKY_QUAL_ZERO         0.0 //    0.0, n. Where n=-2.0 to 2.0 (in mpsas) offset
+#define WEATHER_SKY_QUAL_SCALE        1.0 //    1.0, n. Where n=-0.5 to 1.5 (x) sensitivity scale factor
+
 double last_mag_per_sq_arcsec = invalid;
 unsigned long last_mag_per_sq_arcsec_time = 0;
 #include <Adafruit_TSL2591.h> // I2C addresses 0x28 and 0x29; using my customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library
@@ -204,7 +145,7 @@ Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
 
 // return (invalid) if not implemented or if there's an error
 double weatherSkyQuality() {
-  if (!skyQualityGood) return (invalid);
+  if (!skyQualityGood) return invalid;
 
   // safe-guard to invalidate stale readings after 30 seconds
   if ((long)((last_mag_per_sq_arcsec_time+30000UL)-millis()) < 0) last_mag_per_sq_arcsec = invalid;
@@ -250,7 +191,7 @@ double weatherSkyQuality() {
   last_mag_per_sq_arcsec = mag_per_sq_arcsec;
   last_mag_per_sq_arcsec_time = millis();
   
-  return (last_mag_per_sq_arcsec);
+  return last_mag_per_sq_arcsec;
 }
 
 bool initSkyQuality() {
@@ -276,49 +217,49 @@ void weatherInit() {
   // wiring has pullups enabled, for a 3.3V I2C device this isn't a good thing even this hack isn't 100% perfect 
   // since 5V is applied for an instant at startup use a level converter if this causes you to loose sleep
 
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   Serial.println("Debug weather start");
 #endif
 
   outsideTempGood=initOutsideTemp();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (outsideTempGood) Serial.println("OUTSIDE TEMP sense up"); else Serial.println("OUTSIDE TEMP sense fail");
 #endif
 
   skyTempGood=initSkyTemp();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (skyTempGood) Serial.println("SKY IR sense up"); else Serial.println("SKY IR sense fail");
 #endif
 
   windspeedGood=initWindspeed();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (windspeedGood) Serial.println("WINDSPEED sense up"); else Serial.println("WINDSPEED sense fail");
 #endif
 
   pressureGood=initPressure();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (pressureGood) Serial.println("PRESSURE sense up"); else Serial.println("PRESSURE sense fail");
 #endif
 
   humidityGood=initHumidity();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (humidityGood) Serial.println("HUMIDITY sense up"); else Serial.println("HUMIDITY sense fail");
 #endif
 
   rainGood=initRain();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (rainGood) Serial.println("RAIN sense up"); else Serial.println("RAIN sense fail");
 #endif
 
   skyQualityGood=initSkyQuality();
   pinMode(20,INPUT); pinMode(21,INPUT);
-#ifdef DEBUG_WEATHER_ON
+#if DEBUG_WEATHER == ON
   if (skyQualityGood) Serial.println("SKY QUAL up"); else Serial.println("SKY QUAL fail");
 #endif
 }

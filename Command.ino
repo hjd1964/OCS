@@ -38,7 +38,7 @@ void processCommands() {
 
 //   G - Get Commands ------------------------------------------------------
       if (command[0]=='G') {
-#if defined(WEATHER_ON) && defined(WEATHER_OUT_TEMP_ON)
+#if WEATHER_TEMPERATURE == ON && WEATHER == ON
 //  :G1#  Get outside temperature
 //         Returns: nnn.n#
         if ((command[1]=='1') && (parameter[1]==0)) {
@@ -46,7 +46,7 @@ void processCommands() {
           quietReply=true;
         } else
 #endif
-#if defined(WEATHER_ON) && defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
 //  :G2#  Get sky IR temperature
 //         Returns: nnn.n#
         if ((command[1]=='2') && (parameter[1]==0)) {
@@ -73,7 +73,7 @@ void processCommands() {
           } else
             commandError=true;
         } else
-#if defined(WEATHER_ON) && defined(WEATHER_PRESSURE_ON)
+#if WEATHER_PRESSURE == ON && WEATHER == ON
 //  :Gb#  Get absolute barometric pressure as Float
 //         Returns: n.nnn#
 //         where n ranges from about 980.0 to 1050.0 (mbar, sea-level compensated)
@@ -86,14 +86,14 @@ void processCommands() {
 //         Example: :GC#
 //         Returns: sssss...#
         if ((command[1]=='C') && (parameter[0]==0)) {
-#if defined(WEATHER_ON) && defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
           quietReply=true;
           strcpy(reply,weatherCloudCoverDescription().c_str());
 #else
           strcpy(reply,"N/A");
 #endif
         } else
-#if defined(THERMOSTAT_ON) && defined(HEAT_RELAY)
+#if THERMOSTAT == ON && HEAT_RELAY != OFF
 //  :GH#  Get Heat setpoint
 //         Example: :GH#
 //         Returns: 0# or 21#, 0 or temperature in C
@@ -106,7 +106,7 @@ void processCommands() {
             commandError=true;
         } else
 #endif
-#if defined(WEATHER_HUMIDITY_ON) && defined(WEATHER_ON)
+#if WEATHER_HUMIDITY == ON && WEATHER == ON
 //  :Gh#  Get relative humidity reading as Float
 //         Returns: n.n#
 //         where n ranges from 0.0 to 100.0
@@ -119,7 +119,7 @@ void processCommands() {
 //         Returns: OK#, OUT#, or N/A#
 //         
         if ((command[1]=='P') && (parameter[0]==0)) {
-#if defined(STAT_MAINS_SENSE) && defined(WEATHER_ON)
+#if STAT_MAINS_SENSE != OFF && WEATHER == ON
           // check for mains power out
           if (!senseIsOn(STAT_MAINS_SENSE)) strcpy(reply,"OUT"); else strcpy(reply,"OK");
 #else
@@ -131,7 +131,7 @@ void processCommands() {
 //         Returns: n#
 //         -1000 is invalid, 0 is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
         if ((command[1]=='R') && (parameter[0]==0)) {
-#if defined(WEATHER_ON) && defined(WEATHER_RAIN_ON)
+#if WEATHER_RAIN == ON && WEATHER == ON
           sprintf(reply,"%d",weatherRain());
 #else
           strcpy(reply,"0");
@@ -159,7 +159,7 @@ void processCommands() {
           } else
             commandError=true;
         } else
-#if defined(WEATHER_ON) && defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
 //  :GS#  Get averaged sky differential temperature
 //         Returns: nnn.n#
 //         where <=21 is cloudy
@@ -186,7 +186,7 @@ void processCommands() {
           quietReply=true;
           if (isSafe()) strcpy(reply,"SAFE"); else strcpy(reply,"UNSAFE");
         } else
-#if defined(THERMOSTAT_ON) && defined(COOL_RELAY)
+#if THERMOSTAT == ON && COOL_RELAY != OFF
 //  :GV#  Get Cool/Vent setpoint
 //         Example: :GC#
 //         Returns: 0# or 30#, 0 or temperature in C
@@ -203,7 +203,7 @@ void processCommands() {
 //         Returns: OK#, HIGH#, or N/A#
 //         
         if ((command[1]=='W') && (parameter[0]==0)) {
-#if defined(WEATHER_ON) && defined(WEATHER_WIND_SPD_ON)
+#if WEATHER_WIND_SPD == ON && WEATHER == ON
           if (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD) strcpy(reply,"HIGH"); else 
           if (weatherWindspeed()==invalid) strcpy(reply,"Invalid"); else strcpy(reply,"OK");
 #else
@@ -232,7 +232,7 @@ void processCommands() {
       } else
 
 //   R - Roof Commands -----------------------------------------------------
-#ifdef ROR_ON
+#if ROR == ON
       if (command[0]=='R') {
 //  :RC#  Roof Close
 //         Returns: nothing
@@ -311,8 +311,8 @@ void processCommands() {
           } else
             commandError=true;
         } else
-#ifdef THERMOSTAT_ON
-#ifdef HEAT_RELAY
+#if THERMOSTAT == ON
+#if HEAT_RELAY != OFF
 //  :SHnn#  Set heat nn = temperature in deg. C
 //         Example: :SH0# turns heat off
 //         Example: :SH21# heat setpoint 21 deg. C
@@ -331,7 +331,7 @@ void processCommands() {
             commandError=true;
         } else
 #endif
-#ifdef COOL_RELAY
+#if COOL_RELAY != OFF
 //  :SCnnn#  Set cool nnn = temperature in deg. C
 //         Example: :SC0# turns cooling off
 //         Example: :SC30# cool setpoint 30 deg. C

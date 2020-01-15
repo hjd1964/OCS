@@ -11,7 +11,7 @@ void CmdServer::init(int port, long t) {
     if (thisPort==9999) cmdserver1.begin();
     if (thisPort==9998) cmdserver2.begin();
     timeout=t;
-#ifdef CMDSERVER_DEBUG_ON
+#if DEBUG_CMDSERVER == ON
     Serial.print("cmd server is at ");
     Serial.print(Ethernet.localIP()); Serial.print(":"); Serial.println(thisPort);
 #endif
@@ -27,7 +27,7 @@ void CmdServer::handleClient() {
     if (client) {
       lastAccess=millis();
       haveClient = true;
-#ifdef CMDSERVER_DEBUG_ON
+#if DEBUG_CMDSERVER == ON
       Serial.println("client connected");
 #endif
     }
@@ -37,7 +37,7 @@ void CmdServer::handleClient() {
       client.stop();
       client = EthernetClient();
       haveClient = false;
-#ifdef CMDSERVER_DEBUG_ON
+#if DEBUG_CMDSERVER == ON
       Serial.print("client disconnected");
       if (millis()-lastAccess>timeout) Serial.println(" (timed out)"); else Serial.println("");
 #endif
@@ -64,4 +64,3 @@ void CmdServer::print(char s[]) {
   lastAccess=millis();
   client.write(s);
 }
-

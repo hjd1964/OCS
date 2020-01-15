@@ -1,21 +1,22 @@
 // -----------------------------------------------------------------------------------------------------------------
 // NTP time code
 // from here: https://github.com/PaulStoffregen/Time
+// Adding other RTC or GPS for time instead should be easy, see: https://github.com/PaulStoffregen/Time
 
-#ifdef STAT_TIME_NTP_ON
+#if STAT_TIME_SOURCE == NTP
 const int NTP_PACKET_SIZE = 48; // NTP time is in the first 48 bytes of message
 byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 time_t getNtpTime()
 {
-  #ifdef ROR_ON
+#if ROR == ON
   // no updates if the roof is moving
   if (roofIsMoving()) return 0;
-  #endif
+#endif
   
   unsigned long tOut=millis()+3000L;
   while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
-#ifdef NTP_DEBUG_ON
+#if DEBUG_NPT == ON
   Serial.println("Transmit NTP Request");
 #endif
   sendNTPpacket(timeServer);
@@ -23,7 +24,7 @@ time_t getNtpTime()
   while (millis() - beginWait < 1500) {
     int size = Udp.parsePacket();
     if (size >= NTP_PACKET_SIZE) {
-#ifdef NTP_DEBUG_ON
+#if DEBUG_NPT == ON
       Serial.println("Receive NTP Response");
 #endif
       Udp.read(packetBuffer, NTP_PACKET_SIZE);  // read packet into the buffer
@@ -36,7 +37,7 @@ time_t getNtpTime()
       return secsSince1900 - 2208988800UL + timeZone * SECS_PER_HOUR;
     }
   }
-#ifdef NTP_DEBUG_ON
+#if DEBUG_NPT == ON
   Serial.println("No NTP Response :-(");
 #endif
   return 0; // return 0 if unable to get the time

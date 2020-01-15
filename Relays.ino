@@ -34,32 +34,30 @@ void RelayPwmISR() {
     }
   }
 
-#ifdef ROR_ON
-#if defined(ROR_PWM_SPEED_HZ) && defined(ROR_PWM_POWER_PERCENT)
+#if ROR == ON
+#if ROR_PWM_SPEED_HZ != OFF && ROR_PWM_POWER_PERCENT != OFF
   if (roofIsMoving()) {
-    count++; if (count>=(1000/(ROR_PWM_SPEED_HZ*10))) {
+    count++; if (count >= (1000/(ROR_PWM_SPEED_HZ*10))) {
       count=0;
       slowPwmCycle++; if (slowPwmCycle>9) slowPwmCycle=0;
-      if (slowPwmCycle==0) setRelayOn(ROR_PWR_RELAY);
-      if ((!roofMaxPowerOn()) && ((roofPowerLevel()/10)==slowPwmCycle)) setRelayOff(ROR_PWR_RELAY);
+      if (slowPwmCycle == 0) setRelayOn(ROR_POWER_RELAY);
+      if (!roofMaxPowerOn() && ((roofPowerLevel()/10) == slowPwmCycle)) setRelayOff(ROR_POWER_RELAY);
     }
   } else {
     count=0; slowPwmCycle=0;
-    if (relayIsOn(ROR_PWR_RELAY)) setRelayOff(ROR_PWR_RELAY);
+    if (relayIsOn(ROR_POWER_RELAY)) setRelayOff(ROR_POWER_RELAY);
   }
 #else
   if (roofIsMoving()) {
-    setRelayOn(ROR_PWR_RELAY);
+    setRelayOn(ROR_POWER_RELAY);
   } else {
-    if (relayIsOn(ROR_PWR_RELAY)) setRelayOff(ROR_PWR_RELAY);
+    if (relayIsOn(ROR_POWER_RELAY)) setRelayOff(ROR_POWER_RELAY);
   }
 #endif
 
   // ROR safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
-  #ifdef ROR_DIR_RELAY_A
-    if (relayIsOn(ROR_DIR_RELAY_A) && senseIsOn(ROR_OPENED_LIMIT_SENSE)) stopRoof();
-  #endif
-  if (relayIsOn(ROR_DIR_RELAY_B) && senseIsOn(ROR_CLOSED_LIMIT_SENSE)) stopRoof();
+  if (relayIsOn(ROR_DC_MOTOR_RELAY_A) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) stopRoof();
+  if (relayIsOn(ROR_DC_MOTOR_RELAY_B) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) stopRoof();
 #endif
 }
 
@@ -100,7 +98,7 @@ void setRelayOff(int r, bool updateState) {
 bool relayIsOn(const char *rs) { return relayIsOn(atoi(rs)); }
 
 bool relayIsOn(int r) {
-  if (r >= 1 && r <= 14) return !(relayState[r]==0); else return false;
+  if (r >= 1 && r <= 14) return !(relayState[r] == 0); else return false;
 }
 
 bool senseChanged(int s) {

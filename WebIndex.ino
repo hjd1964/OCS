@@ -20,7 +20,7 @@ const char htmlThermostat1[] PROGMEM =
 "<div class=\"obsControl\">"
 "<b>Thermostat</b><br />"
 "&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\">%s%s</div><br />";
-#ifdef THERMOSTAT_HUMIDITY_ON
+#if THERMOSTAT_HUMIDITY == ON
 const char htmlThermostatHumidity[] PROGMEM =
 "&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\">%s%s</div><br />";
 #endif
@@ -58,42 +58,42 @@ const char htmlRoof2[] PROGMEM =
 "<div style=\"text-align: center\">"
 "<br />"
 "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />"
-#ifdef ROR_USER_SAFETY_OVERRIDE_ON
+#if ROR_USER_SAFETY_OVERRIDE == ON
 "&nbsp;&nbsp;&nbsp;<input type=\"button\" onclick='SetVar(\"press\",\"roof_override\")' value=\"Safety Override\" />"
 #endif
 "<br />"
 "<input type=\"button\" onclick='SetVar(\"press\",\"roof_open\")' value=\"Open Roof\" />&nbsp;&nbsp;&nbsp;"
 "<input type=\"button\" onclick='SetVar(\"press\",\"roof_close\")' value=\"Close Roof\" /><br />"
 "<br />"
-#ifdef ROR_AUTOCLOSE_DAWN_ON
+#if ROR_AUTOCLOSE_DAWN == ON
 "<input type=\"checkbox\"  onclick='SetVar(\"auto_close\",this.checked)' %___ACL />&nbsp;Automatically close at dawn<br />"
 #endif
 "</div>"
 "</div>\r\n";
 
 #ifndef RESPONSE_INTERVAL
-  #define RESPONSE_INTERVAL "1000"
+  #define RESPONSE_INTERVAL 1000
 #endif
 
 // Javascript for Ajax
 const char html_ajax_active[] PROGMEM =
 "<script>\n"
 "var auto1Tick=0;\n"
-"var auto1=setInterval(autoRun1s," RESPONSE_INTERVAL ");\n"
+"var auto1=setInterval(autoRun1s," STR(RESPONSE_INTERVAL) ");\n"
 
 "function autoRun1s() {\n"
   "var pageList = ["
   "'MiscStatus',15,"
-  #ifdef WEATHER_ON
+  #if WEATHER == ON
   "'Weather',32,"
   #endif
-  #ifdef THERMOSTAT_ON
+  #if THERMOSTAT == ON
   "'Thermostat',61,"
-  #ifdef THERMOSTAT_HUMIDITY_ON
-  "'ThermostatH',118,"
+    #if THERMOSTAT_HUMIDITY == ON
+    "'ThermostatH',118,"
+    #endif
   #endif
-  #endif
-  #ifdef ROR_ON
+  #if ROR == ON
   "'RoofStatus',3,"
   #endif
   "'',0"
@@ -156,9 +156,9 @@ void index(EthernetClient *client) {
     strcpy_P(temp,html_pageHeader1); client->print(temp);
     strcpy_P(temp,html_pageHeader2); client->print(temp);
     strcpy_P(temp,html_links1s); client->print(temp);
-  #if defined(WEATHER_ON) && defined(SD_CARD_ON)
+  #if WEATHER == ON && WEATHER_CHARTS == ON
     strcpy_P(temp,html_links2); client->print(temp);
-  #if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
+  #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
     strcpy_P(temp,html_links3); client->print(temp);
   #endif
   #endif
@@ -170,19 +170,19 @@ void index(EthernetClient *client) {
   miscstatus(client);
   { char temp[800]=""; strcpy_P(temp,htmlStatus3); client->print(temp); }
 
-#ifdef WEATHER_ON
+#if WEATHER == ON
   { char temp[800]=""; strcpy_P(temp,htmlWeather1); client->print(temp); }
   weather(client);
   { char temp[800]=""; strcpy_P(temp,htmlWeather3); client->print(temp); }
 #endif
 
-#ifdef POWER_ON
+#if POWER == ON
   { char temp[800]=""; strcpy_P(temp,htmlPower1); client->print(temp); }
   power(client);
   { char temp[800]=""; strcpy_P(temp,htmlPower3); client->print(temp); }
 #endif
 
-#ifdef THERMOSTAT_ON
+#if THERMOSTAT == ON
   {
     char temp[512]="";
     char temp1[255]="";
@@ -195,14 +195,14 @@ void index(EthernetClient *client) {
       strcpy(ws1,"Invalid");
     } else {
       strcpy(ws2," &deg;C -");
-#ifdef IMPERIAL_UNITS_ON
-      T=T*(9.0/5.0)+32.0;
-      strcpy(ws2," &deg;F -");
-#endif
+  #if STAT_UNITS == IMPERIAL
+        T=T*(9.0/5.0)+32.0;
+        strcpy(ws2," &deg;F -");
+  #endif
       dtostrf(T,6,1,ws1);
     }
     strcpy_P(temp1,htmlThermostat1); sprintf(temp,temp1,ws1,ws2); client->print(temp);
-#ifdef THERMOSTAT_HUMIDITY_ON
+#if THERMOSTAT_HUMIDITY == ON
     double H=thermostatInsideHumidity();
     if (H==invalid) {
       strcpy(ws2,"");
@@ -214,9 +214,9 @@ void index(EthernetClient *client) {
     strcpy_P(temp1,htmlThermostatHumidity); sprintf(temp,temp1,ws1,ws2); client->print(temp);
 #endif
     client->print("<br />");
-#ifdef HEAT_RELAY
+#if HEAT_RELAY != OFF
     strcpy_P(temp,htmlThermostatHeat1); client->print(temp);
-#ifdef IMPERIAL_UNITS_ON
+#if STAT_UNITS == IMPERIAL
     int h=round(getHeatSetpoint()*(9.0/5.0)+32.0);
     if (getHeatSetpoint()==0) h=0;
 #else
@@ -225,7 +225,7 @@ void index(EthernetClient *client) {
     strcpy(temp1,"<option value=\"0\" %s>OFF</option>");
     if (h==0) strcpy(ws1,"selected"); else strcpy(ws1,"");
     sprintf(temp,temp1,ws1); client->print(temp);
-#ifdef IMPERIAL_UNITS_ON
+#if STAT_UNITS == IMPERIAL
     strcpy(temp1,"<option value=\"%d\" %s>%d&deg;F</option>");
     int hs[11]={40,50,60,65,67,68,69,70,71,72,73};
 #else
@@ -238,9 +238,9 @@ void index(EthernetClient *client) {
     }
     strcpy_P(temp,htmlThermostatHeat2); client->print(temp);
 #endif
-#ifdef COOL_RELAY
+#if COOL_RELAY != OFF
     strcpy_P(temp,htmlThermostatCool1); client->print(temp);
-#ifdef IMPERIAL_UNITS_ON
+#if STAT_UNITS == IMPERIAL
     int c=round(getCoolSetpoint()*(9.0/5.0)+32.0);
     if (getCoolSetpoint()==0) c=0;
 #else
@@ -249,7 +249,7 @@ void index(EthernetClient *client) {
     strcpy(temp1,"<option value=\"0\" %s>OFF</option>");
     if (c==0) strcpy(ws1,"selected"); else strcpy(ws1,"");
     sprintf(temp,temp1,ws1); client->print(temp);
-#ifdef IMPERIAL_UNITS_ON
+#if STAT_UNITS == IMPERIAL
     strcpy(temp1,"<option value=\"%d\" %s>%d&deg;F</option>");
     int cs[10]={68,69,70,71,72,73,75,80,90,99};
 #else
@@ -266,19 +266,19 @@ void index(EthernetClient *client) {
   }
 #endif
 
-#ifdef LIGHT_ON
+#if LIGHT == ON
   { char temp[800]=""; strcpy_P(temp,htmlLight1); client->print(temp); }
   light(client);
   { char temp[800]=""; strcpy_P(temp,htmlLight3); client->print(temp); }
 #endif
 
-#ifdef ROR_ON
+#if ROR == ON
   { char temp[800]=""; strcpy_P(temp,htmlRoof1); client->print(temp); }
   roofstatus(client);
   { 
     char temp[800]=""; 
     strcpy_P(temp,htmlRoof2);
-  #ifdef ROR_AUTOCLOSE_DAWN_ON
+  #if ROR_AUTOCLOSE_DAWN == ON
     if (roofAutoClose) check(temp,"%___ACL"); else erase(temp,"%___ACL");
   #endif
     client->print(temp);

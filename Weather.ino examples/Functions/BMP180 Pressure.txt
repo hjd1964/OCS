@@ -1,0 +1,80 @@
+// -----------------------------------------------------------------------------------------------------------------
+// gets barometric pressure in mb
+
+#include <SFE_BMP180.h> // I2C address 0x77
+SFE_BMP180 pressure;
+
+#define DEBUG_PRESSURE OFF
+
+// return (invalid) if not implemented or if there's an error; absolute pressure
+double weatherPressure() {
+  if (!pressureGood) return (invalid);
+
+  char status;
+  double T,P,p0,a;
+  p0=-1000;
+  status = pressure.startTemperature();
+  if (status != 0)
+  {
+    delay(status); // Wait for the measurement to complete
+
+    // Retrieve the completed temperature measurement:
+    // Note that the measurement is stored in the variable T.
+    // Function returns 1 if successful, 0 if failure.
+    status = pressure.getTemperature(T);
+    if (status != 0)
+    {
+      // Start a pressure measurement:
+      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
+      // If request is successful, the number of ms to wait is returned.
+      // If request is unsuccessful, 0 is returned.
+      status = pressure.startPressure(3);
+      if (status != 0)
+      {
+        delay(status); // Wait for the measurement to complete
+
+        // Retrieve the completed pressure measurement:
+        // Note that the measurement is stored in the variable P.
+        // Note also that the function requires the previous temperature measurement (T).
+        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
+        // Function returns 1 if successful, 0 if failure.
+        status = pressure.getPressure(P,T);
+        if (status != 0)
+        {
+          p0=P;
+        } else p0=-1003;
+      } else p0=-1002;
+    } else p0=-1001;
+  } else p0=-1000;
+
+#if DEBUG_PRESSURE == ON
+  if (p0==-1003) Serial.println("Error retrieving pressure measurement");
+  if (p0==-1002) Serial.println("Error starting pressure measurement");
+  if (p0==-1001) Serial.println("Error retrieving temperature measurement");
+  if (p0==-1000) Serial.println("Error starting temperature measurement");
+#endif
+
+  if (p0<invalid) p0=invalid;
+  
+  return p0;
+}
+
+// return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
+double weatherPressureSeaLevel() {
+  if (!pressureGood) return (invalid);
+
+  double P=weatherPressure();
+  if (P==invalid) return P;
+  
+  // The pressure sensor returns abolute pressure, which varies with altitude.
+  // To remove the effects of altitude, use the sealevel function and your current altitude.
+  // This number is commonly used in weather reports.
+  // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
+  // Result: p0 = sea-level compensated pressure in mb
+  double p0 = pressure.sealevel(P,WEATHER_ALTITUDE);
+  return p0;
+}
+
+bool initPressure() {
+  return pressure.begin();
+}

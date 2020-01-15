@@ -1,0 +1,61 @@
+// -----------------------------------------------------------------------------------------------------------------
+// gets outside temperature in deg. C
+
+#include <Adafruit_BME280.h> // I2C address 0x76 or 0x77; https://github.com/adafruit/Adafruit_BME280_Library
+Adafruit_BME280 bme;
+
+// return (invalid) if not implemented or if there's an error
+double weatherOutsideTemp() {
+  if (!outsideTempGood) return invalid;
+
+  double t = bme.readTemperature();
+  if (t<-60.0 || t>60.0) t=invalid;
+  return t;
+}
+
+bool initOutsideTemp() {
+  bool success=true;
+  if (!bme.begin(0x76,&Wire)) success=false; // I2C address 0x76 or 0x77
+  return success;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
+// gets barometric pressure in mb
+
+// return (invalid) if not implemented or if there's an error; absolute pressure
+double weatherPressure() {
+  if (!pressureGood) return invalid;
+  
+  double p0 = bme.readPressure()/100.0;  // hpa to millibar
+  return p0;
+}
+
+// return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
+double weatherPressureSeaLevel() {
+  if (!pressureGood) return invalid;
+  
+  double p0=bme.readPressure();
+  double p1=(p0/pow((1.0-((float)(WEATHER_ALTITUDE))/44330.0), 5.255))/100.0;
+  return p1;
+}
+
+bool initPressure() {
+  return outsideTempGood; // BME280 was initialized in initOutsideTemp()
+}
+
+// -----------------------------------------------------------------------------------------------------------------
+// gets relative humidity in %
+
+// return (invalid) if not implemented or if there's an error
+double weatherHumidity() {
+  if (!humidityGood) return invalid;
+
+  double h=bme.readHumidity();
+  if (h<0.0) h=invalid;
+  if (h>100.0) h=100.0;
+  return h;
+}
+
+bool initHumidity() {
+  return outsideTempGood; // BME280 was initialized in initOutsideTemp()
+}

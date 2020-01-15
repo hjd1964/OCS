@@ -2,7 +2,7 @@
  * Title       Observatory-Control-System
  * by          Howard Dutton
  *
- * Copyright (C) 2012 to 2019 Howard Dutton
+ * Copyright (C) 2012 to 2020 Howard Dutton
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,21 +36,24 @@
 // firmware info
 #define ONCUE_OCS
 #define FirmwareDate   __DATE__
-#define FirmwareNumber "1.5a"
+#define FirmwareNumber "2.0a"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   __TIME__
 
-#define invalid -1000
+#include "Constants.h"
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 #include <SPI.h>
 #include <Ethernet.h>
+
 #include "Config.h"
-#ifdef NTP_ON
-#include <EthernetUdp.h>
+#include "Validate.h"
+
+#if NTP == ON
+  #include <EthernetUdp.h>
 #endif
-#ifdef WATCHDOG_ON
-#include <avr/wdt.h>
+#if WATCHDOG == ON
+  #include <avr/wdt.h>
 #endif
 #include "string.h"
 #include "EEPROM.h"
@@ -59,96 +62,80 @@
 #include "CmdServer.h"
 #include "Command.h"
 
-const int timeZone = TimeZone;
+const int timeZone = TIME_ZONE;
 
 WebServer www;
 CmdServer Cmd;
 CmdServer Cmd1;
 
-#if defined(STAT_TIME_NTP_ON)
-EthernetUDP Udp;
-// local port to listen for UDP packets
-unsigned int localPort = 8888;
-time_t startupTime = 0;
-bool fastNTPSync=false;
-#elif defined(STAT_TIME_DS3234_ON) || defined(STAT_TIME_DS3234_INIT)
-#include <SparkFunDS3234RTC.h>  // https://github.com/sparkfun/SparkFun_DS3234_RTC_Arduino_Library/archive/master.zip
-#define DS3234_CS_PIN 53
-time_t startupTime = 0;
+#if STAT_TIME_SOURCE == NTP
+  EthernetUDP Udp;
+  // local port to listen for UDP packets
+  unsigned int localPort = 8888;
+  time_t startupTime = 0;
+  bool fastNTPSync=false;
+#elif STAT_TIME_SOURCE == DS3234 || STAT_TIME_SOURCE == DS3234INIT
+  #include <SparkFunDS3234RTC.h>  // https://github.com/sparkfun/SparkFun_DS3234_RTC_Arduino_Library/archive/master.zip
+  #define DS3234_CS_PIN 53
+  time_t startupTime = 0;
 #endif
 
 // Pin assignments
-// Note that pins 4, 10, 50, 51, 52, 53 are used for SD card and W5100 Ethernet (SPI interface on pins 50-53)
 
 typedef struct {
   uint8_t pin;
   uint8_t onState;
 } relay_t;
 const volatile relay_t relay[] {
-  { 0, HIGH},               // not used
-  {23, HIGH},               // Pin output to Relay 1  (Outlets for computer)
-  {25, HIGH},               // Pin output to Relay 2  (12V Power supply)
-  {27, HIGH},               // Pin output to Relay 3  (Outlets for telescope)
-  {29, HIGH},               // Pin output to Relay 4  (Heater)
-  {31, HIGH},               // Pin output to Relay 5  (Outside flood lights)
-  {33, HIGH},               // Pin output to Relay 6  (Fan/AC, not used)
+  { 0, HIGH},         // not used
+  {23, HIGH},         // Relay 1: pin#, ON state
+  {25, HIGH},         // Relay 2: pin#, ON state
+  {27, HIGH},         // Relay 3: pin#, ON state
+  {29, HIGH},         // Relay 4: pin#, ON state
+  {31, HIGH},         // Relay 5: pin#, ON state
+  {33, HIGH},         // Relay 6: pin#, ON state
 // solid state relays (PWM is enabled on these)
-  {35, HIGH},               // Pin output to Relay 7  (Roof direction relay, open)
-  {37, HIGH},               // Pin output to Relay 8  (Roof direction relay, close)
-  {39, HIGH},               // Pin output to Relay 9  (Warm room Red lights)
-  {41, HIGH},               // Pin output to Relay 10 (Observing room Red lights)
-  {43, HIGH},               // Pin output to Relay 11 (Warm room White lights)
-  {45, HIGH},               // Pin output to Relay 12 (Observing room White lights)
-  {47, HIGH},               // Pin output to Relay 13 (Aux - no relay on my setup)
-  {49, HIGH}                // Pin output to Relay 14 (Roof MOSFET - no relay on my setup)
+  {35, HIGH},         // Relay 7: pin#, ON state
+  {37, HIGH},         // Relay 8: pin#, ON state
+  {39, HIGH},         // Relay 9: pin#, ON state
+  {41, HIGH},         // Relay 10: pin#, ON state
+  {43, HIGH},         // Relay 11: pin#, ON state
+  {45, HIGH},         // Relay 12: pin#, ON state
+  {47, HIGH},         // Relay 13: pin#, ON state
+  {49, HIGH}          // Relay 14: pin#, ON state
 };
 volatile uint8_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+// This section is specific to V1 of the OCS hardware
 typedef struct {
   uint8_t pin;
   uint8_t mode;
   uint8_t onState;
 } sense_t;
 const volatile sense_t sense[] {
-  { 0, INPUT, HIGH},        // not used
-  {22, INPUT, HIGH},        // Pin input from Sense 1 (roof closed limit switch)
-  {24, INPUT, HIGH},        // Pin input from Sense 2 (roof open   limit switch)
-  {26, INPUT, HIGH},        // Pin input from Sense 3 (wall switch)
-  {28, INPUT, HIGH},        // Pin input from Sense 4 (power good)
-  {30, INPUT, HIGH},        // Pin input from Sense 5 (not used)
-  {32, INPUT, HIGH}         // Pin input from Sense 6 (not used)
+  { 0, INPUT, HIGH},  // not used
+  {22, INPUT, HIGH},  // Sense 1: pin#, initialize, ON state 
+  {24, INPUT, HIGH},  // Sense 2: pin#, initialize, ON state
+  {26, INPUT, HIGH},  // Sense 3: pin#, initialize, ON state
+  {28, INPUT, HIGH},  // Sense 4: pin#, initialize, ON state
+  {30, INPUT, HIGH},  // Sense 5: pin#, initialize, ON state
+  {32, INPUT, HIGH}   // Sense 6: pin#, initialize, ON state
 };
 volatile uint8_t senseState[] = {0,0,0,0,0,0,0};
 
-// Analog0                   Analog input from A0   (12V battery)
-// Analog1                   Analog input from A1   (12V power supply)
-// Analog2                   Analog input from A2   (not used)
-// Analog3                   Analog input from A3   (inside temperature LM35)
-// Analog4                   Analog input from A4   (not used)
-// Analog5                   Analog input from A5   (not used)
+                     // Analog 0: A0
+                     // Analog 1: A1
+                     // Analog 2: A2
+                     // Analog 3: A3
+                     // Analog 4: A4
+                     // Analog 5: A5
 volatile int analogState[] = {0,0,0,0,0,0};
 
-// EEPROM addresses for settings
-#define EE_key             0
-// control heat & cooling/vent
-#define EE_heatSetpoint    120
-#define EE_coolSetpoint    124
-// roof motion timing
-#define EE_timeLeftToOpen  129
-#define EE_timeLeftToClose 133
-// power status device memory
-#define EE_powerDevice_1   200
-#define EE_powerDevice_2   201
-#define EE_powerDevice_3   202
-#define EE_powerDevice_4   203
-#define EE_powerDevice_5   204
-#define EE_powerDevice_6   205
-
 // roof
-#ifdef ROR_AUTOCLOSE_DAWN_DEFAULT_ON
-boolean roofAutoClose = true;
+#if ROR_AUTOCLOSE_DAWN_DEFAULT == ON
+  boolean roofAutoClose = true;
 #else
-boolean roofAutoClose = false;
+  boolean roofAutoClose = false;
 #endif
 boolean roofAutoCloseInitiated = false;
 
@@ -167,7 +154,7 @@ void setup()   {
   // Initialize serial communications
   Serial.begin(9600);
   
-#ifdef WATCHDOG_ON
+#if WATCHDOG == ON
   wdt_enable(WDTO_8S);
 #endif
 
@@ -187,23 +174,23 @@ void setup()   {
   }
 
   // Restore relay state
-  #if defined(POWER_DEVICE1_RELAY) && defined(POWER_DEVICE1_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_1)) { setRelayOn(atoi(POWER_DEVICE1_RELAY)); }
+  #if POWER_DEVICE1_RELAY != OFF && POWER_DEVICE1_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_1)) setRelayOn(POWER_DEVICE1_RELAY);
   #endif
-  #if defined(POWER_DEVICE2_RELAY) && defined(POWER_DEVICE2_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_2)) { setRelayOn(atoi(POWER_DEVICE2_RELAY)); }
+  #if POWER_DEVICE2_RELAY != OFF && POWER_DEVICE2_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_2)) setRelayOn(POWER_DEVICE2_RELAY);
   #endif
-  #if defined(POWER_DEVICE3_RELAY) && defined(POWER_DEVICE3_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_3)) { setRelayOn(atoi(POWER_DEVICE3_RELAY)); }
+  #if POWER_DEVICE3_RELAY != OFF && POWER_DEVICE3_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_3)) setRelayOn(POWER_DEVICE3_RELAY);
   #endif
-  #if defined(POWER_DEVICE4_RELAY) && defined(POWER_DEVICE4_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_4)) { setRelayOn(atoi(POWER_DEVICE4_RELAY)); }
+  #if POWER_DEVICE4_RELAY != OFF && POWER_DEVICE4_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_4)) setRelayOn(POWER_DEVICE4_RELAY);
   #endif
-  #if defined(POWER_DEVICE5_RELAY) && defined(POWER_DEVICE5_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_5)) { setRelayOn(atoi(POWER_DEVICE5_RELAY)); }
+  #if POWER_DEVICE5_RELAY != OFF && POWER_DEVICE5_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_5)) setRelayOn(POWER_DEVICE5_RELAY);
   #endif
-  #if defined(POWER_DEVICE6_RELAY) && defined(POWER_DEVICE6_MEMORY_ON)
-  if ((bool)EEPROM.read(EE_powerDevice_6)) { setRelayOn(atoi(POWER_DEVICE6_RELAY)); }
+  #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
+    if ((bool)EEPROM.read(EE_powerDevice_6)) setRelayOn(POWER_DEVICE6_RELAY);
   #endif
 
   // get ready to go
@@ -211,18 +198,18 @@ void setup()   {
 #ifdef ROOF_ON
   roofInit();
 #endif
-#ifdef THERMOSTAT_ON
+#if THERMOSTAT == ON
   thermostatInit();
 #endif
 
-#ifdef ETHERNET_RESET
+#if ETHERNET_RESET != OFF
   // hold ethernet shield in reset
   pinMode(ETHERNET_RESET,OUTPUT);
   digitalWrite(ETHERNET_RESET,LOW);
 
   for (int l=0; l<2; l++) {
     delay(1000);
-  #ifdef WATCHDOG_ON
+  #if WATCHDOG == ON
     wdt_reset();
   #endif
   }
@@ -234,7 +221,7 @@ void setup()   {
   // wait for a bit just to be sure ethernet, etc. is up
   for (int l=0; l<3; l++) {
     delay(1000);
-#ifdef WATCHDOG_ON
+#if WATCHDOG == ON
     wdt_reset();
 #endif
   }
@@ -243,28 +230,28 @@ void setup()   {
   www.setResponseHeader(http_defaultHeader);
   www.init();
   www.on("index.htm",index);
-#if defined(WEATHER_ON) && defined(SD_CARD_ON)
+#if WEATHER == ON && WEATHER_CHARTS == ON
   www.on("weatherpage.htm",weatherPage);
-#if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
   www.on("skypage.htm",skyPage);
 #endif
 #endif
   www.on("relay",relays);
   www.on("setvar",setvar);
   www.on("miscstatus",miscstatus);
-#ifdef WEATHER_ON
+#if WEATHER == ON
   www.on("weather",weather);
 #endif
-#ifdef THERMOSTAT_ON
+#if THERMOSTAT == ON
   www.on("thermostat",thermostat);
-#ifdef THERMOSTAT_HUMIDITY_ON
-  www.on("thermostath",thermostath);
+  #if THERMOSTAT_HUMIDITY == ON
+    www.on("thermostath",thermostath);
+  #endif
 #endif
-#endif
-#ifdef ROR_ON
+#if ROR == ON
   www.on("roofstatus",roofstatus);
 #endif
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
   www.on("Chart.js");
 #endif
   www.on("/",index);
@@ -282,18 +269,16 @@ void setup()   {
   Timer1.initialize(1000);
   Timer1.attachInterrupt(RelayPwmISR);
 
-#ifdef STAT_TIME_NTP_ON
+#if STAT_TIME_SOURCE == NTP
   delay(3000);
   Udp.begin(localPort);
-#ifdef NTP_DEBUG_ON
-  Serial.println("waiting for sync");
-#endif
+  #if DEBUG_NPT == ON
+    Serial.println("waiting for sync");
+  #endif
   setSyncProvider(getNtpTime);
   setSyncInterval(24L*60L*60L); // sync time once a day
   if (now()>365UL*24UL*60UL*60UL) startupTime=now();
-#endif
-
-#if defined(STAT_TIME_DS3234_ON) || defined(STAT_TIME_DS3234_INIT)
+#elif STAT_TIME_SOURCE == DS3234 || STAT_TIME_SOURCE == DS3234INIT
   setSyncProvider(getDs3234Time);
   setSyncInterval(24L*60L*60L); // sync time once a day
   startupTime=now();
@@ -308,18 +293,18 @@ void loop()
   NexDomeLoop();
 #endif
   
-#ifdef WATCHDOG_ON
+#if WATCHDOG == ON
   wdt_reset();
 #endif
 
-#ifdef STAT_TIME_NTP_ON
+#if STAT_TIME_SOURCE == NTP
   // double check time if it looks like it's not set go back and ask for it again every 10 minutes
-if (now()<365UL*24UL*60UL*60UL) {
-  if (!fastNTPSync) { setSyncInterval(10L*60L); fastNTPSync=true; }
-} else {
-  if (startupTime==0) startupTime=now();
-  if (fastNTPSync) { setSyncInterval(24L*60L*60L); fastNTPSync=false; }
-}
+  if (now()<365UL*24UL*60UL*60UL) {
+    if (!fastNTPSync) { setSyncInterval(10L*60L); fastNTPSync=true; }
+  } else {
+    if (startupTime==0) startupTime=now();
+    if (fastNTPSync) { setSyncInterval(24L*60L*60L); fastNTPSync=false; }
+  }
 #endif
   // ------------------------------------------------------------------------------------------
   // Handle comms
@@ -334,10 +319,10 @@ if (now()<365UL*24UL*60UL*60UL) {
   // process commands
   processCommands();
 
-#ifdef LIGHT_SW_SENSE
+#if LIGHT_SW_SENSE == ON && LIGHT_WRW_RELAY != OFF
   // The wall switch controls LED lights
   if (senseChanged(LIGHT_SW_SENSE)) {
-    if (senseIsOn(LIGHT_SW_SENSE)) setRelayOn(atoi(LIGHT_WRW_RELAY)); else setRelayOff(atoi(LIGHT_WRW_RELAY));
+    if (senseIsOn(LIGHT_SW_SENSE)) setRelayOn(LIGHT_WRW_RELAY); else setRelayOff(LIGHT_WRW_RELAY);
   }
 #endif
 
@@ -347,11 +332,11 @@ if (now()<365UL*24UL*60UL*60UL) {
   // update relays
   RelayTimedOff();
 
-  #ifdef THERMOSTAT_ON
-  thermostat();
+  #if THERMOSTAT == ON
+    thermostat();
   #endif
 
-#ifdef ROR_ON
+#if ROR == ON
   // Auto close the roof at 8am if requested
   if ((roofAutoClose) && (validTime())) {
     if ((hour()==8) && (!roofAutoCloseInitiated)) {
@@ -365,7 +350,7 @@ if (now()<365UL*24UL*60UL*60UL) {
     if (hour()==9) roofAutoCloseInitiated=false;
   }
 
-#ifdef ROR_AUTOCLOSE_SAFETY_ON
+#if ROR_AUTOCLOSE_SAFETY == ON
   // close the roof if safety status calls for it
   if (!isSafe()) {
     // if the roof isn't closed, and motion is idle, close it
@@ -377,7 +362,7 @@ if (now()<365UL*24UL*60UL*60UL) {
 #endif
 
   // Watch clouds
-#ifdef WEATHER_ON
+#if WEATHER == ON
   weatherPoll();
 #endif
 }

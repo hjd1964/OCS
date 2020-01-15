@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------------
 // Web server, Weather charts
 
-#if defined(WEATHER_ON) && defined(SD_CARD_ON)
+#if WEATHER == ON && WEATHER_CHARTS == ON
 #define WEATHER_NOMINAL_PRESSURE_SEA_LEVEL 1013.25  // in mb
 
 const char ChartJs1[] PROGMEM =
@@ -65,7 +65,7 @@ void weatherPage(EthernetClient *client) {
   strcpy_P(temp,html_pageHeader2); client->print(temp);
   strcpy_P(temp,html_links1);  client->print(temp);
   strcpy_P(temp,html_links2s); client->print(temp);
-#if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
   strcpy_P(temp,html_links3);  client->print(temp);
 #endif
   strcpy_P(temp,html_pageHeader3); client->print(temp);
@@ -79,29 +79,29 @@ void weatherPage(EthernetClient *client) {
   client->print(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
   client->print(F("<script>\r\n"));
   client->print(F("window.onload = function(){\r\n"));
-#ifdef WEATHER_OUT_TEMP_ON
-  #ifdef  IMPERIAL_UNITS_ON
+#if WEATHER_TEMPERATURE == ON
+  #if STAT_UNITS == IMPERIAL
     // a negative column# means this is a temperature and needs conversion to degrees F
     makeChartJs(client,"ambientT","Outside Temperature F (last "+periodStr+")",-8,5,-40,120,20,period);
   #else
     makeChartJs(client,"ambientT","Outside Temperature C (last "+periodStr+")",8,5,-40,50,10,period);
   #endif
 #endif
-#ifdef WEATHER_WIND_SPD_ON
-  #ifdef  IMPERIAL_UNITS_ON
+#if WEATHER_WIND_SPD == ON
+  #if STAT_UNITS == IMPERIAL
     makeChartJs(client,"WS","Wind Speed mph (last "+periodStr+")",-39,5,0,50,10,period);
   #else
     makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
   #endif
 #endif
-#ifdef WEATHER_PRESSURE_ON
-  #ifdef IMPERIAL_UNITS_ON
+#if WEATHER_PRESSURE == ON
+  #if STAT_UNITS == IMPERIAL
     makeChartJs(client,"BP","Barometric Pressure inches Hg (last "+periodStr+")",-26,6,floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50)*0.02953),ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40)*0.02953),1,period);
   #else
     makeChartJs(client,"BP","Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40,10,period);
   #endif
 #endif
-#ifdef WEATHER_HUMIDITY_ON
+#if WEATHER_HUMIDITY == ON
   makeChartJs(client,"RH","Relative Humidity % (last "+periodStr+")",33,5,0,100,10,period);
 #endif
   client->print(F("}\r\n"));
@@ -110,23 +110,23 @@ void weatherPage(EthernetClient *client) {
   strcpy_P(temp,ChartOptions1a); client->print(temp);
   strcpy_P(temp,ChartOptions2); client->print(temp);
   
-#ifdef WEATHER_OUT_TEMP_ON
+#if WEATHER_TEMPERATURE == ON
   makeChartCanvas(client,"ambientT");
 #endif
-#ifdef WEATHER_WIND_SPD_ON
+#if WEATHER_WIND_SPD == ON
   makeChartCanvas(client,"WS");
 #endif
-#ifdef WEATHER_PRESSURE_ON
+#if WEATHER_PRESSURE == ON
   makeChartCanvas(client,"BP");
 #endif
-#ifdef WEATHER_HUMIDITY_ON
+#if WEATHER_HUMIDITY == ON
   makeChartCanvas(client,"RH");
 #endif
 
   client->print("</div></body></html>\r\n");
 }
 
-#if defined(WEATHER_SKY_QUAL_ON) || defined(WEATHER_CLOUD_CVR_ON)
+#if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
 void skyPage(EthernetClient *client) {
   char temp[512]="";
   String a=www.arg("chart");
@@ -159,10 +159,10 @@ void skyPage(EthernetClient *client) {
   client->print(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
   client->print(F("<script>\r\n"));
   client->print(F("window.onload = function(){\r\n"));
-#ifdef WEATHER_SKY_QUAL_ON
+#if WEATHER_SKY_QUAL == ON
   makeChartJs(client,"SQ","Sky Quality mag/sq arc-sec (last "+periodStr+")",45,5,1,22,5,period);
 #endif
-#ifdef WEATHER_CLOUD_CVR_ON
+#if WEATHER_CLOUD_CVR == ON
   makeChartJs(client,"skyT","Sky IR Temperature C (last "+periodStr+")",14,5,-40,5,5,period);
 #endif
   client->print(F("}\r\n"));
@@ -171,10 +171,10 @@ void skyPage(EthernetClient *client) {
   strcpy_P(temp,ChartOptions1b); client->print(temp);
   strcpy_P(temp,ChartOptions2); client->print(temp);
   
-#ifdef WEATHER_SKY_QUAL_ON
+#if WEATHER_SKY_QUAL == ON
   makeChartCanvas(client,"SQ");
 #endif
-#ifdef WEATHER_CLOUD_CVR_ON
+#if WEATHER_CLOUD_CVR == ON
   makeChartCanvas(client,"skyT");
 #endif
 

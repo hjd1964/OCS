@@ -7,19 +7,29 @@ bool outsideTempGood=false, skyTempGood=false, windspeedGood=false, pressureGood
 // =================================================================================================================
 // =================================== add your weather sensor support below =======================================
 
-//#include <Adafruit_Sensor.h>
+// this is the Weather.ino file for my setup
+
+#include <Adafruit_Sensor.h> // https://github.com/adafruit/Adafruit_Sensor
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets outside temperature in deg. C
 
+#include <Adafruit_BME280.h> // I2C address 0x76 or 0x77; https://github.com/adafruit/Adafruit_BME280_Library
+Adafruit_BME280 bme;
+
 // return (invalid) if not implemented or if there's an error
 double weatherOutsideTemp() {
   if (!outsideTempGood) return invalid;
-  return invalid;
+
+  double t = bme.readTemperature();
+  if (t<-60.0 || t>60.0) t=invalid;
+  return t;
 }
 
 bool initOutsideTemp() {
-  return false;
+  bool success=true;
+  if (!bme.begin(0x76,&Wire)) success=false;
+  return success;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -45,26 +55,31 @@ double weatherWindspeed() {
 }
 
 bool initWindspeed() {
-  return false;
+  return true;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets barometric pressure in mb
 
-// return (invalid) if not implemented or if there's an error, absolute pressure
+// return (invalid) if not implemented or if there's an error; absolute pressure
 double weatherPressure() {
   if (!pressureGood) return invalid;
-  return invalid;
+  
+  double p0 = bme.readPressure()/100.0;  // hpa to millibar
+  return p0;
 }
 
-// return (invalid) if not implemented or if there's an error, sea-level adjusted
+// return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
 double weatherPressureSeaLevel() {
   if (!pressureGood) return invalid;
-  return invalid;
+  
+  double p0=bme.readPressure();
+  double p1=(p0/pow((1.0-((float)(WEATHER_ALTITUDE))/44330.0), 5.255))/100.0;
+  return p1;
 }
 
 bool initPressure() {
-  return false;
+  return outsideTempGood; // BME280 was initialized in initOutsideTemp()
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -73,11 +88,15 @@ bool initPressure() {
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
   if (!humidityGood) return invalid;
-  return invalid;
+
+  double h=bme.readHumidity();
+  if (h<0.0) h=invalid;
+  if (h>100.0) h=100.0;
+  return h;
 }
 
 bool initHumidity() {
-  return false;
+  return outsideTempGood; // BME280 was initialized in initOutsideTemp()
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -90,7 +109,7 @@ int weatherRain() {
 }
 
 bool initRain() {
-  return false;
+  return true;
 }
 
 // -----------------------------------------------------------------------------------------------------------------

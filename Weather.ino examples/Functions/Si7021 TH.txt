@@ -1,0 +1,36 @@
+// -----------------------------------------------------------------------------------------------------------------
+// gets outside temperature in deg. C
+
+#include <Adafruit_Si7021.h>
+Adafruit_Si7021 tempHumidity = Adafruit_Si7021(); // I2C address 0x40
+
+// return (invalid) if not implemented or if there's an error
+double weatherOutsideTemp() {
+  if (!outsideTempGood) return invalid;
+
+  double t = tempHumidity.readTemperature();
+  if (t<-60.0 || t>60.0) t=invalid;
+  return t;
+}
+
+bool initOutsideTemp() {
+  tempHumidity.begin();
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
+// gets relative humidity in %
+
+// return (invalid) if not implemented or if there's an error
+double weatherHumidity() {
+  if (!humidityGood) return (invalid);
+
+  double h=tempHumidity.readHumidity();
+  if (h<0.0) h=invalid;
+  if (h>100.0) h=100.0;
+  return h;
+}
+
+bool initHumidity() {
+  return true;
+}

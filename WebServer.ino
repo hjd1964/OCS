@@ -2,8 +2,8 @@
 // Web server
 
 // SD CARD support, simply enable and provide a webserver.on("filename.htm") to serve each file
-#ifdef SD_CARD_ON
-#include <SD.h>
+#if WEATHER_CHARTS == ON
+  #include <SD.h>
 #endif
 
 EthernetServer _server(80);
@@ -16,14 +16,14 @@ void WebServer::init() {
   pinMode(4,OUTPUT); digitalWrite(4,HIGH);
   pinMode(10,OUTPUT); digitalWrite(10,HIGH);
 
-  Ethernet.begin(mac, ip, myDns, gateway, subnet);
+  Ethernet.begin(m, ip, myDns, gateway, subnet);
   _server.begin();
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
   Serial.print("www server is at ");
   Serial.println(Ethernet.localIP());
 #endif
 
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
   SDfound=SD.begin(4);
 #endif
 
@@ -35,7 +35,7 @@ void WebServer::handleClient() {
   EthernetClient _client;
   _client = _server.available();
   if (_client) {
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
     Serial.println("new client");
 #endif
     // an http request ends with a blank line
@@ -44,7 +44,7 @@ void WebServer::handleClient() {
     while ((_client.connected()) && ((long)(millis()-to) < 0)) {
       if (_client.available()) {
         char c = _client.read();
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
         Serial.write(c);
 #endif
         if (inputBuffer.length()<128) inputBuffer+=c;
@@ -59,7 +59,7 @@ void WebServer::handleClient() {
             String command=inputBuffer.substring(url_start,url_end);
             String page=inputBuffer.substring(url_start,url_pageEnd);
 
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
             // watch for cache requests
             if ((!modifiedSinceFound) && (command.indexOf("If-Modified-Since:")>=0)) modifiedSinceFound=true;
 #endif
@@ -90,7 +90,7 @@ void WebServer::handleClient() {
                       values[parameter_count-1]=thisVal;
                     }
                     command=command.substring(j1);
-  #ifdef WEBSERVER_DEBUG_ON
+  #if DEBUG_WEBSERVER == ON
                     Serial.print(thisArg); Serial.print("="); Serial.println(thisVal);
   #endif
                   }
@@ -99,7 +99,7 @@ void WebServer::handleClient() {
                   handlerFound=true;
                   break;
                 } else {
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
                   // send a 304 header
                   if ((modifiedSinceFound) && true ) {
                     char temp[255]; strcpy_P(temp,http_js304Header); _client.print(temp);
@@ -120,7 +120,7 @@ void WebServer::handleClient() {
             // handle not found
             if (!handlerFound && (notFoundHandler!=NULL)) (*notFoundHandler)(&_client);
           } else {
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
             Serial.println("Invalid response");
 #endif
           }
@@ -138,17 +138,17 @@ void WebServer::handleClient() {
     }
     // give the web browser time to receive the data
     delay(5);
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
     Serial.println("client closing connection");
 #endif
     // close the connection:
     _client.stop();
     // clear the input buffer
     inputBuffer="";
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
     modifiedSinceFound=false;
 #endif
-#ifdef WEBSERVER_DEBUG_ON
+#if DEBUG_WEBSERVER == ON
     Serial.println("client disconnected");
 #endif
   }
@@ -176,7 +176,7 @@ String WebServer::arg(String id) {
   return "";
 }
 
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
 void WebServer::on(String fn) {
   handler_count++; if (handler_count>20) { handler_count=20; return; }
   handlers[handler_count-1]=NULL;

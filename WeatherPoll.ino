@@ -1,11 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Weather/Safety monitor and logging
 
-#ifdef SD_CARD_ON
-#include <SD.h>
+#if WEATHER_CHARTS == ON
+  #include <SD.h>
 #endif
 
-#ifdef WEATHER_ON
+#if WEATHER == ON
 
 #define SecondsBetweenLogEntries 30
 
@@ -63,7 +63,7 @@ void weatherPoll(void) {
 
     // short-term sky temp
 
-#ifdef SD_CARD_ON
+#if WEATHER_CHARTS == ON
     // Logging ------------------------------------------------------------------
     // two minutes between writing values
     // the log is perpetual with 80 chars written twice a minute (about 82MB a year)
@@ -82,7 +82,7 @@ void weatherPoll(void) {
 
         File dataFile;
         if (!SD.exists(fn)) {
-#ifdef SD_DEBUG_ON
+#if DEBUG_SD == ON
           Serial.println("Data file doesn't exist...");
 #endif
           // create the empty file
@@ -94,11 +94,11 @@ void weatherPoll(void) {
 
           dataFile=SD.open(fn, FILE_WRITE);
           if (dataFile) {
-#ifdef SD_DEBUG_ON
+#if DEBUG_SD == ON
             Serial.print("Writing file...");
 #endif
             for (int i=0; i<2880; i++) {
-#ifdef SD_DEBUG_ON
+#if DEBUG_SD == ON
               Serial.print("Writing record#"); Serial.println(i);
 #endif
               //               time   sa    sad   lad   p      h     wind  sq
@@ -109,7 +109,7 @@ void weatherPoll(void) {
             }
             dataFile.close();
           } else { 
-#ifdef SD_DEBUG_ON
+#if DEBUG_SD == ON
             Serial.println("Failed to create file"); 
 #endif
           }
@@ -133,7 +133,7 @@ void weatherPoll(void) {
           dataFile.close();
         }
 
-#ifdef SD_DEBUG_ON
+#if DEBUG_SD == ON
         int n;
         dataFile=SD.open(fn, FILE_READ);
         if (dataFile) {
@@ -169,28 +169,28 @@ bool isSafe() {
   bool safe=true;
   int mainDeviceCount=0;
 
-#ifdef STAT_MAINS_SENSE
+#if STAT_MAINS_SENSE != OFF
   // check for mains power out
   if (!senseIsOn(STAT_MAINS_SENSE)) safe=false;
 #endif
 
-#ifdef WEATHER_ON
-#ifdef WEATHER_RAIN_ON
-  // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
-  if ((weatherRain()==invalid) || (weatherRain()==1)) safe=false;
-#endif
-
-#ifdef WEATHER_CLOUD_CVR_ON
-  // check for invalid or above WEATHER_SAFE_THRESHOLD
-  if ((avgSkyDiffTemp<-200) || (avgSkyDiffTemp>WEATHER_SAFE_THRESHOLD)) safe=false;
-  mainDeviceCount++;
-#endif
-
-#ifdef WEATHER_WIND_SPD_ON
-  // check for invalid or wind speed too high
-  if ((weatherWindspeed()<0) || (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD)) safe=false;
-  mainDeviceCount++;
-#endif
+#if WEATHER == ON
+  #if WEATHER_RAIN == ON
+    // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
+    if ((weatherRain()==invalid) || (weatherRain()==1)) safe=false;
+  #endif
+  
+  #if WEATHER_CLOUD_CVR == ON
+    // check for invalid or above WEATHER_SAFE_THRESHOLD
+    if ((avgSkyDiffTemp<-200) || (avgSkyDiffTemp>WEATHER_SAFE_THRESHOLD)) safe=false;
+    mainDeviceCount++;
+  #endif
+  
+  #if WEATHER_WIND_SPD == ON
+    // check for invalid or wind speed too high
+    if ((weatherWindspeed()<0) || (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD)) safe=false;
+    mainDeviceCount++;
+  #endif
 #endif
 
   if (mainDeviceCount==0) return false; else return safe;

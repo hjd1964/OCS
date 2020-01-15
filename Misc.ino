@@ -2,7 +2,7 @@
 // Misc support functions
 // ======== add your adc voltage and current support here =========
 
-// converts a raw analog reading into voltage for STAT_DC_PS_ANALOG and STAT_BATTERY_ANALOG
+// converts a raw analog reading into voltage for STAT_DC_VOLTAGE_ANALOG and STAT_BATTERY_VOLTAGE_ANALOG
 // return (invalid) if not implemented or if there's an error
 double toDC(double d) {
   d=(d/1023.0);                // 0..1 for ADC range
@@ -26,7 +26,7 @@ double toDCAmps(double d) {
 
 // gets cloud cover in %
 double weatherCloudCover() {
-#if defined(WEATHER_CLOUD_CVR_ON) && defined(WEATHER_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
   double s=getAvgSkyDiffTemp();
   if (s <= -200) return (invalid); else
   if (s <= WEATHER_VCLR_THRESHOLD) return 10; else
@@ -46,7 +46,7 @@ double weatherCloudCover() {
 
 // gets cloud cover text
 String weatherCloudCoverDescription() {
-#if defined(WEATHER_CLOUD_CVR_ON) && defined(WEATHER_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
   double s=getAvgSkyDiffTemp();
   if (s <= -200) return "Invalid"; else
   if (s <= WEATHER_VCLR_THRESHOLD) return "Clear"; else
@@ -66,7 +66,7 @@ String weatherCloudCoverDescription() {
 
 // gets cloud cover text (short)
 String weatherCloudCoverDescriptionShort() {
-#if defined(WEATHER_CLOUD_CVR_ON) && defined(WEATHER_ON)
+#if WEATHER_CLOUD_CVR == ON && WEATHER == ON
   double s=getAvgSkyDiffTemp();
   if (s <= -200) return "Invalid"; else
   if (s <= WEATHER_VCLR_THRESHOLD) return "Clear"; else
@@ -83,4 +83,3 @@ String weatherCloudCoverDescriptionShort() {
   return "N/A";
 #endif
 }
-
