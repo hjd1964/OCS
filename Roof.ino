@@ -181,6 +181,9 @@ void continueClosingRoof() {
 bool startRoofOpen() {
   if (roofState != 'i' || relayIsOn(ROR_DC_MOTOR_RELAY_A) || relayIsOn(ROR_DC_MOTOR_RELAY_B)) { roofLastError="Error: Open already in motion"; return false; }
 
+  // Handle case of Garage door opener where we're not sure which way it'll move
+  if (!roofSafetyOverride && ROR_OPEN_CLOSE_MOMENTARY != OFF && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
+  
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
   if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
@@ -225,6 +228,9 @@ bool startRoofOpen() {
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
   if (roofState != 'i' || relayIsOn(ROR_DC_MOTOR_RELAY_A) || relayIsOn(ROR_DC_MOTOR_RELAY_B)) { roofLastError="Error: Close already in motion"; return false; }
+
+  // Handle case of Garage door opener where we're not sure which way it'll move
+  if (!roofSafetyOverride && ROR_OPEN_CLOSE_MOMENTARY != OFF && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
 
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
