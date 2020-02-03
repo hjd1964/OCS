@@ -122,13 +122,8 @@ const volatile sense_t sense[] {
 };
 volatile uint8_t senseState[] = {0,0,0,0,0,0,0};
 
-// Analog 0: A0
-// Analog 1: A1
-// Analog 2: A2
-// Analog 3: A3
-// Analog 4: A4
-// Analog 5: A5
-volatile int analogState[] = {0,0,0,0,0,0};
+// Analog 0: A0 to Analog 15: A15
+volatile int analogState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 // roof
 #if ROR_AUTOCLOSE_DAWN_DEFAULT == ON

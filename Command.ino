@@ -64,8 +64,8 @@ void processCommands() {
 //  :GAn#  Get Analog n state
 //         Example: :GA1#
 //         Returns: 124# (0 to 1023, 0 to 5V)
-        if ((command[1]=='A') && (parameter[1]==0)) {
-          if ((parameter[0]>='0') && (parameter[0]<='5')) {
+        if (command[1]=='A' && parameter[1]==0) {
+          if ((parameter[0]>='0' && parameter[0]<='9') || (parameter[0]>='A' && parameter[0]<='F')) {
             int i=parameter[0]-'0'; if (i>9) i-=7;
             analogState[i]=analogRead(i);
             quietReply=true;

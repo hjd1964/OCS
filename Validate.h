@@ -43,28 +43,28 @@
   #error "Configuration (Config.h): STAT_MAINS_SENSE must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if (STAT_MAINS_CURRENT_ANALOG < A0 || STAT_MAINS_CURRENT_ANALOG > A5) && STAT_MAINS_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_MAINS_CURRENT_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_MAINS_CURRENT_ANALOG < A0 || STAT_MAINS_CURRENT_ANALOG > A15) && STAT_MAINS_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_MAINS_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
-#if (STAT_MAINS_AUX_CURRENT_ANALOG < A0 || STAT_MAINS_AUX_CURRENT_ANALOG > A5) && STAT_MAINS_AUX_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_MAINS_AUX_CURRENT_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_MAINS_AUX_CURRENT_ANALOG < A0 || STAT_MAINS_AUX_CURRENT_ANALOG > A15) && STAT_MAINS_AUX_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_MAINS_AUX_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
-#if (STAT_DC_VOLTAGE_ANALOG < A0 || STAT_DC_VOLTAGE_ANALOG > A5) && STAT_DC_VOLTAGE_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_DC_VOLTAGE_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_DC_VOLTAGE_ANALOG < A0 || STAT_DC_VOLTAGE_ANALOG > A15) && STAT_DC_VOLTAGE_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_DC_VOLTAGE_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
-#if (STAT_DC_CURRENT_ANALOG < A0 || STAT_DC_CURRENT_ANALOG > A5) && STAT_DC_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_DC_CURRENT_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_DC_CURRENT_ANALOG < A0 || STAT_DC_CURRENT_ANALOG > A15) && STAT_DC_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_DC_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
-#if (STAT_BATTERY_VOLTAGE_ANALOG < A0 || STAT_BATTERY_VOLTAGE_ANALOG > A5) && STAT_BATTERY_VOLTAGE_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_BATTERY_VOLTAGE_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_BATTERY_VOLTAGE_ANALOG < A0 || STAT_BATTERY_VOLTAGE_ANALOG > A15) && STAT_BATTERY_VOLTAGE_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_BATTERY_VOLTAGE_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
-#if (STAT_BATTERY_CURRENT_ANALOG < A0 || STAT_BATTERY_CURRENT_ANALOG > A5) && STAT_BATTERY_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_BATTERY_CURRENT_ANALOG must OFF or between A0 and A5 (Analog Pin#.)"
+#if (STAT_BATTERY_CURRENT_ANALOG < A0 || STAT_BATTERY_CURRENT_ANALOG > A15) && STAT_BATTERY_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_BATTERY_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
 #endif
 
 // Weather
