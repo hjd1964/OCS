@@ -47,14 +47,14 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
                                           //         default SPI interface (CS=53.) Upload once w/DS3234INIT to set date/time.
 
 #define STAT_MAINS_SENSE              OFF //    OFF, n. Where n=1..6 (Sense#) mains power good, OFF (power failure) is UNSAFE Option
-#define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display current mains.               Option
-#define STAT_MAINS_AUX_CURRENT_ANALOG OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display current mains (aux.)         Option
+#define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display current mains.              Option
+#define STAT_MAINS_AUX_CURRENT_ANALOG OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display current mains (aux.)        Option
 
-#define STAT_DC_VOLTAGE_ANALOG        OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display 12VDC power supply voltage.  Option
-#define STAT_DC_CURRENT_ANALOG        OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display 12VDC power supply current.  Option
+#define STAT_DC_VOLTAGE_ANALOG        OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display 12VDC power supply voltage. Option
+#define STAT_DC_CURRENT_ANALOG        OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display 12VDC power supply current. Option
 
-#define STAT_BATTERY_VOLTAGE_ANALOG   OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display 12V roof battery voltage.    Option
-#define STAT_BATTERY_CURRENT_ANALOG   OFF //    OFF, n. Where n=A0..A5 (Analog#) measure/display 12V roof battery current.    Option
+#define STAT_BATTERY_VOLTAGE_ANALOG   OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display 12V roof battery voltage.   Option
+#define STAT_BATTERY_CURRENT_ANALOG   OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display 12V roof battery current.   Option
 
 // WEATHER PANEL -------------------------------------------------------------------------------------------------------------------
 // Weather and Sky Conditions web page charts use "Chart.js" http://www.chartjs.org/. Specifically, version 2.5 of "Chart.min.js" 
