@@ -1,8 +1,8 @@
 // converts a raw analog reading into current for STAT_DC_CURRENT_ANALOG
 // return (invalid) if not implemented or if there's an error
-#define ACS712_mV_PER_A 0.185
+#define ACS712_V_PER_A 0.185
 double toDCAmps(double d) {
  double V = (d/1024.0)*5.0;
- double A = (2.5 - V)/ACS712_mV_PER_A;
+ double A = (2.5 - V)/ACS712_V_PER_A;
 return A;
 }
