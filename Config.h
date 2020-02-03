@@ -13,7 +13,7 @@
 //                                   Sense#:  1  2  3  4  5  6
 
 // Analog inputs are not mapped (they are at their Arduino defined pin#'s)
-//                                   Analog: A0, A1, A2, A3, A4, A5
+//                                   Analog: A0 to A15
 
 // Note: pins 4, 10, 50, 51, 52, 53 are used for the W5100 Ethernet (SPI & 10), SD card (SPI & 4), and DS3234 RTC (SPI & 53)
 
