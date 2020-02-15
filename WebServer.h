@@ -46,7 +46,10 @@ const char http_js304Header[] PROGMEM = "HTTP/1.1 304 OK\r\n" "Content-Type: app
 const char http_jsHeader[] PROGMEM = "HTTP/1.1 200 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
 
 // common web site framework
-const char html_head1[]      PROGMEM = "<!DOCTYPE HTML>\r\n<html>\r\n<head>\r\n<meta charset='utf-8'/>\r\n";
+const char html_head1[]      PROGMEM = "<!DOCTYPE HTML>\r\n"
+                                       "<html>\r\n<head>\r\n"
+                                       "<meta charset='utf-8'/>\r\n"
+                                       "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\r\n";
 const char html_head_refresh[] PROGMEM = "<meta http-equiv=\"refresh\" content=\"5; URL=/index.htm\">\r\n";
 const char html_main_css1[]  PROGMEM = "<STYLE>";
 const char html_main_css2[]  PROGMEM = ".a { background-color: #111111; } .t { padding: 10px 10px 20px 10px; border: 5px solid #551111; margin: 25px 25px 0px 25px; color: #999999; background-color: #111111; }";
