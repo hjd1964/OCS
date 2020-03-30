@@ -56,8 +56,10 @@ void RelayPwmISR() {
 #endif
 
   // ROR safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
-  if (relayIsOn(ROR_DC_MOTOR_RELAY_A) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) stopRoof();
-  if (relayIsOn(ROR_DC_MOTOR_RELAY_B) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) stopRoof();
+  if (ROR_MOTOR_RELAY_MOMENTARY == OFF) {
+    if (relayIsOn(ROR_OPEN_MOTOR_RELAY) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) stopRoof();
+    if (relayIsOn(ROR_CLOSE_MOTOR_RELAY) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) stopRoof();
+  }
 #endif
 }
 

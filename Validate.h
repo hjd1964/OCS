@@ -273,23 +273,33 @@
   #error "Configuration (Config.h): ROR_AUTOCLOSE_SAFETY, OCS website ROR automatic close safety, must OFF or ON."
 #endif
 
-#if (ROR_DC_MOTOR_RELAY_A < 1 || ROR_DC_MOTOR_RELAY_A > 14) && ROR_DC_MOTOR_RELAY_A != OFF
-  #error "Configuration (Config.h): ROR_DC_MOTOR_RELAY_A must OFF or a number between 1 and 14 (Relay#.)"
+#if (ROR_OPEN_MOTOR_RELAY < 1 || ROR_OPEN_MOTOR_RELAY > 14) && ROR_OPEN_MOTOR_RELAY != OFF
+  #error "Configuration (Config.h): ROR_OPEN_MOTOR_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if (ROR_DC_MOTOR_RELAY_B < 1 || ROR_DC_MOTOR_RELAY_B > 14) && ROR_DC_MOTOR_RELAY_B != OFF
-  #error "Configuration (Config.h): ROR_DC_MOTOR_RELAY_B must OFF or a number between 1 and 14 (Relay#.)"
+#if (ROR_CLOSE_MOTOR_RELAY < 1 || ROR_CLOSE_MOTOR_RELAY > 14) && ROR_CLOSE_MOTOR_RELAY != OFF
+  #error "Configuration (Config.h): ROR_CLOSE_MOTOR_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if (ROR_OPEN_CLOSE_MOMENTARY < 1 || ROR_OPEN_CLOSE_MOMENTARY > 14) && ROR_OPEN_CLOSE_MOMENTARY != OFF
-  #error "Configuration (Config.h): ROR_OPEN_CLOSE_MOMENTARY must OFF or a number between 1 and 14 (Relay#.)"
+#if ROR_OPEN_MOTOR_RELAY != OFF && ROR_OPEN_MOTOR_RELAY == ROR_CLOSE_MOTOR_RELAY
+  #if ROR_MOTOR_RELAY_MOMENTARY == ON
+    #define ROR_SINGLE_OPEN_CLOSE_RELAY ON
+  #else
+    #error "Configuration (Config.h): ROR_OPEN_MOTOR_RELAY and ROR_CLOSE_MOTOR_RELAY on the same RELAY# is only allowed if ROR_MOTOR_RELAY_MOMENTARY is used."
+  #endif
+#else
+  #define ROR_SINGLE_OPEN_CLOSE_RELAY OFF
 #endif
 
-#if (ROR_DC_MOTOR_RELAY_A != OFF || ROR_DC_MOTOR_RELAY_B != OFF) && ROR_OPEN_CLOSE_MOMENTARY != OFF
-  #error "Configuration (Config.h): Roof having both momentary switched (garage door) and DC roof motor directional control is not allowed."
+#if ROR == ON && (ROR_OPEN_MOTOR_RELAY == OFF || ROR_CLOSE_MOTOR_RELAY == OFF)
+  #error "Configuration (Config.h): Roof control requires relays that either press button(s) on an automatic opener or operate a motor to move the roof."
 #endif
 
-#if (ROR_DC_MOTOR_RELAY_A == OFF && ROR_DC_MOTOR_RELAY_B != OFF) || (ROR_DC_MOTOR_RELAY_A != OFF && ROR_DC_MOTOR_RELAY_B == OFF)
+#if (ROR_OPEN_MOTOR_RELAY != OFF && ROR_CLOSE_MOTOR_RELAY == OFF) || (ROR_OPEN_MOTOR_RELAY == OFF && ROR_CLOSE_MOTOR_RELAY != OFF)
+  #error "Configuration (Config.h): Roof having momentary switched (garage door) operation requires both ROR_OPEN_MOMENTARY and ROR_CLOSE_MOMENTARY (even if both are on the same RELAY.)"
+#endif
+
+#if (ROR_OPEN_MOTOR_RELAY == OFF && ROR_CLOSE_MOTOR_RELAY != OFF) || (ROR_OPEN_MOTOR_RELAY != OFF && ROR_CLOSE_MOTOR_RELAY == OFF)
   #error "Configuration (Config.h): Roof DC motor control requires both RELAY_A and RELAY_B."
 #endif
 
