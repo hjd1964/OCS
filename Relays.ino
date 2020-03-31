@@ -35,9 +35,9 @@ void RelayPwmISR() {
   }
 
 #if ROR == ON
-#if ROR_PWM_SPEED_HZ != OFF && ROR_PWM_POWER_PERCENT != OFF
+#if ROR_POWER_PWM_FREQUENCY != OFF && ROR_POWER_PWM_POWER != OFF
   if (roofIsMoving()) {
-    count++; if (count >= (1000/(ROR_PWM_SPEED_HZ*10))) {
+    count++; if (count >= (1000/(ROR_POWER_PWM_FREQUENCY*10))) {
       count=0;
       slowPwmCycle++; if (slowPwmCycle>9) slowPwmCycle=0;
       if (slowPwmCycle == 0) setRelayOn(ROR_POWER_RELAY);
@@ -57,8 +57,8 @@ void RelayPwmISR() {
 
   // ROR safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
   if (ROR_MOTOR_RELAY_MOMENTARY == OFF) {
-    if (relayIsOn(ROR_MOTOR_OPEN_RELAY) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) stopRoof();
-    if (relayIsOn(ROR_MOTOR_CLOSE_RELAY) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) stopRoof();
+    if (relayIsOn(ROR_MOTOR_OPEN_RELAY) && senseIsOn(ROR_SENSE_LIMIT_OPENED)) stopRoof();
+    if (relayIsOn(ROR_MOTOR_CLOSE_RELAY) && senseIsOn(ROR_SENSE_LIMIT_CLOSED)) stopRoof();
   }
 #endif
 }

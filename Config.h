@@ -144,17 +144,15 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define ROR_MOTOR_RELAY_MOMENTARY     OFF //    OFF, ON engage above momentarily (~1.5s) to start an automatic open or close. Option
 #define ROR_MOTOR_STOP_RELAY          OFF //    OFF, n. Where n=1..14 (Relay#) momentarily engages this relay to stop roof.   Option
 
-#define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) This controls roof motor pwr. For DC motor.    Option
-                                          //         SSR/MOSFET PWM controls speed. For garage door openers, SW on/off only.
+#define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) This controls roof motor power. For DC motors  Option
+                                          //         SSR/MOSFET PWM controls speed. For garage door openers etc SW on/off only.
+#define ROR_POWER_PWM_FREQUENCY       OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
+#define ROR_POWER_PWM_POWER           OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
+#define ROR_POWER_PWM_SOFTSTART       OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROR_POWER_PWM_POWER.   Option
 
-#define ROR_PWM_SPEED_HZ              OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
-#define ROR_PWM_POWER_PERCENT         OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
-#define ROR_PWM_SOFTSTART             OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROR_PWM_POWER_PERCENT. Option
-
-#define ROR_CLOSE_INTERLOCK           OFF //    OFF, n. Where n=1..6 (Sense#) Roof safety interlock, close allowed when ON.   Option
-
-#define ROR_LIMIT_SENSE_CLOSED        OFF //    OFF, n. Where n=1..6 (Sense#) Roof closed switch (CLOSED when ON.)            Option
-#define ROR_LIMIT_SENSE_OPENED        OFF //    OFF, n. Where n=1..6 (Sense#) Roof open switch (OPEN when ON.)                Option
+#define ROR_SENSE_INTERLOCK             1 //    OFF, n. Where n=1..6 (Sense#) Roof safety interlock, close allowed when ON.   Option
+#define ROR_SENSE_LIMIT_CLOSED          2 //    OFF, n. Where n=1..6 (Sense#) Roof closed switch (CLOSED when ON.)            Option
+#define ROR_SENSE_LIMIT_OPENED          3 //    OFF, n. Where n=1..6 (Sense#) Roof open switch (OPEN when ON.)                Option
 
 #define ROR_TIME_AVG                  300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
 #define ROR_TIME_TOL                   30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust

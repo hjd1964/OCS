@@ -45,9 +45,9 @@ void moveRoof() {
 void continueOpeningRoof() {
     cli(); long msOfTravel=((long)millis()-roofOpenStartTime); sei();
 
-#if ROR_PWM_SOFTSTART == ON
-    if (roofCurrentPower < ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+#if ROR_POWER_PWM_SOFTSTART == ON
+    if (roofCurrentPower < ROR_POWER_PWM_POWER) {
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_POWER_PWM_POWER) roofCurrentPower=ROR_POWER_PWM_POWER; sei();
     }
 #endif
 
@@ -65,7 +65,7 @@ void continueOpeningRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_LIMIT_SENSE_CLOSED))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_CLOSED))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
@@ -84,7 +84,7 @@ void continueOpeningRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToOpenAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished opening
-    if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) {
+    if (senseIsOn(ROR_SENSE_LIMIT_OPENED)) {
       // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
       if (ROR_MOTOR_RELAY_MOMENTARY != OFF) delay(2000);
       // reset position timers
@@ -109,9 +109,9 @@ void continueOpeningRoof() {
 void continueClosingRoof() {
     cli(); long msOfTravel=(long)millis()-roofCloseStartTime; sei();
 
-#if ROR_PWM_SOFTSTART == ON
-    if (roofCurrentPower < ROR_PWM_POWER_PERCENT) {
-      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_PWM_POWER_PERCENT) roofCurrentPower=ROR_PWM_POWER_PERCENT; sei();
+#if ROR_POWER_PWM_SOFTSTART == ON
+    if (roofCurrentPower < ROR_POWER_PWM_POWER) {
+      cli(); roofCurrentPower=msOfTravel/200; if (roofCurrentPower > ROR_POWER_PWM_POWER) roofCurrentPower=ROR_POWER_PWM_POWER; sei();
     }
 #endif
     
@@ -129,7 +129,7 @@ void continueClosingRoof() {
     }
 
     // Or a stuck limit switch
-    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_LIMIT_SENSE_OPENED))) {
+    if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_OPENED))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle
@@ -137,7 +137,7 @@ void continueClosingRoof() {
     }
 
     // Or interlock was triggered
-    if (ROR_CLOSE_INTERLOCK != 0 && !senseIsOn(ROR_CLOSE_INTERLOCK)) {
+    if (ROR_SENSE_INTERLOCK != 0 && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b100000000; // 256
       // Go idle
@@ -156,7 +156,7 @@ void continueClosingRoof() {
     roofTravel=((double)(roofTimeAvg-(timeLeftToCloseAtStart-msOfTravel))/(double)roofTimeAvg)*100;
 
     // Detect that the roof has finished closing
-    if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) {
+    if (senseIsOn(ROR_SENSE_LIMIT_CLOSED)) {
       // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
       if (ROR_MOTOR_RELAY_MOMENTARY != OFF) delay(2000);
       // reset position timers
@@ -182,12 +182,12 @@ bool startRoofOpen() {
   if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Open already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
-  if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
+  if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_SENSE_LIMIT_OPENED) && !senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
   
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
-  if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-  if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+  if (senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+  if (senseIsOn(ROR_SENSE_LIMIT_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
   timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
   timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
 
@@ -195,10 +195,10 @@ bool startRoofOpen() {
   if (!roofSafetyOverride && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg)>2000)) { roofLastError="Error: Open location unknown"; return false; }
 
   // Check to see if the roof is already opened
-  if (senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Warning: Already open"; return false; }
+  if (senseIsOn(ROR_SENSE_LIMIT_OPENED) && !senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Warning: Already open"; return false; }
 
   // Just one last sanity check before we start moving the roof
-  if (senseIsOn(ROR_LIMIT_SENSE_OPENED) && senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Opened/closed limit sw on"; return false; }
+  if (senseIsOn(ROR_SENSE_LIMIT_OPENED) && senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Opened/closed limit sw on"; return false; }
 
   // Flag status, no errors
   roofState='o';
@@ -216,10 +216,10 @@ bool startRoofOpen() {
   // Log start time
   roofOpenStartTime=(long)millis();
 
-#if ROR_PWM_SOFTSTART == ON
+#if ROR_POWER_PWM_SOFTSTART == ON
   roofCurrentPower=0;
 #else
-  roofCurrentPower=ROR_PWM_POWER_PERCENT;
+  roofCurrentPower=ROR_POWER_PWM_POWER;
 #endif
 
   roofLastError="";
@@ -231,12 +231,12 @@ bool startRoofClose() {
   if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Close already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
-  if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
+  if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_SENSE_LIMIT_OPENED) && !senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
 
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
-  if (senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
-  if (senseIsOn(ROR_LIMIT_SENSE_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
+  if (senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg); EEPROM_writeLong(EE_timeLeftToClose,0); }
+  if (senseIsOn(ROR_SENSE_LIMIT_OPENED)) { EEPROM_writeLong(EE_timeLeftToOpen,0); EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg); }
   timeLeftToOpenAtStart =EEPROM_readLong(EE_timeLeftToOpen);
   timeLeftToCloseAtStart=EEPROM_readLong(EE_timeLeftToClose);
 
@@ -244,10 +244,10 @@ bool startRoofClose() {
   if (!roofSafetyOverride && abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart)-roofTimeAvg) > 2000) { roofLastError="Error: Close location unknown"; return false; }
 
   // Check to see if the roof is already closed
-  if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && (!senseIsOn(ROR_LIMIT_SENSE_OPENED))) { roofLastError="Warning: Already closed"; return false; }
+  if (senseIsOn(ROR_SENSE_LIMIT_CLOSED) && (!senseIsOn(ROR_SENSE_LIMIT_OPENED))) { roofLastError="Warning: Already closed"; return false; }
 
   // Just one last sanity check before we start moving the roof
-  if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) { roofLastError="Error: Closed/opened limit sw on"; return false; }
+  if (senseIsOn(ROR_SENSE_LIMIT_CLOSED) && senseIsOn(ROR_SENSE_LIMIT_OPENED)) { roofLastError="Error: Closed/opened limit sw on"; return false; }
 
   // Flag status, no errors
   roofState='c';
@@ -265,10 +265,10 @@ bool startRoofClose() {
   // Log start time
   roofCloseStartTime=(long)millis();
 
-#if ROR_PWM_SOFTSTART == ON
+#if ROR_POWER_PWM_SOFTSTART == ON
   roofCurrentPower=0;
 #else
-  roofCurrentPower=ROR_PWM_POWER_PERCENT;
+  roofCurrentPower=ROR_POWER_PWM_POWER;
 #endif
 
   roofLastError="";
@@ -321,7 +321,7 @@ String getRoofLastError() {
     if (roofState=='i') {
       if (roofLastError=="") {
         // one final check for any wierd relay stuff going on
-        if (senseIsOn(ROR_LIMIT_SENSE_CLOSED) && senseIsOn(ROR_LIMIT_SENSE_OPENED)) s="Error: Limit switch malfunction";
+        if (senseIsOn(ROR_SENSE_LIMIT_CLOSED) && senseIsOn(ROR_SENSE_LIMIT_OPENED)) s="Error: Limit switch malfunction";
       } else s=roofLastError;
     }
   }
@@ -330,12 +330,12 @@ String getRoofLastError() {
 
 // true if the roof is closed (required)
 bool roofIsClosed() {
-  return senseIsOn(ROR_LIMIT_SENSE_CLOSED) && (!senseIsOn(ROR_LIMIT_SENSE_OPENED));
+  return senseIsOn(ROR_SENSE_LIMIT_CLOSED) && (!senseIsOn(ROR_SENSE_LIMIT_OPENED));
 }
 
 // true if the roof is opened (required)
 bool roofIsOpened() {
-  return senseIsOn(ROR_LIMIT_SENSE_OPENED) && (!senseIsOn(ROR_LIMIT_SENSE_CLOSED));
+  return senseIsOn(ROR_SENSE_LIMIT_OPENED) && (!senseIsOn(ROR_SENSE_LIMIT_CLOSED));
 }
 
 // true if the roof is moving (required)

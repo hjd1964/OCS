@@ -303,46 +303,46 @@
   #error "Configuration (Config.h): ROR_POWER_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if (ROR_PWM_SPEED_HZ<1 || ROR_PWM_SPEED_HZ>100) && ROR_PWM_SPEED_HZ != OFF
-  #error "Configuration (Config.h): ROR_PWM_SPEED_HZ must be OFF or a number between 1 and 100 (Hz.)"
+#if (ROR_POWER_PWM_FREQUENCY<1 || ROR_POWER_PWM_FREQUENCY>100) && ROR_POWER_PWM_FREQUENCY != OFF
+  #error "Configuration (Config.h): ROR_POWER_PWM_FREQUENCY must be OFF or a number between 1 and 100 (Hz.)"
 #endif
 
-#if (ROR_PWM_POWER_PERCENT<10 || ROR_PWM_POWER_PERCENT>100) && ROR_PWM_POWER_PERCENT != OFF
-  #error "Configuration (Config.h): ROR_PWM_POWER_PERCENT must be OFF or a number between 10 and 100 (%.)"
+#if (ROR_POWER_PWM_POWER<10 || ROR_POWER_PWM_POWER>100) && ROR_POWER_PWM_POWER != OFF
+  #error "Configuration (Config.h): ROR_POWER_PWM_POWER must be OFF or a number between 10 and 100 (%.)"
 #endif
 
-#if ROR_PWM_SOFTSTART != OFF && ROR_PWM_SOFTSTART != ON
-  #error "Configuration (Config.h): ROR_PWM_SOFTSTART must OFF or ON."
+#if ROR_POWER_PWM_SOFTSTART != OFF && ROR_POWER_PWM_SOFTSTART != ON
+  #error "Configuration (Config.h): ROR_POWER_PWM_SOFTSTART must OFF or ON."
 #endif
 
 #if ROR_OPEN_CLOSE_MOMENTARY != OFF
   #if ROR_POWER_RELAY != OFF
-    #if ROR_PWM_SPEED_HZ != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_PWM_SPEED_HZ must be OFF."
+    #if ROR_POWER_PWM_FREQUENCY != OFF
+      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_FREQUENCY must be OFF."
     #endif
-    #if ROR_PWM_POWER_PERCENT != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_PWM_POWER_PERCENT must be OFF."
+    #if ROR_POWER_PWM_POWER != OFF
+      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_POWER must be OFF."
     #endif
-    #if ROR_PWM_SOFTSTART != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_PWM_SOFTSTART must be OFF."
+    #if ROR_POWER_PWM_SOFTSTART != OFF
+      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_SOFTSTART must be OFF."
     #endif
   #endif
 #endif
 
-#if (ROR_CLOSE_INTERLOCK < 1 || ROR_CLOSE_INTERLOCK > 6) && ROR_CLOSE_INTERLOCK != OFF
-  #error "Configuration (Config.h): ROR_CLOSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
+#if (ROR_SENSE_INTERLOCK < 1 || ROR_SENSE_INTERLOCK > 6) && ROR_SENSE_INTERLOCK != OFF
+  #error "Configuration (Config.h): ROR_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if ROR == ON && ROR_LIMIT_SENSE_CLOSED == OFF && ROR_LIMIT_SENSE_OPENED == OFF
+#if ROR == ON && ROR_SENSE_LIMIT_CLOSED == OFF && ROR_SENSE_LIMIT_OPENED == OFF
   #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROR control is enabled."
 #endif
 
-#if (ROR_LIMIT_SENSE_CLOSED < 1 || ROR_LIMIT_SENSE_CLOSED > 6) && ROR_LIMIT_SENSE_CLOSED != OFF
-  #error "Configuration (Config.h): ROR_LIMIT_SENSE_CLOSED must OFF or a number between 1 and 6 (Sense#.)"
+#if (ROR_SENSE_LIMIT_CLOSED < 1 || ROR_SENSE_LIMIT_CLOSED > 6) && ROR_SENSE_LIMIT_CLOSED != OFF
+  #error "Configuration (Config.h): ROR_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if (ROR_LIMIT_SENSE_OPENED < 1 || ROR_LIMIT_SENSE_OPENED > 6) && ROR_LIMIT_SENSE_OPENED != OFF
-  #error "Configuration (Config.h): ROR_LIMIT_SENSE_OPENED must OFF or a number between 1 and 6 (Sense#.)"
+#if (ROR_SENSE_LIMIT_OPENED < 1 || ROR_SENSE_LIMIT_OPENED > 6) && ROR_SENSE_LIMIT_OPENED != OFF
+  #error "Configuration (Config.h): ROR_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
 #if ROR_TIME_AVG<30 || ROR_TIME_AVG>1200
