@@ -97,7 +97,7 @@ void continueOpeningRoof() {
     // Finished opening? stop the motion and clear state
     if (roofState=='i') {
       // Stop the roof motor (redundant for momentary control)
-      setRelayOff(ROR_OPEN_MOTOR_RELAY);
+      setRelayOff(ROR_MOTOR_OPEN_RELAY);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -169,7 +169,7 @@ void continueClosingRoof() {
     // Finished closing? stop the motion and clear state
     if (roofState=='i') {
       // Stop the roof motor (redundant for momentary control)
-      setRelayOff(ROR_CLOSE_MOTOR_RELAY);
+      setRelayOff(ROR_MOTOR_CLOSE_RELAY);
       // Reset possible override of roof timer
       roofSafetyOverride=false;
       // Reset roof power to normal level
@@ -179,7 +179,7 @@ void continueClosingRoof() {
 
 // Start opening the roof, returns true if successful or false otherwise (required)
 bool startRoofOpen() {
-  if (roofState != 'i' || relayIsOn(ROR_OPEN_MOTOR_RELAY) || relayIsOn(ROR_CLOSE_MOTOR_RELAY)) { roofLastError="Error: Open already in motion"; return false; }
+  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Open already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
@@ -207,10 +207,10 @@ bool startRoofOpen() {
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
     delay(2000); 
-    setRelayOnDelayedOff(ROR_OPEN_MOTOR_RELAY,2);
+    setRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY,2);
   } else {
-    setRelayOff(ROR_CLOSE_MOTOR_RELAY);
-    setRelayOn(ROR_OPEN_MOTOR_RELAY);
+    setRelayOff(ROR_MOTOR_CLOSE_RELAY);
+    setRelayOn(ROR_MOTOR_OPEN_RELAY);
   }
 
   // Log start time
@@ -228,7 +228,7 @@ bool startRoofOpen() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
-  if (roofState != 'i' || relayIsOn(ROR_OPEN_MOTOR_RELAY) || relayIsOn(ROR_CLOSE_MOTOR_RELAY)) { roofLastError="Error: Close already in motion"; return false; }
+  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Close already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_LIMIT_SENSE_OPENED) && !senseIsOn(ROR_LIMIT_SENSE_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
@@ -256,10 +256,10 @@ bool startRoofClose() {
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
     delay(2000);
-    setRelayOnDelayedOff(ROR_CLOSE_MOTOR_RELAY,2);
+    setRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY,2);
   } else {
-    setRelayOff(ROR_OPEN_MOTOR_RELAY);
-    setRelayOn(ROR_CLOSE_MOTOR_RELAY);
+    setRelayOff(ROR_MOTOR_OPEN_RELAY);
+    setRelayOn(ROR_MOTOR_CLOSE_RELAY);
   }
 
   // Log start time
@@ -284,10 +284,10 @@ void stopRoof() {
   // Set the state to idle
   roofState='i';
   // Stop any DC motor
-  setRelayOff(ROR_OPEN_MOTOR_RELAY);
-  setRelayOff(ROR_CLOSE_MOTOR_RELAY);
+  setRelayOff(ROR_MOTOR_OPEN_RELAY);
+  setRelayOff(ROR_MOTOR_CLOSE_RELAY);
   // And press the stop button if this roof has one
-  if (ROR_MOTOR_RELAY_MOMENTARY != OFF && ROR_STOP_MOTOR_RELAY != OFF) setRelayOnDelayedOff(ROR_STOP_MOTOR_RELAY,2);
+  if (ROR_MOTOR_RELAY_MOMENTARY != OFF && ROR_MOTOR_STOP_RELAY != OFF) setRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY,2);
 }
 
 // clear errors (required)
