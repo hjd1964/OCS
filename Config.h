@@ -139,10 +139,10 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 #define ROR_AUTOCLOSE_DAWN_DEFAULT    OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
 #define ROR_AUTOCLOSE_SAFETY          OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
 
-#define ROR_MOTOR_OPEN_RELAY          OFF //    OFF, n. Where n=1..14 (Relay#) OCS engages this relay while opening roof.     Option
-#define ROR_MOTOR_CLOSE_RELAY         OFF //    OFF, n. Where n=1..14 (Relay#) OCS engages this relay while closing roof.     Option
+#define ROR_MOTOR_OPEN_RELAY          OFF //    OFF, n. Where n=1..14 (Relay#) engages this relay to open roof.               Option
+#define ROR_MOTOR_CLOSE_RELAY         OFF //    OFF, n. Where n=1..14 (Relay#) engages this relay to close roof.              Option
 #define ROR_MOTOR_RELAY_MOMENTARY     OFF //    OFF, ON engage above momentarily (~1.5s) to start an automatic open or close. Option
-#define ROR_MOTOR_STOP_RELAY          OFF //    OFF, n. Where n=1..14 (Relay#) OCS momentary engages this relay to stop roof. Option
+#define ROR_MOTOR_STOP_RELAY          OFF //    OFF, n. Where n=1..14 (Relay#) momentarily engages this relay to stop roof.   Option
 
 #define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1..14 (Relay#) This controls roof motor pwr. For DC motor.    Option
                                           //         SSR/MOSFET PWM controls speed. For garage door openers, SW on/off only.
