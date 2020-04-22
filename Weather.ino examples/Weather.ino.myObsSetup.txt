@@ -9,12 +9,12 @@ bool outsideTempGood=false, skyTempGood=false, windspeedGood=false, pressureGood
 
 // this is the Weather.ino file for my setup
 
-#include <Adafruit_Sensor.h>
+#include <Adafruit_Sensor.h> // https://github.com/adafruit/Adafruit_Sensor
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets outside temperature in deg. C
 
-#include <Adafruit_Si7021.h>
+#include <Adafruit_Si7021.h> // https://github.com/adafruit/Adafruit_Si7021
 Adafruit_Si7021 tempHumidity = Adafruit_Si7021(); // I2C address 0x40
 
 // return (invalid) if not implemented or if there's an error
@@ -34,12 +34,12 @@ bool initOutsideTemp() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky IR temperature in deg. C
 
-#include <Adafruit_MLX90614.h>
+#include <Adafruit_MLX90614.h> // https://github.com/adafruit/Adafruit-MLX90614-Library
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();  // I2C address 0x5A
 
 // return (invalid) if not implemented or if there's an error
 double weatherSkyTemp() {
-  if (!skyTempGood) return invalid;
+  if (!skyTempGood) return (invalid);
 
   double t = mlx.readObjectTempC(); 
   if (t<-100.0 || t>100.0) t=invalid;
@@ -56,7 +56,7 @@ bool initSkyTemp() {
 
 // return (invalid) if not implemented or if there's an error
 double weatherWindspeed() {
-  if (!windspeedGood) return invalid;
+  if (!windspeedGood) return (invalid);
 
   // for the Modern Devices wind sensor, https://moderndevice.com/product/wind-sensor-rev-p/
   const int OutPin = A6;   // wind sensor analog pin hooked up to Wind P sensor "OUT" pin
@@ -79,14 +79,14 @@ bool initWindspeed() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets barometric pressure in mb
 
-#include <SFE_BMP180.h> // I2C address 0x77
-SFE_BMP180 pressure;
+#define DEBUG_WEATHER OFF
 
-#define DEBUG_PRESSURE OFF
+#include <SFE_BMP180.h> // https://github.com/sparkfun/BMP180_Breakout_Arduino_Library I2C address 0x77
+SFE_BMP180 pressure;
 
 // return (invalid) if not implemented or if there's an error; absolute pressure
 double weatherPressure() {
-  if (!pressureGood) return invalid;
+  if (!pressureGood) return (invalid);
 
   char status;
   double T,P,p0,a;
@@ -139,7 +139,7 @@ double weatherPressure() {
 
 // return (invalid) if not implemented or if there's an error; sea-level adjusted pressure
 double weatherPressureSeaLevel() {
-  if (!pressureGood) return invalid;
+  if (!pressureGood) return (invalid);
 
   double P=weatherPressure();
   if (P==invalid) return P;
@@ -157,12 +157,32 @@ bool initPressure() {
   return pressure.begin();
 }
 
+double getInsideTemp() {
+  char status;
+  double T;
+  status = pressure.startTemperature();
+  if (status != 0)
+  {
+    delay(status); // Wait for the measurement to complete
+
+    // Retrieve the completed temperature measurement:
+    // Note that the measurement is stored in the variable T.
+    // Function returns 1 if successful, 0 if failure.
+    status = pressure.getTemperature(T);
+    if (status != 0)
+    {
+    }
+  }
+  if ((T<-60.0) || (T>60.0)) T=invalid;
+  return T;
+}
+
 // -----------------------------------------------------------------------------------------------------------------
 // gets relative humidity in %
 
 // return (invalid) if not implemented or if there's an error
 double weatherHumidity() {
-  if (!humidityGood) return invalid;
+  if (!humidityGood) return (invalid);
 
   double h=tempHumidity.readHumidity();
   if (h<0.0) h=invalid;
@@ -177,94 +197,28 @@ bool initHumidity() {
 // -----------------------------------------------------------------------------------------------------------------
 // gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
 
-#define WEATHER_RAIN_THRESHOLD_LOW 0.25
-#define WEATHER_RAIN_THRESHOLD_HIGH 0.75
-
 // return (invalid) if not implemented or if there's an error
 int weatherRain() {
-  // this is for the typical eBay rain sensor like this one:
-  // http://www.ebay.com/itm/Raindrops-Detection-sensor-modue-rain-module-weather-module-Humidity-For-Arduino-/400439668701
-  
-  double rain = (double)analogRead(A2)/1023.0; // scale for 0.0 to 1.0 range
-
-  if (rain <= WEATHER_RAIN_THRESHOLD_LOW) return 1; else
-  if (rain > WEATHER_RAIN_THRESHOLD_HIGH) return 3; else return 2;
+  if (!rainGood) return invalid;
+  return invalid;
 }
 
 bool initRain() {
-  return true;
+  return false;
 }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky brightness in mag/arc-sec^2
 
-#define WEATHER_SKY_QUAL_ZERO         0.0 //    0.0, n. Where n=-2.0 to 2.0 (in mpsas) offset
-#define WEATHER_SKY_QUAL_SCALE        1.0 //    1.0, n. Where n=-0.5 to 1.5 (x) sensitivity scale factor
-
-double last_mag_per_sq_arcsec = invalid;
-unsigned long last_mag_per_sq_arcsec_time = 0;
-#include <Adafruit_TSL2591.h> // I2C addresses 0x28 and 0x29; using my customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library
-Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
-
 // return (invalid) if not implemented or if there's an error
 double weatherSkyQuality() {
-  if (!skyQualityGood) return (invalid);
-
-  // safe-guard to invalidate stale readings after 30 seconds
-  if ((long)((last_mag_per_sq_arcsec_time+30000UL)-millis()) < 0) last_mag_per_sq_arcsec = invalid;
-  
-/*
-  // read data from TSL2591 (blocking)
-  uint32_t lum;
-  // this routine blocks for almost a full second in some cases, so fall back to last value if the roof is moving
-  if (roofIsMoving()) return last_mag_per_sq_arcsec;
-  lum = tsl.getFullLuminosity();
-*/
-
-  // read data from TSL2591 (non-blocking)
-  uint32_t lum;
-  static int stage = 1;
-  if (stage == 1) { tsl.getFullLuminosity(TSL2591_GFL_INIT); stage++; return last_mag_per_sq_arcsec; }
-  if (stage == 2) { if (tsl.getFullLuminosity(TSL2591_GFL_WAIT)) return last_mag_per_sq_arcsec; stage++; }
-  if (stage == 3) { lum=tsl.getFullLuminosity(TSL2591_GFL_DONE); stage=1; }
-  
-  uint16_t ir = lum >> 16;
-  uint16_t full = lum & 0xFFFF;
-
-  Serial.print(full); Serial.print(", "); Serial.println(ir);
-
-  // automatically adapt gain and integration time
-  if (!tsl.autoscale(full, ir)) return last_mag_per_sq_arcsec;
-  
-  // correct for sensor temperature sensitivity
-  double t=weatherOutsideTemp();
-  if (t != invalid) {
-    full=tsl.temperatureCorrectCh0(t,full);
-    ir  =tsl.temperatureCorrectCh1(t,ir);
-  }
-
-  // finally get the visible brightness in Lux
-  double lux = tsl.calculateLux(full, ir);
-
-  // Lux = Candela at 1 meter.
-  // At 1 meter a 1 meter^2 surface has an approximately 60 deg fov so this TSL2591 effectively measures in Candela given a 60 deg TFOV lens.
-  // Its sensitivity spread across the 180 deg FOV seems to be about right for 1 Candela with no lens, but I'm not an expert on this!
-  // If using a 30 deg TFOV lens, for example, set WEATHER_SKY_QUAL_SCALE 4.0 since light from a smaller surface area is projected onto the sensor.
-  double mag_per_sq_arcsec = WEATHER_SKY_QUAL_ZERO + log10((lux * WEATHER_SKY_QUAL_SCALE)/108000.0)/-0.4;
-  last_mag_per_sq_arcsec = mag_per_sq_arcsec;
-  last_mag_per_sq_arcsec_time = millis();
-  
-  return (last_mag_per_sq_arcsec);
+  return 19.0;
+  if (!skyQualityGood) return invalid;
+  return invalid;
 }
 
 bool initSkyQuality() {
-  boolean ok=false;
-  ok=tsl.begin();
-  if (ok) {
-    tsl.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
-    tsl.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
-  }
-  return ok;
+  return true;
 }
 
 // ============================= no user changes are required beyond this point ====================================
