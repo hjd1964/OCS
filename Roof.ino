@@ -137,7 +137,7 @@ void continueClosingRoof() {
     }
 
     // Or interlock was triggered
-    if (ROR_SENSE_INTERLOCK != 0 && !senseIsOn(ROR_SENSE_INTERLOCK)) {
+    if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
       roofStatusRegister=roofStatusRegister|0b100000000; // 256
       // Go idle
