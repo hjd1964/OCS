@@ -315,16 +315,16 @@
   #error "Configuration (Config.h): ROR_POWER_PWM_SOFTSTART must OFF or ON."
 #endif
 
-#if ROR_OPEN_CLOSE_MOMENTARY != OFF
+#if ROR_MOTOR_RELAY_MOMENTARY != OFF
   #if ROR_POWER_RELAY != OFF
     #if ROR_POWER_PWM_FREQUENCY != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_FREQUENCY must be OFF."
+      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_FREQUENCY must be OFF."
     #endif
     #if ROR_POWER_PWM_POWER != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_POWER must be OFF."
+      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_POWER must be OFF."
     #endif
     #if ROR_POWER_PWM_SOFTSTART != OFF
-      #error "Configuration (Config.h): For ROR_OPEN_CLOSE_MOMENTARY the setting ROR_POWER_PWM_SOFTSTART must be OFF."
+      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_SOFTSTART must be OFF."
     #endif
   #endif
 #endif
