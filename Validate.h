@@ -31,12 +31,12 @@
   #error "Configuration (Config.h): STAT_UNITS must be either METRIC or IMPERIAL"
 #endif
 
-#if (STAT_TIME_SOURCE != NTP) && (STAT_TIME_SOURCE != DS3234) && (STAT_TIME_SOURCE != DS3234INIT)
-  #error "Configuration (Config.h): STAT_TIME_SOURCE must be either NTP, DS3234, or DS3234INIT"
+#if (STAT_TIME_SOURCE != NTP) && (STAT_TIME_SOURCE != DS3234_RTC) && (STAT_TIME_SOURCE != DS3234_INIT)
+  #error "Configuration (Config.h): STAT_TIME_SOURCE must be either NTP, DS3234_RTC, or DS3234_INIT"
 #endif
 
-#if STAT_TIME_SOURCE == DS3234INIT
-  #warning "Configuration (Config.h): STAT_TIME_SOURCE set to DS3234INIT, remember to revert to DS3234 after uploading once"
+#if STAT_TIME_SOURCE == DS3234_INIT
+  #warning "Configuration (Config.h): STAT_TIME_SOURCE set to DS3234_INIT, remember to revert to DS3234_RTC after uploading once"
 #endif
 
 #if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 6) && STAT_MAINS_SENSE != OFF

@@ -43,8 +43,8 @@ IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35
 // See Misc.ino for user voltage and current conversion functions.
 #define STAT_UNITS                 METRIC // METRIC, For metric units, or IMPERIAL for imperial units.                        Adjust
 
-#define STAT_TIME_SOURCE              NTP //    NTP, Network Time Protocol per IPAddress settings above or use DS3234 RTC on  Adjust
-                                          //         default SPI interface (CS=53.) Upload once w/DS3234INIT to set date/time.
+#define STAT_TIME_SOURCE              NTP //    NTP, Network Time Protocol per IPAddress settings above or use DS3234_RTC on  Adjust
+                                          //         default SPI interface (CS=53.) Upload once w/DS3234_INIT to set date/time.
 
 #define STAT_MAINS_SENSE              OFF //    OFF, n. Where n=1..6 (Sense#) mains power good, OFF (power failure) is UNSAFE Option
 #define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=A0..A15 (Analog#) measure/display current mains.              Option

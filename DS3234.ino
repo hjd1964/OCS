@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------------------------------------------
 // DS3234 time
 
-#if STAT_TIME_SOURCE == DS3234 || STAT_TIME_SOURCE == DS3234INIT
+#if STAT_TIME_SOURCE == DS3234_RTC || STAT_TIME_SOURCE == DS3234_INIT
 
 #include "TimeLib.h"
 
@@ -16,7 +16,7 @@ time_t getDs3234Time()
   Serial.println("Starting connection to DS3234");
 #endif
   rtc.begin(DS3234_CS_PIN);
-#if STAT_TIME_SOURCE == DS3234INIT
+#if STAT_TIME_SOURCE == DS3234_INIT
   rtc.autoTime();
 #endif
   rtc.update();

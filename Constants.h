@@ -16,7 +16,8 @@
 #define UTC                         3
 
 #define NTP                         1
-#define DS3234                      2
+#define DS3234_RTC                  2
+#define DS3234_INIT                 3
 
 // Units
 #define METRIC                      1

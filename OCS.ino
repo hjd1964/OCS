@@ -74,7 +74,7 @@ CmdServer Cmd1;
   unsigned int localPort = 8888;
   time_t startupTime = 0;
   bool fastNTPSync=false;
-#elif STAT_TIME_SOURCE == DS3234 || STAT_TIME_SOURCE == DS3234INIT
+#elif STAT_TIME_SOURCE == DS3234_RTC || STAT_TIME_SOURCE == DS3234_INIT
   #include <SparkFunDS3234RTC.h>  // https://github.com/sparkfun/SparkFun_DS3234_RTC_Arduino_Library/archive/master.zip
   #define DS3234_CS_PIN 53
   time_t startupTime = 0;
@@ -272,7 +272,7 @@ void setup()   {
   setSyncProvider(getNtpTime);
   setSyncInterval(24L*60L*60L); // sync time once a day
   if (now()>365UL*24UL*60UL*60UL) startupTime=now();
-#elif STAT_TIME_SOURCE == DS3234 || STAT_TIME_SOURCE == DS3234INIT
+#elif STAT_TIME_SOURCE == DS3234_RTC || STAT_TIME_SOURCE == DS3234_INIT
   setSyncProvider(getDs3234Time);
   setSyncInterval(24L*60L*60L); // sync time once a day
   startupTime=now();
