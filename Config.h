@@ -172,7 +172,7 @@ IPAddress watchdog(100,  24, 172, 113);   //  ..113, Connections to this address
 // -------------------------------------------------------------------------------------------------------------------------
 
 // DEBUGGING -----------------------------------------------------------------------------------------------------------------------
-#define DEBUG_WATCHDOG                ON  //    OFF, ON to enable debug code for watchdog.                                    Infreq
+#define DEBUG_WATCHDOG                OFF //    OFF, ON to enable debug code for watchdog.                                    Infreq
 #define DEBUG_NPT                     OFF //    OFF, ON to enable debug code for network time protocol.                       Infreq
 #define DEBUG_DS3234                  OFF //    OFF, ON to enable debug code for the DS3234 real time clock.                  Infreq
 #define DEBUG_SD                      OFF //    OFF, ON to enable debug code for the SD card support.                         Infreq
