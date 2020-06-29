@@ -66,7 +66,6 @@ const int timeZone = TIME_ZONE;
 
 WebServer www;
 CmdServer Cmd;
-CmdServer Cmd1;
 
 #if STAT_TIME_SOURCE == NTP
   EthernetUDP Udp;
@@ -252,7 +251,6 @@ void setup()   {
 
   // Initialize the cmd server, timeout after 500ms
   Cmd.init(9999,500);
-  Cmd1.init(9998,500);
 
   // Set variables
   msFiveMinuteCounter=millis()+5000UL;
@@ -314,7 +312,6 @@ void loop()
 
   // handle cmd-channel
   Cmd.handleClient();
-  Cmd1.handleClient();
 
   // process commands
   processCommands();
