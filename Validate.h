@@ -13,8 +13,20 @@
   #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 500 and 10000 (milliseconds.)"
 #endif
 
-#if (ETHERNET_RESET<0 || ETHERNET_RESET>54) && ETHERNET_RESET != OFF
-  #error "Configuration (Config.h): ETHERNET_RESET must OFF or a number between 0 and 54 (Pin#.)"
+#if (ETHERNET_RESET_PIN < 0 || ETHERNET_RESET_PIN > 54) && ETHERNET_RESET_PIN != OFF
+  #error "Configuration (Config.h): ETHERNET_RESET_PIN must OFF or a number between 0 and 54 (Pin#.)"
+#endif
+
+#if WATCHDOG != ON && WATCHDOG != OFF
+  #error "Configuration (Config.h): WATCHDOG must be either ON or OFF."
+#endif
+
+#if WATCHDOG_CHECK_HOURS != OFF && WATCHDOG == OFF
+  #error "Configuration (Config.h): The WATCHDOG must be ON if using WATCHDOG_CHECK_HOURS."
+#endif
+
+#if (WATCHDOG_CHECK_HOURS < 1 || WATCHDOG_CHECK_HOURS > 48) && WATCHDOG_CHECK_HOURS != OFF
+  #error "Configuration (Config.h): WATCHDOG_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
 #endif
 
 #if TIME_ZONE<-12 || TIME_ZONE>14

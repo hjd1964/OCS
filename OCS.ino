@@ -79,6 +79,10 @@ CmdServer Cmd;
   time_t startupTime = 0;
 #endif
 
+#if WATCHDOG == ON && WATCHDOG_CHECK_HOURS != OFF
+  EthernetClient client;
+#endif
+
 // Pin assignments
 
 typedef struct {
@@ -195,10 +199,10 @@ void setup()   {
   thermostatInit();
 #endif
 
-#if ETHERNET_RESET != OFF
+#if ETHERNET_RESET_PIN != OFF
   // hold ethernet shield in reset
-  pinMode(ETHERNET_RESET,OUTPUT);
-  digitalWrite(ETHERNET_RESET,LOW);
+  pinMode(ETHERNET_RESET_PIN,OUTPUT);
+  digitalWrite(ETHERNET_RESET_PIN,LOW);
 
   for (int l=0; l<2; l++) {
     delay(1000);
@@ -208,7 +212,7 @@ void setup()   {
   }
 
   // let ethernet shield run
-  digitalWrite(ETHERNET_RESET,HIGH);
+  digitalWrite(ETHERNET_RESET_PIN,HIGH);
 #endif
 
   // wait for a bit just to be sure ethernet, etc. is up
@@ -282,6 +286,9 @@ void setup()   {
   startupTime=now();
 #endif
 
+#if DEBUG_WATCHDOG == ON
+  Serial.println("Rebooted!");
+#endif
 }
 
 void loop()                     
@@ -292,6 +299,26 @@ void loop()
 #endif
   
 #if WATCHDOG == ON
+  #if WATCHDOG_CHECK_HOURS != OFF
+    #if DEBUG_WATCHDOG == ON
+      #define WATCHDOG_FAST 3600.0
+    #else
+      #define WATCHDOG_FAST 1UL
+    #endif
+    static unsigned long nextConnectionCheck = 1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST);
+    static bool blockReset=false;
+    if (!blockReset && (long)(millis()-nextConnectionCheck) > 0) {
+      nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
+      int success=client.connect(watchdog, 80);
+      if (!success) { delay(500); success=client.connect(watchdog, 80); }
+      if (success) client.stop(); else blockReset=true;
+    #if DEBUG_WATCHDOG == ON
+      Serial.print("Watchdog client connection check result: ");
+      if (success) Serial.println("Success"); else Serial.println("Failure");
+    #endif
+    }
+    if (!blockReset)
+  #endif
   wdt_reset();
 #endif
 
