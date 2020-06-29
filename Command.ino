@@ -20,7 +20,6 @@ void processCommands() {
     // accumulate the command
     if ((Serial.available()>0) && (!cmd.ready())) cmd.add(Serial.read());
     if ((Cmd.available()>0) && (!cmde.ready())) cmde.add(Cmd.read());
-    if ((Cmd1.available()>0) && (!cmde1.ready())) cmde1.add(Cmd1.read());
 
     // if a command is ready, process it
     Commands process_command = COMMAND_NONE;
@@ -372,11 +371,6 @@ void processCommands() {
           if (cmde.checksum) checksum(reply);
           if (!supress_frame) strcat(reply,"#");
           Cmd.print(reply);
-        }
-        if (process_command==COMMAND_ETHERNET1) {
-          if (cmde1.checksum) checksum(reply);
-          if (!supress_frame) strcat(reply,"#");
-          Cmd1.print(reply);
         }
       }
       quietReply=false;

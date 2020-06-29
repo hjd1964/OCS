@@ -264,7 +264,13 @@ void setup()   {
   Timer1.attachInterrupt(RelayPwmISR);
 
 #if STAT_TIME_SOURCE == NTP
-  delay(3000);
+  for (int l=0; l<3; l++) {
+    delay(1000);
+#if WATCHDOG == ON
+    wdt_reset();
+#endif
+  }
+
   Udp.begin(localPort);
   #if DEBUG_NPT == ON
     Serial.println("waiting for sync");
