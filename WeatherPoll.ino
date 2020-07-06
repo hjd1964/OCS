@@ -106,6 +106,9 @@ void weatherPoll(void) {
               //              01234567890123456789012345678901234567890123456789
               //              0         1         2         3         4
               dataFile.write("                                                                              \r\n");
+#if WATCHDOG == ON
+              wdt_reset();
+#endif
             }
             dataFile.close();
           } else { 
