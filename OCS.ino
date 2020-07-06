@@ -385,9 +385,13 @@ void loop()
   if (roofIsMoving()) moveRoof();
 #endif
 
-  // Watch clouds
+  // Gather weather info. and log
 #if WEATHER == ON
-  weatherPoll();
+  // except while the roof is moving
+#if ROR == ON
+    if (!roofIsMoving())
+#endif
+    weatherPoll();
 #endif
 }
 
