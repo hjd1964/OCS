@@ -61,12 +61,15 @@ void weatherPoll(void) {
     if (wa==invalid) wa=w;
     if (wa!=invalid) wa = ((wa*((double)SecondsBetweenLogEntries/2.0-1.0)) + w)/((double)SecondsBetweenLogEntries/2.0);
 
+    // Sky quality -------------------------------------------------------------
+    double q = weatherSkyQuality();
+
     // short-term sky temp
 
 #if WEATHER_CHARTS == ON
 
 #if WATCHDOG == ON
-      wdt_disable();
+    wdt_disable();
 #endif
 
     // Logging ------------------------------------------------------------------
@@ -132,7 +135,7 @@ void weatherPoll(void) {
           dtostrf2(p,6,1,-999.9,9999.9,temp);                  dataFile.write(" "); dataFile.write(temp); //25, 7 (pressure)
           dtostrf2(h,5,1,-99.9,999.9,temp);                    dataFile.write(" "); dataFile.write(temp); //32, 6 (humidity)
           dtostrf2(wa,5,1,-99.9,999.9,temp);                   dataFile.write(" "); dataFile.write(temp); //38, 6 (short term average windspeed)
-          dtostrf2(weatherSkyQuality(),5,2,-9.99,99.99,temp);  dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
+          dtostrf2(q,5,2,-9.99,99.99,temp);                    dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
           for (int i=0; i<29; i++) dataFile.write(" ");                                                   //  ,29
           dataFile.write("\r\n");                                                                         //  , 2
           dataFile.close();
@@ -155,7 +158,7 @@ void weatherPoll(void) {
     }
     
 #if WATCHDOG == ON
-      wdt_enable(WDTO_8S);
+    wdt_enable(WDTO_8S);
 #endif
 
 #endif
