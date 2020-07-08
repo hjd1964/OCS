@@ -34,7 +34,7 @@ double weatherSkyQuality() {
   uint16_t ir = lum >> 16;
   uint16_t full = lum & 0xFFFF;
 
-  Serial.print(full); Serial.print(", "); Serial.println(ir);
+  // Serial.print(full); Serial.print(", "); Serial.println(ir);
 
   // automatically adapt gain and integration time
   if (!tsl.autoscale(full, ir)) return last_mag_per_sq_arcsec;
