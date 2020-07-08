@@ -15,7 +15,7 @@ time_t getNtpTime()
 #endif
   
 #if WATCHDOG == ON
-  wdt_reset();
+  if (!blockReset) wdt_reset();
 #endif
   unsigned long tOut=millis()+3000L;
 while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
@@ -49,7 +49,7 @@ while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any 
 #endif
 
 #if WATCHDOG == ON
-  wdt_reset();
+  if (!blockReset) wdt_reset();
 #endif
   return 0; // return 0 if unable to get the time
 }

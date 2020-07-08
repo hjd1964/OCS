@@ -79,8 +79,11 @@ CmdServer Cmd;
   time_t startupTime = 0;
 #endif
 
-#if WATCHDOG == ON && WATCHDOG_CHECK_HOURS != OFF
-  EthernetClient client;
+#if WATCHDOG == ON
+  #if WATCHDOG_CHECK_HOURS != OFF
+    EthernetClient client;
+  #endif
+  boolean blockReset = false;
 #endif
 
 // Pin assignments
@@ -306,7 +309,6 @@ void loop()
       #define WATCHDOG_FAST 1UL
     #endif
     static unsigned long nextConnectionCheck = 1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST);
-    static bool blockReset=false;
     if (!blockReset && (long)(millis()-nextConnectionCheck) > 0) {
       nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
       int success=client.connect(watchdog, 80);
@@ -317,9 +319,8 @@ void loop()
       if (success) Serial.println("Success"); else Serial.println("Failure");
     #endif
     }
-    if (!blockReset)
   #endif
-  wdt_reset();
+  if (!blockReset) wdt_reset();
 #endif
 
 #if STAT_TIME_SOURCE == NTP
