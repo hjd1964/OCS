@@ -239,7 +239,7 @@ void weather(EthernetClient *client) {
   char ws1[30]="";
   char ws2[30]="";
   float f;
-  
+
   strcpy_P(temp,htmlInnerWeather1); client->print(temp);
 #if WEATHER_TEMPERATURE == ON
   f=weatherOutsideTemp(); strcpy(ws2," &deg;C");
