@@ -14,12 +14,19 @@ time_t getNtpTime()
   if (roofIsMoving()) return 0;
 #endif
   
+#if WATCHDOG == ON
+  wdt_reset();
+#endif
   unsigned long tOut=millis()+3000L;
-  while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
+while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
 #if DEBUG_NPT == ON
   Serial.println("Transmit NTP Request");
 #endif
   sendNTPpacket(timeServer);
+
+#if WATCHDOG == ON
+  wdt_reset();
+#endif
   uint32_t beginWait = millis();
   while (millis() - beginWait < 1500) {
     int size = Udp.parsePacket();
@@ -39,6 +46,10 @@ time_t getNtpTime()
   }
 #if DEBUG_NPT == ON
   Serial.println("No NTP Response :-(");
+#endif
+
+#if WATCHDOG == ON
+  wdt_reset();
 #endif
   return 0; // return 0 if unable to get the time
 }
