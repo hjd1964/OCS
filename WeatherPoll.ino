@@ -64,6 +64,11 @@ void weatherPoll(void) {
     // short-term sky temp
 
 #if WEATHER_CHARTS == ON
+
+#if WATCHDOG == ON
+      wdt_disable();
+#endif
+
     // Logging ------------------------------------------------------------------
     // two minutes between writing values
     // the log is perpetual with 80 chars written twice a minute (about 82MB a year)
@@ -106,9 +111,6 @@ void weatherPoll(void) {
               //              01234567890123456789012345678901234567890123456789
               //              0         1         2         3         4
               dataFile.write("                                                                              \r\n");
-#if WATCHDOG == ON
-              wdt_reset();
-#endif
             }
             dataFile.close();
           } else { 
@@ -151,6 +153,11 @@ void weatherPoll(void) {
       ss=skyTemp;
       sad=skyDiffTemp;
     }
+    
+#if WATCHDOG == ON
+      wdt_enable(WDTO_8S);
+#endif
+
 #endif
   }
 }
