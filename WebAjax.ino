@@ -279,6 +279,9 @@ void weather(EthernetClient *client) {
   strcpy_P(temp1,htmlInnerWeatherRain);  sprintf(temp,temp1,rainSensorStr[i]); client->print(temp);
 #endif
 #if WEATHER_SKY_QUAL == ON
+#if WATCHDOG == ON
+  if (!blockReset) wdt_reset();
+#endif
   f=weatherSkyQuality();
   if (f==invalid) {
     strcpy(ws1,"Invalid"); strcpy(ws2,"");
