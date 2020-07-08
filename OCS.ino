@@ -357,9 +357,9 @@ void loop()
   // update relays
   RelayTimedOff();
 
-  #if THERMOSTAT == ON
-    thermostat();
-  #endif
+#if THERMOSTAT == ON
+  thermostat();
+#endif
 
 #if ROR == ON
   // Auto close the roof at 8am if requested
@@ -390,9 +390,9 @@ void loop()
 #if WEATHER == ON
   // except while the roof is moving
 #if ROR == ON
-    if (!roofIsMoving())
+  if (!roofIsMoving())
 #endif
-    weatherPoll();
+  weatherPoll();
 #endif
 }
 
