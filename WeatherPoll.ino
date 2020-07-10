@@ -183,33 +183,35 @@ double getAvgSkyDiffTemp() {
 
 bool isSafe() {
   bool safe=true;
-  int mainDeviceCount=0;
+  int safetyDeviceCount=0;
 
 #if STAT_MAINS_SENSE != OFF
   // check for mains power out
   if (!senseIsOn(STAT_MAINS_SENSE)) safe=false;
+  safetyDeviceCount++;
 #endif
 
 #if WEATHER == ON
   #if WEATHER_RAIN == ON
     // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
-    if ((weatherRain()==invalid) || (weatherRain()==1)) safe=false;
+    if (weatherRain() == invalid || weatherRain() == 1) safe=false;
+    safetyDeviceCount++;
   #endif
   
   #if WEATHER_CLOUD_CVR == ON
     // check for invalid or above WEATHER_SAFE_THRESHOLD
-    if ((avgSkyDiffTemp<-200) || (avgSkyDiffTemp>WEATHER_SAFE_THRESHOLD)) safe=false;
-    mainDeviceCount++;
+    if (avgSkyDiffTemp < -200 || avgSkyDiffTemp > WEATHER_SAFE_THRESHOLD) safe=false;
+    safetyDeviceCount++;
   #endif
   
   #if WEATHER_WIND_SPD == ON
     // check for invalid or wind speed too high
-    if ((weatherWindspeed()<0) || (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD)) safe=false;
-    mainDeviceCount++;
+    if (weatherWindspeed() < 0 || weatherWindspeed() > WEATHER_WIND_SPD_THRESHOLD) safe=false;
+    safetyDeviceCount++;
   #endif
 #endif
 
-  if (mainDeviceCount==0) return false; else return safe;
+  if (safetyDeviceCount==0) return false; else return safe;
 }
 
 void dtostrf2(double d, int i, int i1, double l, double h, char result[]) {
