@@ -367,8 +367,8 @@ void loop()
 
 #if ROR == ON
   // Auto close the roof at 8am if requested
-  if ((roofAutoClose) && (validTime())) {
-    if ((hour()==8) && (!roofAutoCloseInitiated)) {
+  if (roofAutoClose && validTime()) {
+    if (hour() == 8 && !roofAutoCloseInitiated) {
       // if motion is idle
       if (!roofIsMoving()) {
         // and the roof isn't closed, close it
@@ -376,14 +376,14 @@ void loop()
         roofAutoCloseInitiated=true;
       }
     }
-    if (hour()==9) roofAutoCloseInitiated=false;
+    if (hour() == 9) roofAutoCloseInitiated=false;
   }
 
 #if ROR_AUTOCLOSE_SAFETY == ON
   // close the roof if safety status calls for it
   if (!isSafe()) {
     // if the roof isn't closed, and motion is idle, close it
-    if ((!roofIsClosed()) && (!roofIsMoving()) startRoofClose();
+    if (!roofIsClosed() && !roofIsMoving()) startRoofClose();
   }
 #endif
 
@@ -401,5 +401,5 @@ void loop()
 }
 
 bool validTime() {
-  return (now()<315360000);
+  return (now() < 315360000);
 }
