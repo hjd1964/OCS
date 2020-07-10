@@ -345,7 +345,7 @@
   #error "Configuration (Config.h): ROR_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if ROR == ON && ROR_SENSE_LIMIT_CLOSED == OFF && ROR_SENSE_LIMIT_OPENED == OFF
+#if ROR == ON && (ROR_SENSE_LIMIT_CLOSED == OFF || ROR_SENSE_LIMIT_OPENED == OFF)
   #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROR control is enabled."
 #endif
 
