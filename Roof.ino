@@ -72,6 +72,14 @@ void continueOpeningRoof() {
       roofState='i';
     }
 
+    // Or interlock was triggered
+    if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
+      // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
+      roofStatusRegister=roofStatusRegister|0b1000000000; // 512
+      // Go idle
+      roofState='i';
+    }
+
     // Or the whole process taking too long
     if ((!roofSafetyOverride) && ((timeLeftToOpenAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
@@ -203,10 +211,12 @@ bool startRoofOpen() {
   // Flag status, no errors
   roofState='o';
   roofStatusRegister=0;
+  delay(2000);
+
+  if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Open safety interlock"; return false; }
 
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
-    delay(2000); 
     setRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY,2);
   } else {
     setRelayOff(ROR_MOTOR_CLOSE_RELAY);
@@ -252,10 +262,12 @@ bool startRoofClose() {
   // Flag status, no errors
   roofState='c';
   roofStatusRegister=0;
+  delay(2000);
+
+  if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Close safety interlock"; return false; }
 
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
-    delay(2000);
     setRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY,2);
   } else {
     setRelayOff(ROR_MOTOR_OPEN_RELAY);
@@ -308,6 +320,7 @@ String getRoofStatus() {
 // returns an error description string if an error has occured, "" if no error (required)
 String getRoofLastError() {
   String s="";
+  if (roofStatusRegister&512) s="Error: Open safety interlock";
   if (roofStatusRegister&256) s="Error: Close safety interlock";
   if (roofStatusRegister&128) s="Error: Open unknown error"; else
   if (roofStatusRegister&64) s="Error: Open limit sw fail"; else
