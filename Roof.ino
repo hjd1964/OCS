@@ -5,17 +5,20 @@
 #if ROR == ON
 
 // roof status and errors
-volatile char roofState = 'i';
-// bit 7 = not used, reserved
-// bit 6 = open roof failed with closed limit switch failure to disengage
-// bit 5 = open roof failed with over time
-// bit 4 = open roof failed with under time
-// bit 3 = not used, reserved
-// bit 2 = close roof failed with open limit switch failure to disengage
-// bit 1 = close roof failed with over time
-// bit 0 = close roof failed with under time
-uint16_t roofStatusRegister=0;
-String roofLastError="";
+volatile char roofState =       'i';
+#define RSR_OPEN_INTERLOCK      512
+#define RSR_CLOSE_INTERLOCK     256
+#define RSR_OPEN_UNKNOWN_ERROR  128
+#define RSR_OPEN_LIMIT_SW_FAIL  64
+#define RSR_OPEN_OVER_TIME      32
+#define RSR_OPEN_UNDER_TIME     16
+#define RSR_CLOSE_UNKNOWN_ERROR 8
+#define RSR_CLOSE_LIMIT_SW_FAIL 4
+#define RSR_CLOSE_OVER_TIME     2
+#define RSR_CLOSE_UNDER_TIME    1
+#define RSR_NO_ERROR            0
+uint16_t roofStatusRegister =   RSR_NO_ERROR;
+String roofLastError =          "";
 
 // roof power and safety
 volatile boolean roofSafetyOverride = false;
@@ -67,24 +70,24 @@ void continueOpeningRoof() {
     // Or a stuck limit switch
     if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_CLOSED))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b01000000; // 64
       // Go idle
       roofState='i';
+      roofStatusRegister|=RSR_OPEN_LIMIT_SW_FAIL;
     }
 
     // Or interlock was triggered
     if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b1000000000; // 512
       // Go idle
       roofState='i';
+      roofStatusRegister|=RSR_OPEN_INTERLOCK;
     }
 
     // Or the whole process taking too long
     if ((!roofSafetyOverride) && ((timeLeftToOpenAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b00100000; // 32
       // Go idle
+      roofStatusRegister|=RSR_OPEN_OVER_TIME;
       roofState='i';
     }
 
@@ -139,24 +142,24 @@ void continueClosingRoof() {
     // Or a stuck limit switch
     if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_OPENED))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b00000100; // 4
       // Go idle
       roofState='i';
+      roofStatusRegister|=RSR_CLOSE_LIMIT_SW_FAIL;
     }
 
     // Or interlock was triggered
     if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b100000000; // 256
       // Go idle
       roofState='i';
+      roofStatusRegister|=RSR_CLOSE_INTERLOCK;
     }
 
     // Or the whole process is taking too long
     if ((!roofSafetyOverride) && ((timeLeftToCloseAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      roofStatusRegister=roofStatusRegister|0b00000010; // 2
       // Go idle
+      roofStatusRegister|=RSR_CLOSE_OVER_TIME;
       roofState='i';
     }
 
@@ -210,7 +213,7 @@ bool startRoofOpen() {
 
   // Flag status, no errors
   roofState='o';
-  roofStatusRegister=0;
+  roofStatusRegister=RSR_NO_ERROR;
   delay(2000);
 
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Open safety interlock"; return false; }
@@ -261,7 +264,7 @@ bool startRoofClose() {
 
   // Flag status, no errors
   roofState='c';
-  roofStatusRegister=0;
+  roofStatusRegister=RSR_NO_ERROR;
   delay(2000);
 
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Close safety interlock"; return false; }
@@ -305,7 +308,7 @@ void stopRoof() {
 // clear errors (required)
 void clearRoofStatus() {
   // Reset the status register
-  roofStatusRegister=0;
+  roofStatusRegister=RSR_NO_ERROR;
   roofLastError="";
 }
 
@@ -320,16 +323,16 @@ String getRoofStatus() {
 // returns an error description string if an error has occured, "" if no error (required)
 String getRoofLastError() {
   String s="";
-  if (roofStatusRegister&512) s="Error: Open safety interlock";
-  if (roofStatusRegister&256) s="Error: Close safety interlock";
-  if (roofStatusRegister&128) s="Error: Open unknown error"; else
-  if (roofStatusRegister&64) s="Error: Open limit sw fail"; else
-  if (roofStatusRegister&32) s="Error: Open over time"; else
-  if (roofStatusRegister&16) s="Error: Open under time"; else
-  if (roofStatusRegister&8) s="Error: Close unknown error"; else
-  if (roofStatusRegister&4) s="Error: Close limit sw fail"; else
-  if (roofStatusRegister&2) s="Error: Close over time"; else
-  if (roofStatusRegister&1) s="Error: Close under time";
+  if (roofStatusRegister&RSR_OPEN_INTERLOCK)      s="Error: Open safety interlock";
+  if (roofStatusRegister&RSR_CLOSE_INTERLOCK)     s="Error: Close safety interlock";
+  if (roofStatusRegister&RSR_OPEN_UNKNOWN_ERROR)  s="Error: Open unknown error"; else
+  if (roofStatusRegister&RSR_OPEN_LIMIT_SW_FAIL)  s="Error: Open limit sw fail"; else
+  if (roofStatusRegister&RSR_OPEN_OVER_TIME)      s="Error: Open over time"; else
+  if (roofStatusRegister&RSR_OPEN_UNDER_TIME)     s="Error: Open under time"; else
+  if (roofStatusRegister&RSR_CLOSE_UNKNOWN_ERROR) s="Error: Close unknown error"; else
+  if (roofStatusRegister&RSR_CLOSE_LIMIT_SW_FAIL) s="Error: Close limit sw fail"; else
+  if (roofStatusRegister&RSR_CLOSE_OVER_TIME)     s="Error: Close over time"; else
+  if (roofStatusRegister&RSR_CLOSE_UNDER_TIME)    s="Error: Close under time";
   if (s=="") {
     if (roofState=='i') {
       if (roofLastError=="") {
