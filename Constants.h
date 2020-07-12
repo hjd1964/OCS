@@ -23,6 +23,12 @@
 #define METRIC                      1
 #define IMPERIAL                    2
 
+// Roof ----------------------------------------------------------------------------------------------------------------------------
+
+#define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds
+#define ROOF_PRE_MOTION_TIME             1.5  // in seconds
+#define ROOF_POST_MOTION_TIME            2.0  // in seconds
+
 // Misc ----------------------------------------------------------------------------------------------------------------------------
 
 #define invalid -1000

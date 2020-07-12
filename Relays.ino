@@ -1,18 +1,19 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Basic relay functions
 
-// relayState: 0 = off, 1=on, 2..9 unused, 11..19 pwm 10% to 90%, 20..255 timed off period in seconds
+// relayState: 0 = off, 1=on, 2..9 unused, 11..19 pwm 10% to 90%, 20..65535 timed off period in 1/10 seconds
 // do timed relay off control
 void RelayTimedOff() {
   // run once a second
-  if ((long)(tst-millis())<0) {
-    tst=millis()+1000UL;
+  static unsigned long last=0;
+  if ((long)(millis()-last) > 100) {
+    last=millis();
 
     // Timed relay off
     for (int i=1; i<=14; i++) {
-      if (relayState[i] >= 20 && relayState[i] <= 255) {
+      if (relayState[i] >= 20 && relayState[i] <= 65535) {
         relayState[i]-=1;
-        if (relayState[i] < 20) { setRelayOff(i); }
+        if (relayState[i] < 20) setRelayOff(i);
       }
     }
   }
@@ -24,12 +25,12 @@ volatile byte slowPwmCycle = 0;
 volatile int count = 0;
 void RelayPwmISR() {
   fastPwmCycle++; if (fastPwmCycle>9) { fastPwmCycle=0; }
-  for (int i=7; i<=14; i++) {
-    if (relayState[i]>=10) {
-      if (fastPwmCycle==0) {
+  for (int i=7; i <= 14; i++) {
+    if (relayState[i] >= 10) {
+      if (fastPwmCycle == 0) {
         setRelayOn(i,false);
       } else {
-        if ((relayState[i]/10)==fastPwmCycle) { setRelayOff(i,false); }
+        if ((relayState[i]/10) == fastPwmCycle) { setRelayOff(i,false); }
       }
     }
   }
@@ -79,11 +80,19 @@ void setRelayPwm(int r, int percentPower) {
   }
 }
 
-void setRelayOnDelayedOff(int r, int seconds) {
-  if (r >= 1 && r <= 14 && seconds >= 1 && seconds <= 236) {
-    relayState[r]=19+seconds;
+// delays up to 1 hour
+void setRelayOnDelayedOff(int r, float seconds) {
+  if (r >= 1 && r <= 14 && seconds >= 0.1 && seconds <= 3600.0) {
+    relayState[r]=19+round(seconds*10.0);
     digitalWrite(relay[r].pin,relay[r].onState);
   }
+}
+
+bool isActiveRelayOnDelayedOff(int r) {
+  RelayTimedOff();
+  if (r >= 1 && r <= 14) {
+    return (relayState[r] > 19);
+  } else return false;
 }
 
 void setRelayOff(int r) { setRelayOff(r,true); }

@@ -139,9 +139,6 @@ volatile int analogState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 #endif
 boolean roofAutoCloseInitiated = false;
 
-// relay control timer
-unsigned long tst;
-
 unsigned long msFiveMinuteCounter;
 float insideTemperature;
 
@@ -261,7 +258,6 @@ void setup()   {
 
   // Set variables
   msFiveMinuteCounter=millis()+5000UL;
-  tst                =millis()+30000UL;
   insideTemperature  =-999.0;
 
   // for dimming the led's etc, 1 millisecond period
