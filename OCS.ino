@@ -317,13 +317,16 @@ void loop()
     }
   #endif
 
-  #if DEBUG_WATCHDOG == ON
-    static unsigned long lastDwrTime,maxDwrTime;
-    lastDwrTime=millis(); long thisDwrTime=(long)(millis()-lastDwrTime);
-    if (thisDwrTime > maxDwrTime) { maxDwrTime=thisDwrTime; Serial.print("DEBUG_WATCHDOG: % of Reset (worst case) = "); Serial.println(maxDwrTime/80.0); }
-  #endif
-
   if (!blockReset) wdt_reset();
+#endif
+
+#if DEBUG_LOOPTIME == ON
+  static unsigned long lastDwrTime,maxDwrTime;
+  if (lastDwrTime != 0) {
+    long thisDwrTime=(long)(millis()-lastDwrTime);
+    if (thisDwrTime > maxDwrTime) { maxDwrTime=thisDwrTime; Serial.print("DEBUG_LOOPTIME: Seconds per pass (worst case) = "); Serial.println(maxDwrTime/1000.0,3); }
+  }
+  lastDwrTime=millis();
 #endif
 
 #if STAT_TIME_SOURCE == NTP
