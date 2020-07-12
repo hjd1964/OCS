@@ -296,6 +296,9 @@
 #if ROR_MOTOR_OPEN_RELAY != OFF && ROR_MOTOR_OPEN_RELAY == ROR_MOTOR_CLOSE_RELAY
   #if ROR_MOTOR_RELAY_MOMENTARY == ON
     #define ROR_SINGLE_OPEN_CLOSE_RELAY ON
+    #if ROR_MOTOR_STOP_RELAY == ROR_MOTOR_OPEN_RELAY
+      #define ROR_SINGLE_OPEN_CLOSE_STOP_RELAY ON
+    #endif
   #else
     #error "Configuration (Config.h): ROR_MOTOR_OPEN_RELAY and ROR_MOTOR_CLOSE_RELAY on the same RELAY# is only allowed if ROR_MOTOR_RELAY_MOMENTARY is used."
   #endif
