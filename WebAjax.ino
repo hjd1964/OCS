@@ -105,6 +105,7 @@ const char htmlInnerStatus3[] PROGMEM =
 "&nbsp;&nbsp;Time (%s Time)<div class=\"aStatus\">%s</div><br />";
 const char htmlInnerStatus4[] PROGMEM =
 "&nbsp;&nbsp;Up Time (Minutes)<div class=\"aStatus\">%s</div><br /><br />";
+
 #if STAT_MAINS_SENSE != OFF
 const char htmlInnerStatusMains[] PROGMEM =
 "&nbsp;&nbsp;Mains Power<div class=\"aStatus\">%s</div><br />";
@@ -279,9 +280,6 @@ void weather(EthernetClient *client) {
   strcpy_P(temp1,htmlInnerWeatherRain);  sprintf(temp,temp1,rainSensorStr[i]); client->print(temp);
 #endif
 #if WEATHER_SKY_QUAL == ON
-#if WATCHDOG == ON
-  if (!blockReset) wdt_reset();
-#endif
   f=weatherSkyQuality();
   if (f==invalid) {
     strcpy(ws1,"Invalid"); strcpy(ws2,"");

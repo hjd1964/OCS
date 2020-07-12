@@ -351,10 +351,6 @@ void loop()
   }
 #endif
 
-#if WATCHDOG == ON
-  if (!blockReset) wdt_reset();
-#endif
-
   // ------------------------------------------------------------------------------------------
   // Process events
 
