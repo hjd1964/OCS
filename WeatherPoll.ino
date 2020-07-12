@@ -62,9 +62,6 @@ void weatherPoll(void) {
     if (wa!=invalid) wa = ((wa*((double)SecondsBetweenLogEntries/2.0-1.0)) + w)/((double)SecondsBetweenLogEntries/2.0);
 
     // Sky quality -------------------------------------------------------------
-#if WATCHDOG == ON
-  if (!blockReset) wdt_reset();
-#endif
     double q = weatherSkyQuality();
 
     // short-term sky temp
