@@ -36,7 +36,7 @@
 // firmware info
 #define ONCUE_OCS
 #define FirmwareDate   __DATE__
-#define FirmwareNumber "2.3a"
+#define FirmwareNumber "2.3b"
 #define FirmwareName   "OnCue OCS"
 #define FirmwareTime   __TIME__
 
