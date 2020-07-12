@@ -53,7 +53,7 @@ void setvar(EthernetClient *client) {
 #if LIGHT == ON
 #if LIGHT_OUTSIDE_RELAY != OFF
   if (a=="light_exit") { 
-    setRelayOnDelayedOff(atoi(LIGHT_OUTSIDE_RELAY),236); // turn off after about 4 minutes
+    setRelayOnDelayedOff(atoi(LIGHT_OUTSIDE_RELAY),4*60); // turn off after about 4 minutes
   }
 #endif
 #endif
