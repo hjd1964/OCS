@@ -110,7 +110,7 @@ const volatile relay_t relay[] {
   {47, HIGH},  // Relay 13: pin#, ON state
   {49, HIGH}   // Relay 14: pin#, ON state
 };
-volatile uint8_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+volatile uint16_t relayState[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 typedef struct {
   uint8_t pin;
