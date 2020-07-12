@@ -96,8 +96,8 @@ void continueOpeningRoof() {
 
     // Detect that the roof has finished opening
     if (senseIsOn(ROR_SENSE_LIMIT_OPENED)) {
-      // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
-      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(2000);
+      // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
+      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(ROOF_POST_MOTION_TIME*1000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,0);
       EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg);
@@ -168,8 +168,8 @@ void continueClosingRoof() {
 
     // Detect that the roof has finished closing
     if (senseIsOn(ROR_SENSE_LIMIT_CLOSED)) {
-      // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
-      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(2000);
+      // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
+      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(ROOF_POST_MOTION_TIME*1000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg);
       EEPROM_writeLong(EE_timeLeftToClose,0);
@@ -190,7 +190,7 @@ void continueClosingRoof() {
 
 // Start opening the roof, returns true if successful or false otherwise (required)
 bool startRoofOpen() {
-  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Open already in motion"; return false; }
+  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY) || relayIsOn(ROR_MOTOR_STOP_RELAY)) { roofLastError="Error: Open already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_SENSE_LIMIT_OPENED) && !senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
@@ -214,13 +214,13 @@ bool startRoofOpen() {
   // Flag status, no errors
   roofState='o';
   roofStatusRegister=RSR_NO_ERROR;
-  delay(2000);
 
+  delay(ROOF_PRE_MOTION_TIME*1000);
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Open safety interlock"; return false; }
 
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY == ON) {
-    setRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY,2);
+    setRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY,ROOF_MOMENTARY_BUTTON_PRESS_TIME);
   } else {
     setRelayOff(ROR_MOTOR_CLOSE_RELAY);
     setRelayOn(ROR_MOTOR_OPEN_RELAY);
@@ -241,7 +241,7 @@ bool startRoofOpen() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool startRoofClose() {
-  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY)) { roofLastError="Error: Close already in motion"; return false; }
+  if (roofState != 'i' || relayIsOn(ROR_MOTOR_OPEN_RELAY) || relayIsOn(ROR_MOTOR_CLOSE_RELAY) || relayIsOn(ROR_MOTOR_STOP_RELAY)) { roofLastError="Error: Close already in motion"; return false; }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!roofSafetyOverride && ROR_SINGLE_OPEN_CLOSE_RELAY == ON && !senseIsOn(ROR_SENSE_LIMIT_OPENED) && !senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Motion direction unknown"; return false; }
@@ -265,13 +265,13 @@ bool startRoofClose() {
   // Flag status, no errors
   roofState='c';
   roofStatusRegister=RSR_NO_ERROR;
-  delay(2000);
 
+  delay(ROOF_PRE_MOTION_TIME*1000);
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Close safety interlock"; return false; }
 
   // Set relay/MOSFET
   if (ROR_MOTOR_RELAY_MOMENTARY == ON) {
-    setRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY,2);
+    setRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY,ROOF_MOMENTARY_BUTTON_PRESS_TIME);
   } else {
     setRelayOff(ROR_MOTOR_OPEN_RELAY);
     setRelayOn(ROR_MOTOR_CLOSE_RELAY);
@@ -298,13 +298,20 @@ void stopRoof() {
   roofMaxPower=false;
   // Set the state to idle
   roofState='i';
+
+  // Wait for any momentary relay to finish press
+  bool wasActive=false;
+  while (isActiveRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY) || isActiveRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY) || isActiveRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY)) { wasActive=true; delay(100); }
+  if (wasActive) delay(ROOF_POST_MOTION_TIME*1000);
+
   // Stop any DC motor
   setRelayOff(ROR_MOTOR_OPEN_RELAY);
   setRelayOff(ROR_MOTOR_CLOSE_RELAY);
+
   // And press the stop button if this roof has one
   if (ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY != OFF) {
-    delay(2500); // make sure any 2 second button press is finished before pressing again
-    setRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY,2);
+    // make sure any 2 second button press is finished before pressing again
+    setRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY,ROOF_MOMENTARY_BUTTON_PRESS_TIME);
   }
 }
 
