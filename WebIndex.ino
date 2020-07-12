@@ -58,7 +58,7 @@ const char htmlRoof2[] PROGMEM =
 "<div style=\"text-align: center\">"
 "<br />"
 #if !(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)
-  #if ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == ROR_MOTOR_OPEN_RELAY && ROR_MOTOR_OPEN_RELAY == ROR_MOTOR_CLOSE_RELAY
+  #if ROR_SINGLE_OPEN_CLOSE_STOP_RELAY == ON
     "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Press!\" />&nbsp;&nbsp;&nbsp;"
   #else
     "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />&nbsp;&nbsp;&nbsp;"
