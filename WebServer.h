@@ -60,7 +60,7 @@ const char html_main_css6[]  PROGMEM = "h1 { text-align: right; } .g { color: #1
 const char html_main_css7[]  PROGMEM = "a:hover, a:active { background-color: red; } .c { color: #A01010; font-weight: bold; }";
 const char html_main_css8[]  PROGMEM = "a:link, a:visited { background-color: #332222; color: #a07070; border:1px solid red; padding: 5px 10px; margin: 0px; text-align: center; text-decoration: none; display: inline-block; }";
 const char html_main_css9[]  PROGMEM = "button { background-color: #A01010; font-weight: bold; border-radius: 5px; font-size: 12px; margin: 2px; padding: 4px 8px; }";
-const char html_main_css10[] PROGMEM = ".obsControl { position: relative; font-size: 14px; width: 260px; height: 170px; float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red; }"
+const char html_main_css10[] PROGMEM = ".obsControl { position: relative; font-size: 14px; width: 260px; height: 190px; float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red; }"
                                        ".aStatus { color: #505090; width: 60px; height: 2px; float: right; padding: 0px; margin: 2px; background-color: #CCCCCC;} </STYLE>\r\n";
 
 const char html_head3[]      PROGMEM = "</head>\r\n<body bgcolor=\"#26262A\">\r\n";
