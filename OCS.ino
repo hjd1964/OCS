@@ -315,11 +315,18 @@ void loop()
       if (!success) { delay(500); success=client.connect(watchdog, 80); }
       if (success) client.stop(); else blockReset=true;
     #if DEBUG_WATCHDOG == ON
-      Serial.print("Watchdog client connection check result: ");
+      Serial.print("DEBUG_WATCHDOG: Client connection check result = ");
       if (success) Serial.println("Success"); else Serial.println("Failure");
     #endif
     }
   #endif
+
+  #if DEBUG_WATCHDOG == ON
+    static unsigned long lastDwrTime,maxDwrTime;
+    lastDwrTime=millis(); long thisDwrTime=(long)(millis()-lastDwrTime);
+    if (thisDwrTime > maxDwrTime) { maxDwrTime=thisDwrTime; Serial.print("DEBUG_WATCHDOG: % of Reset (worst case) = "); Serial.println(maxDwrTime/80.0); }
+  #endif
+
   if (!blockReset) wdt_reset();
 #endif
 

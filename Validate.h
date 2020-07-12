@@ -25,7 +25,7 @@
   #error "Configuration (Config.h): The WATCHDOG must be ON if using WATCHDOG_CHECK_HOURS."
 #endif
 
-#if (WATCHDOG_CHECK_HOURS < 1 || WATCHDOG_CHECK_HOURS > 48) && WATCHDOG_CHECK_HOURS != OFF
+#if (WATCHDOG_CHECK_HOURS < 1 || WATCHDOG_CHECK_HOURS > 48) && WATCHDOG_CHECK_HOURS != OFF && DEBUG_WATCHDOG == OFF
   #error "Configuration (Config.h): WATCHDOG_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
 #endif
 
