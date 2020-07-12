@@ -70,24 +70,24 @@ void continueOpeningRoof() {
     // Or a stuck limit switch
     if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToOpenNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_CLOSED))) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      // Go idle
-      roofState='i';
       roofStatusRegister|=RSR_OPEN_LIMIT_SW_FAIL;
+      // Go idle (assume the roof is still moving where we can't cut the power)
+      if (!(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)) roofState='i';
     }
 
     // Or interlock was triggered
     if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      // Go idle
-      roofState='i';
       roofStatusRegister|=RSR_OPEN_INTERLOCK;
+      // Go idle (assume the roof is still moving where we can't cut the power)
+      if (!(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)) roofState='i';
     }
 
     // Or the whole process taking too long
     if ((!roofSafetyOverride) && ((timeLeftToOpenAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-      // Go idle
       roofStatusRegister|=RSR_OPEN_OVER_TIME;
+      // Go idle (assume the roof has stopped where we can't cut the power)
       roofState='i';
     }
 
@@ -97,7 +97,7 @@ void continueOpeningRoof() {
     // Detect that the roof has finished opening
     if (senseIsOn(ROR_SENSE_LIMIT_OPENED)) {
       // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
-      if (ROR_MOTOR_RELAY_MOMENTARY != OFF) delay(2000);
+      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,0);
       EEPROM_writeLong(EE_timeLeftToClose,roofTimeAvg);
@@ -139,27 +139,27 @@ void continueClosingRoof() {
       EEPROM_writeLong(EE_timeLeftToClose,timeLeftToCloseNow);
     }
 
-    // Or a stuck limit switch
+    // On a stuck limit switch
     if ((!roofSafetyOverride) && (((roofTimeAvg-timeLeftToCloseNow)>ROR_TIME_LIMIT_SENSE_FAIL*1000) && senseIsOn(ROR_SENSE_LIMIT_OPENED))) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      // Go idle
-      roofState='i';
       roofStatusRegister|=RSR_CLOSE_LIMIT_SW_FAIL;
+      // Go idle (assume the roof is still moving where we can't cut the power)
+      if (!(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)) roofState='i';
     }
 
     // Or interlock was triggered
     if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      // Go idle
-      roofState='i';
       roofStatusRegister|=RSR_CLOSE_INTERLOCK;
+      // Go idle (assume the roof is still moving where we can't cut the power)
+      if (!(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)) roofState='i';
     }
 
     // Or the whole process is taking too long
     if ((!roofSafetyOverride) && ((timeLeftToCloseAtStart-msOfTravel)<-roofTimeErrorLimit)) {
       // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-      // Go idle
       roofStatusRegister|=RSR_CLOSE_OVER_TIME;
+      // Go idle (assume the roof has stopped where we can't cut the power)
       roofState='i';
     }
 
@@ -169,7 +169,7 @@ void continueClosingRoof() {
     // Detect that the roof has finished closing
     if (senseIsOn(ROR_SENSE_LIMIT_CLOSED)) {
       // wait for two seconds before powering off the roof drive (for automatic opener that stops itself)
-      if (ROR_MOTOR_RELAY_MOMENTARY != OFF) delay(2000);
+      if (ROR_MOTOR_RELAY_MOMENTARY == ON) delay(2000);
       // reset position timers
       EEPROM_writeLong(EE_timeLeftToOpen,roofTimeAvg);
       EEPROM_writeLong(EE_timeLeftToClose,0);
@@ -219,7 +219,7 @@ bool startRoofOpen() {
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Open safety interlock"; return false; }
 
   // Set relay/MOSFET
-  if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
+  if (ROR_MOTOR_RELAY_MOMENTARY == ON) {
     setRelayOnDelayedOff(ROR_MOTOR_OPEN_RELAY,2);
   } else {
     setRelayOff(ROR_MOTOR_CLOSE_RELAY);
@@ -270,7 +270,7 @@ bool startRoofClose() {
   if (ROR_SENSE_INTERLOCK != OFF && !senseIsOn(ROR_SENSE_INTERLOCK)) { roofState='i'; roofLastError="Error: Close safety interlock"; return false; }
 
   // Set relay/MOSFET
-  if (ROR_MOTOR_RELAY_MOMENTARY != OFF) {
+  if (ROR_MOTOR_RELAY_MOMENTARY == ON) {
     setRelayOnDelayedOff(ROR_MOTOR_CLOSE_RELAY,2);
   } else {
     setRelayOff(ROR_MOTOR_OPEN_RELAY);
@@ -302,7 +302,10 @@ void stopRoof() {
   setRelayOff(ROR_MOTOR_OPEN_RELAY);
   setRelayOff(ROR_MOTOR_CLOSE_RELAY);
   // And press the stop button if this roof has one
-  if (ROR_MOTOR_RELAY_MOMENTARY != OFF && ROR_MOTOR_STOP_RELAY != OFF) setRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY,2);
+  if (ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY != OFF) {
+    delay(2500); // make sure any 2 second button press is finished before pressing again
+    setRelayOnDelayedOff(ROR_MOTOR_STOP_RELAY,2);
+  }
 }
 
 // clear errors (required)
