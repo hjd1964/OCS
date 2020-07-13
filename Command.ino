@@ -350,6 +350,14 @@ void processCommands() {
         } else
 #endif
 #endif
+#if WATCHDOG != OFF
+//  :SW#  Set the watchdog reset flag
+        if (command[1] == 'W' && command[2] == 0) {
+          blockReset=true;
+          strcpy(reply,"Rebooting in 8 seconds...");
+          quietReply=true;
+        } else
+#endif
         commandError=true;
 
       } else 
