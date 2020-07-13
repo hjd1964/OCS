@@ -166,7 +166,6 @@ IPAddress watchdog(100,  24, 172, 113);   //  ..113, Connections to this address
 #define ROR_TIME_LIMIT_SENSE_FAIL       6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Adjust
 
 // MISC. SETTINGS ------------------------------------------------------------------------------------------------------------------
-#define WATCHDOG                      OFF //    OFF, ON to reset the Mega2560 after 8 seconds if it hangs for any reason.     Infreq
 
 // THAT'S IT FOR USER CONFIGURATION!
 // -------------------------------------------------------------------------------------------------------------------------
