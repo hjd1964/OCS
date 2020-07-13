@@ -23,6 +23,11 @@
 #define METRIC                      1
 #define IMPERIAL                    2
 
+// Watchdog ------------------------------------------------------------------------------------------------------------------------
+
+#define WATCHDOG_RECHECK_TIME       60        // in seconds
+#define WATCHDOG_RECHECK_TRIES      2
+
 // Roof ----------------------------------------------------------------------------------------------------------------------------
 
 #define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds

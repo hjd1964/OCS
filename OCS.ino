@@ -87,8 +87,8 @@ CmdServer Cmd;
 #endif
 
 #if DEBUG_LOOPTIME == ON
-  char dwrMsg[150];
-  char dwrWs[30];
+  char dwrMsg[150]="";
+  char dwrWs[30]="";
   unsigned long lastDwrTime,maxDwrTime;
   #define LOOPTIME_WATCH(x) sprintf(dwrWs,"%sP%s=%ld",(x[0]=='1'&&x[1]==0)?"":", ",x,(long)(millis()-lastDwrTime)); strcat(dwrMsg,dwrWs)
 #else
@@ -331,10 +331,10 @@ void loop()
         connectionCheckTry=0;
         nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
       } else {
-        nextConnectionCheck = millis()+(1000UL*60UL);
+        nextConnectionCheck = millis()+(1000UL*WATCHDOG_RECHECK_TIME);
       }
 
-      if (connectionCheckTry > 2 && !success) blockReset=true;
+      if (connectionCheckTry > WATCHDOG_RECHECK_TRIES && !success) blockReset=true;
     }
   #endif
 
