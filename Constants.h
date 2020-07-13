@@ -5,34 +5,34 @@
 // Configuration options -----------------------------------------------------------------------------------------------------------
 
 // On/Off, etc.
-#define OFF                        -1
-#define ON                         -2
-#define ON_PULLUP                  -3
-#define ON_PULLDOWN                -4
+#define OFF                               -1
+#define ON                                -2
+#define ON_PULLUP                         -3
+#define ON_PULLDOWN                       -4
 
 // Time
-#define LST                         1
-#define DST                         2
-#define UTC                         3
+#define LST                                1
+#define DST                                2
+#define UTC                                3
 
-#define NTP                         1
-#define DS3234_RTC                  2
-#define DS3234_INIT                 3
+#define NTP                                1
+#define DS3234_RTC                         2
+#define DS3234_INIT                        3
 
 // Units
-#define METRIC                      1
-#define IMPERIAL                    2
+#define METRIC                             1
+#define IMPERIAL                           2
 
 // Watchdog ------------------------------------------------------------------------------------------------------------------------
 
-#define WATCHDOG_RECHECK_TIME       60        // in seconds
-#define WATCHDOG_RECHECK_TRIES      2
+#define WATCHDOG_RECHECK_TIME             60  // in seconds
+#define WATCHDOG_RECHECK_TRIES             2
 
 // Roof ----------------------------------------------------------------------------------------------------------------------------
 
-#define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds
-#define ROOF_PRE_MOTION_TIME             1.5  // in seconds
-#define ROOF_POST_MOTION_TIME            2.0  // in seconds
+#define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds, this blocks the main-loop so <= ~2 seconds!
+#define ROOF_PRE_MOTION_TIME             1.5  // as above
+#define ROOF_POST_MOTION_TIME            2.0  // as above
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
 
