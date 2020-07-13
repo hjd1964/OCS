@@ -446,7 +446,11 @@ void loop()
 #if ROR == ON
   if (!roofIsMoving())
 #endif
-  if (!blockReset) weatherPoll();
+  #if WATCHDOG == ON
+    if (!blockReset) weatherPoll();
+  #else
+    weatherPoll();
+  #endif
 #endif
 
   LOOPTIME_WATCH("10");
