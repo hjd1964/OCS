@@ -33,6 +33,9 @@
  *
  */
 
+char msg[1024];
+char ws[20];
+
 // firmware info
 #define ONCUE_OCS
 #define FirmwareDate   __DATE__
@@ -296,6 +299,11 @@ void loop()
   // keep NexDome alive
   NexDomeLoop();
 #endif
+
+#if DEBUG_LOOPTIME == ON
+  static unsigned long lastDwrTime,maxDwrTime;
+  sprintf(ws,"P11=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
   
 #if WATCHDOG == ON
   #if WATCHDOG_CHECK_HOURS != OFF
@@ -321,12 +329,20 @@ void loop()
 #endif
 
 #if DEBUG_LOOPTIME == ON
-  static unsigned long lastDwrTime,maxDwrTime;
+  sprintf(ws,"P12=%ld",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+
   if (lastDwrTime != 0) {
     long thisDwrTime=(long)(millis()-lastDwrTime);
-    if (thisDwrTime > maxDwrTime) { maxDwrTime=thisDwrTime; Serial.print("DEBUG_LOOPTIME: Seconds per pass (worst case) = "); Serial.println(maxDwrTime/1000.0,3); }
+    if (thisDwrTime > maxDwrTime) {
+      maxDwrTime=thisDwrTime;
+      Serial.print("DEBUG_LOOPTIME: ");
+      Serial.println(msg);
+      Serial.print("DEBUG_LOOPTIME: Seconds per pass (worst case) = "); Serial.println(maxDwrTime/1000.0,3); }
   }
   lastDwrTime=millis();
+
+  strcpy(msg,"");
+  sprintf(ws,"P1=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
 #endif
 
 #if STAT_TIME_SOURCE == NTP
@@ -338,17 +354,34 @@ void loop()
     if (fastNTPSync) { setSyncInterval(24L*60L*60L); fastNTPSync=false; }
   }
 #endif
+
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P2=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
   // ------------------------------------------------------------------------------------------
   // Handle comms
 
   // serve web-pages
   www.handleClient();
 
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P3=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
   // handle cmd-channel
   Cmd.handleClient();
 
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P4=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
   // process commands
   processCommands();
+
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P5=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
 
 #if LIGHT_SW_SENSE == ON && LIGHT_WRW_RELAY != OFF
   // The wall switch controls LED lights
@@ -357,14 +390,26 @@ void loop()
   }
 #endif
 
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P6=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
   // ------------------------------------------------------------------------------------------
   // Process events
 
   // update relays
   RelayTimedOff();
 
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P7=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
 #if THERMOSTAT == ON
   thermostat();
+#endif
+
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P8=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
 #endif
 
 #if ROR == ON
@@ -392,6 +437,10 @@ void loop()
   if (roofIsMoving()) moveRoof();
 #endif
 
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P9=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+#endif
+
   // Gather weather info. and log
 #if WEATHER == ON
   // except while the roof is moving
@@ -399,6 +448,10 @@ void loop()
   if (!roofIsMoving())
 #endif
   weatherPoll();
+#endif
+
+#if DEBUG_LOOPTIME == ON
+  sprintf(ws,"P10=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
 #endif
 }
 
