@@ -315,16 +315,26 @@ void loop()
     #else
       #define WATCHDOG_FAST 1UL
     #endif
+    static int connectionCheckTry = 0;
     static unsigned long nextConnectionCheck = 1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST);
     if (!blockReset && (long)(millis()-nextConnectionCheck) > 0) {
-      nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
+      connectionCheckTry++;
       int success=client.connect(watchdog, 80);
-      if (!success) { delay(500); success=client.connect(watchdog, 80); }
-      if (success) client.stop(); else blockReset=true;
+
     #if DEBUG_WATCHDOG == ON
       Serial.print("DEBUG_WATCHDOG: Client connection check result = ");
       if (success) Serial.println("Success"); else Serial.println("Failure");
     #endif
+
+      if (success) {
+        client.stop();
+        connectionCheckTry=0;
+        nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
+      } else {
+        nextConnectionCheck = millis()+(1000UL*60UL);
+      }
+
+      if (connectionCheckTry > 2 && !success) blockReset=true;
     }
   #endif
 
