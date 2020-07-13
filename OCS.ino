@@ -87,8 +87,8 @@ CmdServer Cmd;
 #endif
 
 #if DEBUG_LOOPTIME == ON
-  char dwrMsg[512];
-  char dwrWs[20];
+  char dwrMsg[150];
+  char dwrWs[30];
   unsigned long lastDwrTime,maxDwrTime;
   #define LOOPTIME_WATCH(x) sprintf(dwrWs,"%sP%s=%ld",(x[0]=='1'&&x[1]==0)?"":", ",x,(long)(millis()-lastDwrTime)); strcat(dwrMsg,dwrWs)
 #else
