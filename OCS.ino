@@ -90,7 +90,7 @@ CmdServer Cmd;
   char dwrMsg[512];
   char dwrWs[20];
   unsigned long lastDwrTime,maxDwrTime;
-  #define LOOPTIME_WATCH(x) sprintf(dwrWs,"P%s=%ld, ",x,(long)(millis()-lastDwrTime)); strcat(dwrMsg,dwrWs)
+  #define LOOPTIME_WATCH(x) sprintf(dwrWs,"%sP%s=%ld",(x[0]=='1'&&x[1]==0)?"":", ",x,(long)(millis()-lastDwrTime)); strcat(dwrMsg,dwrWs)
 #else
   #define LOOPTIME_WATCH(x)
 #endif
