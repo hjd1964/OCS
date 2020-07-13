@@ -9,8 +9,8 @@
 
 // Ethernet setup
 
-#if RESPONSE_INTERVAL<500 || RESPONSE_INTERVAL>10000
-  #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 500 and 10000 (milliseconds.)"
+#if RESPONSE_INTERVAL<400 || RESPONSE_INTERVAL>4000
+  #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 400 and 4000 (milliseconds.)"
 #endif
 
 #if (ETHERNET_RESET_PIN < 0 || ETHERNET_RESET_PIN > 54) && ETHERNET_RESET_PIN != OFF
