@@ -33,9 +33,6 @@
  *
  */
 
-char msg[1024];
-char ws[20];
-
 // firmware info
 #define ONCUE_OCS
 #define FirmwareDate   __DATE__
@@ -87,6 +84,15 @@ CmdServer Cmd;
     EthernetClient client;
   #endif
   boolean blockReset = false;
+#endif
+
+#if DEBUG_LOOPTIME == ON
+  char dwrMsg[512];
+  char dwrWs[20];
+  unsigned long lastDwrTime,maxDwrTime;
+  #define LOOPTIME_WATCH(x) sprintf(dwrWs,"P%s=%ld, ",x,(long)(millis()-lastDwrTime)); strcat(dwrMsg,dwrWs)
+#else
+  #define LOOPTIME_WATCH(x)
 #endif
 
 // Pin assignments
@@ -300,10 +306,7 @@ void loop()
   NexDomeLoop();
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  static unsigned long lastDwrTime,maxDwrTime;
-  sprintf(ws,"P11=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("11");
   
 #if WATCHDOG == ON
   #if WATCHDOG_CHECK_HOURS != OFF
@@ -328,22 +331,24 @@ void loop()
   if (!blockReset) wdt_reset();
 #endif
 
+  LOOPTIME_WATCH("12");
+
 #if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P12=%ld",(long)(millis()-lastDwrTime)); strcat(msg,ws);
 
   if (lastDwrTime != 0) {
     long thisDwrTime=(long)(millis()-lastDwrTime);
     if (thisDwrTime > maxDwrTime) {
       maxDwrTime=thisDwrTime;
       Serial.print("DEBUG_LOOPTIME: ");
-      Serial.println(msg);
+      Serial.println(dwrMsg);
       Serial.print("DEBUG_LOOPTIME: Seconds per pass (worst case) = "); Serial.println(maxDwrTime/1000.0,3); }
   }
   lastDwrTime=millis();
 
-  strcpy(msg,"");
-  sprintf(ws,"P1=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
+  strcpy(dwrMsg,"");
 #endif
+
+  LOOPTIME_WATCH("1");
 
 #if STAT_TIME_SOURCE == NTP
   // double check time if it looks like it's not set go back and ask for it again every 10 minutes
@@ -355,9 +360,7 @@ void loop()
   }
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P2=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("2");
 
   // ------------------------------------------------------------------------------------------
   // Handle comms
@@ -365,23 +368,17 @@ void loop()
   // serve web-pages
   www.handleClient();
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P3=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("3");
 
   // handle cmd-channel
   Cmd.handleClient();
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P4=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("4");
 
   // process commands
   processCommands();
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P5=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("5");
 
 #if LIGHT_SW_SENSE == ON && LIGHT_WRW_RELAY != OFF
   // The wall switch controls LED lights
@@ -390,9 +387,7 @@ void loop()
   }
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P6=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("6");
 
   // ------------------------------------------------------------------------------------------
   // Process events
@@ -400,17 +395,13 @@ void loop()
   // update relays
   RelayTimedOff();
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P7=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("7");
 
 #if THERMOSTAT == ON
   thermostat();
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P8=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("8");
 
 #if ROR == ON
   // Auto close the roof at 8am if requested
@@ -437,9 +428,7 @@ void loop()
   if (roofIsMoving()) moveRoof();
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P9=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("9");
 
   // Gather weather info. and log
 #if WEATHER == ON
@@ -450,9 +439,7 @@ void loop()
   weatherPoll();
 #endif
 
-#if DEBUG_LOOPTIME == ON
-  sprintf(ws,"P10=%ld, ",(long)(millis()-lastDwrTime)); strcat(msg,ws);
-#endif
+  LOOPTIME_WATCH("10");
 }
 
 bool validTime() {
