@@ -14,6 +14,9 @@ time_t getNtpTime()
   if (roofIsMoving()) return 0;
 #endif
   
+#if WATCHDOG == ON
+  if (!blockReset) wdt_reset();
+#endif
   unsigned long tOut=millis()+3000L;
 while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any previously received packets
 #if DEBUG_NPT == ON
@@ -21,6 +24,9 @@ while ((Udp.parsePacket() > 0) && ((long)(millis()-tOut) < 0)) ; // discard any 
 #endif
   sendNTPpacket(timeServer);
 
+#if WATCHDOG == ON
+  if (!blockReset) wdt_reset();
+#endif
   uint32_t beginWait = millis();
   while (millis() - beginWait < 1500) {
     int size = Udp.parsePacket();
