@@ -339,6 +339,9 @@ void loop()
     #if STAT_TIME_SOURCE == NTP
       Udp.begin(localPort);
     #endif
+    #if WATCHDOG == OFF
+      connectionCheckTry=0;
+    #endif
     }
   #endif
   }
