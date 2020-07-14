@@ -12,11 +12,6 @@ void WebServer::init() {
   // start the Ethernet connection and the server:
   setResponseHeader(http_defaultHeader);
 
-  // disable the SDCARD and Ethernet at start up
-  pinMode(4,OUTPUT); digitalWrite(4,HIGH);
-  pinMode(10,OUTPUT); digitalWrite(10,HIGH);
-
-  Ethernet.begin(m, ip, myDns, gateway, subnet);
   _server.begin();
 #if DEBUG_WEBSERVER == ON
   Serial.print("www server is at ");
@@ -42,6 +37,7 @@ void WebServer::handleClient() {
     boolean currentLineIsBlank = true;
     unsigned long to=millis()+WebSocketTimeOut;
     while ((_client.connected()) && ((long)(millis()-to) < 0)) {
+      WDT_RESET;
       if (_client.available()) {
         char c = _client.read();
 #if DEBUG_WEBSERVER == ON
@@ -189,6 +185,7 @@ void WebServer::sdPage(String fn, EthernetClient *client) {
 
   // open the sdcard file
   if (SDfound) {
+    WDT_DISABLE;
     File dataFile=SD.open(fn, FILE_READ);
     if (dataFile) {
       do {
@@ -197,6 +194,7 @@ void WebServer::sdPage(String fn, EthernetClient *client) {
       } while (n>0);
       dataFile.close();
     }
+    WDT_ENABLE;
   }
 }
 #endif

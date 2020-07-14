@@ -54,6 +54,13 @@
 #endif
 #if WATCHDOG == ON
   #include <avr/wdt.h>
+  #define WDT_ENABLE wdt_enable(WDTO_8S)
+  #define WDT_RESET wdt_reset()
+  #define WDT_DISABLE wdt_disable()
+#else
+  #define WDT_ENABLE
+  #define WDT_RESET
+  #define WDT_DISABLE
 #endif
 #include "string.h"
 #include "EEPROM.h"
@@ -79,11 +86,8 @@ CmdServer Cmd;
   time_t startupTime = 0;
 #endif
 
-#if WATCHDOG == ON
-  #if WATCHDOG_CHECK_HOURS != OFF
-    EthernetClient client;
-  #endif
-  boolean blockReset = false;
+#if CONNECTION_CHECK_HOURS != OFF
+  EthernetClient client;
 #endif
 
 #if DEBUG_LOOPTIME == ON
@@ -159,10 +163,8 @@ void setup()   {
 
   // Initialize serial communications
   Serial.begin(9600);
-  
-#if WATCHDOG == ON
-  wdt_enable(WDTO_8S);
-#endif
+
+  WDT_ENABLE;
 
   // Set pins for direct relay control
   for (int i=1; i<=14; i++) { pinMode(relay[i].pin,OUTPUT); setRelayOff(i); }
@@ -208,31 +210,25 @@ void setup()   {
   thermostatInit();
 #endif
 
+  // ----------------------------------------------------------------------
+  // initialize ethernet
+
+  // disable the SDCARD and Ethernet at start up
+  pinMode(4,OUTPUT); digitalWrite(4,HIGH);
+  pinMode(10,OUTPUT); digitalWrite(10,HIGH);
+
 #if ETHERNET_RESET_PIN != OFF
-  // hold ethernet shield in reset
+  // hold ethernet shield in reset for 2 seconds
   pinMode(ETHERNET_RESET_PIN,OUTPUT);
-  digitalWrite(ETHERNET_RESET_PIN,LOW);
-
-  for (int l=0; l<2; l++) {
-    delay(1000);
-  #if WATCHDOG == ON
-    wdt_reset();
-  #endif
-  }
-
-  // let ethernet shield run
-  digitalWrite(ETHERNET_RESET_PIN,HIGH);
+  digitalWrite(ETHERNET_RESET_PIN,LOW); for (int l=0; l<2; l++) { delay(1000); WDT_RESET; } digitalWrite(ETHERNET_RESET_PIN,HIGH);
 #endif
 
-  // wait for a bit just to be sure ethernet, etc. is up
-  for (int l=0; l<3; l++) {
-    delay(1000);
-#if WATCHDOG == ON
-    wdt_reset();
-#endif
-  }
+  // wait another 3 seconds just to be sure ethernet, etc. is up
+  for (int l=0; l<3; l++) { delay(1000); WDT_RESET; }
 
   // Initialize the webserver
+  Ethernet.begin(m, ip, myDns, gateway, subnet);
+
   www.setResponseHeader(http_defaultHeader);
   www.init();
   www.on("index.htm",index);
@@ -265,22 +261,10 @@ void setup()   {
   // Initialize the cmd server, timeout after 500ms
   Cmd.init(9999,500);
 
-  // Set variables
-  msFiveMinuteCounter=millis()+5000UL;
-  insideTemperature  =-999.0;
-
-  // for dimming the led's etc, 1 millisecond period
-  Timer1.initialize(1000);
-  Timer1.attachInterrupt(RelayPwmISR);
+  // another wait ahead of the NTP sync attempt
+  for (int l=0; l<3; l++) { delay(1000); WDT_RESET; }
 
 #if STAT_TIME_SOURCE == NTP
-  for (int l=0; l<3; l++) {
-    delay(1000);
-#if WATCHDOG == ON
-    wdt_reset();
-#endif
-  }
-
   Udp.begin(localPort);
   #if DEBUG_NPT == ON
     Serial.println("waiting for sync");
@@ -293,8 +277,17 @@ void setup()   {
   setSyncInterval(24L*60L*60L); // sync time once a day
   startupTime=now();
 #endif
+  // ----------------------------------------------------------------------
 
-#if DEBUG_WATCHDOG == ON
+  // Set variables
+  msFiveMinuteCounter=millis()+5000UL;
+  insideTemperature  =-999.0;
+
+  // for dimming the led's etc, 1 millisecond period
+  Timer1.initialize(1000);
+  Timer1.attachInterrupt(RelayPwmISR);
+
+#if DEBUG_CONNECT_CHECK == ON
   Serial.println("Rebooted!");
 #endif
 }
@@ -308,38 +301,50 @@ void loop()
 
   LOOPTIME_WATCH("11");
   
-#if WATCHDOG == ON
-  #if WATCHDOG_CHECK_HOURS != OFF
-    #if DEBUG_WATCHDOG == ON
-      #define WATCHDOG_FAST 3600.0
-    #else
-      #define WATCHDOG_FAST 1UL
-    #endif
-    static int connectionCheckTry = 0;
-    static unsigned long nextConnectionCheck = 1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST);
-    if (!blockReset && (long)(millis()-nextConnectionCheck) > 0) {
-      connectionCheckTry++;
-      int success=client.connect(watchdog, 80);
+#if CONNECTION_CHECK_HOURS != OFF
+  static int connectionCheckTry = 0;
+  static unsigned long nextConnectionCheck = 1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST);
+  if ((long)(millis()-nextConnectionCheck) > 0) {
+    connectionCheckTry++;
+    int success=client.connect(connectCheck, 80);
 
-    #if DEBUG_WATCHDOG == ON
-      Serial.print("DEBUG_WATCHDOG: Client connection check result = ");
-      if (success) Serial.println("Success"); else Serial.println("Failure");
-    #endif
+    if (success) {
+      if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Result = Success");
+      client.stop();
+      connectionCheckTry=0;
+      nextConnectionCheck = millis()+(1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST));
+    } else {
+      if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Result = Failure");
+      nextConnectionCheck = millis()+(1000UL*CONNECT_RECHECK_TIME);
+    }
 
-      if (success) {
-        client.stop();
-        connectionCheckTry=0;
-        nextConnectionCheck = millis()+(1000UL*3600UL*(WATCHDOG_CHECK_HOURS/WATCHDOG_FAST));
-      } else {
-        nextConnectionCheck = millis()+(1000UL*WATCHDOG_RECHECK_TIME);
-      }
-
-      if (connectionCheckTry > WATCHDOG_RECHECK_TRIES && !success) blockReset=true;
+  #if WATCHDOG == ON
+    if (!success && connectionCheckTry == CONNECT_REBOOT_TRIES) {
+      if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Forcing Watchdog reboot");
+      while (true) {};
     }
   #endif
 
-  if (!blockReset) wdt_reset();
+  #if ETHERNET_RESET_PIN != OFF
+    if (!success && connectionCheckTry == CONNECT_RESET_TRIES) {
+      if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Reset Ethernet shield");
+      // reset ethernet shield
+      digitalWrite(ETHERNET_RESET_PIN,LOW);
+      for (int l=0; l<2; l++) { delay(1000); WDT_RESET; }
+      digitalWrite(ETHERNET_RESET_PIN,HIGH);
+      for (int l=0; l<2; l++) { delay(1000); WDT_RESET; }
+      // restart servers
+      Ethernet.begin(m, ip, myDns, gateway, subnet);
+      Cmd.init(9999,500);
+    #if STAT_TIME_SOURCE == NTP
+      Udp.begin(localPort);
+    #endif
+    }
+  #endif
+  }
 #endif
+
+  WDT_RESET;
 
   LOOPTIME_WATCH("12");
 
@@ -443,14 +448,10 @@ void loop()
   // Gather weather info. and log
 #if WEATHER == ON
   // except while the roof is moving
-#if ROR == ON
-  if (!roofIsMoving())
-#endif
-  #if WATCHDOG == ON
-    if (!blockReset) weatherPoll();
-  #else
-    weatherPoll();
+  #if ROR == ON
+    if (!roofIsMoving())
   #endif
+  weatherPoll();
 #endif
 
   LOOPTIME_WATCH("10");

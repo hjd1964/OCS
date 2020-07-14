@@ -9,8 +9,8 @@
 
 // Ethernet setup
 
-#if RESPONSE_INTERVAL<400 || RESPONSE_INTERVAL>4000
-  #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 400 and 4000 (milliseconds.)"
+#if RESPONSE_INTERVAL < 500 || RESPONSE_INTERVAL > 10000
+  #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 500 and 10000 (milliseconds.)"
 #endif
 
 #if (ETHERNET_RESET_PIN < 0 || ETHERNET_RESET_PIN > 54) && ETHERNET_RESET_PIN != OFF
@@ -21,13 +21,17 @@
   #error "Configuration (Config.h): WATCHDOG must be either ON or OFF."
 #endif
 
-#if WATCHDOG_CHECK_HOURS != OFF && WATCHDOG == OFF
-  #error "Configuration (Config.h): The WATCHDOG must be ON if using WATCHDOG_CHECK_HOURS."
+#if (CONNECTION_CHECK_HOURS < 1 || CONNECTION_CHECK_HOURS > 48) && CONNECTION_CHECK_HOURS != OFF && DEBUG_CONNECT_CHECK == OFF
+  #error "Configuration (Config.h): CONNECTION_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
 #endif
 
-#if (WATCHDOG_CHECK_HOURS < 1 || WATCHDOG_CHECK_HOURS > 48) && WATCHDOG_CHECK_HOURS != OFF && DEBUG_WATCHDOG == OFF
-  #error "Configuration (Config.h): WATCHDOG_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
+#if DEBUG_CONNECT_CHECK == ON
+  #define CHECK_FAST 3600.0
+#else
+  #define CHECK_FAST 1UL
 #endif
+
+// Time setup
 
 #if TIME_ZONE<-12 || TIME_ZONE>14
   #error "Configuration (Config.h): TIME_ZONE must be a number between -12 and 13 (hours.)"

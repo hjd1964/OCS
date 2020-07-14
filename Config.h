@@ -32,15 +32,16 @@ IPAddress subnet(255, 255, 255, 0);       //..255.0, Network bit-mask, determine
 IPAddress timeServer(216, 239, 35, 0);    // ..35.0, time.google.com (216.239.35.0) or time-a.timefreq.bldrdoc.gov at         Option
                                           //         132.163.4.101, 132.163.4.102, 132.163.4.103, etc.
 
+#define CONNECTION_CHECK_HOURS        OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
+IPAddress connectCheck(100,24,172,113);   //  ..113, Connections to this address (port 80) monitors Ethernet adapter health.  Option
+                                          //         default is arduino.cc.  Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
+
 #define ETHERNET_RESET_PIN            OFF //    OFF, n. Where n=unused Mega2560 pin #, activates feature and allows the OCS   Option
-                                          //         to force a reset of the W5100 Ethernet Shield at startup using this pin.
+                                          //         to force a reset of the W5100 Ethernet Shield using this pin.
                                           //         W5100 reset pin must be connected to the pin# specified here and no other.
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON to reset the Mega2560 after 8 seconds if it hangs for any reason.     Option
-#define WATCHDOG_CHECK_HOURS          OFF //    OFF, n. Where n=1 to 48 (hours.)  Watchdog address connection check.          Option
-IPAddress watchdog(100,  24, 172, 113);   //  ..113, Connections to this address (port 80) monitors Ethernet adapter health.  Option
-                                          //         default is arduino.cc.
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd
@@ -171,8 +172,8 @@ IPAddress watchdog(100,  24, 172, 113);   //  ..113, Connections to this address
 // -------------------------------------------------------------------------------------------------------------------------
 
 // DEBUGGING -----------------------------------------------------------------------------------------------------------------------
+#define DEBUG_CONNECT_CHECK           OFF //    OFF, ON to enable debug code for connection checks.                           Infreq
 #define DEBUG_LOOPTIME                OFF //    OFF, ON to enable debug code for monitoring main loop time.                   Infreq
-#define DEBUG_WATCHDOG                OFF //    OFF, ON to enable debug code for watchdog.                                    Infreq
 #define DEBUG_NPT                     OFF //    OFF, ON to enable debug code for network time protocol.                       Infreq
 #define DEBUG_DS3234                  OFF //    OFF, ON to enable debug code for the DS3234 real time clock.                  Infreq
 #define DEBUG_SD                      OFF //    OFF, ON to enable debug code for the SD card support.                         Infreq
