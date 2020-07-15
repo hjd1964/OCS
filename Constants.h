@@ -9,6 +9,7 @@
 #define ON                                -2
 #define ON_PULLUP                         -3
 #define ON_PULLDOWN                       -4
+#define ON_CC                             -5
 
 // Time
 #define LST                                1

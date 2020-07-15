@@ -17,8 +17,8 @@
   #error "Configuration (Config.h): ETHERNET_RESET_PIN must OFF or a number between 0 and 54 (Pin#.)"
 #endif
 
-#if WATCHDOG != ON && WATCHDOG != OFF
-  #error "Configuration (Config.h): WATCHDOG must be either ON or OFF."
+#if WATCHDOG != OFF && WATCHDOG != ON && WATCHDOG != ON_CC
+  #error "Configuration (Config.h): WATCHDOG must be either ON, ON_CC, or OFF."
 #endif
 
 #if (CONNECTION_CHECK_HOURS < 1 || CONNECTION_CHECK_HOURS > 48) && CONNECTION_CHECK_HOURS != OFF && DEBUG_CONNECT_CHECK == OFF

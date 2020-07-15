@@ -41,7 +41,8 @@ IPAddress connectCheck(100,24,172,113);   //  ..113, Connections to this address
                                           //         W5100 reset pin must be connected to the pin# specified here and no other.
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
-#define WATCHDOG                      OFF //    OFF, ON to reset the Mega2560 after 8 seconds if it hangs for any reason.     Option
+#define WATCHDOG                      OFF //    OFF, ON, ON_CC.  ON resets Mega2560 after 8 sec. if it hangs for any reason.  Option
+                                          //         ON_CC as above and resets the Mega2560 if the connection check fails.
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd

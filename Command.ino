@@ -350,7 +350,7 @@ void processCommands() {
         } else
 #endif
 #endif
-#if WATCHDOG == ON
+#if WATCHDOG != OFF
 //  :SW#  Set the watchdog reset flag
         if (command[1] == 'W' && command[2] == 0) {
           if (!roofIsMoving()) {

@@ -52,7 +52,7 @@
 #if NTP == ON
   #include <EthernetUdp.h>
 #endif
-#if WATCHDOG == ON
+#if WATCHDOG != OFF
   #include <avr/wdt.h>
   #define WDT_ENABLE wdt_enable(WDTO_8S)
   #define WDT_RESET wdt_reset()
@@ -318,7 +318,7 @@ void loop()
       nextConnectionCheck = millis()+(1000UL*CONNECT_RECHECK_TIME);
     }
 
-  #if WATCHDOG == ON
+  #if WATCHDOG == ON_CC
     if (!success && !roofIsMoving() && connectionCheckTry >= CONNECT_REBOOT_TRIES) {
       if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Forcing Watchdog reboot");
       while (true) {};
@@ -339,7 +339,7 @@ void loop()
     #if STAT_TIME_SOURCE == NTP
       Udp.begin(localPort);
     #endif
-    #if WATCHDOG == OFF
+    #if WATCHDOG != ON_CC
       connectionCheckTry=0;
     #endif
     }
