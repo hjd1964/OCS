@@ -25,9 +25,9 @@ double wa=invalid;
 
 void weatherPoll(void) {
   unsigned long m = millis();
-  if ((m-last)>2000L) {
+  if ((long)(m-last) > 2000) {
     last=m;
-    
+
     // Cloud sensor ------------------------------------------------------------
     // it might be a good idea to add some error checking and force the values to invalid if something is wrong
     double ambientTemp = weatherOutsideTemp();
@@ -36,7 +36,7 @@ void weatherPoll(void) {
     if (skyDiffTemp==invalid) avgSkyDiffTemp=skyDiffTemp; else
       if (avgSkyDiffTemp==invalid) avgSkyDiffTemp=skyDiffTemp; else
         avgSkyDiffTemp = ((avgSkyDiffTemp*(AvgTimeSeconds/2.0-1.0)) + skyDiffTemp)/(AvgTimeSeconds/2.0);
-    
+
     // short-term average ambient temp
     if (sa==invalid) sa=ambientTemp;
     if (sa!=invalid) sa = ((sa*((double)SecondsBetweenLogEntries/2.0-1.0)) + ambientTemp)/((double)SecondsBetweenLogEntries/2.0);
@@ -74,7 +74,7 @@ void weatherPoll(void) {
     // two minutes between writing values
     // the log is perpetual with 80 chars written twice a minute (about 82MB a year)
     TimeSeconds+=2;
-    if (TimeSeconds%SecondsBetweenLogEntries==0) { // x seconds
+    if (TimeSeconds >= SecondsBetweenLogEntries) {
       TimeSeconds=0;
 
       // only log if the time is set and we have an SD card
