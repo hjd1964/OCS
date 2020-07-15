@@ -319,7 +319,7 @@ void loop()
     }
 
   #if WATCHDOG == ON
-    if (!success && connectionCheckTry == CONNECT_REBOOT_TRIES) {
+    if (!success && !roofIsMoving() && connectionCheckTry >= CONNECT_REBOOT_TRIES) {
       if (DEBUG_CONNECT_CHECK == ON) Serial.println("DEBUG_CONNECT_CHECK: Forcing Watchdog reboot");
       while (true) {};
     }

@@ -353,8 +353,11 @@ void processCommands() {
 #if WATCHDOG == ON
 //  :SW#  Set the watchdog reset flag
         if (command[1] == 'W' && command[2] == 0) {
-          strcpy(reply,"Rebooting in 8 seconds...");
-          while (true) {};
+          if (!roofIsMoving()) {
+            strcpy(reply,"Rebooting in 8 seconds...");
+            while (true) {};
+          | else
+          commandError=true;
         } else
 #endif
         commandError=true;
