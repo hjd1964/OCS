@@ -1,0 +1,37 @@
+// -----------------------------------------------------------------------------------------------------------------
+// gets outside temperature in deg. C
+
+// return (invalid) if not implemented or if there's an error
+#include "DHT.h"           // DHT temperature/humidity sensors https://github.com/adafruit/DHT-sensor-library
+#define DHTPIN 2           // digital pin connected to the DHT sensor
+#define DHTTYPE DHT11      // set DHT sensor model: DHT11, DHT22, or DHT21
+DHT dht(DHTPIN, DHTTYPE);
+double weatherOutsideTemp() {
+  static double t=invalid;
+  static unsigned long next=1000;
+  if (t == 0 || (long)(millis()-next) > 0) {
+    next=millis()+60000;
+    t=dht.readTemperature();
+  }
+  if (isnan(t) || t < -50 || t > 150) return invalid; else return t;
+}
+
+bool initOutsideTemp() {
+  dht.begin();
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------------------------------
+// gets relative humidity in %
+
+// return (invalid) if not implemented or if there's an error
+// for DHT temperature/humidity sensors init'd with weatherOutsideTemp()
+double weatherHumidity() {
+  static double h=invalid;
+  static unsigned long next=1000;
+  if (h == 0 || (long)(millis()-next) > 0) {
+    next=millis()+60000;
+    h=dht.readHumidity();
+  }
+  if (isnan(h) || h < 0 || h > 100) return invalid; else return h;
+}
