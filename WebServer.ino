@@ -185,7 +185,7 @@ void WebServer::sdPage(String fn, EthernetClient *client) {
 
   // open the sdcard file
   if (SDfound) {
-    WDT_DISABLE;
+    if (WATCHDOG_DURING_SD == OFF) WDT_DISABLE;
     File dataFile=SD.open(fn, FILE_READ);
     if (dataFile) {
       do {
@@ -194,7 +194,7 @@ void WebServer::sdPage(String fn, EthernetClient *client) {
       } while (n>0);
       dataFile.close();
     }
-    WDT_ENABLE;
+    if (WATCHDOG_DURING_SD == OFF) WDT_ENABLE;
   }
 }
 #endif

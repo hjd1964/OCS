@@ -68,7 +68,7 @@ void weatherPoll(void) {
 
 #if WEATHER_CHARTS == ON
 
-    WDT_DISABLE;
+    if (WATCHDOG_DURING_SD == OFF) WDT_DISABLE;
 
     // Logging ------------------------------------------------------------------
     // two minutes between writing values
@@ -155,7 +155,7 @@ void weatherPoll(void) {
       sad=skyDiffTemp;
     }
     
-    WDT_ENABLE;
+    if (WATCHDOG_DURING_SD == OFF) WDT_ENABLE;
 
 #endif
   }

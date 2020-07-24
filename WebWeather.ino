@@ -201,7 +201,7 @@ void makeChartJs(EthernetClient *client, const char chartId[], String chartName,
   //Serial.print("Primary log="); Serial.println(fn);
   //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
-  WDT_DISABLE;
+  if (WATCHDOG_DURING_SD == OFF) WDT_DISABLE;
   File dataFile=SD.open(fn, FILE_READ);
   if (dataFile) {
     for (long i=0; i<120; i++) {
@@ -234,7 +234,7 @@ void makeChartJs(EthernetClient *client, const char chartId[], String chartName,
     }
     dataFile.close();
   }
-  WDT_ENABLE;
+  if (WATCHDOG_DURING_SD == OFF) WDT_ENABLE;
   
   strcpy_P(temp1,ChartJs4); sprintf(temp,temp1,rangeMax,rangeMin,rangeStep); client->print(temp);
 }

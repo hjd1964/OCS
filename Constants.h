@@ -24,11 +24,14 @@
 #define METRIC                             1
 #define IMPERIAL                           2
 
-// Watchdog ------------------------------------------------------------------------------------------------------------------------
+// Connectivity check --------------------------------------------------------------------------------------------------------------
 
 #define CONNECT_RECHECK_TIME               60  // in seconds
 #define CONNECT_RESET_TRIES                 5  // connection attempts before Ethernet shield is reset (if available,) must be >= 1
 #define CONNECT_REBOOT_TRIES               10  // connection attempts before Watchdog reboot is forced, must be > CONNECT_RESET_TRIES
+
+// Watchdog ------------------------------------------------------------------------------------------------------------------------
+#define WATCHDOG_DURING_SD                OFF  // set to ON to keep watchdog enabled at all times
 
 // Roof ----------------------------------------------------------------------------------------------------------------------------
 
