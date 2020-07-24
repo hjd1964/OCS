@@ -356,7 +356,7 @@ void processCommands() {
           if (!roofIsMoving()) {
             strcpy(reply,"Rebooting in 8 seconds...");
             while (true) {};
-          | else
+          } else
           commandError=true;
         } else
 #endif
