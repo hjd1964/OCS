@@ -211,6 +211,12 @@ bool startRoofOpen() {
   // Just one last sanity check before we start moving the roof
   if (senseIsOn(ROR_SENSE_LIMIT_OPENED) && senseIsOn(ROR_SENSE_LIMIT_CLOSED)) { roofLastError="Error: Opened/closed limit sw on"; return false; }
 
+#if ROR_POWER_PWM_SOFTSTART == ON
+  roofCurrentPower=0;
+#else
+  roofCurrentPower=ROR_POWER_PWM_POWER;
+#endif
+
   // Flag status, no errors
   roofState='o';
   roofStatusRegister=RSR_NO_ERROR;
@@ -228,12 +234,6 @@ bool startRoofOpen() {
 
   // Log start time
   roofOpenStartTime=(long)millis();
-
-#if ROR_POWER_PWM_SOFTSTART == ON
-  roofCurrentPower=0;
-#else
-  roofCurrentPower=ROR_POWER_PWM_POWER;
-#endif
 
   roofLastError="";
   return true;
@@ -262,6 +262,12 @@ bool startRoofClose() {
   // Just one last sanity check before we start moving the roof
   if (senseIsOn(ROR_SENSE_LIMIT_CLOSED) && senseIsOn(ROR_SENSE_LIMIT_OPENED)) { roofLastError="Error: Closed/opened limit sw on"; return false; }
 
+#if ROR_POWER_PWM_SOFTSTART == ON
+  roofCurrentPower=0;
+#else
+  roofCurrentPower=ROR_POWER_PWM_POWER;
+#endif
+
   // Flag status, no errors
   roofState='c';
   roofStatusRegister=RSR_NO_ERROR;
@@ -279,12 +285,6 @@ bool startRoofClose() {
 
   // Log start time
   roofCloseStartTime=(long)millis();
-
-#if ROR_POWER_PWM_SOFTSTART == ON
-  roofCurrentPower=0;
-#else
-  roofCurrentPower=ROR_POWER_PWM_POWER;
-#endif
 
   roofLastError="";
   return true;
