@@ -225,9 +225,15 @@ void makeChartJs(EthernetClient *client, const char chartId[], String chartName,
         if (logColumn==-39) f=f*0.621371;      // wind kph to mph
         if (logColumn==-26) f=f*0.02953;       // pressure in inches
         if (logColumn==-26) dtostrf(f,1,3,ws2); else dtostrf(f,1,1,ws2);
+#if REVERSE_WEATHER_CHART_X_AXIS == ON
+        if (hours==1) dtostrf(-(120-i)/2.0,1,1,ws1);
+        if (hours==24) dtostrf(-(120-i)/5.0,1,1,ws1);
+        if (hours==48) dtostrf(-(120-i)/2.5,1,1,ws1);
+#else
         if (hours==1) dtostrf((120-i)/2.0,1,1,ws1);
         if (hours==24) dtostrf((120-i)/5.0,1,1,ws1);
         if (hours==48) dtostrf((120-i)/2.5,1,1,ws1);
+#endif
         sprintf(temp,"{x:%s,y:%s},",ws1,ws2);
         client->print(temp);
       }
