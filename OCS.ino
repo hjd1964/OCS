@@ -232,6 +232,9 @@ void setup()   {
   www.setResponseHeader(http_defaultHeader);
   www.init();
   www.on("index.htm",index);
+#if FAV_ICON == ON
+  www.on("favicon.ico");
+#endif
 #if WEATHER == ON && WEATHER_CHARTS == ON
   www.on("weatherpage.htm",weatherPage);
 #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON

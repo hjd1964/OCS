@@ -27,6 +27,7 @@
 // Connectivity check --------------------------------------------------------------------------------------------------------------
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS      OFF  // ON reverses the xaxis of weather charts so new data is to the left
+#define FAV_ICON                          OFF  // ON enables website icon in browsers, place favicon.ico file SD card root directory
 
 #define CONNECT_RECHECK_TIME               60  // in seconds
 #define CONNECT_RESET_TRIES                 5  // connection attempts before Ethernet shield is reset (if available,) must be >= 1
