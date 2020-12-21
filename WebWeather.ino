@@ -221,9 +221,10 @@ void makeChartJs(EthernetClient *client, const char chartId[], String chartName,
       strcpy(ws2,(char*)&(ws1[j]));
       if (ws2[0]!=0) {
         double f=atof(ws2);
-        if (logColumn==-8) f=f*(9.0/5.0)+32.0; // temperature C to F
-        if (logColumn==-39) f=f*0.621371;      // wind kph to mph
-        if (logColumn==-26) f=f*0.02953;       // pressure in inches
+        if (logColumn==-8)  f=f*(9.0/5.0)+32.0; // temperature C to F
+        if (logColumn==-39) f=f*0.621371;       // wind kph to mph
+        if (logColumn==-26) f=f*0.02953;        // pressure in inches
+        if (isnan(f))       f=rangeMax;         // handle bad/no data
         if (logColumn==-26) dtostrf(f,1,3,ws2); else dtostrf(f,1,1,ws2);
 #if REVERSE_WEATHER_CHART_X_AXIS == ON
         if (hours==1) dtostrf(-(120-i)/2.0,1,1,ws1);
