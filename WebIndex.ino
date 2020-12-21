@@ -200,11 +200,21 @@ void index(EthernetClient *client) {
       strcpy(ws2,"");
       strcpy(ws1,"Invalid");
     } else {
-      strcpy(ws2," &deg;C -");
-  #if STAT_UNITS == IMPERIAL
+      char ws3[2]="";
+      #if HEAT_RELAY != OFF
+        if (relayIsOn(HEAT_RELAY)) strcpy(ws3,"^"); else
+      #endif
+      #if COOL_RELAY != OFF
+        if (relayIsOn(COOL_RELAY)) strcpy(ws3,"*"); else 
+      #endif
+      strcpy(ws3,"-");
+      #if STAT_UNITS == IMPERIAL
         T=T*(9.0/5.0)+32.0;
-        strcpy(ws2," &deg;F -");
-  #endif
+        strcpy(ws2," &deg;F ");
+      #else
+        strcpy(ws2," &deg;C ");
+      #endif
+      strcat(ws2,ws3);
       dtostrf(T,6,1,ws1);
     }
     strcpy_P(temp1,htmlThermostat1); sprintf(temp,temp1,ws1,ws2); client->print(temp);
