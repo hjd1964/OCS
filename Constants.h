@@ -24,26 +24,24 @@
 #define METRIC                             1
 #define IMPERIAL                           2
 
-// Connectivity check --------------------------------------------------------------------------------------------------------------
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS      OFF  // ON reverses the xaxis of weather charts so new data is to the left
 #define FAV_ICON                          OFF  // ON enables website icon in browsers, place favicon.ico file SD card root directory
 
+// Connectivity check --------------------------------------------------------------------------------------------------------------
 #define CONNECT_RECHECK_TIME               60  // in seconds
 #define CONNECT_RESET_TRIES                 5  // connection attempts before Ethernet shield is reset (if available,) must be >= 1
 #define CONNECT_REBOOT_TRIES               10  // connection attempts before Watchdog reboot is forced, must be > CONNECT_RESET_TRIES
 
 // Watchdog ------------------------------------------------------------------------------------------------------------------------
-#define WATCHDOG_DURING_SD                OFF  // set to ON to keep watchdog enabled at all times
+#define WATCHDOG_DURING_SD                OFF  // ON keeps watchdog enabled at all times
 
 // Roof ----------------------------------------------------------------------------------------------------------------------------
-
 #define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds, this blocks the main-loop so <= ~2 seconds!
 #define ROOF_PRE_MOTION_TIME             1.5  // as above
 #define ROOF_POST_MOTION_TIME            2.0  // as above
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
-
 #define invalid -1000
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)
