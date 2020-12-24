@@ -86,11 +86,11 @@ void processCommands() {
 //         Returns: sssss...#
         if ((command[1]=='C') && (parameter[0]==0)) {
 #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
-          quietReply=true;
           strcpy(reply,weatherCloudCoverDescription().c_str());
 #else
           strcpy(reply,"N/A");
 #endif
+          quietReply=true;
         } else
 #if THERMOSTAT == ON && HEAT_RELAY != OFF
 //  :GH#  Get Heat setpoint
