@@ -128,7 +128,7 @@ void processCommands() {
         } else
 //  :GR#  Get rain sensor status
 //         Returns: n#
-//         -1000 is invalid, 0 is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
+//         -1000# is invalid, 0# is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
         if ((command[1]=='R') && (parameter[0]==0)) {
 #if WEATHER_RAIN == ON && WEATHER == ON
           sprintf(reply,"%d",weatherRain());
