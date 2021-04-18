@@ -126,6 +126,14 @@ void processCommands() {
 #endif
           quietReply=true;
         } else
+#if WEATHER_SKY_QUAL == ON && WEATHER == ON
+//  :GQ#  Get sky quality in mag/arc-sec^2
+//         Returns: nnn.n#
+        if ((command[1]=='Q') && (parameter[1]==0)) {
+          dtostrf(weatherSkyQuality(),3,1,reply);
+          quietReply=true;
+        } else
+#endif
 //  :GR#  Get rain sensor status
 //         Returns: n#
 //         -1000# is invalid, 0# is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
