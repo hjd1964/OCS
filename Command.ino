@@ -29,18 +29,18 @@ void processCommands() {
     else return;
 
     if (process_command) {
-      quietReply=false;
+      quietReply = false;
 // Command is two chars followed by an optional parameter...
-      commandError=false;
+      commandError = false;
 // Handles empty and one char replies
-      reply[0]=0; reply[1]=0;
+      reply[0] = 0; reply[1] = 0;
 
 //   G - Get Commands ------------------------------------------------------
-      if (command[0]=='G') {
+      if (command[0] == 'G') {
 #if WEATHER_TEMPERATURE == ON && WEATHER == ON
 //  :G1#  Get outside temperature
 //         Returns: nnn.n#
-        if ((command[1]=='1') && (parameter[1]==0)) {
+        if ((command[1] == '1') && (parameter[0] == 0)) {
           dtostrf(weatherOutsideTemp(),3,1,reply);
           quietReply=true;
         } else
@@ -48,14 +48,14 @@ void processCommands() {
 #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
 //  :G2#  Get sky IR temperature
 //         Returns: nnn.n#
-        if ((command[1]=='2') && (parameter[1]==0)) {
+        if ((command[1] == '2') && (parameter[0] == 0)) {
           dtostrf(weatherSkyTemp(),3,1,reply);
           quietReply=true;
         } else
 //  :G3#  Get differential sky temperature
 //         Returns: nnn.n#
 //         where <=21 is cloudy
-        if ((command[1]=='3') && (parameter[1]==0)) {
+        if ((command[1] == '3') && (parameter[0] == 0)) {
           dtostrf(getSkyDiffTemp(),3,1,reply);
           quietReply=true;
         } else
@@ -63,9 +63,9 @@ void processCommands() {
 //  :GAn#  Get Analog n state
 //         Example: :GA1#
 //         Returns: 124# (0 to 1023, 0 to 5V)
-        if (command[1]=='A' && parameter[1]==0) {
-          if ((parameter[0]>='0' && parameter[0]<='9') || (parameter[0]>='A' && parameter[0]<='F')) {
-            int i=parameter[0]-'0'; if (i>9) i-=7;
+        if (command[1] == 'A' && parameter[1] == 0) {
+          if ((parameter[0] >= '0' && parameter[0] <= '9') || (parameter[0] >= 'A' && parameter[0] <= 'F')) {
+            int i = parameter[0]-'0'; if (i>9) i-=7;
             analogState[i]=analogRead(i);
             quietReply=true;
             sprintf(reply,"%d",analogState[i]);
@@ -76,7 +76,7 @@ void processCommands() {
 //  :Gb#  Get absolute barometric pressure as Float
 //         Returns: n.nnn#
 //         where n ranges from about 980.0 to 1050.0 (mbar, sea-level compensated)
-        if ((command[1]=='b') && (parameter[0]==0)) {
+        if ((command[1] == 'b') && (parameter[0] == 0)) {
           dtostrf(weatherPressure(),1,1,reply);
           quietReply=true;
         } else
@@ -84,7 +84,7 @@ void processCommands() {
 //  :GC#  Get cloud description
 //         Example: :GC#
 //         Returns: sssss...#
-        if ((command[1]=='C') && (parameter[0]==0)) {
+        if ((command[1] == 'C') && (parameter[0] == 0)) {
 #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
           strcpy(reply,weatherCloudCoverDescription().c_str());
 #else
@@ -96,7 +96,7 @@ void processCommands() {
 //  :GH#  Get Heat setpoint
 //         Example: :GH#
 //         Returns: 0# or 21#, 0 or temperature in C
-        if (command[1]=='H') {
+        if (command[1] == 'H' && parameter[0] == 0) {
           if (parameter[0]==0) {
             int i=getHeatSetpoint();
             quietReply=true;
@@ -109,7 +109,7 @@ void processCommands() {
 //  :Gh#  Get relative humidity reading as Float
 //         Returns: n.n#
 //         where n ranges from 0.0 to 100.0
-        if (command[1]=='h') {
+        if (command[1] == 'h' && parameter[0] == 0) {
           dtostrf(weatherHumidity(),1,1,reply);
           quietReply=true;
         } else
@@ -117,7 +117,7 @@ void processCommands() {
 //  :GP#  Get power status
 //         Returns: OK#, OUT#, or N/A#
 //         
-        if ((command[1]=='P') && (parameter[0]==0)) {
+        if ((command[1] == 'P') && (parameter[0] == 0)) {
 #if STAT_MAINS_SENSE != OFF && WEATHER == ON
           // check for mains power out
           if (!senseIsOn(STAT_MAINS_SENSE)) strcpy(reply,"OUT"); else strcpy(reply,"OK");
@@ -129,7 +129,7 @@ void processCommands() {
 #if WEATHER_SKY_QUAL == ON && WEATHER == ON
 //  :GQ#  Get sky quality in mag/arc-sec^2
 //         Returns: nnn.n#
-        if ((command[1]=='Q') && (parameter[1]==0)) {
+        if ((command[1] == 'Q') && (parameter[0] == 0)) {
           dtostrf(weatherSkyQuality(),3,1,reply);
           quietReply=true;
         } else
@@ -137,7 +137,7 @@ void processCommands() {
 //  :GR#  Get rain sensor status
 //         Returns: n#
 //         -1000# is invalid, 0# is N/A, 1# is Rain, 2# is Warn, and 3# is Dry
-        if ((command[1]=='R') && (parameter[0]==0)) {
+        if ((command[1] == 'R') && (parameter[0] == 0)) {
 #if WEATHER_RAIN == ON && WEATHER == ON
           sprintf(reply,"%d",weatherRain());
 #else
@@ -148,8 +148,8 @@ void processCommands() {
 //  :GRn#  Get Relay n state
 //         Example: :GR1#
 //         Returns: ON#, OFF#, n# (pwm 0-9)
-        if ((command[1]=='R') && (parameter[1]==0)) {
-          if (((parameter[0]>='1') && (parameter[0]<='9')) || ((parameter[0]>='A') && (parameter[0]<='E'))) {
+        if ((command[1] == 'R') && (parameter[1] == 0)) {
+          if (((parameter[0] >= '1') && (parameter[0] <= '9')) || ((parameter[0] >= 'A') && (parameter[0] <= 'E'))) {
             int i=parameter[0]-'0'; if (i>9) i-=7;
             quietReply=true;
             if (relayState[i]==0) {
@@ -170,7 +170,7 @@ void processCommands() {
 //  :GS#  Get averaged sky differential temperature
 //         Returns: nnn.n#
 //         where <=21 is cloudy
-        if ((command[1]=='S') && (parameter[0]==0)) {
+        if ((command[1] == 'S') && (parameter[0] == 0)) {
           dtostrf(getAvgSkyDiffTemp(),3,1,reply);
           quietReply=true;
         } else
@@ -178,8 +178,8 @@ void processCommands() {
 //  :GSn#  Get Digital Sense n state
 //         Example: :GS1#
 //         Returns: ON#, OFF#
-        if ((command[1]=='S') && (parameter[1]==0)) {
-          if ((parameter[0]>='1') && (parameter[0]<='6')) {
+        if ((command[1] == 'S') && (parameter[1] == 0)) {
+          if ((parameter[0] >= '1') && (parameter[0] <= '6')) {
             int i=parameter[0]-'0';
             if (senseIsOn(i)) strcpy(reply,"ON"); else strcpy(reply,"OFF");
             quietReply=true;
@@ -189,7 +189,7 @@ void processCommands() {
 //  :Gs#  Get safety status
 //         Example: :Gs#
 //         Returns: SAFE#, UNSAFE#
-        if ((command[1]=='s') && (parameter[0]==0)) {
+        if ((command[1] == 's') && (parameter[0] == 0)) {
           quietReply=true;
           if (isSafe()) strcpy(reply,"SAFE"); else strcpy(reply,"UNSAFE");
         } else
@@ -209,7 +209,7 @@ void processCommands() {
 //  :GW#  Get wind status
 //         Returns: OK#, HIGH#, or N/A#
 //         
-        if ((command[1]=='W') && (parameter[0]==0)) {
+        if ((command[1] == 'W') && (parameter[0] == 0)) {
 #if WEATHER_WIND_SPD == ON && WEATHER == ON
           if (weatherWindspeed()>WEATHER_WIND_SPD_THRESHOLD) strcpy(reply,"HIGH"); else 
           if (weatherWindspeed()==invalid) strcpy(reply,"Invalid"); else strcpy(reply,"OK");
@@ -222,16 +222,16 @@ void processCommands() {
       } else
 
 //   I - Info Commands -----------------------------------------------------
-      if (command[0]=='I') {
+      if (command[0] == 'I') {
 //  :IN#  get version Number
 //         Returns: s#
-        if ((command[1]=='N') && (parameter[0]==0)) {
+        if ((command[1] == 'N') && (parameter[0] == 0)) {
           strcpy(reply,FirmwareNumber);
           quietReply=true;
         } else
 //  :IP#  get Product (compatibility)
 //         Returns: s#
-        if ((command[1]=='P') && (parameter[0]==0)) {
+        if ((command[1] == 'P') && (parameter[0] == 0)) {
           strcpy(reply,FirmwareName);
           quietReply=true;
         } else
@@ -240,38 +240,38 @@ void processCommands() {
 
 //   R - Roof Commands -----------------------------------------------------
 #if ROR == ON
-      if (command[0]=='R') {
+      if (command[0] == 'R') {
 //  :RC#  Roof Close
 //         Returns: nothing
-        if ((command[1]=='C') && (parameter[0]==0)) {
+        if ((command[1] == 'C') && (parameter[0] == 0)) {
           startRoofClose();
           quietReply=true;
         } else
 //  :RO#  Roof Open
 //         Returns: nothing
-        if ((command[1]=='O') && (parameter[0]==0)) {
+        if ((command[1] == 'O') && (parameter[0] == 0)) {
           startRoofOpen();
           quietReply=true;
         } else
 //  :RH#  Roof Stop
 //         Returns: nothing
-        if ((command[1]=='H') && (parameter[0]==0)) {
+        if ((command[1] == 'H') && (parameter[0] == 0)) {
           stopRoof(); clearRoofStatus();
           quietReply=true;
         } else
 //  :R!#  Roof Safety Override
 //         Returns: 1 on success
-        if ((command[1]=='!') && (parameter[0]==0)) {
+        if ((command[1] == '!') && (parameter[0] == 0)) {
           setRoofSafetyOverride();
         } else
 //  :R+#  Roof high power mode
 //         Returns: 1 on success
-        if ((command[1]=='!') && (parameter[0]==0)) {
+        if ((command[1] == '!') && (parameter[0] == 0)) {
           setRoofMaxPower();
         } else
 //  :RS#  Roof Status
 //         Returns: status string
-        if ((command[1]=='S') && (parameter[0]==0)) {
+        if ((command[1] == 'S') && (parameter[0] == 0)) {
           quietReply=true;
           char ws[128];
           if (roofIsClosed()) strcpy(ws,"CLOSED"); else
@@ -292,31 +292,31 @@ void processCommands() {
 #endif
 
 //   S - Set Commands ------------------------------------------------------
-      if (command[0]=='S') {
+      if (command[0] == 'S') {
 //  :SRn,[state]#  Set Relay n [state] = ON, OFF, DELAY, n (pwm 1-9)
 //         Example: :SR1,ON#
 //         Returns: 1 on success
-        if ((command[1]=='R') && (parameter[1]==',')) {
-          if (((parameter[0]>='1') && (parameter[0]<='9')) || ((parameter[0]>='A') && (parameter[0]<='E'))) {
-            int i=parameter[0]-'0'; if (i>9) i-=7;
+        if ((command[1] == 'R') && (parameter[1] == ',')) {
+          if (((parameter[0] >= '1') && (parameter[0] <= '9')) || ((parameter[0] >= 'A') && (parameter[0] <= 'E'))) {
+            int i=parameter[0] - '0'; if (i > 9) i -= 7;
             String ws=String(parameter);
             ws=ws.substring(2);
-            if ((i>=1) && (i<=14) && (ws=="DELAY")) {
-              relayState[i]=9;
+            if ((i >= 1) && (i <= 14) && (ws == "DELAY")) {
+              relayState[i] = 9;
             } else
-            if ((i>=1) && (i<=14) && (ws=="ON")) {
+            if ((i >= 1) && (i <= 14) && (ws == "ON")) {
               setRelayOn(i);
             } else
-            if ((i>=1) && (i<=14) && (ws=="OFF")) {
+            if ((i >= 1) && (i <= 14) && (ws == "OFF")) {
               setRelayOff(i);
             } else
-            if ((i>=7) && (i<=14) && (ws.length()==1)) {
-              int j=ws[0]-'0';
-              relayState[i]=j*10;
+            if ((i >= 7) && (i <= 14) && (ws.length() == 1)) {
+              int j = ws[0] - '0';
+              relayState[i] = j*10;
             } else
-              commandError=true;
+              commandError = true;
           } else
-            commandError=true;
+            commandError = true;
         } else
 #if THERMOSTAT == ON
 #if HEAT_RELAY != OFF
@@ -324,18 +324,18 @@ void processCommands() {
 //         Example: :SH0# turns heat off
 //         Example: :SH21# heat setpoint 21 deg. C
 //         Returns: 1 on success
-        if (command[1]=='H') {
-          String ws=String(parameter);
-          int i=ws.toInt();
-          if (i==0) {
+        if (command[1] == 'H') {
+          String ws = String(parameter);
+          int i = ws.toInt();
+          if (i == 0) {
             setHeatSetpoint(0);
             setRelayOff(HEAT_RELAY);
           } else
-          if ((i>=1) && (i<=40)) {
+          if ((i >= 1) && (i <= 40)) {
             setHeatSetpoint(i);
-            msFiveMinuteCounter=millis()+5000UL;
+            msFiveMinuteCounter = millis() + 5000UL;
           } else
-            commandError=true;
+            commandError = true;
         } else
 #endif
 #if COOL_RELAY != OFF
@@ -343,55 +343,55 @@ void processCommands() {
 //         Example: :SC0# turns cooling off
 //         Example: :SC30# cool setpoint 30 deg. C
 //         Returns: 1 on success
-        if (command[1]=='C') {
-          String ws=String(parameter);
-          int i=ws.toInt();
-          if (i==0) {
+        if (command[1] == 'C') {
+          String ws = String(parameter);
+          int i = ws.toInt();
+          if (i == 0) {
             setCoolSetpoint(0); 
             setRelayOff(COOL_RELAY);
           } else
-          if ((i>=1) && (i<=40)) {
+          if ((i >= 1) && (i <= 40)) {
             setCoolSetpoint(i);
-            msFiveMinuteCounter=millis()+5000UL;
+            msFiveMinuteCounter = millis() + 5000UL;
           } else
-          commandError=true;
+          commandError = true;
         } else
 #endif
 #endif
 #if WATCHDOG != OFF
 //  :SW#  Set the watchdog reset flag
-        if (command[1] == 'W' && command[2] == 0) {
+        if (command[1] == 'W' && parameter[0] == 0) {
           if (!roofIsMoving()) {
             strcpy(reply,"Rebooting in 8 seconds...");
             while (true) {};
           } else
-          commandError=true;
+          commandError = true;
         } else
 #endif
-        commandError=true;
+        commandError = true;
 
       } else 
-        commandError=true;
+        commandError = true;
       
       if (!quietReply) {
-        if (commandError) reply[0]='0'; else reply[0]='1';
-        reply[1]=0;
-        supress_frame=true;
+        if (commandError) reply[0] = '0'; else reply[0] = '1';
+        reply[1] = 0;
+        supress_frame = true;
       }
       
-      if (strlen(reply)>0) {
-        if (process_command==COMMAND_SERIAL) {
+      if (strlen(reply) > 0) {
+        if (process_command == COMMAND_SERIAL) {
           if (cmd.checksum) checksum(reply);
-          if (!supress_frame) strcat(reply,"#");
+          if (!supress_frame) strcat(reply, "#");
           Serial.print(reply);
         }
-        if (process_command==COMMAND_ETHERNET) {
+        if (process_command == COMMAND_ETHERNET) {
           if (cmde.checksum) checksum(reply);
-          if (!supress_frame) strcat(reply,"#");
+          if (!supress_frame) strcat(reply, "#");
           Cmd.print(reply);
         }
       }
-      quietReply=false;
+      quietReply = false;
    }
 }
 
