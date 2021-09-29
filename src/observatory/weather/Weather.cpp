@@ -177,7 +177,6 @@ float Weather::getSkyDiffTemp() {
 float Weather::getAvgSkyDiffTemp() {
   return avgSkyDiffTemp;
 }
-#endif
 
 void Weather::dtostrf2(float d, int i, int i1, float l, float h, char result[]) {
   if (d == invalid)
@@ -190,3 +189,5 @@ void Weather::dtostrf2(float d, int i, int i1, float l, float h, char result[]) 
 }
 
 Weather weather;
+
+#endif
