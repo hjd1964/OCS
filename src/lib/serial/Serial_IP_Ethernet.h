@@ -1,0 +1,61 @@
+// -----------------------------------------------------------------------------------
+// Polling serial IP for ESP32
+#pragma once
+
+#include <Arduino.h>
+#include "../../Constants.h"
+#include "../../Config.common.h"
+#include "../../HAL/HAL.h"
+#include "../../debug/Debug.h"
+
+#if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
+
+  #include "../ethernet/Ethernet.h"
+
+  class IPSerial : public Stream {
+    public:
+      inline void begin() { begin(9999); }
+      void begin(long port);
+      
+      void end();
+
+      int read(void);
+
+      int available(void);
+
+      int peek(void);
+
+      void flush(void);
+
+      size_t write(uint8_t data);
+
+      size_t write(const uint8_t* data, size_t count);
+
+      inline size_t write(unsigned long n) { return write((uint8_t)n); }
+      inline size_t write(long n) { return write((uint8_t)n); }
+      inline size_t write(unsigned int n) { return write((uint8_t)n); }
+      inline size_t write(int n) { return write((uint8_t)n); }
+
+      using Print::write;
+
+    private:
+      EthernetServer *cmdSvr;
+      EthernetClient cmdSvrClient;
+
+      int port = -1;
+      unsigned long timeout = 60000;
+      unsigned long clientTimeout = 0;
+      bool resetTimeout = false;
+  };
+
+  #if STANDARD_COMMAND_CHANNEL == ON
+    extern IPSerial ipSerial;
+    #define SERIAL_IP ipSerial
+  #endif
+
+  #if PERSISTENT_COMMAND_CHANNEL == ON
+    extern IPSerial pipSerial;
+    #define SERIAL_PIP pipSerial
+  #endif
+
+#endif
