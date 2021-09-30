@@ -90,8 +90,6 @@
 #define WEATHER_WIND_SPD              OFF //    OFF, ON for measuring wind speed.                                             Option
 #define WEATHER_WIND_SPD_THRESHOLD     20 //     20, n. Where n=0..100 (in kph) wind speed above this is considered UNSAFE.   Adjust
 
-#define WEATHER_SKY_QUAL              OFF //    OFF, ON for measuring sky quality (darkness in magnitudes per sq arc-sec.)    Option
-
 #define WEATHER_RAIN                  OFF //    OFF, ON to enable rain sensor, a "wet" condition is considered to be UNSAFE.  Option
 
 #define WEATHER_CLOUD_CVR             OFF //    OFF, ON to enable the cloud sensor, above WEATHER_SAFE_THRESHOLD is UNSAFE.   Option
@@ -103,6 +101,8 @@
 #define WEATHER_CLDY_THRESHOLD         -8 //     -8, n. Where n=-25..0 (in Deg. C)                                            Adjust
 #define WEATHER_VCLD_THRESHOLD         -5 //     -5, n. Where n=-25..0 (in Deg. C)                                            Adjust
 
+#define WEATHER_SKY_QUAL              OFF //    OFF, ON for measuring sky quality (darkness in magnitudes per sq arc-sec.)    Option
+
 #define WEATHER_SENSOR_TPH_BME280     OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
 #define WEATHER_SENSOR_TP_BMP280      OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
 #define WEATHER_SENSOR_TH_DHT         OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
@@ -111,14 +111,15 @@
 
 #define WEATHER_SENSOR_WIND_CUP       OFF //    OFF, n. Where n=1..8 (Digital#) to enable. Wind speed, cup anemometer.        Option
 #define WEATHER_SENSOR_WIND_PPM2KPH 0.087 //  0.087, n. Wind speed conversion factor from pulses per minute to KPH.           Option 
-
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 
 #define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.
 #define WEATHER_SENSOR_RAIN_LOW      0.25 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
 #define WEATHER_SENSOR_RAIN_HIGH     0.75 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
 
-#define WEATHER_SENSOR_CLOUD_MLX90614 OFF //    OFF, 0x5A to enable. Gets IR sky temperature for cloud detection.             Adjust
+#define WEATHER_SENSOR_CLOUD_MLX90614 OFF //    OFF, 0x5A (I2C Address) to enable. Gets IR sky IR temp. for cloud detection.  Adjust
+
+#define WEATHER_SENSOR_SKYQ_TSL2591   OFF //    OFF, 0x28 (I2C Address) to enable. Temperature, humidity.                     Option
 
 // THERMOSTAT PANEL ----------------------------------------------------------------------------------------------------------------
 #define THERMOSTAT                    OFF //    OFF, ON to enable the OCS website thermostat panel display.                   Option
