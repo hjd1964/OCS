@@ -50,11 +50,11 @@
 
 #define POWER_DEVICE1_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE1_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
-#define POWER_DEVICE1_NAME "TEST1"
+#define POWER_DEVICE1_NAME ""
 
 #define POWER_DEVICE2_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE2_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
-#define POWER_DEVICE2_NAME "TEST2"
+#define POWER_DEVICE2_NAME ""
 
 #define POWER_DEVICE3_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) with _NAME below.                              Option
 #define POWER_DEVICE3_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
