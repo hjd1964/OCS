@@ -137,32 +137,32 @@
 #define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) for Outside flood.                             Option
 #define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn WRW lights on/off.           Option
 
-// ROLL-OFF ROOF CONTROL PANEL -----------------------------------------------------------------------------------------------------
-#define ROR                           OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
-#define ROR_USER_SAFETY_OVERRIDE      OFF //    OFF, ON displays safety override button.                                      Option
+// ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
+#define ROOF                          OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
+#define ROOF_USER_SAFETY_OVERRIDE     OFF //    OFF, ON displays safety override button.                                      Option
 
-#define ROR_AUTOCLOSE_DAWN            OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
-#define ROR_AUTOCLOSE_DAWN_DEFAULT    OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
-#define ROR_AUTOCLOSE_SAFETY          OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
+#define ROOF_AUTOCLOSE_DAWN           OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
+#define ROOF_AUTOCLOSE_DAWN_DEFAULT   OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
+#define ROOF_AUTOCLOSE_SAFETY         OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
 
-#define ROR_MOTOR_OPEN_RELAY          OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to open roof.               Option
-#define ROR_MOTOR_CLOSE_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to close roof.              Option
-#define ROR_MOTOR_RELAY_MOMENTARY     OFF //    OFF, ON engage above momentarily (~1.5s) to start an automatic open or close. Option
-#define ROR_MOTOR_STOP_RELAY          OFF //    OFF, n. Where n=1..18 (Relay#) momentarily engages this relay to stop roof.   Option
+#define ROOF_MOTOR_OPEN_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to open roof.               Option
+#define ROOF_MOTOR_CLOSE_RELAY        OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to close roof.              Option
+#define ROOF_MOTOR_RELAY_MOMENTARY    OFF //    OFF, ON engage above momentarily (~1.5s) to start an automatic open or close. Option
+#define ROOF_MOTOR_STOP_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) momentarily engages this relay to stop roof.   Option
 
-#define ROR_POWER_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) This controls roof motor power. For DC motors  Option
+#define ROOF_POWER_RELAY              OFF //    OFF, n. Where n=1..18 (Relay#) This controls roof motor power. For DC motors  Option
                                           //         SSR/MOSFET PWM controls speed. For garage door openers etc SW on/off only.
-#define ROR_POWER_PWM_FREQUENCY       OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
-#define ROR_POWER_PWM_POWER           OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
-#define ROR_POWER_PWM_SOFTSTART       OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROR_POWER_PWM_POWER.   Option
+#define ROOF_POWER_PWM_FREQUENCY      OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
+#define ROOF_POWER_PWM_POWER          OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
+#define ROOF_POWER_PWM_SOFTSTART      OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROOF_POWER_PWM_POWER.   Option
 
-#define ROR_INTERLOCK_SENSE           OFF //    OFF, n. Where n=1..8 (Sense#) Roof safety interlock, close allowed when ON.   Option
-#define ROR_LIMIT_CLOSED_SENSE        OFF //    OFF, n. Where n=1..8 (Sense#) Roof closed switch (CLOSED when ON.)            Option
-#define ROR_LIMIT_OPENED_SENSE        OFF //    OFF, n. Where n=1..8 (Sense#) Roof open switch (OPEN when ON.)                Option
+#define ROOF_INTERLOCK_SENSE          OFF //    OFF, n. Where n=1..8 (Sense#) Roof safety interlock, close allowed when ON.   Option
+#define ROOF_LIMIT_CLOSED_SENSE       OFF //    OFF, n. Where n=1..8 (Sense#) Roof closed switch (CLOSED when ON.)            Option
+#define ROOF_LIMIT_OPENED_SENSE       OFF //    OFF, n. Where n=1..8 (Sense#) Roof open switch (OPEN when ON.)                Option
 
-#define ROR_TIME_AVG                  300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
-#define ROR_TIME_TOL                   30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
-#define ROR_TIME_LIMIT_SENSE_FAIL       6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Adjust
+#define ROOF_TIME_AVG                 300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
+#define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
+#define ROOF_TIME_LIMIT_SENSE_FAIL      6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Adjust
 
 // MISC. SETTINGS ------------------------------------------------------------------------------------------------------------------
 

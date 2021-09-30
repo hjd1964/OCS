@@ -13,7 +13,7 @@
 #include "LightTile.h"
 #include "RoofTile.h"
 
-#include "../observatory/roof/RollOff.h"
+#include "../observatory/roof/Roof.h"
 #include "../observatory/safety/Safety.h"
 
 #if OPERATIONAL_MODE != WIFI
@@ -67,7 +67,7 @@ void index() {
     lightTile(client);
   #endif
 
-  #if ROR == ON
+  #if ROOF == ON
     roofTile(client);
   #endif
 
@@ -105,7 +105,7 @@ void indexAjax() {
   #endif
 
   // roll-off roof
-  #if ROR == ON
+  #if ROOF == ON
     if (a == "roof_open") roof.open();
     if (a == "roof_close") roof.close();
     if (a == "roof_override") roof.setSafetyOverride(true);

@@ -12,7 +12,7 @@
 #include "../lib/sense/Sense.h"
 
 #include "power/Power.h"
-#include "roof/RollOff.h"
+#include "roof/Roof.h"
 #include "safety/Safety.h"
 #include "thermostat/Thermostat.h"
 #include "weather/Weather.h"
@@ -92,7 +92,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   if (SENSE7_PIN != OFF) sense.add(SENSE7_PIN, SENSE7_INIT_STATE, SENSE7_ON_STATE, true);
   if (SENSE8_PIN != OFF) sense.add(SENSE8_PIN, SENSE8_INIT_STATE, SENSE8_ON_STATE, true);
 
-  #if ROR == ON
+  #if ROOF == ON
     roof.init();
   #endif
 
@@ -164,7 +164,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
       www.on("thermostath", thermostath);
     #endif
   #endif
-  #if ROR == ON
+  #if ROOF == ON
     www.on("roofstatus", roofContents);
   #endif
   #if WEATHER_CHARTS == ON
@@ -261,14 +261,14 @@ void Observatory::poll() {
     thermostat.poll();
   #endif
 
-  #if ROR == ON
+  #if ROOF == ON
     if (roof.isMoving()) roof.poll();
   #endif
 
   // Gather weather info. and log
   #if WEATHER == ON
     // except while the roof is moving
-    #if ROR == ON
+    #if ROOF == ON
       if (!roof.isMoving())
     #endif
     weather.poll();

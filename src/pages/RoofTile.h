@@ -3,7 +3,7 @@
 
 #include "../Common.h"
 
-#if ROR == ON
+#if ROOF == ON
   #include "../lib/ethernet/webServer/WebServer.h"
 
   extern void roofTile(EthernetClient *client);
@@ -18,21 +18,21 @@
   "</div>"
   "<div style=\"text-align: center\">"
   "<br />"
-  #if !(ROR_MOTOR_RELAY_MOMENTARY == ON && ROR_MOTOR_STOP_RELAY == OFF && ROR_POWER_RELAY == OFF)
-    #if ROR_SINGLE_OPEN_CLOSE_STOP_RELAY == ON
+  #if !(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)
+    #if ROOF_SINGLE_OPEN_CLOSE_STOP_RELAY == ON
       "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Press!\" />&nbsp;&nbsp;&nbsp;"
     #else
       "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />&nbsp;&nbsp;&nbsp;"
     #endif
   #endif
-  #if ROR_USER_SAFETY_OVERRIDE == ON
+  #if ROOF_USER_SAFETY_OVERRIDE == ON
     "<input type=\"button\" onclick='SetVar(\"press\",\"roof_override\")' value=\"Safety Override\" />"
   #endif
   "<br />"
   "<input type=\"button\" onclick='SetVar(\"press\",\"roof_open\")' value=\"Open Roof\" />&nbsp;&nbsp;&nbsp;"
   "<input type=\"button\" onclick='SetVar(\"press\",\"roof_close\")' value=\"Close Roof\" /><br />"
   "<br />"
-  #if ROR_AUTOCLOSE_DAWN == ON
+  #if ROOF_AUTOCLOSE_DAWN == ON
     "<input type=\"checkbox\"  onclick='SetVar(\"auto_close\",this.checked)' %___ACL />&nbsp;Automatically close at dawn<br />"
   #endif
   "</div>"

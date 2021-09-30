@@ -1,11 +1,11 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Observatory roof commands
 
-#include "RollOff.h"
+#include "Roof.h"
 
-#if ROR == ON
+#if ROOF == ON
 
-bool RollOffRoof::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
+bool Roof::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
 	if (command[0] == 'R') {
     //  :RC#  Roof Close

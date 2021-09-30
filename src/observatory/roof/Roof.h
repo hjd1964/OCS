@@ -4,7 +4,7 @@
 
 #include "../../Common.h"
 
-#if ROR == ON
+#if ROOF == ON
 
 #include "../../commands/ProcessCmds.h"
 
@@ -22,7 +22,7 @@
 
 class RollOffRoof {
   public:
-    // process commands associated with the ROR
+    // process commands associated with the ROOF
     bool command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError);
 
     // this gets called once on startup to initialize roof operation (required)
@@ -86,7 +86,7 @@ class RollOffRoof {
     // called repeatedly to close the roof
     void continueClosing();
 
-    bool autoClose = ROR_AUTOCLOSE_DAWN_DEFAULT == ON;
+    bool autoClose = ROOF_AUTOCLOSE_DAWN_DEFAULT == ON;
     bool autoCloseInitiated = false;
 
     // roof status and errors
@@ -100,12 +100,12 @@ class RollOffRoof {
     volatile int currentPower = 0;
 
     // roof timing and travel
-    const long timeAvg = (long)(ROR_TIME_AVG)*1000L;
-    const long timeErrorLimit = (long)(ROR_TIME_TOL)*1000L;
+    const long timeAvg = (long)(ROOF_TIME_AVG)*1000L;
+    const long timeErrorLimit = (long)(ROOF_TIME_TOL)*1000L;
     long lastSecondsOfTravel, openStartTime, timeLeftToOpenAtStart, closeStartTime, timeLeftToCloseAtStart;
     long travel = 0;
 };
 
-extern RollOffRoof roof;
+extern Roof roof;
 
 #endif

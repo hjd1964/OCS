@@ -1,12 +1,12 @@
 // roll-off roof -------------------------------------------------------------------------------------------------------------
 #include "RoofTile.h"
 
-#if ROR == ON
+#if ROOF == ON
   #include "htmlHeaders.h"
   #include "htmlScripts.h"
   #include "htmlTabs.h"
 
-  #include "../observatory/roof/RollOff.h"
+  #include "../observatory/roof/Roof.h"
 
   #if OPERATIONAL_MODE != WIFI
   void roofTile(EthernetClient *client) {
@@ -21,7 +21,7 @@
     roofContents(client);
 
     strcpy_P(temp, htmlRoof2);
-    #if ROR_AUTOCLOSE_DAWN == ON
+    #if ROOF_AUTOCLOSE_DAWN == ON
       if (roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
     #endif
     sendHtml(temp);

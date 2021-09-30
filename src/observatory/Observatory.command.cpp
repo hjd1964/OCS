@@ -11,17 +11,15 @@
 #include "Observatory.h"
 #include "safety/Safety.h"
 #include "power/Power.h"
-#include "roof/RollOff.h"
+#include "roof/Roof.h"
 #include "thermostat/Thermostat.h"
 #include "weather/Weather.h"
 
 bool Observatory::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
-  #if POWER == ON
-    if (power.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
-  #endif
+  if (power.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
 
-  #if ROR == ON
+  #if ROOF == ON
     if (roof.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
@@ -103,8 +101,9 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
           strcpy(reply,"Rebooting in 8 seconds...");
           while (true) {};
         } else *commandError = CE_ROOF_IN_MOTION;
-      } else return false;
+      } else
     #endif
+      return false;
   } else return false;
 
   return true;

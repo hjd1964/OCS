@@ -18,7 +18,7 @@ const char html_ajax_active[] PROGMEM =
         "'ThermostatH',118,"
       #endif
   #endif
-  #if ROR == ON
+  #if ROOF == ON
     "'RoofStatus',3,"
   #endif
   "'',0"

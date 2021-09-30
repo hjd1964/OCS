@@ -5,7 +5,7 @@
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
 #include "../../lib/weatherSensor/WeatherSensor.h"
-#include "../roof/RollOff.h"
+#include "../roof/Roof.h"
 
 bool validTime() {
   return (now() < 315360000);
@@ -49,7 +49,7 @@ bool Safety::isSafe() {
 }
 
 void Safety::poll() {
-  #if ROR == ON
+  #if ROOF == ON
     // Auto close the roof at 8am if requested
     if (roofAutoClose && validTime()) {
       if (hour() == 8 && !roofAutoCloseInitiated) {
@@ -63,7 +63,7 @@ void Safety::poll() {
       if (hour() == 9) roofAutoCloseInitiated = false;
     }
 
-    #if ROR_AUTOCLOSE_SAFETY == ON
+    #if ROOF_AUTOCLOSE_SAFETY == ON
       // close the roof if safety status calls for it
       if (!isSafe()) {
         // if the roof isn't closed, and motion is idle, close it

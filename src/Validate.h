@@ -255,110 +255,110 @@
   #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-// ROR
-#if ROR != OFF && ROR != ON
-  #error "Configuration (Config.h): ROR, OCS website roll off roof control display, must OFF or ON."
+// ROOF
+#if ROOF != OFF && ROOF != ON
+  #error "Configuration (Config.h): ROOF, OCS website roll off roof control display, must OFF or ON."
 #endif
 
-#if ROR_USER_SAFETY_OVERRIDE != OFF && ROR_USER_SAFETY_OVERRIDE != ON
-  #error "Configuration (Config.h): ROR_USER_SAFETY_OVERRIDE, OCS website ROR safety override control display, must OFF or ON."
+#if ROOF_USER_SAFETY_OVERRIDE != OFF && ROOF_USER_SAFETY_OVERRIDE != ON
+  #error "Configuration (Config.h): ROOF_USER_SAFETY_OVERRIDE, OCS website ROOF safety override control display, must OFF or ON."
 #endif
 
-#if ROR_AUTOCLOSE_DAWN != OFF && ROR_AUTOCLOSE_DAWN != ON
-  #error "Configuration (Config.h): ROR_AUTOCLOSE_DAWN, OCS website ROR automatic close at dawn control display, must OFF or ON."
+#if ROOF_AUTOCLOSE_DAWN != OFF && ROOF_AUTOCLOSE_DAWN != ON
+  #error "Configuration (Config.h): ROOF_AUTOCLOSE_DAWN, OCS website ROOF automatic close at dawn control display, must OFF or ON."
 #endif
 
-#if ROR_AUTOCLOSE_DAWN_DEFAULT != OFF && ROR_AUTOCLOSE_DAWN_DEFAULT != ON
-  #error "Configuration (Config.h): ROR_AUTOCLOSE_DAWN_DEFAULT, OCS website ROR automatic close at dawn default state, must OFF or ON."
+#if ROOF_AUTOCLOSE_DAWN_DEFAULT != OFF && ROOF_AUTOCLOSE_DAWN_DEFAULT != ON
+  #error "Configuration (Config.h): ROOF_AUTOCLOSE_DAWN_DEFAULT, OCS website ROOF automatic close at dawn default state, must OFF or ON."
 #endif
 
-#if ROR_AUTOCLOSE_SAFETY != OFF && ROR_AUTOCLOSE_SAFETY != ON
-  #error "Configuration (Config.h): ROR_AUTOCLOSE_SAFETY, OCS website ROR automatic close safety, must OFF or ON."
+#if ROOF_AUTOCLOSE_SAFETY != OFF && ROOF_AUTOCLOSE_SAFETY != ON
+  #error "Configuration (Config.h): ROOF_AUTOCLOSE_SAFETY, OCS website ROOF automatic close safety, must OFF or ON."
 #endif
 
-#if (ROR_MOTOR_OPEN_RELAY < 1 || ROR_MOTOR_OPEN_RELAY > 14) && ROR_MOTOR_OPEN_RELAY != OFF
-  #error "Configuration (Config.h): ROR_MOTOR_OPEN_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+#if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 14) && ROOF_MOTOR_OPEN_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if (ROR_MOTOR_CLOSE_RELAY < 1 || ROR_MOTOR_CLOSE_RELAY > 14) && ROR_MOTOR_CLOSE_RELAY != OFF
-  #error "Configuration (Config.h): ROR_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+#if (ROOF_MOTOR_CLOSE_RELAY < 1 || ROOF_MOTOR_CLOSE_RELAY > 14) && ROOF_MOTOR_CLOSE_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if ROR_MOTOR_OPEN_RELAY != OFF && ROR_MOTOR_OPEN_RELAY == ROR_MOTOR_CLOSE_RELAY
-  #if ROR_MOTOR_RELAY_MOMENTARY == ON
-    #define ROR_SINGLE_OPEN_CLOSE_RELAY ON
-    #if ROR_MOTOR_STOP_RELAY == ROR_MOTOR_OPEN_RELAY
-      #define ROR_SINGLE_OPEN_CLOSE_STOP_RELAY ON
+#if ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_OPEN_RELAY == ROOF_MOTOR_CLOSE_RELAY
+  #if ROOF_MOTOR_RELAY_MOMENTARY == ON
+    #define ROOF_SINGLE_OPEN_CLOSE_RELAY ON
+    #if ROOF_MOTOR_STOP_RELAY == ROOF_MOTOR_OPEN_RELAY
+      #define ROOF_SINGLE_OPEN_CLOSE_STOP_RELAY ON
     #endif
   #else
-    #error "Configuration (Config.h): ROR_MOTOR_OPEN_RELAY and ROR_MOTOR_CLOSE_RELAY on the same RELAY# is only allowed if ROR_MOTOR_RELAY_MOMENTARY is used."
+    #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY and ROOF_MOTOR_CLOSE_RELAY on the same RELAY# is only allowed if ROOF_MOTOR_RELAY_MOMENTARY is used."
   #endif
 #else
-  #define ROR_SINGLE_OPEN_CLOSE_RELAY OFF
+  #define ROOF_SINGLE_OPEN_CLOSE_RELAY OFF
 #endif
 
-#if ROR == ON && (ROR_MOTOR_OPEN_RELAY == OFF || ROR_MOTOR_CLOSE_RELAY == OFF)
+#if ROOF == ON && (ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_CLOSE_RELAY == OFF)
   #error "Configuration (Config.h): Roof control requires relays that either press button(s) on an automatic opener or operate a motor to move the roof."
 #endif
 
-#if (ROR_MOTOR_OPEN_RELAY != OFF && ROR_MOTOR_CLOSE_RELAY == OFF) || (ROR_MOTOR_OPEN_RELAY == OFF && ROR_MOTOR_CLOSE_RELAY != OFF)
-  #error "Configuration (Config.h): Roof operation requires both ROR_MOTOR_OPEN_RELAY and ROR_MOTOR_CLOSE_RELAY (even if both are on the same RELAY.)"
+#if (ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_CLOSE_RELAY == OFF) || (ROOF_MOTOR_OPEN_RELAY == OFF && ROOF_MOTOR_CLOSE_RELAY != OFF)
+  #error "Configuration (Config.h): Roof operation requires both ROOF_MOTOR_OPEN_RELAY and ROOF_MOTOR_CLOSE_RELAY (even if both are on the same RELAY.)"
 #endif
 
-#if (ROR_POWER_RELAY < 1 || ROR_POWER_RELAY > 14) && ROR_POWER_RELAY != OFF
-  #error "Configuration (Config.h): ROR_POWER_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+#if (ROOF_POWER_RELAY < 1 || ROOF_POWER_RELAY > 14) && ROOF_POWER_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_POWER_RELAY must OFF or a number between 1 and 14 (Relay#.)"
 #endif
 
-#if (ROR_POWER_PWM_FREQUENCY<1 || ROR_POWER_PWM_FREQUENCY>100) && ROR_POWER_PWM_FREQUENCY != OFF
-  #error "Configuration (Config.h): ROR_POWER_PWM_FREQUENCY must be OFF or a number between 1 and 100 (Hz.)"
+#if (ROOF_POWER_PWM_FREQUENCY<1 || ROOF_POWER_PWM_FREQUENCY>100) && ROOF_POWER_PWM_FREQUENCY != OFF
+  #error "Configuration (Config.h): ROOF_POWER_PWM_FREQUENCY must be OFF or a number between 1 and 100 (Hz.)"
 #endif
 
-#if (ROR_POWER_PWM_POWER<10 || ROR_POWER_PWM_POWER>100) && ROR_POWER_PWM_POWER != OFF
-  #error "Configuration (Config.h): ROR_POWER_PWM_POWER must be OFF or a number between 10 and 100 (%.)"
+#if (ROOF_POWER_PWM_POWER<10 || ROOF_POWER_PWM_POWER>100) && ROOF_POWER_PWM_POWER != OFF
+  #error "Configuration (Config.h): ROOF_POWER_PWM_POWER must be OFF or a number between 10 and 100 (%.)"
 #endif
 
-#if ROR_POWER_PWM_SOFTSTART != OFF && ROR_POWER_PWM_SOFTSTART != ON
-  #error "Configuration (Config.h): ROR_POWER_PWM_SOFTSTART must OFF or ON."
+#if ROOF_POWER_PWM_SOFTSTART != OFF && ROOF_POWER_PWM_SOFTSTART != ON
+  #error "Configuration (Config.h): ROOF_POWER_PWM_SOFTSTART must OFF or ON."
 #endif
 
-#if ROR_MOTOR_RELAY_MOMENTARY == ON
-  #if ROR_POWER_RELAY != OFF
-    #if ROR_POWER_PWM_FREQUENCY != OFF
-      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_FREQUENCY must be OFF."
+#if ROOF_MOTOR_RELAY_MOMENTARY == ON
+  #if ROOF_POWER_RELAY != OFF
+    #if ROOF_POWER_PWM_FREQUENCY != OFF
+      #error "Configuration (Config.h): For ROOF_MOTOR_RELAY_MOMENTARY the setting ROOF_POWER_PWM_FREQUENCY must be OFF."
     #endif
-    #if ROR_POWER_PWM_POWER != OFF
-      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_POWER must be OFF."
+    #if ROOF_POWER_PWM_POWER != OFF
+      #error "Configuration (Config.h): For ROOF_MOTOR_RELAY_MOMENTARY the setting ROOF_POWER_PWM_POWER must be OFF."
     #endif
-    #if ROR_POWER_PWM_SOFTSTART != OFF
-      #error "Configuration (Config.h): For ROR_MOTOR_RELAY_MOMENTARY the setting ROR_POWER_PWM_SOFTSTART must be OFF."
+    #if ROOF_POWER_PWM_SOFTSTART != OFF
+      #error "Configuration (Config.h): For ROOF_MOTOR_RELAY_MOMENTARY the setting ROOF_POWER_PWM_SOFTSTART must be OFF."
     #endif
   #endif
 #endif
 
-#if (ROR_INTERLOCK_SENSE < 1 || ROR_INTERLOCK_SENSE > 6) && ROR_INTERLOCK_SENSE != OFF
-  #error "Configuration (Config.h): ROR_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
+#if (ROOF_INTERLOCK_SENSE < 1 || ROOF_INTERLOCK_SENSE > 6) && ROOF_INTERLOCK_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if ROR == ON && (ROR_LIMIT_CLOSED_SENSE == OFF || ROR_LIMIT_OPENED_SENSE == OFF)
-  #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROR control is enabled."
+#if ROOF == ON && (ROOF_LIMIT_CLOSED_SENSE == OFF || ROOF_LIMIT_OPENED_SENSE == OFF)
+  #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROOF control is enabled."
 #endif
 
-#if (ROR_LIMIT_CLOSED_SENSE < 1 || ROR_LIMIT_CLOSED_SENSE > 6) && ROR_LIMIT_CLOSED_SENSE != OFF
-  #error "Configuration (Config.h): ROR_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (Sense#.)"
+#if (ROOF_LIMIT_CLOSED_SENSE < 1 || ROOF_LIMIT_CLOSED_SENSE > 6) && ROOF_LIMIT_CLOSED_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if (ROR_LIMIT_OPENED_SENSE < 1 || ROR_LIMIT_OPENED_SENSE > 6) && ROR_LIMIT_OPENED_SENSE != OFF
-  #error "Configuration (Config.h): ROR_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (Sense#.)"
+#if (ROOF_LIMIT_OPENED_SENSE < 1 || ROOF_LIMIT_OPENED_SENSE > 6) && ROOF_LIMIT_OPENED_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (Sense#.)"
 #endif
 
-#if ROR_TIME_AVG<30 || ROR_TIME_AVG>1200
-  #error "Configuration (Config.h): ROR_TIME_AVG must be a number between 30 and 1200 (seconds.)"
+#if ROOF_TIME_AVG<30 || ROOF_TIME_AVG>1200
+  #error "Configuration (Config.h): ROOF_TIME_AVG must be a number between 30 and 1200 (seconds.)"
 #endif
 
-#if ROR_TIME_TOL<0 || ROR_TIME_TOL>120
-  #error "Configuration (Config.h): ROR_TIME_TOL must be a number between 0 and 120 (seconds.)"
+#if ROOF_TIME_TOL<0 || ROOF_TIME_TOL>120
+  #error "Configuration (Config.h): ROOF_TIME_TOL must be a number between 0 and 120 (seconds.)"
 #endif
 
-#if ROR_TIME_LIMIT_SENSE_FAIL<1 || ROR_TIME_LIMIT_SENSE_FAIL>60
-  #error "Configuration (Config.h): ROR_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
+#if ROOF_TIME_LIMIT_SENSE_FAIL<1 || ROOF_TIME_LIMIT_SENSE_FAIL>60
+  #error "Configuration (Config.h): ROOF_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
 #endif
