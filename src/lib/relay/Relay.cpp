@@ -3,7 +3,7 @@
 #include "Relay.h"
 #include "../sense/Sense.h"
 
-#include "../../observatory/roof/RollOff.h"
+#include "../../observatory/roof/Roof.h"
 
 void Relay::init() {
   for (int r = 1; r <= RELAYS_MAX; r++) {
@@ -91,34 +91,34 @@ void Relay::poll() {
     }
   }
 
-  #if ROR == ON
-    #if ROR_POWER_PWM_FREQUENCY != OFF && ROR_POWER_PWM_POWER != OFF
+  #if ROOF == ON
+    #if ROOF_POWER_PWM_FREQUENCY != OFF && ROOF_POWER_PWM_POWER != OFF
       if (roof.isMoving()) {
         count++;
-        if (count >= 1000/(ROR_POWER_PWM_FREQUENCY*10)) {
+        if (count >= 1000/(ROOF_POWER_PWM_FREQUENCY*10)) {
           count = 0;
           slowPwmCycle++;
           if (slowPwmCycle > 9) slowPwmCycle = 0;
-          if (slowPwmCycle == 0) on(ROR_POWER_RELAY);
-          if (!roof.isMaxPower() && (roof.powerLevel()/10 == slowPwmCycle)) off(ROR_POWER_RELAY);
+          if (slowPwmCycle == 0) on(ROOF_POWER_RELAY);
+          if (!roof.isMaxPower() && (roof.powerLevel()/10 == slowPwmCycle)) off(ROOF_POWER_RELAY);
         }
       } else {
         count = 0;
         slowPwmCycle = 0;
-        if (isOn(ROR_POWER_RELAY)) off(ROR_POWER_RELAY);
+        if (isOn(ROOF_POWER_RELAY)) off(ROOF_POWER_RELAY);
       }
     #else
       if (roof.isMoving()) {
-        on(ROR_POWER_RELAY);
+        on(ROOF_POWER_RELAY);
       } else {
-        if (isOn((ROR_POWER_RELAY)) off(ROR_POWER_RELAY);
+        if (isOn((ROOF_POWER_RELAY)) off(ROOF_POWER_RELAY);
       }
     #endif
 
-    // ROR safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
-    if (ROR_MOTOR_RELAY_MOMENTARY == OFF) {
-      if (isOn(ROR_MOTOR_OPEN_RELAY) && sense.isOn(ROR_LIMIT_OPENED_SENSE)) roof.stop();
-      if (isOn(ROR_MOTOR_CLOSE_RELAY) && sense.isOn(ROR_LIMIT_CLOSED_SENSE)) roof.stop();
+    // ROOF safety shutoff (via direction relays) here in an ISR where it can't be blocked by anything just incase the main-loop blocks
+    if (ROOF_MOTOR_RELAY_MOMENTARY == OFF) {
+      if (isOn(ROOF_MOTOR_OPEN_RELAY) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) roof.stop();
+      if (isOn(ROOF_MOTOR_CLOSE_RELAY) && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) roof.stop();
     }
   #endif
 }
