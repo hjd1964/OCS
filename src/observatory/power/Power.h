@@ -4,8 +4,6 @@
 
 #include "../../Common.h"
 
-#if POWER == ON
-
 #include "../../commands/ProcessCmds.h"
 
 class Power {
@@ -16,5 +14,3 @@ class Power {
 };
 
 extern Power power;
-
-#endif

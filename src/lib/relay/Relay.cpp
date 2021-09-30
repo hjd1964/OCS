@@ -6,8 +6,8 @@
 #include "../../observatory/roof/RollOff.h"
 
 void Relay::init() {
-  for (int r = 0; r < RELAYS_MAX; r++) {
-    pinMode(settings[r].pin, OUTPUT);
+  for (int r = 1; r <= RELAYS_MAX; r++) {
+    pinMode(settings[r - 1].pin, OUTPUT);
     off(r);
   }
   /*
@@ -18,44 +18,44 @@ void Relay::init() {
 }
 
 void Relay::on(int r, bool updateState) {
-  if (r >= 0 && r < RELAYS_MAX) {
-    if (updateState) settings[r].state = 1;
-    digitalWrite(settings[r].pin, settings[r].onState);
+  if (r >= 1 && r <= RELAYS_MAX) {
+    if (updateState) settings[r - 1].state = 1;
+    digitalWrite(settings[r - 1].pin, settings[r - 1].onState);
   }
 }
 
 // delays up to 1 hour
 void Relay::onDelayedOff(int r, float seconds) {
-  if (r >= 0 && r < RELAYS_MAX && seconds >= 0.1 && seconds <= 3600.0) {
-    settings[r].state = 19 + round(seconds*10.0);
-    digitalWrite(settings[r].pin, settings[r].onState);
+  if (r >= 1 && r <= RELAYS_MAX && seconds >= 0.1 && seconds <= 3600.0) {
+    settings[r - 1].state = 19 + round(seconds*10.0);
+    digitalWrite(settings[r - 1].pin, settings[r - 1].onState);
   }
 }
 
 void Relay::pwm(int r, int percentPower) {
   percentPower /= 10;
-  if (r >= 0 && r < RELAYS_MAX && percentPower >= 1 && percentPower <= 9) {
-    settings[r].state = 10 + percentPower;
+  if (r >= 1 && r <= RELAYS_MAX && percentPower >= 1 && percentPower <= 9) {
+    settings[r - 1].state = 10 + percentPower;
   }
 }
 
 void Relay::off(int r, bool updateState) {
-  if (r >= 0 && r < RELAYS_MAX) {
-    if (updateState) settings[r].state = 0;
+  if (r >= 1 && r <= RELAYS_MAX) {
+    if (updateState) settings[r - 1].state = 0;
     uint8_t offState = LOW;
-    if (settings[r].onState == LOW) offState = HIGH;
-    digitalWrite(settings[r].pin, offState);
+    if (settings[r - 1].onState == LOW) offState = HIGH;
+    digitalWrite(settings[r - 1].pin, offState);
   }
 }
 
 bool Relay::isOn(int r) {
-  if (r >= 0 && r < RELAYS_MAX) return !(settings[r].state == 0); else return false;
+  if (r >= 1 && r <= RELAYS_MAX) return !(settings[r - 1].state == 0); else return false;
 }
 
 bool Relay::isOnDelayedOff(int r) {
   timedOff();
-  if (r >= 0 && r < RELAYS_MAX) {
-    return (settings[r].state > 19);
+  if (r >= 1 && r <= RELAYS_MAX) {
+    return (settings[r - 1].state > 19);
   } else return false;
 }
 
@@ -68,10 +68,10 @@ void Relay::timedOff() {
     last = millis();
 
     // Timed relay off
-    for (int r = 0; r < RELAYS_MAX; r++) {
-      if (settings[r].state >= 20) {
-        settings[r].state -= 1;
-        if (settings[r].state < 20) off(r);
+    for (int r = 1; r <= RELAYS_MAX; r++) {
+      if (settings[r - 1].state >= 20) {
+        settings[r - 1].state -= 1;
+        if (settings[r - 1].state < 20) off(r);
       }
     }
   }
@@ -81,12 +81,12 @@ void Relay::timedOff() {
 void Relay::poll() {
   fastPwmCycle++;
   if (fastPwmCycle > 9) fastPwmCycle = 0;
-  for (int r = 0; r < RELAYS_MAX; r++) {
-    if (settings[r].state >= 10) {
+  for (int r = 1; r <= RELAYS_MAX; r++) {
+    if (settings[r - 1].state >= 10) {
       if (fastPwmCycle == 0) {
         on(r, false);
       } else {
-        if (settings[r].state/10 == fastPwmCycle) off(r, false);
+        if (settings[r - 1].state/10 == fastPwmCycle) off(r, false);
       }
     }
   }

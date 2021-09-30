@@ -3,8 +3,6 @@
 
 #include "Power.h"
 
-#if POWER == ON
-
 #include "../../lib/relay/Relay.h"
 
 bool Power::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
@@ -14,9 +12,8 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     //         Example: :GR1#
     //         Returns: ON#, OFF#, n# (pwm 0-9)
     if (command[1] == 'R' && parameter[1] == 0) {
-      if ((parameter[0] >= '1' && parameter[0] <= '9') || (parameter[0] >= 'A' && parameter[0] <= 'E')) {
-        int r = parameter[0] - '0';
-        if (r > 9) r -= 7;
+      int r = atoi(parameter);
+      if (r >= 1 && r <= RELAYS_MAX) {
         if (!relay.isOn(r)) strcpy(reply, "OFF"); else
         if (relay.isOn(r)) strcpy(reply, "ON"); else
         if (relay.isOnDelayedOff(r)) strcpy(reply, "DELAY"); else strcpy(reply, "?");
@@ -30,9 +27,8 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     //         Example: :SR1,ON#
     //         Returns: 1 on success
     if (command[1] == 'R' && parameter[1] == ',') {
-      if ((parameter[0] >= '1' && parameter[0] <= '9') || (parameter[0] >= 'A' && parameter[0] <= 'E')) {
-        int r = parameter[0] - '0';
-        if (r > 9) r -= 7;
+      int r = atoi(parameter);
+      if (r >= 1 && r <= RELAYS_MAX) {
         String ws = String(parameter);
         ws = ws.substring(2);
         if (ws == "DELAY") relay.onDelayedOff(r, 30); else
@@ -50,5 +46,3 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
 }
 
 Power power;
-
-#endif
