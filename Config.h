@@ -119,7 +119,7 @@
 
 #define WEATHER_SENSOR_CLOUD_MLX90614 OFF //    OFF, 0x5A (I2C Address) to enable. Gets IR sky IR temp. for cloud detection.  Adjust
 
-#define WEATHER_SENSOR_SKYQ_TSL2591   OFF //    OFF, 0x28 (I2C Address) to enable. Temperature, humidity.                     Option
+#define WEATHER_SENSOR_SKYQ_TSL2591   OFF //    OFF, 0x28 (I2C Address) to enable. Sky brightness for sky quality estimate.   Option
 
 // THERMOSTAT PANEL ----------------------------------------------------------------------------------------------------------------
 #define THERMOSTAT                    OFF //    OFF, ON to enable the OCS website thermostat panel display.                   Option
