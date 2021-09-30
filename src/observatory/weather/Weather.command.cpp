@@ -22,14 +22,14 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
   //  :G2#  Get sky IR temperature
   //         Returns: nnn.n#
   if (command[1] == '2' && parameter[0] == 0) {
-    dtostrf(weatherSkyTemp(),3,1,reply);
+    sprintF(reply, "%3.1f", weatherSensor.skyTemperature());
     *numericReply = false;
   } else
   //  :G3#  Get differential sky temperature
   //         Returns: nnn.n#
   //         where <= 21 is cloudy
   if (command[1] == '3' && parameter[0] == 0) {
-    dtostrf(getSkyDiffTemp(), 3, 1, reply);
+    sprintF(reply, "%3.1f", weather.getAvgSkyDiffTemp());
     *numericReply = false;
   } else
   #endif
@@ -49,9 +49,9 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
   //         Returns: sssss...#
   if (command[1] == 'C' && parameter[0] == 0) {
     #if WEATHER_CLOUD_CVR == ON
-      strcpy(reply,weatherCloudCoverDescription().c_str());
+      strcpy(reply, weather.cloudCoverDescription());
     #else
-      strcpy(reply,"N/A");
+      strcpy(reply, "N/A");
     #endif
     *numericReply = false;
   } else
@@ -92,7 +92,7 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
   //         Returns: nnn.n#
   //         where <=21 is cloudy
   if ((command[1] == 'S') && (parameter[0] == 0)) {
-    dtostrf(getAvgSkyDiffTemp(),3,1,reply);
+    sprintF(reply, "%3.1f", weather.avgSkyDiffTemp);
     *numericReply = true;
   } else
   #endif

@@ -79,23 +79,23 @@
     #if WEATHER_HUMIDITY == ON
       makeChartJs(client,"RH","Relative Humidity % (last "+periodStr+")",33,5,0,100,10,period);
     #endif
-    sendHtml("}\r\n");
-    sendHtml("</script>\r\n");
+    sendHtml(F("}\r\n"));
+    sendHtml(F("</script>\r\n"));
 
     strcpy_P(temp,ChartOptions1a); sendHtml(temp);
     strcpy_P(temp,ChartOptions2); sendHtml(temp);
     
     #if WEATHER_TEMPERATURE == ON
-      makeChartCanvas(client,"ambientT");
+      makeChartCanvas(client, "ambientT");
     #endif
     #if WEATHER_WIND_SPD == ON
-      makeChartCanvas(client,"WS");
+      makeChartCanvas(client, "WS");
     #endif
     #if WEATHER_PRESSURE == ON
-      makeChartCanvas(client,"BP");
+      makeChartCanvas(client, "BP");
     #endif
     #if WEATHER_HUMIDITY == ON
-      makeChartCanvas(client,"RH");
+      makeChartCanvas(client, "RH");
     #endif
 
     sendHtmlDone("</div></body></html>\r\n");
@@ -144,6 +144,7 @@
       #if WEATHER_SKY_QUAL == ON
         makeChartJs(client, "SQ", "Sky Quality mag/sq arc-sec (last "+periodStr+")", 45, 5, 1, 22, 5, period);
       #endif
+
       #if WEATHER_CLOUD_CVR == ON
         makeChartJs(client, "skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
       #endif

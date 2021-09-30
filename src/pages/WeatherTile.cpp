@@ -8,6 +8,7 @@
   #include "htmlTabs.h"
 
   #include "../lib/weatherSensor/WeatherSensor.h"
+  #include "../observatory/weather/Weather.h"
   #include "../observatory/safety/Safety.h"
 
   #if OPERATIONAL_MODE != WIFI
@@ -47,7 +48,7 @@
         f = f*(9.0/5.0) + 32.0;
         strcpy(ws2, " &deg;F");
       #endif
-      if (f < -200) {
+      if (isnan(f)) {
         strcpy(ws1, "Invalid");
         strcpy(ws2, "");
       } else sprintF(ws1, "%5.1f", f);
@@ -60,14 +61,14 @@
       #if STAT_UNITS == IMPERIAL
         f = weatherPressureSeaLevel()*0.02953;
         strcpy(ws2," in");
-        if (f == invalid) {
+        if (isnan(f)) {
           strcpy(ws1, "Invalid");
           strcpy(ws2, "");
         } else sprintF(ws1, "%6.2f", f);
       #else
         f = weatherSensor.pressureSeaLevel();
         strcpy(ws2," mb");
-        if (f == invalid) {
+        if (isnan(f)) {
           strcpy(ws1, "Invalid");
           strcpy(ws2,"");
         } else sprintF(ws1, "%6.0f", f);
@@ -80,7 +81,7 @@
     #if WEATHER_HUMIDITY == ON
       f = weatherSensor.humidity();
       strcpy(ws2, " %");
-      if (f == invalid) {
+      if (isnan(f)) {
         strcpy(ws1, "Invalid");
         strcpy(ws2,"");
       } else sprintF(ws1, "%6.1f", f); 
@@ -93,10 +94,10 @@
       f = weatherSensor.windspeed();
       strcpy(ws2," kph");
       #if STAT_UNITS == IMPERIAL
-        f = f*0.621371;
+        f *= 0.621371;
         strcpy(ws2, " mph");
       #endif
-      if (f < 0) {
+      if (isnan(f)) {
         strcpy(ws2, "");
         strcpy(ws1, "Invalid");
       } else sprintF(ws1, "%6.0f", f);
@@ -108,7 +109,7 @@
     #if WEATHER_RAIN == ON
       char rainSensorStr[4][8] = {"Invalid", "Rain", "Warn", "Dry"};
       int i = lroundf(weatherSensor.rain());
-      if (i > 3 || i < 0) i = 0;
+      if (i < 0 || i > 3) i = 0;
       strcpy_P(temp1, htmlInnerWeatherRain);
       sprintf(temp, temp1, rainSensorStr[i]);
       sendHtml(temp);
@@ -116,12 +117,12 @@
 
     #if WEATHER_SKY_QUAL == ON
       f = weatherSensor.skyQuality();
-      if (f == invalid) {
+      if (isnan(f)) {
         strcpy(ws1, "Invalid");
         strcpy(ws2, "");
       } else {
         sprintF(ws1, "%4.1f", f);
-        strcpy(ws2, "mpsas"); 
+        strcpy(ws2, " mpsas"); 
       }
       strcpy_P(temp1, htmlInnerWeatherSq);
       sprintf(temp, temp1, ws1, ws2);
@@ -130,16 +131,16 @@
 
     #if WEATHER_CLOUD_CVR == ON
       strcpy_P(temp1, htmlInnerWeatherCloud);
-      strcpy(ws1, weatherCloudCoverDescriptionShort().c_str());
+      strcpy(ws1, weather.cloudCoverDescriptionShort());
       sprintf(temp, temp1, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON
       if (safety.isSafe()) {
-        strcpy_P(temp,htmlInnerWeatherSafe);
+        strcpy_P(temp, htmlInnerWeatherSafe);
         sendHtml(temp);
-        strcpy_P(temp,htmlInnerWeatherSafe1);
+        strcpy_P(temp, htmlInnerWeatherSafe1);
         sendHtml(temp);
       } else {
         strcpy_P(temp, htmlInnerWeatherUnSafe);

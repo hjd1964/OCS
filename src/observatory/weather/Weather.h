@@ -24,11 +24,21 @@ class Weather {
 
     float getAvgSkyDiffTemp();
 
+    // gets cloud cover in %
+    float cloudCover();
+
+    // get cloud cover text
+    const char * cloudCoverDescription();
+
+    // gets cloud cover text (short)
+    const char * cloudCoverDescriptionShort();
+
     bool isSafe();
 
     void poll();
 
   private:
+    int getAvgSkyDiffTempIndex();
     void dtostrf2(float d, int i, int i1, float l, float h, char result[]);
 
     long TimeSeconds = 0;
@@ -41,6 +51,14 @@ class Weather {
     float sad = NAN;
     float lad = NAN;
     float wa = NAN;
+
+    const char *CloudDescription[10] =
+    { "Invalid", "Clear", "Mostly Clear", "Slight Haze", "Overcast/Haze",
+      "Overcast", "Clouds/Overcast", "Mostly Cloudy", "Cloudy", "Very Cloudy" };
+
+    const char *CloudDescriptionShort[10] =
+    { "Invalid", "Clear", "Mostly-Clr", "Slight-Hze", "Ovrcst/Hze",
+      "Overcast", "Cld/Ovrcst", "Mstly-Cldy", "Cloudy", "Very-Cldy" };
 };
 
 extern Weather weather;

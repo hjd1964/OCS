@@ -71,11 +71,13 @@ void index() {
     roofTile(client);
   #endif
 
-  strcpy_P(temp,"</div>\r\n");
-  sendHtml(temp);
-  
+  sendHtml(F("</div>\r\n"));
+
   // javascript for ajax relay control
-  strcpy_P(temp, html_ajax_active);
+  strcpy_P(temp, html_ajax_activeA);
+  sendHtml(temp);
+
+  strcpy_P(temp, html_ajax_activeB);
   sendHtml(temp);
 
   strcpy_P(temp, html_ajax_setRelay);
@@ -84,7 +86,7 @@ void index() {
   strcpy_P(temp, html_ajax_setVar);
   sendHtml(temp);
 
-  strcpy_P(temp,"</body></html>\r\n");
+  strcpy(temp, "</body></html>\r\n");
   sendHtmlDone(temp);
 }
 

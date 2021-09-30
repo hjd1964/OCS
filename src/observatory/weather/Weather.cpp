@@ -14,8 +14,6 @@
 #include "../../lib/ethernet/webServer/WebServer.h"
 #include "../../lib/weatherSensor/WeatherSensor.h"
 
-File dataFile;
-
 void Weather::init() {
   weatherSensor.init();
 }
@@ -82,6 +80,8 @@ void Weather::poll(void) {
       TimeSeconds += 2;
       if (TimeSeconds >= SecondsBetweenLogEntries) {
         TimeSeconds = 0;
+
+        File dataFile;
 
         // only log if the time is set and we have an SD card
         if (timeStatus() != timeNotSet && www.SDfound) {
@@ -176,6 +176,59 @@ float Weather::getSkyDiffTemp() {
 
 float Weather::getAvgSkyDiffTemp() {
   return avgSkyDiffTemp;
+}
+
+// gets cloud cover in %
+float Weather::cloudCover() {
+  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
+    float delta = getAvgSkyDiffTemp();
+    if (isnan(delta) || delta <= -200) return (invalid); else
+    if (delta <= WEATHER_VCLR_THRESHOLD) return 10; else
+    if (delta <= WEATHER_CLER_THRESHOLD) return 20; else
+    if (delta <= WEATHER_HAZE_THRESHOLD) return 30; else
+    if (delta <= (WEATHER_HAZE_THRESHOLD+WEATHER_OVRC_THRESHOLD)/2.0) return 40; else
+    if (delta <= WEATHER_OVRC_THRESHOLD) return 50; else
+    if (delta <= (WEATHER_OVRC_THRESHOLD+WEATHER_CLDY_THRESHOLD)/2.0) return 60; else
+    if (delta <= WEATHER_CLDY_THRESHOLD) return 70; else
+    if (delta <= (WEATHER_CLDY_THRESHOLD+WEATHER_VCLD_THRESHOLD)/2.0) return 80; else
+    if (delta <= WEATHER_VCLD_THRESHOLD) return 90; else
+    if (delta >  WEATHER_VCLD_THRESHOLD) return 100;
+  #else
+    return 100;
+  #endif
+}
+
+// get cloud cover text
+const char * Weather::cloudCoverDescription() {
+  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
+    return CloudDescription[getAvgSkyDiffTempIndex()];
+  #else
+    return "N/A";
+  #endif
+}
+
+// gets cloud cover text (short)
+const char * Weather::cloudCoverDescriptionShort() {
+  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
+    return CloudDescriptionShort[getAvgSkyDiffTempIndex()];
+  #else
+    return "N/A";
+  #endif
+}
+
+int Weather::getAvgSkyDiffTempIndex() {
+  int index = 0;
+  float delta = getAvgSkyDiffTemp();
+  if (isnan(delta) || delta <= -200) index = 0; else
+  if (delta <= WEATHER_VCLR_THRESHOLD) index = 1; else
+  if (delta <= WEATHER_CLER_THRESHOLD) index = 2; else
+  if (delta <= WEATHER_HAZE_THRESHOLD) index = 3; else
+  if (delta <= (WEATHER_HAZE_THRESHOLD+WEATHER_OVRC_THRESHOLD)/2.0) index = 4; else
+  if (delta <= WEATHER_OVRC_THRESHOLD) index = 5; else
+  if (delta <= (WEATHER_OVRC_THRESHOLD+WEATHER_CLDY_THRESHOLD)/2.0) index = 6; else
+  if (delta <= WEATHER_CLDY_THRESHOLD) index = 7; else
+  if (delta <= (WEATHER_CLDY_THRESHOLD+WEATHER_VCLD_THRESHOLD)/2.0) index = 8; else index = 9;
+  return index;
 }
 
 void Weather::dtostrf2(float d, int i, int i1, float l, float h, char result[]) {

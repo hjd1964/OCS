@@ -5,6 +5,7 @@
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
 #include "../../lib/weatherSensor/WeatherSensor.h"
+#include "../weather/Weather.h"
 #include "../roof/Roof.h"
 
 bool validTime() {
@@ -25,21 +26,24 @@ bool Safety::isSafe() {
   #endif
 
   #if WEATHER == ON
+    float f;
     #if WEATHER_RAIN == ON
       // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
-      if (isnan(weatherSensor.rain()) || weatherSensor.rain() == 1) safe = false;
+      f = weatherSensor.rain();
+      if (isnan(f) || f < 2.0F) safe = false;
       safetyDeviceCount++;
     #endif
     
     #if WEATHER_CLOUD_CVR == ON
       // check for invalid or above WEATHER_SAFE_THRESHOLD
-      if (avgSkyDiffTemp < -200 || avgSkyDiffTemp > WEATHER_SAFE_THRESHOLD) safe = false;
+      f = weather.getAvgSkyDiffTemp();
+      if (isnan(f) || f < -200 || f > WEATHER_SAFE_THRESHOLD) safe = false;
       safetyDeviceCount++;
     #endif
     
     #if WEATHER_WIND_SPD == ON
       // check for invalid or wind speed too high
-      float f = weatherSensor.windspeed();
+      f = weatherSensor.windspeed();
       if (isnan(f) || f < 0 || f > WEATHER_WIND_SPD_THRESHOLD) safe = false;
       safetyDeviceCount++;
     #endif

@@ -23,7 +23,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     if (roof.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
-  #if WEATHER == ON
+  #if THERMOSTAT == ON
     if (thermostat.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
