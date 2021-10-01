@@ -39,12 +39,9 @@
   #else
   void roofContents() {
   #endif
-    char temp[250] = "";
-    char temp1[150] = "";
-    char ws1[20] = "";
-    char ws2[100] = "";
-
-    strcpy_P(temp1, htmlInnerRoofStat);
+    char temp[250];
+    char ws1[10] = "";
+    char ws2[10] = "";
 
     if (!roof.isMoving()) {
       if (roof.isClosed()) strcpy(ws1, "Closed"); else
@@ -54,12 +51,11 @@
     if (roof.isClosing()) strcpy(ws1, "Closing");
 
     const char *statusStr = roof.getStatus();
-    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") >= 0) {
-      sprintf(ws2, "<div style=\"color: #505090;\">%s</div>", statusStr);
-    } else {
-      sprintf(ws2, "<div style=\"color: red;\">%s</div>", statusStr);
-    }
-    sprintf(temp, temp1, ws1, ws2);
+    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") >= 0) 
+      strcpy(ws2, "#505090");
+    else 
+      strcpy(ws2, "red");
+    sprintf_P(temp, htmlInnerRoofStat, ws1, ws2, statusStr);
     sendHtml(temp);
   }
 

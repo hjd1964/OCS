@@ -5,11 +5,17 @@
 
 #if ROOF == ON
 
+#include "../../tasks/OnTask.h"
 #include "../../lib/relay/Relay.h"
 #include "../../lib/sense/Sense.h"
 
+void roofWrapper() { roof.poll(); }
+
 // this gets called once on startup to initialize roof operation (required)
 void Roof::init() {
+  // start polling task
+  VF("MSG: Roof, start monitor task (rate 10ms priority 0)... ");
+  if (tasks.add(10, 0, true, 0, roofWrapper, "Thermst")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 // Start opening the roof, returns true if successful or false otherwise (required)
@@ -294,6 +300,8 @@ int Roof::powerLevel() {
 
 // called repeatedly if roof is moving (required)
 void Roof::poll() {
+  if (!roof.isMoving()) return;
+
   // Open the roof, keeping track of time limit and sensor status
   if (isOpening()) continueOpening();
 

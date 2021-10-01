@@ -25,10 +25,10 @@ void ntpPoll() {
 bool TimeLocationSource::init() {
   VF("MSG: TLS, start NTP monitor task (rate 60s priority 7)... ");
   if (tasks.add(60000, 0, true, 7, ntpPoll, "ntpPoll")) {
-    VL("success");
+    VLF("success");
     active = true;
   } else {
-    VL("FAILED!");
+    VLF("FAILED!");
     active = false;
   }
 

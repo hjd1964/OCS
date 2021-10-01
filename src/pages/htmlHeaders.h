@@ -7,10 +7,6 @@ const char http_defaultHeader[] PROGMEM =
 "HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "\r\n";
 const char http_autoRefreshHeader[] PROGMEM =
 "HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "Refresh: 5\r\n" "\r\n";
-const char http_js304Header[] PROGMEM =
-"HTTP/1.1 304 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
-const char http_jsHeader[] PROGMEM =
-"HTTP/1.1 200 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
 
 // common web site framework
 const char html_head1[] PROGMEM =

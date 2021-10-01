@@ -175,8 +175,8 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   www.on("/", index);
 
   // start observatory monitor task
-  VF("MSG: Setup, start observatory monitor task (rate 1ms priority 4)... ");
-  if (tasks.add(1, 0, true, 4, observatoryWrapper, "ObsPoll")) { VL("success"); } else { VL("FAILED!"); }
+  VF("MSG: Observatory, start monitor task (rate 1ms priority 4)... ");
+  if (tasks.add(1, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 void Observatory::connectionCheck() {
@@ -246,34 +246,11 @@ void Observatory::poll() {
   // serve web-pages
   www.handleClient();
 
-  // process commands
-  //processCommands();
-
   // a wall switch can control lights
   #if LIGHT_SW_SENSE == ON && LIGHT_WRW_RELAY != OFF
     if (sense.changed(LIGHT_SW_SENSE)) {
       if (sense.isOn(LIGHT_SW_SENSE)) relay.on(LIGHT_WRW_RELAY); else relay.off(LIGHT_WRW_RELAY);
     }
-  #endif
-
-  // update relays
-  relay.timedOff();
-
-  #if THERMOSTAT == ON
-    thermostat.poll();
-  #endif
-
-  #if ROOF == ON
-    if (roof.isMoving()) roof.poll();
-  #endif
-
-  // Gather weather info. and log
-  #if WEATHER == ON
-    // except while the roof is moving
-    #if ROOF == ON
-      if (!roof.isMoving())
-    #endif
-    weather.poll();
   #endif
 }
 

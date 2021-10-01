@@ -24,7 +24,7 @@ void index(EthernetClient *client) {
 void index() {
 #endif
   {
-    char temp[400] = "";
+    char temp[250] = "";
 
     sendHtmlStart();
 
@@ -77,7 +77,7 @@ void index() {
   #endif
 
   {
-    char temp[400] = "";
+    char temp[350] = "";
 
     sendHtml(F("</div>\r\n"));
 
@@ -94,8 +94,7 @@ void index() {
     strcpy_P(temp, html_ajax_setVar);
     sendHtml(temp);
 
-    strcpy(temp, "</body></html>\r\n");
-    sendHtmlDone(temp);
+    sendHtmlDone(F("</body></html>\r\n"));
   }
 }
 

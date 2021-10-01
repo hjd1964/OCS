@@ -4,16 +4,20 @@
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
+#include "../../tasks/OnTask.h"
 #include "../../lib/weatherSensor/WeatherSensor.h"
 #include "../../lib/sense/Sense.h"
 #include "../weather/Weather.h"
 #include "../roof/Roof.h"
 
-bool validTime() {
-  return (now() < 315360000);
-}
+void safetyWrapper() { safety.poll(); }
+
+bool validTime() { return (now() < 315360000); }
 
 void Safety::init() {
+  // start polling task
+  VF("MSG: Safety, start monitor task (rate 1s priority 7)... ");
+  if (tasks.add(1000, 0, true, 7, safetyWrapper, "Safety")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 bool Safety::isSafe() {

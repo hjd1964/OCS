@@ -13,8 +13,7 @@
   #else
   void powerTile() {
   #endif
-    char temp[100];
-
+    char temp[50];
     strcpy_P(temp, htmlPower1);
     sendHtml(temp);
 

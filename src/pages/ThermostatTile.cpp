@@ -16,57 +16,21 @@
   #else
   void thermostatTile() {
   #endif
-    char temp[512] = "";
-    char temp1[255] = "";
+    char temp[256] = "";
     char ws1[20] = "";
-    char ws2[20] = "";
 
-    float T = thermostatSensor.temperature();
-    if (isnan(T)) {
-      strcpy(ws2, "");
-      strcpy(ws1, "Invalid");
-    } else {
-      char ws3[2] = "";
-      #if HEAT_RELAY != OFF
-        if (relay.isOn(HEAT_RELAY)) strcpy(ws3, "^"); else
-      #endif
-      #if COOL_RELAY != OFF
-        if (relay.isOn(COOL_RELAY)) strcpy(ws3, "*"); else 
-      #endif
-      strcpy(ws3, "-");
-      #if STAT_UNITS == IMPERIAL
-        T = T*(9.0/5.0) + 32.0;
-        strcpy(ws2, " &deg;F ");
-      #else
-        strcpy(ws2, " &deg;C ");
-      #endif
-      strcat(ws2, ws3);
-      sprintF(ws1, "%6.1f", T);
-    }
-//    strcpy_P(temp1, htmlThermostat1);
-//    sprintf(temp, temp1, ws1, ws2);
-    sprintf_P(temp, htmlThermostat1, ws1, ws2);
+    strcpy_P(temp, htmlThermostatBegin);
     sendHtml(temp);
 
     #if THERMOSTAT_HUMIDITY == ON
-      float h = thermostatInsideHumidity();
-      if (isnan(h)) {
-        strcpy(ws2, "");
-        strcpy(ws1, "Invalid");
-      } else {
-        strcpy(ws2, " %");
-        sprintF(ws1, "%5.1f", h);
-      }
-//      strcpy_P(temp1, htmlThermostatHumidity);
-//      sprintf(temp, temp1, ws1, ws2);
-      sprintf_P(temp, htmlThermostatHumidity, ws1, ws2);
+      strcpy_P(temp, htmlThermostatHumidity);
       sendHtml(temp);
     #endif
 
     sendHtml("<br />");
 
     #if HEAT_RELAY != OFF
-      strcpy_P(temp,htmlThermostatHeat1);
+      strcpy_P(temp, htmlThermostatHeat1);
       sendHtml(temp);
 
       #if STAT_UNITS == IMPERIAL
@@ -129,7 +93,7 @@
       sendHtml(temp);
     #endif
 
-    strcpy_P(temp, htmlThermostat2);
+    strcpy_P(temp, htmlThermostatEnd);
     sendHtml(temp);
   }
 
@@ -138,37 +102,27 @@
   #else
   void thermostatContents() {
   #endif
-    char temp[80] = "";
-    char ws1[20] = "";
-    char ws2[20] = "";
+    char temp[40] = "";
     
     float t = thermostatSensor.temperature();
     if (isnan(t)) {
-      strcpy(ws2, "");
-      strcpy(ws1, "Invalid");
+      strcpy(temp, "Invalid");
     } else {
-      char ws3[2] = "";
-
-      #if HEAT_RELAY != OFF
-        if (relay.isOn(HEAT_RELAY)) strcpy(ws3, "^"); else
-      #endif
-      #if COOL_RELAY != OFF
-        if (relay.isOn(COOL_RELAY)) strcpy(ws3, "*"); else 
-      #endif
-        strcpy(ws3, "-");
-
       #if STAT_UNITS == IMPERIAL
         t = t*(9.0/5.0) + 32.0;
-        strcpy(ws2," &deg;F ");
+        sprintF(temp, "%6.1f &deg;F ", t);
       #else
-        strcpy(ws2," &deg;C ");
+        sprintF(temp, "%6.1f &deg;C ", t);
       #endif
 
-      strcat(ws2, ws3);
-      sprintF(ws1, "%6.1f", t);
+      #if HEAT_RELAY != OFF
+        if (relay.isOn(HEAT_RELAY)) strcat(temp, "^"); else
+      #endif
+      #if COOL_RELAY != OFF
+        if (relay.isOn(COOL_RELAY)) strcpy(temp, "*"); else 
+      #endif
+        strcat(temp, "-");
     }
-
-    sprintf(temp, "%s%s", ws1, ws2);
     sendHtml(temp);
   }
 
@@ -180,13 +134,10 @@
       
       float h = thermostatInsideHumidity();
       if (isnan(h)) {
-        strcpy(ws2, "");
-        strcpy(ws1, "Invalid");
+        strcpy(temp, "Invalid");
       } else {
-        strcpy(ws2, " %");
-        dtostrf(h, 5, 1, ws1);
+        sprintF(temp, "%5.1f %", h);
       }
-      sprintf(temp, "%s%s", ws1, ws2);
       sendHtml(temp);
     }
   #endif

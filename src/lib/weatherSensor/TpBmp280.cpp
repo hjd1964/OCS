@@ -33,11 +33,11 @@ bool Bmp280w::init() {
 
     VF("MSG: Bmp280w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, bmp280Wrapper, "weaBmp")) {
-      VL("success");
+      VLF("success");
       _temperatureAssigned = true;
       _pressureAssigned = true;
       active = true;
-    } else { VL("FAILED!"); }
+    } else { VLF("FAILED!"); }
   } else { DF("WRN: Bmp280w.init(), BMP280 (I2C 0x"); SERIAL_DEBUG.print(WEATHER_SENSOR_TP_BMP280, HEX); DLF(") not found"); }
 
   return active;

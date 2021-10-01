@@ -29,21 +29,27 @@
   #else
   void lightContents() {
   #endif
-    char temp[600];
-    
-    strcpy_P(temp, htmlLighting);
+    char temp[250];
+
+    strcpy_P(temp, htmlLighting1);
     #if LIGHT_WRW_RELAY != OFF
       if (relay.isOn(LIGHT_WRW_RELAY)) check(temp, "%___WRW"); else erase(temp, "%___WRW");
     #endif
     #if LIGHT_WRR_RELAY != OFF
       if (relay.isOn(LIGHT_WRR_RELAY)) check(temp, "%___WRR"); else erase(temp, "%___WRR");
     #endif
+    sendHtml(temp);
+
+    strcpy_P(temp, htmlLighting2);
     #if LIGHT_ORW_RELAY != OFF
       if (relay.isOn(LIGHT_ORW_RELAY)) check(temp, "%___ORW"); else erase(temp, "%___ORW");
     #endif
     #if LIGHT_ORR_RELAY != OFF
       if (relay.isOn(LIGHT_ORR_RELAY)) check(temp, "%___ORR"); else erase(temp, "%___ORR");
     #endif
+    sendHtml(temp);
+
+    strcpy_P(temp, htmlLighting3);
     sendHtml(temp);
   }
 

@@ -23,10 +23,10 @@ bool WindRevP::init() {
 
   VF("MSG: WindRevP, start monitor task (default rate priority 7)... ");
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, windRevPTask)) {
-    VL("success");
+    VLF("success");
     _windSpeedAssigned = true;
     active = true;
-  } else { VL("FAILED!"); }
+  } else { VLF("FAILED!"); }
 
   return active;
 }

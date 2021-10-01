@@ -5,13 +5,20 @@
 
 #if THERMOSTAT == ON
 
+#include "../../tasks/OnTask.h"
 #include "../../lib/thermostatSensor/ThermostatSensor.h"
 #include "../../lib/relay/Relay.h"
+
+void thermostatWrapper() { thermostat.poll(); }
 
 // this gets called once on startup to initialize any thermostat sensors
 void Thermostat::init() {
   analogReference(DEFAULT);
   thermostatSensor.init();
+
+  // start polling task
+  VF("MSG: Thermostat, start monitor task (rate 5 min priority 7)... ");
+  if (tasks.add(5*60*1000, 0, true, 7, thermostatWrapper, "Thermst")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 // control temperature in observatory, call once every 5 minutes

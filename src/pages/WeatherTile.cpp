@@ -33,9 +33,7 @@
   void weatherContents() {
   #endif
     char temp[128] = "";
-    char temp1[128] = "";
     char ws1[30] = "";
-    char ws2[30] = "";
     float f;
 
     strcpy_P(temp, htmlInnerWeather1);
@@ -43,75 +41,65 @@
 
     #if WEATHER_TEMPERATURE == ON
       f = weatherSensor.temperature();
-      strcpy(ws2," &deg;C");
-      #if STAT_UNITS == IMPERIAL
-        f = f*(9.0/5.0) + 32.0;
-        strcpy(ws2, " &deg;F");
-      #endif
       if (isnan(f)) {
         strcpy(ws1, "Invalid");
-        strcpy(ws2, "");
-      } else sprintF(ws1, "%5.1f", f);
-      strcpy_P(temp1, htmlInnerWeatherTemp);
-      sprintf(temp, temp1, ws1, ws2);
+      } else {
+        #if STAT_UNITS == IMPERIAL
+          sprintF(ws1, "%5.1f &deg;F", ff*1.8F + 32.0F);
+        #else
+          sprintF(ws1, "%5.1f &deg;C", f);
+        #endif
+      }
+      sprintf_P(temp, htmlInnerWeatherTemp, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_PRESSURE == ON
+      f = weatherSensor.pressureSeaLevel();
+      if (isnan(f)) {
+        strcpy(ws1, "Invalid");
+      } else {
       #if STAT_UNITS == IMPERIAL
-        f = weatherPressureSeaLevel()*0.02953;
-        strcpy(ws2," in");
-        if (isnan(f)) {
-          strcpy(ws1, "Invalid");
-          strcpy(ws2, "");
-        } else sprintF(ws1, "%6.2f", f);
+        sprintF(ws1, "%6.2f in", f*0.02953);
       #else
-        f = weatherSensor.pressureSeaLevel();
-        strcpy(ws2," mb");
-        if (isnan(f)) {
-          strcpy(ws1, "Invalid");
-          strcpy(ws2,"");
-        } else sprintF(ws1, "%6.0f", f);
+        sprintF(ws1, "%6.0f mb", f);
       #endif
-      strcpy_P(temp1, htmlInnerWeatherPres);
-      sprintf(temp, temp1, ws1, ws2);
+      }
+      sprintf_P(temp, htmlInnerWeatherPres, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_HUMIDITY == ON
       f = weatherSensor.humidity();
-      strcpy(ws2, " %");
       if (isnan(f)) {
         strcpy(ws1, "Invalid");
-        strcpy(ws2,"");
-      } else sprintF(ws1, "%6.1f", f); 
-      strcpy_P(temp1, htmlInnerWeatherHumd);
-      sprintf(temp, temp1, ws1, ws2);
+      } else {
+        sprintF(ws1, "%6.1f %", f);
+      } 
+      sprintf_P(temp, htmlInnerWeatherHumd, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_WIND_SPD == ON
       f = weatherSensor.windspeed();
-      strcpy(ws2," kph");
-      #if STAT_UNITS == IMPERIAL
-        f *= 0.621371;
-        strcpy(ws2, " mph");
-      #endif
       if (isnan(f)) {
-        strcpy(ws2, "");
         strcpy(ws1, "Invalid");
-      } else sprintF(ws1, "%6.0f", f);
-      strcpy_P(temp1, htmlInnerWeatherWind);
-      sprintf(temp, temp1, ws1, ws2);
+      } else {
+        #if STAT_UNITS == IMPERIAL
+          sprintF(ws1, "%6.0f mph", f*0.621371);
+        #else
+          sprintF(ws1, "%6.0f kph", f);
+        #endif
+      }
+      sprintf_P(temp, htmlInnerWeatherWind, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_RAIN == ON
-      char rainSensorStr[4][8] = {"Invalid", "Rain", "Warn", "Dry"};
+      const char * rainSensorStr[4] = {"Invalid", "Rain", "Warn", "Dry"};
       int i = lroundf(weatherSensor.rain());
       if (i < 0 || i > 3) i = 0;
-      strcpy_P(temp1, htmlInnerWeatherRain);
-      sprintf(temp, temp1, rainSensorStr[i]);
+      sprintf_P(temp, htmlInnerWeatherRain, rainSensorStr[i]);
       sendHtml(temp);
     #endif
 
@@ -119,20 +107,16 @@
       f = weatherSensor.skyQuality();
       if (isnan(f)) {
         strcpy(ws1, "Invalid");
-        strcpy(ws2, "");
       } else {
-        sprintF(ws1, "%4.1f", f);
-        strcpy(ws2, " mpsas"); 
+        sprintF(ws1, "%4.1fmpsas", f);
       }
-      strcpy_P(temp1, htmlInnerWeatherSq);
-      sprintf(temp, temp1, ws1, ws2);
+      sprintf_P(temp, htmlInnerWeatherSq, ws1);
       sendHtml(temp);
     #endif
 
     #if WEATHER_CLOUD_CVR == ON
-      strcpy_P(temp1, htmlInnerWeatherCloud);
       strcpy(ws1, weather.cloudCoverDescription());
-      sprintf(temp, temp1, ws1);
+      sprintf_P(temp, htmlInnerWeatherCloud, ws1);
       sendHtml(temp);
     #endif
 

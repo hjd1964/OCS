@@ -1,19 +1,32 @@
 // -----------------------------------------------------------------------------------------------------------------
 // Relay control
-#include "Relay.h"
-#include "../sense/Sense.h"
 
+#include "../../tasks/OnTask.h"
+#include "../sense/Sense.h"
 #include "../../observatory/roof/Roof.h"
+#include "Relay.h"
+
+void pollWrapper() { relay.poll(); }
+void pwmWrapper() { relay.pwm(); }
 
 void Relay::init() {
   for (int r = 1; r <= RELAYS_MAX; r++) {
     pinMode(settings[r - 1].pin, OUTPUT);
-    off(r);
+    if (settings[r - 1].defaultState == ON) on(r); else off(r);
   }
-  /*
-  // for dimming the led's etc, 1 millisecond period
-  Timer1.initialize(1000);
-  Timer1.attachInterrupt(RelayPwmISR);
+
+  // start relay polling task
+  VF("MSG: Relay, start monitor task (rate 100ms priority 0)... ");
+  if (tasks.add(100, 0, true, 0, pollWrapper, "Relays")) { VLF("success"); } else { VLF("FAILED!"); }
+/*
+  // start relay pwm task
+  VF("MSG: Relay, start pwm task (rate 1ms priority 0)... ");
+  uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
+  if (handle) {
+    VF("success");
+    if (!tasks.requestHardwareTimer(handle, 1, 0)) { VF(" (no hardware timer!)"); }
+    VL("");
+  } else { VLF("FAILED!"); }
   */
 }
 
@@ -32,7 +45,7 @@ void Relay::onDelayedOff(int r, float seconds) {
   }
 }
 
-void Relay::pwm(int r, int percentPower) {
+void Relay::power(int r, int percentPower) {
   percentPower /= 10;
   if (r >= 1 && r <= RELAYS_MAX && percentPower >= 1 && percentPower <= 9) {
     settings[r - 1].state = 10 + percentPower;
@@ -53,32 +66,24 @@ bool Relay::isOn(int r) {
 }
 
 bool Relay::isOnDelayedOff(int r) {
-  timedOff();
   if (r >= 1 && r <= RELAYS_MAX) {
     return (settings[r - 1].state > 19);
   } else return false;
 }
 
-// relayState: 0 = OFF, 1 = ON, 2..9 unused, 11..19 pwm 10% to 90%, 20..65535 timed off period in 1/10 seconds
 // do timed relay off control
-void Relay::timedOff() {
-  // run at 1/10 second intervals
-  static unsigned long last = 0;
-  if ((long)(millis() - last) > 100) {
-    last = millis();
-
-    // Timed relay off
-    for (int r = 1; r <= RELAYS_MAX; r++) {
-      if (settings[r - 1].state >= 20) {
-        settings[r - 1].state -= 1;
-        if (settings[r - 1].state < 20) off(r);
-      }
+// relayState: 0 = OFF, 1 = ON, 2..9 unused, 11..19 pwm 10% to 90%, 20..65535 timed off period in 1/10 seconds
+void Relay::poll() {
+  for (int r = 1; r <= RELAYS_MAX; r++) {
+    if (settings[r - 1].state >= 20) {
+      settings[r - 1].state -= 1;
+      if (settings[r - 1].state < 20) off(r);
     }
   }
 }
 
 // do PWM on a solid state relay (ISR,) this runs at 1kHz
-void Relay::poll() {
+void Relay::pwm() {
   fastPwmCycle++;
   if (fastPwmCycle > 9) fastPwmCycle = 0;
   for (int r = 1; r <= RELAYS_MAX; r++) {

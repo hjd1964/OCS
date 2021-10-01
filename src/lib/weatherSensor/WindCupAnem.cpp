@@ -28,11 +28,11 @@ bool CupAnem::init() {
 
   VF("MSG: CupAnem, start monitor task (default rate priority 1)... ");
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 1, cupAnemTask, "cupAnem")) {
-    VL("success");
+    VLF("success");
     _windSpeedAssigned = true;
     attachInterrupt(digitalPinToInterrupt(sensePin[index]), cupAnemISR, RISING);
     active = true;
-  } else { VL("FAILED!"); }
+  } else { VLF("FAILED!"); }
 
   return active;
 }

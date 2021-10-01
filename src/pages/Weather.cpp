@@ -19,7 +19,7 @@
   #else
   void weatherPage() {
   #endif
-    char temp[512] = "";
+    char temp[256] = "";
     String a = www.arg("chart");
 
     sendHtmlStart();
@@ -99,7 +99,7 @@
       makeChartCanvas(client, "RH");
     #endif
 
-    sendHtmlDone("</div></body></html>\r\n");
+    sendHtmlDone(F("</div></body></html>\r\n"));
   }
 
   #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
@@ -108,7 +108,7 @@
     #else
     void skyPage() {
     #endif
-      char temp[512] = "";
+      char temp[256] = "";
       String a = www.arg("chart");
 
       sendHtmlStart();
@@ -151,9 +151,9 @@
         makeChartJs(client, "skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
       #endif
 
-      sendHtml("}\r\n");
+      sendHtml(F("}\r\n"));
 
-      sendHtml("</script>\r\n");
+      sendHtml(F("</script>\r\n"));
 
       strcpy_P(temp,ChartOptions1b);
       sendHtml(temp);
@@ -162,14 +162,14 @@
       sendHtml(temp);
 
       #if WEATHER_SKY_QUAL == ON
-        makeChartCanvas(client,"SQ");
+        makeChartCanvas(client, "SQ");
       #endif
 
       #if WEATHER_CLOUD_CVR == ON
-        makeChartCanvas(client,"skyT");
+        makeChartCanvas(client, "skyT");
       #endif
 
-      sendHtmlDone("</div></body></html>\r\n");
+      sendHtmlDone(F("</div></body></html>\r\n"));
     }
   #endif
 

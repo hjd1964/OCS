@@ -42,6 +42,6 @@
 
   const char htmlInnerRoofStat[] PROGMEM =
   "&nbsp;&nbsp;Status <div class=\"aStatus\">%s</div><br />"
-  "<div style=\"text-align:center\">%s</div>";
+  "<div style=\"text-align:center\"><div style=\"color: %s;\">%s</div></div>";
 
 #endif

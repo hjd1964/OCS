@@ -36,12 +36,12 @@ bool Bme280t::init() {
 
     VF("MSG: Bme280t, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, thermostatBme280Wrapper, "weaBme")) {
-      VL("success");
+      VLF("success");
       _inside_temperatureAssigned = true;
       _inside_pressureAssigned = true;
       _inside_humidityAssigned = true;
       active = true;
-    } else { VL("FAILED!"); }
+    } else { VLF("FAILED!"); }
   } else { DF("WRN: Bme280t.init(), BME280 (I2C 0x"); SERIAL_DEBUG.print(THERMOSTAT_SENSOR_TPH_BME280, HEX); DLF(") not found"); }
 
   return active;

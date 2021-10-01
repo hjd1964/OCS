@@ -5,17 +5,23 @@
 #if WEATHER == ON
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
-
 #if WEATHER_CHARTS == ON
   #include <SD.h>
 #endif
 
+#include "../../tasks/OnTask.h"
 #include "../../lib/ethernet/Ethernet.h"
 #include "../../lib/ethernet/webServer/WebServer.h"
 #include "../../lib/weatherSensor/WeatherSensor.h"
 
+void weatherWrapper() { weather.poll(); }
+
 void Weather::init() {
   weatherSensor.init();
+
+  // start polling task
+  VF("MSG: Weather, start monitor task (rate 2 sec priority 7)... ");
+  if (tasks.add(2*1000, 0, true, 7, weatherWrapper, "Weathr")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 void Weather::poll(void) {
@@ -100,7 +106,7 @@ void Weather::poll(void) {
 
           if (!SD.exists(fn)) {
             #if DEBUG_SD == ON
-              VL("MSG: Data file doesn't exist...");
+              VLF("MSG: Data file doesn't exist...");
             #endif
             // create the empty file
             dataFile = SD.open(fn, FILE_WRITE);
@@ -113,11 +119,11 @@ void Weather::poll(void) {
             dataFile = SD.open(fn, FILE_WRITE);
             if (dataFile) {
               #if DEBUG_SD == ON
-                VL("MSG: Writing file...");
+                VLF("MSG: Writing file...");
               #endif
               for (int i = 0; i < 2880; i++) {
                 #if DEBUG_SD == ON
-                  V("MSG: Writing record#"); VL(i);
+                  VF("MSG: Writing record#"); VL(i);
                 #endif
                 //               time   sa    sad   lad   p      h     wind  sq
                 //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
@@ -128,7 +134,7 @@ void Weather::poll(void) {
               dataFile.close();
             } else { 
               #if DEBUG_SD == ON
-                VL("MSG: Failed to create file"); 
+                VLF("MSG: Failed to create file"); 
               #endif
             }
           }

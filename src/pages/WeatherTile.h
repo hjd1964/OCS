@@ -18,22 +18,22 @@
 
   #if WEATHER_TEMPERATURE == ON
     const char htmlInnerWeatherTemp[] PROGMEM =
-    "&nbsp;&nbsp;Temperature<div class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Temperature<div class=\"aStatus\">%s</div><br />";
   #endif
 
   #if WEATHER_PRESSURE == ON
     const char htmlInnerWeatherPres[] PROGMEM =
-    "&nbsp;&nbsp;Barometric Pressure<div class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Barometric Pressure<div class=\"aStatus\">%s</div><br />";
   #endif
 
   #if WEATHER_HUMIDITY == ON
     const char htmlInnerWeatherHumd[] PROGMEM =
-    "&nbsp;&nbsp;Relative Humidity<div class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Relative Humidity<div class=\"aStatus\">%s</div><br />";
   #endif
 
   #if WEATHER_WIND_SPD == ON
     const char htmlInnerWeatherWind[] PROGMEM =
-    "&nbsp;&nbsp;Wind Speed<div class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Wind Speed<div class=\"aStatus\">%s</div><br />";
   #endif
 
   #if WEATHER_RAIN == ON
@@ -43,7 +43,7 @@
 
   #if WEATHER_SKY_QUAL == ON
     const char htmlInnerWeatherSq[] PROGMEM =
-    "&nbsp;&nbsp;Sky Quality<div class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Sky Quality<div class=\"aStatus\">%s</div><br />";
   #endif
 
   #if WEATHER_CLOUD_CVR == ON

@@ -34,10 +34,9 @@ void statusContents(EthernetClient *client) {
 #else
 void statusContents() {
 #endif
-  char temp[128] = "";
-  char temp1[128] = "";
-  char ws1[20] = "";
-  char ws2[4] = "Std";
+  char temp[128];
+  char ws1[20];
+  char ws2[4];
   float f;
 
   strcpy_P(temp, htmlInnerStatus1);
@@ -45,6 +44,8 @@ void statusContents() {
 
   time_t t = now();
   t -= timeZone*SECS_PER_HOUR;  // convert to UTC
+
+  strcpy(ws2, "Std");
   #if TIME_DISPLAY == UTC
     strcpy(ws2, "UTC");
   #elif TIME_DISPLAY == DST
@@ -54,74 +55,64 @@ void statusContents() {
     } else t = now();
   #endif
 
-  strcpy_P(temp1, htmlInnerStatus2);
   sprintf(ws1, "%02d/%02d/%04d", month(t), day(t), year(t));
-  sprintf(temp, temp1, ws2, ws1);
+  sprintf_P(temp, htmlInnerStatus2, ws2, ws1);
   sendHtml(temp);
 
-  strcpy_P(temp1, htmlInnerStatus3);
   sprintf(ws1, "%02d:%02d", hour(t), minute(t));
-  sprintf(temp, temp1, ws2, ws1);
+  sprintf_P(temp, htmlInnerStatus3, ws2, ws1);
   sendHtml(temp);
 
   t = (now() - startupTime);
-  strcpy_P(temp1, htmlInnerStatus4);
   sprintf(ws1, "%08lu", (unsigned long)(t/60UL));
-  sprintf(temp, temp1, ws1);
+  sprintf_P(temp, htmlInnerStatus4, ws1);
   sendHtml(temp);
 
   #if STAT_MAINS_SENSE != OFF
-    strcpy_P(temp1,htmlInnerStatusMains);
     if (sense.isOn(STAT_MAINS_SENSE)) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT");
-    sprintf(temp,temp1,ws1);
+    sprintf_P(temp, htmlInnerStatusMains, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_MAINS_CURRENT_ANALOG != OFF
     f = aduToMainsAmps(analog.read(STAT_MAINS_CURRENT_ANALOG));
-    strcpy_P(temp1, htmlInnerStatusMainsA);
     if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusMainsA, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
     f = aduToMainsAmps(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG));
-    strcpy_P(temp1, htmlInnerStatusMainsAA);
     if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusMainsAA, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_DC_VOLTAGE_ANALOG != OFF
     f = aduToDcVolts(analog.read(STAT_DC_VOLTAGE_ANALOG));
-    strcpy_P(temp1,htmlInnerStatusDC);
     if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusDC, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_DC_CURRENT_ANALOG != OFF
     f = aduToDcAmps(analog.read(STAT_DC_CURRENT_ANALOG));
-    strcpy_P(temp1, htmlInnerStatusDCA);
     if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fA", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusDCA, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_BATTERY_VOLTAGE_ANALOG != OFF
     f = aduToDcVolts(analog.read(STAT_BATTERY_VOLTAGE_ANALOG));
-    strcpy_P(temp1, htmlInnerStatusBat);
     if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusBat, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_BATTERY_CURRENT_ANALOG != OFF
     f = aduToDcAmps(analog.read(STAT_BATTERY_CURRENT_ANALOG));
-    strcpy_P(temp1, htmlInnerStatusBatA);
     if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-    sprintf(temp, temp1, ws1);
+    sprintf_P(temp, htmlInnerStatusBatA, ws1);
     sendHtml(temp);
   #endif
 }

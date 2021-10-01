@@ -16,6 +16,16 @@
   #define ETHERNET_CS_PIN           OFF
 #endif
 
+#if WEATHER_CHARTS == ON //&& SDCARD_CS_PIN != OFF
+#define SD_CARD ON
+#endif
+
+#if OPERATIONAL_MODE == ETHERNET_W5500
+  #ifndef W5500_CS_PIN
+    #define W5500_CS_PIN ETHERNET_CS_PIN
+  #endif
+#endif
+
 #ifndef AUX_CS_PIN
   #define AUX_CS_PIN                OFF
 #endif

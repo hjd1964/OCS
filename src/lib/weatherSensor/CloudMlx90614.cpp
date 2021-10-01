@@ -32,10 +32,10 @@ bool Mlx90614w::init() {
 
     VF("MSG: Mlx90614w, start monitor task (default rate priority 7)... ");
     if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "m90614")) {
-      VL("success");
+      VLF("success");
       _skyTemperatureAssigned = true;
       active = true;
-    } else { VL("FAILED!"); }
+    } else { VLF("FAILED!"); }
   } else { DF("WRN: Mlx90614w.init(), MLX90614 (I2C 0x"); SERIAL_DEBUG.print(WEATHER_SENSOR_CLOUD_MLX90614, HEX); DLF(") not found"); }
 
   return active;

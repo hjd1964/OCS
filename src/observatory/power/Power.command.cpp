@@ -36,7 +36,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
         if (ws.equals("OFF"))   relay.off(r); else
         if (ws.length() == 1) {
           int j = ws[0] - '0';
-          relay.pwm(r, j*10);
+          relay.power(r, j*10);
         } else *commandError = CE_PARAM_FORM;
       } else *commandError = CE_PARAM_RANGE;
     } else return false;

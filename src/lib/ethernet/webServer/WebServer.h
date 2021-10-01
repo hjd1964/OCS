@@ -32,7 +32,13 @@
   #define WEB_SOCKET_TIMEOUT    10000
   #define HANDLER_COUNT_MAX     16
   #define PARAMETER_COUNT_MAX   8
-  
+
+  const char http_js304Header[] PROGMEM =
+  "HTTP/1.1 304 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
+
+  const char http_jsHeader[] PROGMEM =
+  "HTTP/1.1 200 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
+
   typedef void (* webFunction) (EthernetClient *client);
   
   class WebServer {

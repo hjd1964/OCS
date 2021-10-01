@@ -133,15 +133,19 @@
           #if SD_CARD == ON
             if (modifiedSinceFound) {
               WLF("MSG: Webserver sending js304Header");
-              char temp[255]; strcpy_P(temp, http_js304Header); _client.print(temp);
+              char temp[255];
+              strcpy_P(temp, http_js304Header);
+              client.print(temp);
               handlerFound = true;
             } else {
-              if (handlers_fn[handler].indexOf(".js") > 0) {
+              if (handlers_fn[handler_number].indexOf(".js") > 0) {
                 WLF("MSG: Webserver sending jsHeader");
-                char temp[255]; strcpy_P(temp, http_jsHeader); _client.print(temp); 
+                char temp[255];
+                strcpy_P(temp, http_jsHeader);
+                client.print(temp); 
               } else client.print(responseHeader);
               WLF("MSG: Webserver sending SD file");
-              sdPage(handlers_fn[handler], &client);
+              sdPage(handlers_fn[handler_number], &client);
               handlerFound = true;
             }
           #endif
@@ -281,8 +285,12 @@
         File dataFile = SD.open(fn, FILE_READ);
         if (dataFile) {
           do {
-            n = dataFile.available(); if (n > 256) n = 256;
-            if (n > 0) { dataFile.read(temp, n); client->write(temp, n); }
+            n = dataFile.available();
+            if (n > 256) n = 256;
+            if (n > 0) {
+              dataFile.read(temp, n);
+              client->write(temp, n);
+            }
           } while (n > 0);
           dataFile.close();
         }

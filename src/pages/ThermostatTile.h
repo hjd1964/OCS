@@ -9,14 +9,14 @@
   extern void thermostatTile(EthernetClient *client);
   extern void thermostatContents(EthernetClient *client);
 
-  const char htmlThermostat1[] PROGMEM =
+  const char htmlThermostatBegin[] PROGMEM =
   "<div class=\"obsControl\">"
   "<b>Thermostat</b><br />"
-  "&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\">%s%s</div><br />";
+  "&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\"></div><br />";
 
   #if THERMOSTAT_HUMIDITY == ON
     const char htmlThermostatHumidity[] PROGMEM =
-    "&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\">%s%s</div><br />";
+    "&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\"></div><br />";
   #endif
 
   const char htmlThermostatHeat1[] PROGMEM =
@@ -34,7 +34,7 @@
 
   const char htmlThermostatCool2[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div>";
 
-  const char htmlThermostat2[] PROGMEM = "</form></div>\r\n";
+  const char htmlThermostatEnd[] PROGMEM = "</form></div>\r\n";
   const char htmlThermostatOption[] PROGMEM = "<option value=\"%d\" %s>%d&deg;%c</option>";
   const char htmlThermostatOptionZero[] PROGMEM = "<option value=\"0\" %s>OFF</option>";
 #endif

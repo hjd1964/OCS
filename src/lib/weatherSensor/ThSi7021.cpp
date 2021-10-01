@@ -35,11 +35,11 @@ bool Si7021w::init() {
 
     VF("MSG: Si7021w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, si7021Wrapper, "weaSi7")) {
-      VL("success");
+      VLF("success");
       _temperatureAssigned = true;
       _humidityAssigned = true;
       active = true;
-    } else { VL("FAILED!"); }
+    } else { VLF("FAILED!"); }
   } else { DLF("WRN: Si7021w.init(), SI7021 (I2C 0x40) not found"); }
 
   return active;

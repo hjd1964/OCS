@@ -35,12 +35,12 @@ bool Tsl2591w::init() {
 
     VF("MSG: Tsl2591w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, tsl2591Wrapper, "Tsl2591")) {
-      VL("success");
+      VLF("success");
       _skyQualityAssigned = true;
       tlsSensor.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
       tlsSensor.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
       active = true;
-    } else { VL("FAILED!"); }
+    } else { VLF("FAILED!"); }
   } else { DLF("WRN: Tsl2591w.init(), TSL2591 (I2C 0x28) not found"); }
 
   return active;
