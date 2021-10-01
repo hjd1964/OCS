@@ -16,8 +16,8 @@ bool validTime() { return (now() < 315360000); }
 
 void Safety::init() {
   // start polling task
-  VF("MSG: Safety, start monitor task (rate 1s priority 7)... ");
-  if (tasks.add(1000, 0, true, 7, safetyWrapper, "Safety")) { VLF("success"); } else { VLF("FAILED!"); }
+  VF("MSG: Safety, start monitor task (rate 1s priority 3)... ");
+  if (tasks.add(1000, 0, true, 3, safetyWrapper, "Safety")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 bool Safety::isSafe() {
@@ -59,7 +59,7 @@ bool Safety::isSafe() {
 
 void Safety::poll() {
   #if ROOF == ON
-    // Auto close the roof at 8am if requested
+    // auto close the roof at 8am if requested
     if (roofAutoClose && validTime()) {
       if (hour() == 8 && !roofAutoCloseInitiated) {
         // if motion is idle
