@@ -45,6 +45,10 @@
 #define STAT_BATTERY_VOLTAGE_ANALOG   OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12V roof battery voltage.     Option
 #define STAT_BATTERY_CURRENT_ANALOG   OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12V roof battery current.     Option
 
+#define STAT_MAINS_ADU_TO_CURRENT     NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Amps.         Adjust
+#define STAT_DC_ADU_TO_VOLTAGE        NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Volts.        Adjust
+#define STAT_DC_ADU_TO_CURRENT        NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Amps.         Adjust
+
 // POWER PANEL ---------------------------------------------------------------------------------------------------------------------
 #define POWER                         OFF //    OFF, ON to enable the OCS website power panel display.                        Option
 
