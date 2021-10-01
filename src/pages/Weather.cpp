@@ -48,7 +48,7 @@
 
     int period = 1;
     String periodStr = "";
-    if ((a.equals("recent")) || (a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
+    if (a.equals("recent") || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
     if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
     if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
     
@@ -135,7 +135,7 @@
 
       int period = 1;
       String periodStr = "";
-      if (a.equals("recent" || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
+      if (a.equals("recent") || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
       if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
       if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
       
