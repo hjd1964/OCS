@@ -21,7 +21,7 @@ void ThermostatSensor::init(){
   Wire.setClock(HAL_WIRE_CLOCK);
   analogReference(DEFAULT);
 
-  #if WEATHER_SENSOR_TPH_BME280 != OFF
+  #if THERMOSTAT_SENSOR_TPH_BME280 != OFF
     bme280t.init();
   #endif
 }
