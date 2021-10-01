@@ -159,7 +159,7 @@
                                           //         SSR/MOSFET PWM controls speed. For garage door openers etc SW on/off only.
 #define ROOF_POWER_PWM_FREQUENCY      OFF //    OFF, n. Where n=1..100 (Hz) PWM frequency for roof motor DC control.          Option
 #define ROOF_POWER_PWM_POWER          OFF //    OFF, n. Where n=10..100 (%) PWM power level for roof motor DC control.        Option
-#define ROOF_POWER_PWM_SOFTSTART      OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROOF_POWER_PWM_POWER.   Option
+#define ROOF_POWER_PWM_SOFTSTART      OFF //    OFF, ON For PWM soft start, start 0% adds 5%/sec until ROOF_POWER_PWM_POWER.  Option
 
 #define ROOF_INTERLOCK_SENSE          OFF //    OFF, n. Where n=1..8 (Sense#) Roof safety interlock, close allowed when ON.   Option
 #define ROOF_LIMIT_CLOSED_SENSE       OFF //    OFF, n. Where n=1..8 (Sense#) Roof closed switch (CLOSED when ON.)            Option
