@@ -6,6 +6,8 @@
 
 #if TIME_LOCATION_SOURCE == DS3231
 
+#include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip
+
 #include <Wire.h>
 #include <RtcDS3231.h> // https://github.com/Makuna/Rtc/archive/master.zip
 RtcDS3231<TwoWire> rtcDS3231(HAL_Wire);
@@ -27,6 +29,10 @@ bool TimeLocationSource::init() {
       // frequency 0 (1Hz) on the SQW pin
       rtcDS3231.SetSquareWavePin(DS3231SquareWavePin_ModeClock);
       rtcDS3231.SetSquareWavePinClockFrequency(DS3231SquareWaveClock_1Hz);
+
+      RtcDateTime now = rtcDS3231.GetDateTime();
+      setTime(now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());
+
       ready = true;
     } else { DLF("WRN: tls.init(), DS3231 GetIsRunning() false"); }
   } else { DLF("WRN: tls.init(), DS3231 (I2C 0x68) not found"); }

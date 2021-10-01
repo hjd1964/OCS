@@ -6,6 +6,8 @@
 
 #if TIME_LOCATION_SOURCE == DS3234
 
+#include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip
+
 #include <SPI.h>
 #include <RtcDS3234.h> // https://github.com/Makuna/Rtc/archive/master.zip
 RtcDS3234<SPIClass> rtcDS3234(SPI, DS3234_CS_PIN);
@@ -22,6 +24,10 @@ bool TimeLocationSource::init() {
     // frequency 0 (1Hz) on the SQW pin
     rtcDS3234.SetSquareWavePin(DS3234SquareWavePin_ModeClock);
     rtcDS3234.SetSquareWavePinClockFrequency(DS3234SquareWaveClock_1Hz);
+
+    RtcDateTime now = rtcDS3234.GetDateTime();
+    setTime(now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());
+
     ready = true;
   } else DLF("WRN: tls.init(), DS3234 GetIsRunning() false");
   #ifdef SSPI_SHARED

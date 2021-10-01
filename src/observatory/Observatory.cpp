@@ -11,6 +11,12 @@
 #include "../lib/relay/Relay.h"
 #include "../lib/sense/Sense.h"
 
+#include "../lib/tls/Tls_DS3231.h"
+#include "../lib/tls/Tls_DS3234.h"
+#include "../lib/tls/Tls_GPS.h"
+#include "../lib/tls/Tls_NTP.h"
+#include "../lib/tls/Tls_Teensy.h"
+
 #include "power/Power.h"
 #include "roof/Roof.h"
 #include "safety/Safety.h"
@@ -173,6 +179,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     www.on("Chart.js", NULL);
   #endif
   www.on("/", index);
+
+  #if TIME_LOCATION_SOURCE != OFF
+    tls.init();
+  #endif
 
   // start observatory monitor task
   VF("MSG: Observatory, start monitor task (rate 1ms priority 4)... ");

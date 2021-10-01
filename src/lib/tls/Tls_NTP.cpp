@@ -17,14 +17,17 @@ IPAddress timeServer = IPAddress TIME_IP_ADDR;
 // local port to listen for UDP packets
 unsigned int localPort = 8888;
 
-void ntpPoll() {
+void ntpWrapper() {
   if (!tls.isReady()) tls.poll();
 }
 
 // initialize
 bool TimeLocationSource::init() {
-  VF("MSG: TLS, start NTP monitor task (rate 60s priority 7)... ");
-  if (tasks.add(60000, 0, true, 7, ntpPoll, "ntpPoll")) {
+  Udp.begin(localPort);
+  
+  VF("MSG: TLS, start NTP monitor task (rate 5 min priority 7)... ");
+  handle = tasks.add(5*60*1000L, 0, true, 7, ntpWrapper, "ntp");
+  if (handle) {
     VLF("success");
     active = true;
   } else {
@@ -59,14 +62,14 @@ void TimeLocationSource::poll() {
   unsigned long tOut = millis() + 3000L;
   while ((Udp.parsePacket() > 0) && ((long)(millis() - tOut) < 0)) Y;
 
-  VLF("Transmit NTP Request");
+  VLF("MSG: TLS, transmit NTP Request");
   sendNTPpacket(timeServer);
 
   uint32_t beginWait = millis();
   while (millis() - beginWait < 1500) {
     int size = Udp.parsePacket();
     if (size >= NTP_PACKET_SIZE) {
-      VLF("Receive NTP Response");
+      VLF("MSG: TLS, receive NTP Response");
       // read packet into the buffer
       Udp.read(packetBuffer, NTP_PACKET_SIZE);
       unsigned long secsSince1900;
@@ -77,12 +80,16 @@ void TimeLocationSource::poll() {
       secsSince1900 |= (unsigned long)packetBuffer[43];
       time_t ntpTime = secsSince1900 - 2208988800UL;
       setTime(ntpTime);
+      DLF("MSG: TLS, next NTP query in 24 hours");
+      tasks.setPeriod(handle, 24*60*60*1000L);
       ready = true;
       return;
     }
     Y;
   }
-  DLF("No NTP Response :-(");
+  DLF("MSG: TLS, no NTP Response :-(");
+  DLF("MSG: TLS, next NTP query in 5 minutes");
+  tasks.setPeriod(handle, 5*60*1000L);
 }
 
 // send an NTP request to the time server at the given address

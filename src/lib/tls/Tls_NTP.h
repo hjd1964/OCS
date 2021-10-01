@@ -40,7 +40,7 @@ class TimeLocationSource {
     unsigned long startTime = 0;
     bool ready = false;
     bool active = false;
-
+    uint8_t handle = 0;
     
 };
 

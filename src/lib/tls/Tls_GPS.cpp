@@ -6,6 +6,8 @@
 
 #if TIME_LOCATION_SOURCE == GPS
 
+#include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip
+
 #ifndef SERIAL_GPS
   #error "SERIAL_GPS must be set to the serial port object if TIME_LOCATION_SOURCE GPS is used"
 #endif
@@ -129,6 +131,8 @@ void TimeLocationSource::poll() {
 
         VLF("MSG: TLS, stopping GPS monitor task");
         tasks.setDurationComplete(tasks.getHandleByName("gpsPoll"));
+
+        setTime(gps.time.hour(), gps.time.minute(), gps.time.second(), gps.date.day(), gps.date.month(), gps.date.year());
 
         ready = true;
       }
