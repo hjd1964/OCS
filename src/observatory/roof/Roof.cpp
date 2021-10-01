@@ -15,13 +15,13 @@ void Roof::init() {
 // Start opening the roof, returns true if successful or false otherwise (required)
 bool Roof::open() {
   if (state != 'i' || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
-    lastError = "Error: Open already in motion";
+    lastError = RERR_OPEN_EXCEPT_IN_MOTION;
     return false;
   }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!safetyOverride && ROOF_SINGLE_OPEN_CLOSE_RELAY == ON && !sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    lastError = "Error: Motion direction unknown";
+    lastError = RERR_DIRECTION_UNKNOWN;
     return false;
   }
   
@@ -40,19 +40,19 @@ bool Roof::open() {
 
   // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
   if (!safetyOverride && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart) - timeAvg) > 2000)) {
-    lastError = "Error: Open location unknown";
+    lastError = RERR_OPEN_LOCATION_UNKNOWN;
     return false;
   }
 
   // Check to see if the roof is already opened
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    lastError = "Warning: Already open";
+    lastError = RERR_OPEN_EXCEPT_OPENED;
     return false;
   }
 
   // Just one last sanity check before we start moving the roof
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    lastError = "Error: Opened/closed limit sw on";
+    lastError = RERR_OPEN_EXCEPT_CLOSED_LIMIT_SW_ON;
     return false;
   }
 
@@ -64,12 +64,12 @@ bool Roof::open() {
 
   // Flag status, no errors
   state = 'o';
-  statusRegister = RSR_NO_ERROR;
+  clearStatus(false);
 
   delay(ROOF_PRE_MOTION_TIME*1000);
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
-    lastError = "Error: Open safety interlock";
+    lastError = RERR_OPEN_SAFETY_INTERLOCK;
     return false;
   }
 
@@ -84,20 +84,20 @@ bool Roof::open() {
   // Log start time
   openStartTime = (long)millis();
 
-  lastError = "";
+  lastError = RERR_NONE;
   return true;
 }
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
   if (state != 'i' || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
-    lastError = "Error: Close already in motion";
+    lastError = RERR_CLOSE_EXCEPT_IN_MOTION;
     return false;
   }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!safetyOverride && ROOF_SINGLE_OPEN_CLOSE_RELAY == ON && !sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    lastError = "Error: Motion direction unknown";
+    lastError = RERR_DIRECTION_UNKNOWN;
     return false;
   }
 
@@ -116,19 +116,19 @@ bool Roof::close() {
 
   // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
   if (!safetyOverride && abs((timeLeftToOpenAtStart + timeLeftToCloseAtStart) - timeAvg) > 2000) {
-    lastError = "Error: Close location unknown";
+    lastError = RERR_CLOSE_LOCATION_UNKNOWN;
     return false;
   }
 
   // Check to see if the roof is already closed
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && !sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
-    lastError = "Warning: Already closed";
+    lastError = RERR_CLOSE_EXCEPT_CLOSED;
     return false;
   }
 
   // Just one last sanity check before we start moving the roof
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
-    lastError = "Error: Closed/opened limit sw on";
+    lastError = RERR_CLOSE_EXCEPT_OPENED_LIMIT_SW_ON;
     return false;
   }
 
@@ -140,12 +140,12 @@ bool Roof::close() {
 
   // Flag status, no errors
   state = 'c';
-  statusRegister = RSR_NO_ERROR;
+  clearStatus(false);
 
   delay(ROOF_PRE_MOTION_TIME*1000);
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
-    lastError = "Error: Close safety interlock";
+    lastError = RERR_CLOSE_SAFETY_INTERLOCK;
     return false;
   }
 
@@ -160,7 +160,7 @@ bool Roof::close() {
   // Log start time
   closeStartTime = (long)millis();
 
-  lastError = "";
+  lastError = RERR_NONE;
   return true;
 }
 
@@ -193,45 +193,53 @@ void Roof::stop() {
 }
 
 // clear errors (required)
-void Roof::clearStatus() {
-  // Reset the status register
-  statusRegister = RSR_NO_ERROR;
-  lastError = "";
+void Roof::clearStatus(bool last) {
+  fault.closeInterlock = false;
+  fault.closeLimitSW = false;
+  fault.closeOverTime = false;
+  fault.closeUnderTime = false;
+  fault.closeUnknown = false;
+  fault.openInterlock = false;
+  fault.openLimitSW = false;
+  fault.openOverTime = false;
+  fault.openUnderTime = false;
+  fault.openUnknown = false;
+  if (last) lastError = RERR_NONE;
 }
 
 // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error" (required)
-String Roof::getStatus() {
-  String s = getLastError();
-  if (s == "" && isMoving()) {
-    s = "Travel: " + String(travel) + "%";
-    return s;
+const char * Roof::getStatus() {
+  const char *strErr = getLastError();
+  if (strlen(strErr) == 0 && isMoving()) {
+    static char travelMessage[40];
+    sprintf(travelMessage, "Travel: %s%", travel);
+    return travelMessage;
   }
-  if (s == "") s = "No Error";
-  return s;
+  if (strlen(strErr) == 0) return "No Error";
+  return strErr;
 }
 
 // returns an error description string if an error has occured, "" if no error (required)
-String Roof::getLastError() {
-  String s = "";
-  if (statusRegister & RSR_OPEN_INTERLOCK)      s = "Error: Open safety interlock";
-  if (statusRegister & RSR_CLOSE_INTERLOCK)     s = "Error: Close safety interlock";
-  if (statusRegister & RSR_OPEN_UNKNOWN_ERROR)  s = "Error: Open unknown error"; else
-  if (statusRegister & RSR_OPEN_LIMIT_SW_FAIL)  s = "Error: Open limit sw fail"; else
-  if (statusRegister & RSR_OPEN_OVER_TIME)      s = "Error: Open over time"; else
-  if (statusRegister & RSR_OPEN_UNDER_TIME)     s = "Error: Open under time"; else
-  if (statusRegister & RSR_CLOSE_UNKNOWN_ERROR) s = "Error: Close unknown error"; else
-  if (statusRegister & RSR_CLOSE_LIMIT_SW_FAIL) s = "Error: Close limit sw fail"; else
-  if (statusRegister & RSR_CLOSE_OVER_TIME)     s = "Error: Close over time"; else
-  if (statusRegister & RSR_CLOSE_UNDER_TIME)    s = "Error: Close under time";
-  if (s == "") {
+const char * Roof::getLastError() {
+  RoofError err = RERR_NONE;
+  if (fault.openInterlock)  err = RERR_OPEN_SAFETY_INTERLOCK; else
+  if (fault.closeInterlock) err = RERR_CLOSE_SAFETY_INTERLOCK; else
+  if (fault.openUnknown)    err = RERR_OPEN_UNKNOWN; else
+  if (fault.openLimitSW)    err = RERR_OPEN_LIMIT_SW; else
+  if (fault.openOverTime)   err = RERR_OPEN_MAX_TIME; else
+  if (fault.openUnderTime)  err = RERR_OPEN_MIN_TIME; else
+  if (fault.closeUnknown)   err = RERR_CLOSE_UNKNOWN; else
+  if (fault.closeLimitSW)   err = RERR_CLOSE_LIMIT_SW; else
+  if (fault.closeOverTime)  err = RERR_CLOSE_MAX_TIME; else
+  if (fault.closeUnderTime) err = RERR_CLOSE_MIN_TIME;
+  if (err == RERR_NONE) {
     if (state == 'i') {
-      if (lastError == "") {
-        // one final check for any wierd relay stuff going on
-        if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) s = "Error: Limit switch malfunction";
-      } else s = lastError;
+      if (lastError == RERR_NONE) {
+        if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) err = RERR_LIMIT_SW;
+      } else err = lastError;
     }
   }
-  return s;
+  return ErrorMessage[err];
 }
 
 // true if the roof is closed (required)
@@ -256,7 +264,7 @@ bool Roof::isClosing() {
 
 // true if the roof is moving (opening, required)
 bool Roof::isOpening() {
-  return ( state == 'o');
+  return (state == 'o');
 }
 
 // safety override, ignores stuck limit switch and timeout (required)
@@ -324,7 +332,7 @@ void Roof::continueOpening() {
   // Or a stuck limit switch
   if (!safetyOverride && (timeAvg - timeLeftToOpenNow) > ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
     // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_OPEN_LIMIT_SW_FAIL;
+    fault.openLimitSW = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
     if (!(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)) state = 'i';
   }
@@ -332,7 +340,7 @@ void Roof::continueOpening() {
   // Or interlock was triggered
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_OPEN_INTERLOCK;
+    fault.openInterlock = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
     if (!(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)) state = 'i';
   }
@@ -340,7 +348,7 @@ void Roof::continueOpening() {
   // Or the whole process taking too long
   if (!safetyOverride && (timeLeftToOpenAtStart - msOfTravel) < -timeErrorLimit) {
     // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_OPEN_OVER_TIME;
+    fault.openOverTime = true;
     // Go idle (assume the roof has stopped where we can't cut the power)
     state = 'i';
   }
@@ -401,7 +409,7 @@ void Roof::continueClosing() {
   // On a stuck limit switch
   if (!safetyOverride && (timeAvg-timeLeftToCloseNow)>ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_CLOSE_LIMIT_SW_FAIL;
+    fault.closeLimitSW = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
     if (!(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)) state = 'i';
   }
@@ -409,7 +417,7 @@ void Roof::continueClosing() {
   // Or interlock was triggered
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_CLOSE_INTERLOCK;
+    fault.closeInterlock = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
     if (!(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)) state = 'i';
   }
@@ -417,7 +425,7 @@ void Roof::continueClosing() {
   // Or the whole process is taking too long
   if (!safetyOverride && (timeLeftToCloseAtStart-msOfTravel) < -timeErrorLimit) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
-    statusRegister |= RSR_CLOSE_OVER_TIME;
+    fault.closeOverTime = true;
     // Go idle (assume the roof has stopped where we can't cut the power)
     state = 'i';
   }

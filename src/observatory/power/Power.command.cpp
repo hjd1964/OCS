@@ -31,9 +31,9 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
       if (r >= 1 && r <= RELAYS_MAX) {
         String ws = String(parameter);
         ws = ws.substring(2);
-        if (ws == "DELAY") relay.onDelayedOff(r, 30); else
-        if (ws == "ON")    relay.on(r); else
-        if (ws == "OFF")   relay.off(r); else
+        if (ws.equals("DELAY")) relay.onDelayedOff(r, 30); else
+        if (ws.equals("ON"))    relay.on(r); else
+        if (ws.equals("OFF"))   relay.off(r); else
         if (ws.length() == 1) {
           int j = ws[0] - '0';
           relay.pwm(r, j*10);

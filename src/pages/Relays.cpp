@@ -11,9 +11,10 @@ void relaysAjax() {
   for (int i = 1; i <= 14; i++) {
     String s = "r" + String(i);
     String a = www.arg(s);
+
     uint8_t state = 0;
-    if (a != "") {
-      if (a == "true") {
+    if (!a.equals(EmptyStr)) {
+      if (a.equals("true")) {
         relay.on(i);
         state = (uint8_t)true;
         #if DEBUG_AJAX_RELAY == ON
@@ -21,7 +22,7 @@ void relaysAjax() {
           VLF("=on");
         #endif
       }
-      if (a == "false") {
+      if (a.equals("false")) {
         relay.off(i);
         state = (uint8_t)false;
         #if DEBUG_AJAX_RELAY == ON
@@ -31,7 +32,7 @@ void relaysAjax() {
       }
       
       // if this relay is from the "Power Panel" store the setting if requested
-      if (a == "true" || a == "false") {
+      if (a.equals("true") || a.equals("false")) {
         #if POWER_DEVICE1_RELAY != OFF && POWER_DEVICE1_MEMORY != OFF
           if (i == POWER_DEVICE1_RELAY) nv.write(NV_POWER_DEVICE1, state);
         #endif
@@ -51,7 +52,9 @@ void relaysAjax() {
           if (i == POWER_DEVICE6_RELAY) nv.write(NV_POWER_DEVICE6, state);
         #endif
       }
-      if (a == "get") {
+
+      // get relay state
+      if (a.equals("get")) {
         s = String(relay.isOn(i));
         sendHtml(s);
         break;

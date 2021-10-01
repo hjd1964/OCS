@@ -47,7 +47,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
     if (command[1] == 'S' && parameter[0] == 0) {
       char ws[128];
       if (roof.isClosed()) strcpy(ws, "CLOSED"); else
-      if (roof.isOpen()) strcpy(ws, "OPEN"); else strcpy(ws, roof.getStatus().c_str());
+      if (roof.isOpen()) strcpy(ws, "OPEN"); else strcpy(ws, roof.getStatus());
       ws[47] = 0; // never longer than 47 chars
       if (roof.isClosing()) sprintf(reply, "c,%s", ws); else
       if (roof.isOpen()) sprintf(reply, "o,%s", ws); else sprintf(reply, "i,%s", ws);
@@ -57,7 +57,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
     //  :RSL#  Roof Status Last Error
     //         Returns: status string
     if (command[1] == 'S' && parameter[0] == 'L' && parameter[1] == 0) {
-      strcpy(reply, roof.getLastError().c_str());
+      strcpy(reply, roof.getLastError());
       *numericReply = false;
     } else *commandError = CE_CMD_UNKNOWN;
 	} else

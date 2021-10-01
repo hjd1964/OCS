@@ -39,8 +39,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   firmware.version.minor = fwMinor;
   strcpy(firmware.version.patch, fwPatch);
   firmware.version.config = fwConfig;
-  strcpy(firmware.date, __DATE__);
-  strcpy(firmware.time, __TIME__);
 
   if (nv.readUL(NV_KEY) != INIT_NV_KEY) {
     validKey = false;

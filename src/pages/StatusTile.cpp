@@ -7,6 +7,9 @@
 #include "htmlScripts.h"
 #include "htmlTabs.h"
 
+#include "../lib/sense/Sense.h"
+#include "../lib/analog/Analog.h"
+
 extern int timeZone;
 extern time_t startupTime;
 
@@ -15,7 +18,7 @@ void statusTile(EthernetClient *client) {
 #else
 void statusTile() {
 #endif
-  char temp[128] = "";
+  char temp[100] = "";
 
   strcpy_P(temp, htmlStatus1);
   sendHtml(temp);
@@ -69,67 +72,55 @@ void statusContents() {
 
   #if STAT_MAINS_SENSE != OFF
     strcpy_P(temp1,htmlInnerStatusMains);
-    if (senseIsOn(STAT_MAINS_SENSE)) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT");
+    if (sense.isOn(STAT_MAINS_SENSE)) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT");
     sprintf(temp,temp1,ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_MAINS_CURRENT_ANALOG != OFF
-    f = toAmps(analogRead(STAT_MAINS_CURRENT_ANALOG));
+    f = aduToMainsAmps(analog.read(STAT_MAINS_CURRENT_ANALOG));
     strcpy_P(temp1, htmlInnerStatusMainsA);
-    dtostrf(f, 6, 1, ws1);
-    strcat(ws1,"A");
-    if (f == invalid) strcpy(ws1,"Invalid");
+    if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
-    f = toAmps(analogRead(STAT_MAINS_AUX_CURRENT_ANALOG));
+    f = aduToMainsAmps(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG));
     strcpy_P(temp1, htmlInnerStatusMainsAA);
-    dtostrf(f, 6, 1, ws1);
-    strcat(ws1, "A");
-    if (f == invalid) strcpy(ws1, "Invalid");
+    if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_DC_VOLTAGE_ANALOG != OFF
-    f = toDC(analogRead(STAT_DC_VOLTAGE_ANALOG));
+    f = aduToDcVolts(analog.read(STAT_DC_VOLTAGE_ANALOG));
     strcpy_P(temp1,htmlInnerStatusDC);
-    dtostrf(f,6,1,ws1);
-    strcat(ws1,"V");
-    if (f == invalid) strcpy(ws1,"Invalid");
+    if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_DC_CURRENT_ANALOG != OFF
-    f = toDCAmps(analogRead(STAT_DC_CURRENT_ANALOG));
+    f = aduToDcAmps(analog.read(STAT_DC_CURRENT_ANALOG));
     strcpy_P(temp1, htmlInnerStatusDCA);
-    dtostrf(f, 6, 1, ws1);
-    strcat(ws1, "A");
-    if (f == invalid) strcpy(ws1,"Invalid");
+    if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fA", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_BATTERY_VOLTAGE_ANALOG != OFF
-    f = toDC(analogRead(STAT_BATTERY_VOLTAGE_ANALOG));
+    f = aduToDcVolts(analog.read(STAT_BATTERY_VOLTAGE_ANALOG));
     strcpy_P(temp1, htmlInnerStatusBat);
-    dtostrf(f, 6, 1, ws1);
-    strcat(ws1,"V");
-    if (f == invalid) strcpy(ws1,"Invalid");
+    if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif
 
   #if STAT_BATTERY_CURRENT_ANALOG != OFF
-    f = toDCAmps(analogRead(STAT_BATTERY_CURRENT_ANALOG));
+    f = aduToDcAmps(analog.read(STAT_BATTERY_CURRENT_ANALOG));
     strcpy_P(temp1, htmlInnerStatusBatA);
-    dtostrf(f, 6, 1, ws1);
-    strcat(ws1, "A");
-    if (f == invalid) strcpy(ws1, "Invalid");
+    if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
     sprintf(temp, temp1, ws1);
     sendHtml(temp);
   #endif

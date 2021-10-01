@@ -13,18 +13,25 @@
   #else
   void roofTile() {
   #endif
-    char temp[200] = "";
-
-    strcpy_P(temp, htmlRoof1);
-    sendHtml(temp);
+    {
+      char temp[250] = "";
+      strcpy_P(temp, htmlRoof1);
+      sendHtml(temp);
+    }
 
     roofContents(client);
 
-    strcpy_P(temp, htmlRoof2);
-    #if ROOF_AUTOCLOSE_DAWN == ON
-      if (roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
-    #endif
-    sendHtml(temp);
+    {
+      char temp[250] = "";
+      strcpy_P(temp, htmlRoof2);
+      sendHtml(temp);
+
+      strcpy_P(temp, htmlRoof3);
+      #if ROOF_AUTOCLOSE_DAWN == ON
+        if (roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
+      #endif
+      sendHtml(temp);
+    }
   }
 
   #if OPERATIONAL_MODE != WIFI
@@ -32,9 +39,10 @@
   #else
   void roofContents() {
   #endif
-    char temp[200] = "";
-    char temp1[200] = "";
+    char temp[250] = "";
+    char temp1[150] = "";
     char ws1[20] = "";
+    char ws2[100] = "";
 
     strcpy_P(temp1, htmlInnerRoofStat);
 
@@ -45,13 +53,13 @@
     if (roof.isOpening()) strcpy(ws1, "Opening"); else
     if (roof.isClosing()) strcpy(ws1, "Closing");
 
-    String s = roof.getStatus();
-    if (s == "No Error" || s.indexOf("Travel: ") >= 0) {
-      s = "<div style=\"color: #505090;\">" + s + "</div>";
+    const char *statusStr = roof.getStatus();
+    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") >= 0) {
+      sprintf(ws2, "<div style=\"color: #505090;\">%s</div>", statusStr);
     } else {
-      s = "<div style=\"color: red;\">" + s + "</div>";
+      sprintf(ws2, "<div style=\"color: red;\">%s</div>", statusStr);
     }
-    sprintf(temp, temp1, ws1, s.c_str());
+    sprintf(temp, temp1, ws1, ws2);
     sendHtml(temp);
   }
 

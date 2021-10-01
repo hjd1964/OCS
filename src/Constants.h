@@ -40,9 +40,6 @@
 #define IMPERIAL                    2
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
-#define invalid -1000
-#define STR_HELPER(x) #x
-#define STR(x) STR_HELPER(x)
 
 // various Weather sensors supported
 #define BME280                      1      // BME280 on I2C (at default address 0x77)
@@ -62,12 +59,12 @@
 // task manager
 #define TASKS_SKIP_MISSED
 #define TASKS_HWTIMER1_ENABLE
-#define TASKS_HWTIMER2_ENABLE
-#define TASKS_HWTIMER3_ENABLE
+//#define TASKS_HWTIMER2_ENABLE
+//#define TASKS_HWTIMER3_ENABLE
 
-#define pinModeEx pinMode
-#define digitalReadEx digitalRead
-#define digitalWriteEx digitalWrite
+#define pinModeEx(n, m) { if (n != OFF) pinMode(n, m); }
+#define digitalReadEx(n) ((n != OFF)?digitalRead(n):false)
+#define digitalWriteEx(n, m) { if (n != OFF) digitalWrite(n, m); }
 
 // NV write endurance constants
 // low (< 100K writes)
@@ -84,9 +81,6 @@
   #define RESPONSE_INTERVAL 1000
 #endif
 
-// Misc ----------------------------------------------------------------------------------------------------------------------------
-#define invalid -1000
-
 #ifdef EmptyStr
   #undef EmptyStr
 #endif
@@ -100,6 +94,27 @@
 #define NV_DEFAULT
 
 #define logRecordLocation(t) (round(hour(t)*3600L+minute(t)*60L+second(t))/30L)
+
+// converts a raw analog reading into voltage for STAT_DC_VOLTAGE_ANALOG and STAT_BATTERY_VOLTAGE_ANALOG
+// return NAN if not implemented or if there's an error
+#ifndef STAT_DC_ADU_TO_VOLTAGE
+  #define STAT_DC_ADU_TO_VOLTAGE NAN
+#endif
+#define aduToDcVolts(f) ((f)*STAT_DC_ADU_TO_VOLTAGE)
+
+// converts a raw analog reading into current for STAT_DC_CURRENT_ANALOG and STAT_BATTERY_CURRENT_ANALOG
+// return NAN if not implemented or if there's an error
+#ifndef STAT_DC_ADU_TO_CURRENT
+  #define STAT_DC_ADU_TO_CURRENT NAN
+#endif
+#define aduToDcAmps(f) ((f)*STAT_DC_ADU_TO_CURRENT)
+
+// converts a raw analog reading into current for STAT_MAINS_CURRENT_ANALOG and STAT_MAINS_AUX_CURRENT_ANALOG
+// return NAN if not implemented or if there's an error
+#ifndef STAT_MAINS_ADU_TO_CURRENT
+  #define STAT_MAINS_ADU_TO_CURRENT NAN
+#endif
+#define aduToMainsAmps(f) ((f)*STAT_MAINS_ADU_TO_CURRENT)
 
 // Roof
 #define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds, this blocks the main-loop so <= ~2 seconds!

@@ -6,6 +6,7 @@
 #if THERMOSTAT == ON
 
 #include "../../lib/thermostatSensor/ThermostatSensor.h"
+#include "../../lib/relay/Relay.h"
 
 // this gets called once on startup to initialize any thermostat sensors
 void Thermostat::init() {
@@ -22,9 +23,9 @@ void Thermostat::poll() {
 
   #if HEAT_RELAY != OFF
     if (!isnan(averageTemperature) && averageTemperature < getHeatSetpoint() && getHeatSetpoint() != 0) {
-      setRelayOn(HEAT_RELAY);
+      relay.on(HEAT_RELAY);
     } else {
-      setRelayOff(HEAT_RELAY);
+      relay.off(HEAT_RELAY);
     }
 
   #elif COOL_RELAY != OFF

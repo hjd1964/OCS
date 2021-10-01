@@ -33,6 +33,7 @@
     strcpy_P(temp, html_main_css7); sendHtml(temp);
     strcpy_P(temp, html_main_css8); sendHtml(temp);
     strcpy_P(temp, html_main_css10); sendHtml(temp);
+    strcpy_P(temp, html_main_css11); sendHtml(temp);
 
     strcpy_P(temp, html_head3); sendHtml(temp);
 
@@ -47,9 +48,9 @@
 
     int period = 1;
     String periodStr = "";
-    if ((a == "recent") || (a=="")) { period = 1; periodStr = "60 minutes"; }
-    if (a == "last24") { period = 24; periodStr = "24 hours"; }
-    if (a == "last48") { period = 48; periodStr = "48 hours"; }
+    if ((a.equals("recent")) || (a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
+    if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
+    if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
     
     sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
     sendHtml(F("<script>\r\n"));
@@ -121,6 +122,7 @@
       strcpy_P(temp, html_main_css7); sendHtml(temp);
       strcpy_P(temp, html_main_css8); sendHtml(temp);
       strcpy_P(temp, html_main_css10); sendHtml(temp);
+      strcpy_P(temp, html_main_css11); sendHtml(temp);
 
       strcpy_P(temp, html_head3); sendHtml(temp);
 
@@ -133,9 +135,9 @@
 
       int period = 1;
       String periodStr = "";
-      if (a == "recent" || a=="") { period = 1; periodStr = "60 minutes"; }
-      if (a == "last24") { period = 24; periodStr = "24 hours"; }
-      if (a == "last48") { period = 48; periodStr = "48 hours"; }
+      if (a.equals("recent" || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
+      if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
+      if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
       
       sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
       sendHtml(F("<script>\r\n"));

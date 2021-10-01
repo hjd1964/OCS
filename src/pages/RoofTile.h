@@ -28,7 +28,9 @@
   #if ROOF_USER_SAFETY_OVERRIDE == ON
     "<input type=\"button\" onclick='SetVar(\"press\",\"roof_override\")' value=\"Safety Override\" />"
   #endif
-  "<br />"
+  "<br />";
+
+  const char htmlRoof3[] PROGMEM =
   "<input type=\"button\" onclick='SetVar(\"press\",\"roof_open\")' value=\"Open Roof\" />&nbsp;&nbsp;&nbsp;"
   "<input type=\"button\" onclick='SetVar(\"press\",\"roof_close\")' value=\"Close Roof\" /><br />"
   "<br />"

@@ -20,7 +20,7 @@ void Relay::init() {
 void Relay::on(int r, bool updateState) {
   if (r >= 1 && r <= RELAYS_MAX) {
     if (updateState) settings[r - 1].state = 1;
-    digitalWrite(settings[r - 1].pin, settings[r - 1].onState);
+    digitalWriteEx(settings[r - 1].pin, settings[r - 1].onState);
   }
 }
 
@@ -28,7 +28,7 @@ void Relay::on(int r, bool updateState) {
 void Relay::onDelayedOff(int r, float seconds) {
   if (r >= 1 && r <= RELAYS_MAX && seconds >= 0.1 && seconds <= 3600.0) {
     settings[r - 1].state = 19 + round(seconds*10.0);
-    digitalWrite(settings[r - 1].pin, settings[r - 1].onState);
+    digitalWriteEx(settings[r - 1].pin, settings[r - 1].onState);
   }
 }
 
@@ -44,7 +44,7 @@ void Relay::off(int r, bool updateState) {
     if (updateState) settings[r - 1].state = 0;
     uint8_t offState = LOW;
     if (settings[r - 1].onState == LOW) offState = HIGH;
-    digitalWrite(settings[r - 1].pin, offState);
+    digitalWriteEx(settings[r - 1].pin, offState);
   }
 }
 
@@ -111,7 +111,7 @@ void Relay::poll() {
       if (roof.isMoving()) {
         on(ROOF_POWER_RELAY);
       } else {
-        if (isOn((ROOF_POWER_RELAY)) off(ROOF_POWER_RELAY);
+        if (isOn(ROOF_POWER_RELAY)) off(ROOF_POWER_RELAY);
       }
     #endif
 

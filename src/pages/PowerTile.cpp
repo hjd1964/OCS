@@ -6,13 +6,14 @@
   #include "htmlScripts.h"
   #include "htmlTabs.h"
   #include "../lib/relay/Relay.h"
+  #include "Pages.h"
 
   #if OPERATIONAL_MODE != WIFI
   void powerTile(EthernetClient *client) {
   #else
   void powerTile() {
   #endif
-    char temp[800];
+    char temp[100];
 
     strcpy_P(temp, htmlPower1);
     sendHtml(temp);
@@ -23,22 +24,12 @@
     sendHtml(temp);
   }
 
-  void check(char *ss, const char *rs) {
-    char *w = strstr(ss,rs);
-    if (w != NULL) { w[0]='c'; w[1]='h'; w[2]='e'; w[3]='c'; w[4]='k'; w[5]='e'; w[6]='d'; }
-  }
-
-  void erase(char *ss, const char *rs) {
-    char *w = strstr(ss,rs);
-    if (w != NULL) { w[0]=' '; w[1]=' '; w[2]=' '; w[3]=' '; w[4]=' '; w[5]=' '; w[6]=' '; }
-  }
-
   #if OPERATIONAL_MODE != WIFI
   void powerContents(EthernetClient *client) {
   #else
   void powerContents() {
   #endif
-    char temp[800];
+    char temp[300];
 
     strcpy_P(temp, htmlPower);
     #if POWER_DEVICE1_RELAY != OFF

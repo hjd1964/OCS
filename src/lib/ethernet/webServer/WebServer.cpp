@@ -196,8 +196,11 @@
     // look for form "?a=1&" or "&a=1"
     while ((*line)[0] == '?' || (*line)[0] == '&') {
       *line = line->substring(1);
-      int j  = line->indexOf('='); if (j == -1) j = line->length(); if (j == -1) break; // invalid formatting
-      int j1 = line->indexOf('&'); if (j1 == -1) j1 = line->length() + 1;
+      int j  = line->indexOf('=');
+      if (j == -1) j = line->length();
+      if (j == -1) break; // invalid formatting
+      int j1 = line->indexOf('&');
+      if (j1 == -1) j1 = line->length() + 1;
       String thisArg = line->substring(0, j);
       String thisVal = line->substring(j + 1, j1);
       if (thisArg != "") {
@@ -222,8 +225,11 @@
     // look for form "&a=1"
     while ((*line)[0] == '&') {
       *line = line->substring(1);
-      int j  = line->indexOf('='); if (j == -1) j = line->length(); if (j == -1) break; // invalid formatting
-      int j1 = line->indexOf('&'); if (j1 == -1) j1 = line->length() + 1;
+      int j  = line->indexOf('=');
+      if (j == -1) j = line->length();
+      if (j == -1) break; // invalid formatting
+      int j1 = line->indexOf('&');
+      if (j1 == -1) j1 = line->length() + 1;
       String thisArg = line->substring(0, j);
       String thisVal = line->substring(j + 1, j1);
       if (thisArg != "") {

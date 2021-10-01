@@ -7,14 +7,14 @@
   #include "TphBme280.h"
 #endif
 
-float _inside_temperature;
-bool _inside_temperatureAssigned;
+float _inside_temperature = NAN;
+bool _inside_temperatureAssigned = NAN;
 
-float _inside_pressure;
-bool _inside_pressureAssigned;
+float _inside_pressure = NAN;
+bool _inside_pressureAssigned = NAN;
 
-float _inside_humidity;
-bool _inside_humidityAssigned;
+float _inside_humidity = NAN;
+bool _inside_humidityAssigned = NAN;
 
 void ThermostatSensor::init(){
   // slow down i2c so long distances work, still plenty fast for our little data being moved around

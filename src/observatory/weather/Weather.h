@@ -30,9 +30,6 @@ class Weather {
     // get cloud cover text
     const char * cloudCoverDescription();
 
-    // gets cloud cover text (short)
-    const char * cloudCoverDescriptionShort();
-
     bool isSafe();
 
     void poll();
@@ -53,10 +50,6 @@ class Weather {
     float wa = NAN;
 
     const char *CloudDescription[10] =
-    { "Invalid", "Clear", "Mostly Clear", "Slight Haze", "Overcast/Haze",
-      "Overcast", "Clouds/Overcast", "Mostly Cloudy", "Cloudy", "Very Cloudy" };
-
-    const char *CloudDescriptionShort[10] =
     { "Invalid", "Clear", "Mostly-Clr", "Slight-Hze", "Ovrcst/Hze",
       "Overcast", "Cld/Ovrcst", "Mstly-Cldy", "Cloudy", "Very-Cldy" };
 };

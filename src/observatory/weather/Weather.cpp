@@ -27,11 +27,7 @@ void Weather::poll(void) {
     // it might be a good idea to add some error checking and force the values to invalid if something is wrong
     float ambientTemp = weatherSensor.temperature();
     float skyTemp = weatherSensor.skyTemperature();
-    if (isnan(ambientTemp) || isnan(skyTemp)) {
-      skyDiffTemp = NAN;
-    } else {
-       skyDiffTemp = skyTemp - ambientTemp;
-    }
+     skyDiffTemp = skyTemp - ambientTemp;
     if (isnan(skyDiffTemp)) {
       avgSkyDiffTemp = skyDiffTemp;
     } else {
@@ -42,36 +38,44 @@ void Weather::poll(void) {
       }
     }
 
-    // short-term average ambient temp
-    if (isnan(sa)) sa = ambientTemp;
-    if (!isnan(sa)) sa = ((sa*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + ambientTemp)/((double)SecondsBetweenLogEntries/2.0);
-    // short-term sky temp
-    if (isnan(ss)) ss = skyTemp;
-    if (!isnan(ss)) ss = ((ss*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyTemp)/((double)SecondsBetweenLogEntries/2.0);
-    // short-term average diff temp
-    if (isnan(sad)) sad = skyDiffTemp;
-    if (!isnan(sad)) sad = ((sad*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyDiffTemp)/((float)SecondsBetweenLogEntries/2.0);
-    // long-term average diff temp
-    lad = avgSkyDiffTemp;
-    // End cloud sensor
-
-    // Pressure ----------------------------------------------------------------
-    float p = weatherSensor.pressureSeaLevel();
-
-    // Humidity ----------------------------------------------------------------
-    float h = weatherSensor.humidity();
-
-    // Wind speed --------------------------------------------------------------
-    float w = weatherSensor.windspeed();
-    if (wa == invalid) wa = w;
-    if (wa != invalid) wa = ((wa*((float)SecondsBetweenLogEntries/2.0 - 1.0)) + w)/((float)SecondsBetweenLogEntries/2.0);
-
-    // Sky quality -------------------------------------------------------------
-    float q = weatherSensor.skyQuality();
-
-    // short-term sky temp
-
     #if WEATHER_CHARTS == ON
+      // short-term average ambient temp
+      if (isnan(sa))
+        sa = ambientTemp;
+      else
+        sa = ((sa*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + ambientTemp)/((double)SecondsBetweenLogEntries/2.0);
+      
+      // short-term sky temp
+      if (isnan(ss))
+        ss = skyTemp;
+      else
+        ss = ((ss*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyTemp)/((double)SecondsBetweenLogEntries/2.0);
+      
+      // short-term average diff temp
+      if (isnan(sad))
+        sad = skyDiffTemp;
+      else
+        sad = ((sad*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyDiffTemp)/((float)SecondsBetweenLogEntries/2.0);
+
+      // long-term average diff temp
+      lad = avgSkyDiffTemp;
+
+      // Pressure ----------------------------------------------------------------
+      float p = weatherSensor.pressureSeaLevel();
+
+      // Humidity ----------------------------------------------------------------
+      float h = weatherSensor.humidity();
+
+      // Wind speed --------------------------------------------------------------
+      float w = weatherSensor.windspeed();
+      if (isnan(wa))
+        wa = w;
+      else
+        wa = ((wa*((float)SecondsBetweenLogEntries/2.0 - 1.0)) + w)/((float)SecondsBetweenLogEntries/2.0);
+
+      // Sky quality -------------------------------------------------------------
+      float q = weatherSensor.skyQuality();
+
       if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
 
       // Logging ------------------------------------------------------------------
@@ -180,37 +184,30 @@ float Weather::getAvgSkyDiffTemp() {
 
 // gets cloud cover in %
 float Weather::cloudCover() {
+  float percent = NAN;
   #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
     float delta = getAvgSkyDiffTemp();
-    if (isnan(delta) || delta <= -200) return (invalid); else
-    if (delta <= WEATHER_VCLR_THRESHOLD) return 10; else
-    if (delta <= WEATHER_CLER_THRESHOLD) return 20; else
-    if (delta <= WEATHER_HAZE_THRESHOLD) return 30; else
-    if (delta <= (WEATHER_HAZE_THRESHOLD+WEATHER_OVRC_THRESHOLD)/2.0) return 40; else
-    if (delta <= WEATHER_OVRC_THRESHOLD) return 50; else
-    if (delta <= (WEATHER_OVRC_THRESHOLD+WEATHER_CLDY_THRESHOLD)/2.0) return 60; else
-    if (delta <= WEATHER_CLDY_THRESHOLD) return 70; else
-    if (delta <= (WEATHER_CLDY_THRESHOLD+WEATHER_VCLD_THRESHOLD)/2.0) return 80; else
-    if (delta <= WEATHER_VCLD_THRESHOLD) return 90; else
-    if (delta >  WEATHER_VCLD_THRESHOLD) return 100;
+    if (isnan(delta) || delta <= -200) percent = NAN; else
+    if (delta <= WEATHER_VCLR_THRESHOLD) percent = 10; else
+    if (delta <= WEATHER_CLER_THRESHOLD) percent = 20; else
+    if (delta <= WEATHER_HAZE_THRESHOLD) percent = 30; else
+    if (delta <= (WEATHER_HAZE_THRESHOLD+WEATHER_OVRC_THRESHOLD)/2.0) percent = 40; else
+    if (delta <= WEATHER_OVRC_THRESHOLD) percent = 50; else
+    if (delta <= (WEATHER_OVRC_THRESHOLD+WEATHER_CLDY_THRESHOLD)/2.0) percent = 60; else
+    if (delta <= WEATHER_CLDY_THRESHOLD) percent = 70; else
+    if (delta <= (WEATHER_CLDY_THRESHOLD+WEATHER_VCLD_THRESHOLD)/2.0) percent = 80; else
+    if (delta <= WEATHER_VCLD_THRESHOLD) percent = 90; else
+    if (delta >  WEATHER_VCLD_THRESHOLD) percent = 100;
   #else
-    return 100;
+    percent = 100;
   #endif
+  return percent;
 }
 
 // get cloud cover text
 const char * Weather::cloudCoverDescription() {
   #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
     return CloudDescription[getAvgSkyDiffTempIndex()];
-  #else
-    return "N/A";
-  #endif
-}
-
-// gets cloud cover text (short)
-const char * Weather::cloudCoverDescriptionShort() {
-  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
-    return CloudDescriptionShort[getAvgSkyDiffTempIndex()];
   #else
     return "N/A";
   #endif
@@ -232,7 +229,7 @@ int Weather::getAvgSkyDiffTempIndex() {
 }
 
 void Weather::dtostrf2(float d, int i, int i1, float l, float h, char result[]) {
-  if (d == invalid)
+  if (isnan(d))
     for (int j = 0; j < i; j++) { result[j] = ' '; result[j + 1] = 0; }
   else {
     if (d <= l) d = l;

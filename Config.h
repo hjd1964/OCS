@@ -109,7 +109,7 @@
 #define WEATHER_SENSOR_TH_DHT_TYPE  DHT11 //  DHT11, or DHT21, DHT22. DHT device type.                                        Option
 #define WEATHER_SENSOR_TH_SI7021      OFF //    OFF, 0x40 (I2C Address) to enable. Temperature, humidity.                     Option
 
-#define WEATHER_SENSOR_WIND_CUP       OFF //    OFF, n. Where n=1..8 (Digital#) to enable. Wind speed, cup anemometer.        Option
+#define WEATHER_SENSOR_WIND_CUP       OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Wind speed, cup anemometer.          Option
 #define WEATHER_SENSOR_WIND_PPM2KPH 0.087 //  0.087, n. Wind speed conversion factor from pulses per minute to KPH.           Option 
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 

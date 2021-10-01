@@ -35,5 +35,6 @@
   const char htmlThermostatCool2[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div>";
 
   const char htmlThermostat2[] PROGMEM = "</form></div>\r\n";
-
+  const char htmlThermostatOption[] PROGMEM = "<option value=\"%d\" %s>%d&deg;%c</option>";
+  const char htmlThermostatOptionZero[] PROGMEM = "<option value=\"0\" %s>OFF</option>";
 #endif

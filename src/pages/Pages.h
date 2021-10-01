@@ -10,6 +10,9 @@
 #include "htmlHeaders.h"
 #include "../lib/ethernet/webServer/WebServer.h"
 
+void check(char *ss, const char *rs);
+void erase(char *ss, const char *rs);
+
 #if OPERATIONAL_MODE == WIFI
   void index();
   void indexAjax();

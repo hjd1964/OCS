@@ -82,7 +82,7 @@ void Tsl2591w::poll() {
   
   // correct for sensor temperature sensitivity
   float t = _temperature;
-  if (t != invalid) {
+  if (!isnan(t)) {
     full = tlsSensor.temperatureCorrectCh0(t, full);
     ir = tlsSensor.temperatureCorrectCh1(t, ir);
   }

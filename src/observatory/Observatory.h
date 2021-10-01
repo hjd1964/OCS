@@ -13,10 +13,8 @@ typedef struct Version {
 } Version;
 
 typedef struct Firmware {
-  char name[8];
+  char name[4];
   Version version;
-  char date[20];
-  char time[20];
 } Firmware;
 
 class Observatory {

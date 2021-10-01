@@ -48,31 +48,31 @@
 #endif
 
 #if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 6) && STAT_MAINS_SENSE != OFF
-  #error "Configuration (Config.h): STAT_MAINS_SENSE must OFF or a number between 1 and 6 (Sense#.)"
+  #error "Configuration (Config.h): STAT_MAINS_SENSE must OFF or a number between 1 and 6 (SENSE#.)"
 #endif
 
-#if (STAT_MAINS_CURRENT_ANALOG < A0 || STAT_MAINS_CURRENT_ANALOG > A15) && STAT_MAINS_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_MAINS_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_MAINS_CURRENT_ANALOG < 1 || STAT_MAINS_CURRENT_ANALOG > 16) && STAT_MAINS_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_MAINS_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
-#if (STAT_MAINS_AUX_CURRENT_ANALOG < A0 || STAT_MAINS_AUX_CURRENT_ANALOG > A15) && STAT_MAINS_AUX_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_MAINS_AUX_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_MAINS_AUX_CURRENT_ANALOG < 1 || STAT_MAINS_AUX_CURRENT_ANALOG > 16) && STAT_MAINS_AUX_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_MAINS_AUX_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
-#if (STAT_DC_VOLTAGE_ANALOG < A0 || STAT_DC_VOLTAGE_ANALOG > A15) && STAT_DC_VOLTAGE_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_DC_VOLTAGE_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_DC_VOLTAGE_ANALOG < 1 || STAT_DC_VOLTAGE_ANALOG > 16) && STAT_DC_VOLTAGE_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_DC_VOLTAGE_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
-#if (STAT_DC_CURRENT_ANALOG < A0 || STAT_DC_CURRENT_ANALOG > A15) && STAT_DC_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_DC_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_DC_CURRENT_ANALOG < 1 || STAT_DC_CURRENT_ANALOG > 16) && STAT_DC_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_DC_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
-#if (STAT_BATTERY_VOLTAGE_ANALOG < A0 || STAT_BATTERY_VOLTAGE_ANALOG > A15) && STAT_BATTERY_VOLTAGE_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_BATTERY_VOLTAGE_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_BATTERY_VOLTAGE_ANALOG < 1 || STAT_BATTERY_VOLTAGE_ANALOG > 16) && STAT_BATTERY_VOLTAGE_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_BATTERY_VOLTAGE_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
-#if (STAT_BATTERY_CURRENT_ANALOG < A0 || STAT_BATTERY_CURRENT_ANALOG > A15) && STAT_BATTERY_CURRENT_ANALOG != OFF
-  #error "Configuration (Config.h): STAT_BATTERY_CURRENT_ANALOG must OFF or between A0 and A15 (Analog Pin#.)"
+#if (STAT_BATTERY_CURRENT_ANALOG < 1 || STAT_BATTERY_CURRENT_ANALOG > 16) && STAT_BATTERY_CURRENT_ANALOG != OFF
+  #error "Configuration (Config.h): STAT_BATTERY_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
 // Weather
@@ -162,7 +162,7 @@
 #endif
 
 #if (POWER_DEVICE1_RELAY < 1 || POWER_DEVICE1_RELAY > 14) && POWER_DEVICE1_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE1_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE1_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE1_MEMORY != OFF && POWER_DEVICE1_MEMORY != ON
@@ -170,7 +170,7 @@
 #endif
 
 #if (POWER_DEVICE2_RELAY < 1 || POWER_DEVICE2_RELAY > 14) && POWER_DEVICE2_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE2_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE2_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE2_MEMORY != OFF && POWER_DEVICE2_MEMORY != ON
@@ -178,7 +178,7 @@
 #endif
 
 #if (POWER_DEVICE3_RELAY < 1 || POWER_DEVICE3_RELAY > 14) && POWER_DEVICE3_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE3_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE3_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE3_MEMORY != OFF && POWER_DEVICE3_MEMORY != ON
@@ -186,7 +186,7 @@
 #endif
 
 #if (POWER_DEVICE4_RELAY < 1 || POWER_DEVICE4_RELAY > 14) && POWER_DEVICE4_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE4_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE4_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE4_MEMORY != OFF && POWER_DEVICE4_MEMORY != ON
@@ -194,7 +194,7 @@
 #endif
 
 #if (POWER_DEVICE5_RELAY < 1 || POWER_DEVICE5_RELAY > 14) && POWER_DEVICE5_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE5_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE5_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE5_MEMORY != OFF && POWER_DEVICE5_MEMORY != ON
@@ -202,7 +202,7 @@
 #endif
 
 #if (POWER_DEVICE6_RELAY < 1 || POWER_DEVICE6_RELAY > 14) && POWER_DEVICE6_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE6_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): POWER_DEVICE6_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE6_MEMORY != OFF && POWER_DEVICE6_MEMORY != ON
@@ -215,11 +215,11 @@
 #endif
 
 #if (HEAT_RELAY < 1 || HEAT_RELAY > 14) && HEAT_RELAY != OFF
-  #error "Configuration (Config.h): HEAT_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): HEAT_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (COOL_RELAY < 1 || COOL_RELAY > 14) && COOL_RELAY != OFF
-  #error "Configuration (Config.h): COOL_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): COOL_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if THERMOSTAT_HUMIDITY != OFF && THERMOSTAT_HUMIDITY != ON
@@ -232,27 +232,27 @@
 #endif
 
 #if (LIGHT_WRW_RELAY < 1 || LIGHT_WRW_RELAY > 14) && LIGHT_WRW_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_WRW_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): LIGHT_WRW_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (LIGHT_WRR_RELAY < 1 || LIGHT_WRR_RELAY > 14) && LIGHT_WRR_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_WRR_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): LIGHT_WRR_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (LIGHT_ORW_RELAY < 1 || LIGHT_ORW_RELAY > 14) && LIGHT_ORW_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_ORW_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): LIGHT_ORW_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (LIGHT_ORR_RELAY < 1 || LIGHT_ORR_RELAY > 14) && LIGHT_ORR_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_ORR_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): LIGHT_ORR_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (LIGHT_OUTSIDE_RELAY < 1 || LIGHT_OUTSIDE_RELAY > 14) && LIGHT_OUTSIDE_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_OUTSIDE_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): LIGHT_OUTSIDE_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (LIGHT_SW_SENSE < 1 || LIGHT_SW_SENSE > 6) && LIGHT_SW_SENSE != OFF
-  #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 6 (Sense#.)"
+  #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 6 (SENSE#.)"
 #endif
 
 // ROOF
@@ -277,11 +277,11 @@
 #endif
 
 #if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 14) && ROOF_MOTOR_OPEN_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (ROOF_MOTOR_CLOSE_RELAY < 1 || ROOF_MOTOR_CLOSE_RELAY > 14) && ROOF_MOTOR_CLOSE_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): ROOF_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_OPEN_RELAY == ROOF_MOTOR_CLOSE_RELAY
@@ -306,7 +306,7 @@
 #endif
 
 #if (ROOF_POWER_RELAY < 1 || ROOF_POWER_RELAY > 14) && ROOF_POWER_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_POWER_RELAY must OFF or a number between 1 and 14 (Relay#.)"
+  #error "Configuration (Config.h): ROOF_POWER_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
 #if (ROOF_POWER_PWM_FREQUENCY<1 || ROOF_POWER_PWM_FREQUENCY>100) && ROOF_POWER_PWM_FREQUENCY != OFF
@@ -336,7 +336,7 @@
 #endif
 
 #if (ROOF_INTERLOCK_SENSE < 1 || ROOF_INTERLOCK_SENSE > 6) && ROOF_INTERLOCK_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (Sense#.)"
+  #error "Configuration (Config.h): ROOF_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (SENSE#.)"
 #endif
 
 #if ROOF == ON && (ROOF_LIMIT_CLOSED_SENSE == OFF || ROOF_LIMIT_OPENED_SENSE == OFF)
@@ -344,11 +344,11 @@
 #endif
 
 #if (ROOF_LIMIT_CLOSED_SENSE < 1 || ROOF_LIMIT_CLOSED_SENSE > 6) && ROOF_LIMIT_CLOSED_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (Sense#.)"
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (SENSE#.)"
 #endif
 
 #if (ROOF_LIMIT_OPENED_SENSE < 1 || ROOF_LIMIT_OPENED_SENSE > 6) && ROOF_LIMIT_OPENED_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (Sense#.)"
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (SENSE#.)"
 #endif
 
 #if ROOF_TIME_AVG<30 || ROOF_TIME_AVG>1200

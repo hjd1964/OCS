@@ -6,6 +6,7 @@
 #if THERMOSTAT == ON
 
 #include "../../lib/weatherSensor/WeatherSensor.h"
+#include "../../lib/relay/Relay.h"
 
 bool Thermostat::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
@@ -44,11 +45,10 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
         int i = ws.toInt();
         if (i == 0) {
           setHeatSetpoint(0);
-          setRelayOff(HEAT_RELAY);
+          relay.off(HEAT_RELAY);
         } else
         if (i >= 1 && i <= 40) {
           setHeatSetpoint(i);
-          msFiveMinuteCounter = millis() + 5000UL;
         } else *commandError = CE_PARAM_RANGE;
       } else
     #endif
@@ -62,11 +62,10 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
         int i = ws.toInt();
         if (i == 0) {
           setCoolSetpoint(0);
-          setRelayOff(COOL_RELAY);
+          relay.off(COOL_RELAY);
         } else
         if (i >= 1 && i <= 40) {
           setCoolSetpoint(i);
-          msFiveMinuteCounter = millis() + 5000UL;
         } else *commandError = CE_PARAM_RANGE;
       } else
     #endif

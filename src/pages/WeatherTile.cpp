@@ -131,7 +131,7 @@
 
     #if WEATHER_CLOUD_CVR == ON
       strcpy_P(temp1, htmlInnerWeatherCloud);
-      strcpy(ws1, weather.cloudCoverDescriptionShort());
+      strcpy(ws1, weather.cloudCoverDescription());
       sprintf(temp, temp1, ws1);
       sendHtml(temp);
     #endif
