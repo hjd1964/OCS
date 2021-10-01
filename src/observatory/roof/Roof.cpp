@@ -39,7 +39,7 @@ bool Roof::open() {
   timeLeftToCloseAtStart = nv.readL(NV_ROOF_TIME_TO_CLOSE);
 
   // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
-  if (!safetyOverride && (abs((timeLeftToOpenAtStart+timeLeftToCloseAtStart) - timeAvg) > 2000)) {
+  if (!safetyOverride && (abs((timeLeftToOpenAtStart + timeLeftToCloseAtStart) - timeAvg) > 2000)) {
     lastError = RERR_OPEN_LOCATION_UNKNOWN;
     return false;
   }
@@ -82,7 +82,7 @@ bool Roof::open() {
   }
 
   // Log start time
-  openStartTime = (long)millis();
+  openStartTime = millis();
 
   lastError = RERR_NONE;
   return true;
@@ -304,7 +304,7 @@ void Roof::poll() {
 // called repeatedly to open the roof
 void Roof::continueOpening() {
   cli();
-  long msOfTravel = (long)millis() - openStartTime;
+  long msOfTravel = (long)(millis() - openStartTime);
   sei();
 
   #if ROOF_POWER_PWM_SOFTSTART == ON
@@ -319,7 +319,7 @@ void Roof::continueOpening() {
   // calculate how far we are from opening and closing the roof right now
   long timeLeftToOpenNow = timeLeftToOpenAtStart - msOfTravel;
   if (timeLeftToOpenNow < 0) timeLeftToOpenNow = 0;
-  long timeLeftToCloseNow=timeAvg - timeLeftToOpenNow;
+  long timeLeftToCloseNow = timeAvg - timeLeftToOpenNow;
 
   // keep track of where we are (to the nearest five seconds)
   long secondsOfTravel = round(msOfTravel/5000)*5000;
@@ -381,7 +381,7 @@ void Roof::continueOpening() {
 // called repeatedly to close the roof
 void Roof::continueClosing() {
   cli();
-  long msOfTravel = (long)millis() - closeStartTime;
+  long msOfTravel = (long)(millis() - closeStartTime);
   sei();
 
   #if ROOF_POWER_PWM_SOFTSTART == ON
@@ -407,7 +407,7 @@ void Roof::continueClosing() {
   }
 
   // On a stuck limit switch
-  if (!safetyOverride && (timeAvg-timeLeftToCloseNow)>ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
+  if (!safetyOverride && (timeAvg-timeLeftToCloseNow) > ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
     fault.closeLimitSW = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
@@ -423,7 +423,7 @@ void Roof::continueClosing() {
   }
 
   // Or the whole process is taking too long
-  if (!safetyOverride && (timeLeftToCloseAtStart-msOfTravel) < -timeErrorLimit) {
+  if (!safetyOverride && (timeLeftToCloseAtStart - msOfTravel) < -timeErrorLimit) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
     fault.closeOverTime = true;
     // Go idle (assume the roof has stopped where we can't cut the power)

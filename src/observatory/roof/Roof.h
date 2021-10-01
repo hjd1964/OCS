@@ -128,8 +128,9 @@ class Roof {
     // roof timing and travel
     const long timeAvg = (long)(ROOF_TIME_AVG)*1000L;
     const long timeErrorLimit = (long)(ROOF_TIME_TOL)*1000L;
-    long lastSecondsOfTravel, openStartTime, timeLeftToOpenAtStart, closeStartTime, timeLeftToCloseAtStart;
+    long lastSecondsOfTravel, timeLeftToOpenAtStart, timeLeftToCloseAtStart;
     long travel = 0;
+    unsigned long openStartTime, closeStartTime;
 
     const char * ErrorMessage[21] = {
       "",                                    // 0
