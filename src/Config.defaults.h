@@ -155,6 +155,7 @@
 #define RELAY18_ACTIVE_STATE HIGH
 #endif
 
+// Digital, optionally add: |HYST(n) Where n=0..1023 stability time in ms.
 #ifndef SENSE1_ON_STATE
 #define SENSE1_ON_STATE HIGH
 #endif
