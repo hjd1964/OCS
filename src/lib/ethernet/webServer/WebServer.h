@@ -30,8 +30,8 @@
 
   // misc.
   #define WEB_SOCKET_TIMEOUT    10000
-  #define HANDLER_COUNT_MAX     15
-  #define PARAMETER_COUNT_MAX   6
+  #define HANDLER_COUNT_MAX     16
+  #define PARAMETER_COUNT_MAX   8
   
   typedef void (* webFunction) (EthernetClient *client);
   

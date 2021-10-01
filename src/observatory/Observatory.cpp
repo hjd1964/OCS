@@ -137,6 +137,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     digitalWrite(ETHERNET_RESET_PIN, HIGH);
   #endif
 
+  // Note: Ethernet webserver has limitations
+  // HANDLER_COUNT_MAX     16
+  // PARAMETER_COUNT_MAX   8
+
   www.init();
   www.setResponseHeader(http_defaultHeader);
 
