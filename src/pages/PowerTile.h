@@ -9,10 +9,10 @@
   extern void powerTile(EthernetClient *client);
   extern void powerContents(EthernetClient *client);
 
-  const char htmlPower1[] PROGMEM = "<div id=\"Power\" class=\"obsControl\" >";
-  const char htmlPower3[] PROGMEM = "</div>\r\n";
+  const char htmlPowerBegin[] PROGMEM = "<div id=\"Power\" class=\"obsControl\" >";
+  const char htmlPowerEnd[] PROGMEM = "</div>\r\n";
 
-  const char htmlPower[] PROGMEM =
+  const char htmlPowerA[] PROGMEM =
   "<b>Power</b><br />"
   "<form><div>"
   #if POWER_DEVICE1_RELAY != OFF
@@ -21,12 +21,16 @@
   #if POWER_DEVICE2_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE2_RELAY) "\",this.checked)' %___PD2 />&nbsp;&nbsp;" POWER_DEVICE2_NAME "<br />"
   #endif
+  ;
+  const char htmlPowerB[] PROGMEM =
   #if POWER_DEVICE3_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE3_RELAY) "\",this.checked)' %___PD3 />&nbsp;&nbsp;" POWER_DEVICE3_NAME "<br />"
   #endif
   #if POWER_DEVICE4_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE4_RELAY) "\",this.checked)' %___PD4 />&nbsp;&nbsp;" POWER_DEVICE4_NAME "<br />"
   #endif
+  ;
+  const char htmlPowerC[] PROGMEM =
   #if POWER_DEVICE5_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE5_RELAY) "\",this.checked)' %___PD5 />&nbsp;&nbsp;" POWER_DEVICE5_NAME "<br />"
   #endif
