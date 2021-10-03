@@ -28,7 +28,7 @@
   #else
   void powerContents() {
   #endif
-    char temp[350];
+    char temp[400];
 
     strcpy_P(temp, htmlPowerA);
     #if POWER_DEVICE1_RELAY != OFF
