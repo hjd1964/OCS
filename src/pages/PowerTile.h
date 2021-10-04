@@ -29,7 +29,7 @@
   #if POWER_DEVICE4_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE4_RELAY) "\",this.checked)' %___PD4 />&nbsp;&nbsp;" POWER_DEVICE4_NAME "<br />"
   #endif
-  ;
+  "";
   const char htmlPowerC[] PROGMEM =
   #if POWER_DEVICE5_RELAY != OFF
   "&nbsp;&nbsp;<input type=\"checkbox\" onclick='SetRelay(\"" STR(POWER_DEVICE5_RELAY) "\",this.checked)' %___PD5 />&nbsp;&nbsp;" POWER_DEVICE5_NAME "<br />"
