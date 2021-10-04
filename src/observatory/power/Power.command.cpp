@@ -23,7 +23,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
   } else
 
   if (command[0] == 'S') {
-    //  :SRn,[state]#  Set Relay n [state] = ON, OFF, DELAY, n (pwm 1-9)
+    //  :SRn,[state]#  Set Relay n [state] = ON, OFF, DELAY, n (pwm 0 to 10)
     //         Example: :SR1,ON#
     //         Returns: 1 on success
     if (command[1] == 'R' && parameter[1] == ',') {
@@ -34,10 +34,14 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
         if (ws.equals("DELAY")) relay.onDelayedOff(r, 30); else
         if (ws.equals("ON"))    relay.on(r); else
         if (ws.equals("OFF"))   relay.off(r); else
-        if (ws.length() == 1) {
+        if (ws.length() == 1 && ws[0] >= '0' && ws[0] <= '9') {
           int j = ws[0] - '0';
           relay.power(r, j*10);
-        } else *commandError = CE_PARAM_FORM;
+        } else
+        if (ws == "10") {
+          relay.power(r, 100);
+        } else
+        *commandError = CE_PARAM_FORM;
       } else *commandError = CE_PARAM_RANGE;
     } else return false;
   } else return false;

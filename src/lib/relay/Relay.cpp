@@ -17,17 +17,16 @@ void Relay::init() {
 
   // start relay polling task
   VF("MSG: Relay, start monitor task (rate 100ms priority 0)... ");
-  if (tasks.add(100, 0, true, 0, pollWrapper, "Relays")) { VLF("success"); } else { VLF("FAILED!"); }
-/*
+  if (tasks.add(1, 0, true, 0, pollWrapper, "Relays")) { VLF("success"); } else { VLF("FAILED!"); }
+
   // start relay pwm task
   VF("MSG: Relay, start pwm task (rate 1ms priority 0)... ");
-  uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
+  uint8_t handle = tasks.add(100, 0, true, 0, pwmWrapper, "RelyPwm");
   if (handle) {
     VF("success");
     if (!tasks.requestHardwareTimer(handle, 1, 0)) { VF(" (no hardware timer!)"); }
     VL("");
   } else { VLF("FAILED!"); }
-  */
 }
 
 void Relay::on(int r, bool updateState) {
@@ -46,9 +45,13 @@ void Relay::onDelayedOff(int r, float seconds) {
 }
 
 void Relay::power(int r, int percentPower) {
-  percentPower /= 10;
-  if (r >= 1 && r <= RELAYS_MAX && percentPower >= 1 && percentPower <= 9) {
-    settings[r - 1].state = 10 + percentPower;
+  percentPower = lroundf(percentPower/10.0F);
+  if (r >= 1 && r <= RELAYS_MAX) {
+    if (percentPower == 0) off(r);
+    if (percentPower >= 1 && percentPower <= 9) {
+      settings[r - 1].state = 10 + percentPower;
+    }
+    if (percentPower == 10) on(r);
   }
 }
 
@@ -87,11 +90,11 @@ void Relay::pwm() {
   fastPwmCycle++;
   if (fastPwmCycle > 9) fastPwmCycle = 0;
   for (int r = 1; r <= RELAYS_MAX; r++) {
-    if (settings[r - 1].state >= 10) {
+    if (settings[r - 1].state >= 10 && settings[r - 1].state < 20) {
       if (fastPwmCycle == 0) {
         on(r, false);
       } else {
-        if (settings[r - 1].state/10 == fastPwmCycle) off(r, false);
+        if (settings[r - 1].state - 10 == fastPwmCycle) off(r, false);
       }
     }
   }
