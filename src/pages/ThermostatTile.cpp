@@ -86,7 +86,7 @@
 
       for (int i = 0; i < 10; i++) {
         if (c == cs[i]) strcpy(ws1, "selected"); else strcpy(ws1, "");
-        sprintf_P(temp, htmlThermostatOption, cs[i], ws1, cs[i]);
+        sprintf_P(temp, htmlThermostatOption, cs[i], ws1, cs[i], unitCool);
         sendHtml(temp);
       }
       strcpy_P(temp, htmlThermostatCool2);
