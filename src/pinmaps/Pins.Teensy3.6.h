@@ -27,7 +27,7 @@
 
 // Hardware SPI interface is on pins 11, 12, 13
 #ifndef SDCARD_CS_PIN
-  #define SDCARD_CS_PIN        OFF             // unknown or N/A
+  #define SDCARD_CS_PIN        OFF
 #endif
 #ifndef ETHERNET_CS_PIN
   #define ETHERNET_CS_PIN      10

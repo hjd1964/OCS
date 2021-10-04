@@ -5,9 +5,10 @@
 
 #if ROOF == ON
   #include "../lib/ethernet/webServer/WebServer.h"
+  #include "../lib/wifi/Wifi.h"
 
-  extern void roofTile(EthernetClient *client);
-  extern void roofContents(EthernetClient *client);
+  extern void roofTile();
+  extern void roofContents();
 
   const char htmlRoof1[] PROGMEM =
   "<div id=\"Roof\" class=\"obsControl\">"

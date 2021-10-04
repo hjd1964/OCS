@@ -6,16 +6,12 @@
 
 #define ANALOG_MAX 16
 
-typedef struct AnalogSettings {
-  int pin;
-} AnalogSettings;
-
 class Analog {
   public:
     float read(int n);
 
   private:
-    volatile AnalogSettings settings[ANALOG_MAX] {
+    volatile int pins[ANALOG_MAX] {
       ASENSE1_PIN,
       ASENSE2_PIN,
       ASENSE3_PIN,

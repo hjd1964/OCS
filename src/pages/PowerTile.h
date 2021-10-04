@@ -5,9 +5,10 @@
 
 #if POWER == ON
   #include "../lib/ethernet/webServer/WebServer.h"
+  #include "../lib/wifi/Wifi.h"
 
-  extern void powerTile(EthernetClient *client);
-  extern void powerContents(EthernetClient *client);
+  extern void powerTile();
+  extern void powerContents();
 
   const char htmlPowerBegin[] PROGMEM = "<div id=\"Power\" class=\"obsControl\" >";
   const char htmlPowerEnd[] PROGMEM = "</div>\r\n";

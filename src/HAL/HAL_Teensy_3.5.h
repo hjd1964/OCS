@@ -51,6 +51,7 @@
   analogReadResolution(10); \
   analogWriteResolution(HAL_ANALOG_WRITE_BITS); \
   nv.init(E2END + 1, true, 0, false); \
+   analogReference(DEFAULT); \
 }
 
 //--------------------------------------------------------------------------------------------------

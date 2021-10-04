@@ -8,18 +8,14 @@
 
   #include "../observatory/roof/Roof.h"
 
-  #if OPERATIONAL_MODE != WIFI
-  void roofTile(EthernetClient *client) {
-  #else
   void roofTile() {
-  #endif
     {
       char temp[250] = "";
       strcpy_P(temp, htmlRoof1);
       sendHtml(temp);
     }
 
-    roofContents(client);
+    roofContents();
 
     {
       char temp[250] = "";

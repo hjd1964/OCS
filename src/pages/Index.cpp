@@ -18,11 +18,7 @@
 #include "../observatory/safety/Safety.h"
 #include "../observatory/thermostat/Thermostat.h"
 
-#if OPERATIONAL_MODE != WIFI
-void index(EthernetClient *client) {
-#else
 void index() {
-#endif
   {
     char temp[250] = "";
 
@@ -54,26 +50,21 @@ void index() {
     strcpy_P(temp, html_pageHeader3); sendHtml(temp);
   }
 
-  statusTile(client);
-
+  statusTile();
   #if WEATHER == ON
-    weatherTile(client);
+    weatherTile();
   #endif
-
   #if POWER == ON
-    powerTile(client);
+    powerTile();
   #endif
-
   #if THERMOSTAT == ON
-    thermostatTile(client);
+    thermostatTile();
   #endif
-
   #if LIGHT == ON
-    lightTile(client);
+    lightTile();
   #endif
-
   #if ROOF == ON
-    roofTile(client);
+    roofTile();
   #endif
 
   {
@@ -98,11 +89,7 @@ void index() {
   }
 }
 
-#if OPERATIONAL_MODE != WIFI
-void indexAjax(EthernetClient *client) {
-#else
 void indexAjax() {
-#endif
   String a = www.arg("press");
 
   // lights

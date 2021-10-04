@@ -11,11 +11,7 @@
   #include "../lib/relay/Relay.h"
   #include "../observatory/thermostat/Thermostat.h"
 
-  #if OPERATIONAL_MODE != WIFI
-  void thermostatTile(EthernetClient *client) {
-  #else
   void thermostatTile() {
-  #endif
     char temp[256] = "";
     char ws1[20] = "";
 
@@ -97,11 +93,7 @@
     sendHtml(temp);
   }
 
-  #if OPERATIONAL_MODE != WIFI
-  void thermostatContents(EthernetClient *client) {
-  #else
   void thermostatContents() {
-  #endif
     char temp[40] = "";
     
     float t = thermostatSensor.temperature();

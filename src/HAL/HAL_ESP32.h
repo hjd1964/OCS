@@ -32,7 +32,7 @@
 //--------------------------------------------------------------------------------------------------
 // General purpose initialize for HAL
 
-#include "../lib/serial/Serial_IP_WiFi.h"
+#include "../lib/serial/Serial_IP_ESP32.h"
 #if defined(SERIAL_IP)
   #define SERIAL_IP_BEGIN() SERIAL_IP.begin(9999);
 #else
@@ -59,8 +59,9 @@
   #error "Configuration (Config.h): SERIAL_BT_MODE and SERIAL_IP_MODE can't be enabled at the same time, disable one or both options."
 #endif
 
+//  analogWriteResolution(HAL_ANALOG_WRITE_BITS);
+
 #define HAL_INIT() { \
-  analogWriteResolution(HAL_ANALOG_WRITE_BITS); \
   nv.init(E2END + 1, false, 5000, false); \
   SERIAL_IP_BEGIN(); \
   SERIAL_PIP_BEGIN(); \
@@ -75,7 +76,18 @@
 
 //---------------------------------------------------------------------------------------------------
 // Misc. includes to support this processor's operation
-#include "../lib/analog/AN_ESP32.h"
+//#include "../lib/analog/AN_ESP32.h"
 
 // Allow MCU reset -----------------------------------------------------------------------------------
 #define HAL_RESET() ESP.restart()
+
+// Watchdog control macros --------------------------------------------------------------------------
+#if WATCHDOG != OFF
+  #define WDT_ENABLE
+  #define WDT_RESET
+  #define WDT_DISABLE
+#else
+  #define WDT_ENABLE
+  #define WDT_RESET
+  #define WDT_DISABLE
+#endif

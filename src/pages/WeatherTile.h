@@ -6,9 +6,10 @@
 
 #if WEATHER == ON
   #include "../lib/ethernet/webServer/WebServer.h"
+  #include "../lib/wifi/Wifi.h"
 
-  extern void weatherTile(EthernetClient *client);
-  extern void weatherContents(EthernetClient *client);
+  extern void weatherTile();
+  extern void weatherContents();
 
   const char htmlWeather1[] PROGMEM = "<div id=\"Weather\" class=\"obsControl\" >";
   const char htmlWeather3[] PROGMEM = "</div>\r\n";

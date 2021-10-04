@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------------
 // IP communication routines
 
-#include "Serial_IP_WiFi.h"
+#include "Serial_IP_ESP32.h"
 
 #if OPERATIONAL_MODE == WIFI && (SERIAL_IP_MODE == STATION || SERIAL_IP_MODE == ACCESS_POINT)
 

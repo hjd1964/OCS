@@ -11,27 +11,19 @@
   #include "../observatory/weather/Weather.h"
   #include "../observatory/safety/Safety.h"
 
-  #if OPERATIONAL_MODE != WIFI
-  void weatherTile(EthernetClient *client) {
-  #else
   void weatherTile() {
-  #endif
     char temp[128] = "";
 
     strcpy_P(temp, htmlWeather1);
     sendHtml(temp);
 
-    weatherContents(client);
+    weatherContents();
 
     strcpy_P(temp,htmlWeather3);
     sendHtml(temp);
   }
 
-  #if OPERATIONAL_MODE != WIFI
-  void weatherContents(EthernetClient *client) {
-  #else
   void weatherContents() {
-  #endif
     char temp[128] = "";
     char ws1[30] = "";
     float f;

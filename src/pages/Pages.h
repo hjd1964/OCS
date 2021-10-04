@@ -9,44 +9,25 @@
 
 #include "htmlHeaders.h"
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/Wifi.h"
 
-void check(char *ss, const char *rs);
-void erase(char *ss, const char *rs);
+extern void check(char *ss, const char *rs);
+extern void erase(char *ss, const char *rs);
 
-#if OPERATIONAL_MODE == WIFI
-  void index();
-  void indexAjax();
+extern void index();
+extern void indexAjax();
 
-  void lightContents();
-  void powerContents();
-  void roofContents();
-  void statusContents();
-  void thermostatContents();
-  void thermostatHumidityContents();
-  void weatherContents();
+extern void lightContents();
+extern void powerContents();
+extern void roofContents();
+extern void statusContents();
+extern void thermostatContents();
+extern void thermostatHumidityContents();
+extern void weatherContents();
 
-  void relaysAjax();
+extern void relaysAjax();
 
-  void weatherPage();
-  void skyPage();
+extern void weatherPage();
+extern void skyPage();
 
-  void handleNotFound();
-#else
-  void index(EthernetClient *client);
-  void indexAjax(EthernetClient *client);
-
-  void lightContents(EthernetClient *client);
-  void powerContents(EthernetClient *client);
-  void roofContents(EthernetClient *client);
-  void statusContents(EthernetClient *client);
-  void thermostatContents(EthernetClient *client);
-  void thermostatHumidityContents(EthernetClient *client);
-  void weatherContents(EthernetClient *client);
-
-  void relaysAjax(EthernetClient *client);
-
-  void weatherPage(EthernetClient *client);
-  void skyPage(EthernetClient *client);
-
-  void handleNotFound(EthernetClient *client);
-#endif
+extern void handleNotFound();

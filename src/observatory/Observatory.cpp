@@ -5,9 +5,6 @@
 #include "../Common.h"
 #include "../tasks/OnTask.h"
 
-#include "../lib/ethernet/Ethernet.h"
-#include "../lib/ethernet/webServer/WebServer.h"
-#include "../lib/serial/Serial_IP_Ethernet.h"
 #include "../lib/weatherSensor/WeatherSensor.h"
 #include "../lib/relay/Relay.h"
 #include "../lib/sense/Sense.h"
@@ -140,8 +137,12 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // HANDLER_COUNT_MAX     16
   // PARAMETER_COUNT_MAX   8
 
-  www.init();
-  www.setResponseHeader(http_defaultHeader);
+  #if OPERATIONAL_MODE == WIFI
+    wifiStart();
+  #else
+    www.init();
+    www.setResponseHeader(http_defaultHeader);
+  #endif
 
   www.on("index.htm", index);
   #if FAV_ICON == ON
@@ -149,9 +150,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
   #if WEATHER == ON && WEATHER_CHARTS == ON
     www.on("weatherpage.htm", weatherPage);
-  #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-    www.on("skypage.htm", skyPage);
-  #endif
+    #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
+      www.on("skypage.htm", skyPage);
+    #endif
   #endif
   www.on("setvar", indexAjax);
   www.on("relay", relaysAjax);
@@ -172,6 +173,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     www.on("Chart.js", NULL);
   #endif
   www.on("/", index);
+
+  #if OPERATIONAL_MODE == WIFI
+    www.begin();
+  #endif
 
   #if TIME_LOCATION_SOURCE != OFF
     tls.init();
@@ -244,7 +249,7 @@ void Observatory::poll() {
 
   #if TIME_LOCATION_SOURCE == NTP
     // double check time if it looks like it's not set go back and ask for it again every 10 minutes
-    if (now() < 365UL*24UL*60UL*60UL) {
+    if (now() < 365L*24L*60L*60L) {
       if (!fastNTPSync) { setSyncInterval(10L*60L); fastNTPSync = true; }
     } else {
       if (startupTime == 0) startupTime = now();

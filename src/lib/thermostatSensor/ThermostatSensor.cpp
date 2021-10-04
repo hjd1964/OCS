@@ -19,7 +19,6 @@ bool _inside_humidityAssigned = NAN;
 void ThermostatSensor::init(){
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
   Wire.setClock(HAL_WIRE_CLOCK);
-  analogReference(DEFAULT);
 
   #if THERMOSTAT_SENSOR_TPH_BME280 != OFF
     bme280t.init();
@@ -49,3 +48,5 @@ float ThermostatSensor::humidity() {
   if (_inside_humidity < 0.0) _inside_humidity = NAN;
   return _inside_humidity;
 }
+
+ThermostatSensor thermostatSensor;

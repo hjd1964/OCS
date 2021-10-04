@@ -13,7 +13,6 @@ void thermostatWrapper() { thermostat.poll(); }
 
 // this gets called once on startup to initialize any thermostat sensors
 void Thermostat::init() {
-  analogReference(DEFAULT);
   thermostatSensor.init();
 
   // start polling task

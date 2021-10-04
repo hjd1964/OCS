@@ -5,14 +5,12 @@
 
 #include "../commands/ProcessCmds.h"
 
-#ifdef ESP8266
-  #ifndef ETHERNET_W5500
-    #error "The ESP8266 Ethernet option supports the W5500 only"
-  #endif
-  #include <Ethernet2.h>  // https://github.com/adafruit/Ethernet2
-#else
-  #include <Ethernet.h>
-#endif
+#include "../lib/ethernet/Ethernet.h"
+#include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/serial/Serial_IP_Ethernet.h"
+
+#include "../lib/wifi/Wifi.h"
+#include "../lib/serial/Serial_IP_ESP32.h"
 
 typedef struct Version {
   uint8_t major;

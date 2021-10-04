@@ -44,7 +44,6 @@ bool _skyQualityAssigned = false;
 void WeatherSensor::init() {
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
   Wire.setClock(HAL_WIRE_CLOCK);
-  analogReference(DEFAULT);
 
   #if WEATHER_SENSOR_TPH_BME280 != OFF
     bme280w.init();

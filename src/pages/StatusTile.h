@@ -4,10 +4,10 @@
 #include "../Common.h"
 
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/Wifi.h"
 
-extern void statusTile(EthernetClient *client);
-
-extern void statusContents(EthernetClient *client);
+extern void statusTile();
+extern void statusContents();
 
 const char htmlStatus1[] PROGMEM = "<div id=\"MiscStatus\" class=\"obsControl\">";
 

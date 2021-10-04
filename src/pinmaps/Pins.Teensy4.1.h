@@ -23,11 +23,9 @@
   #define SERIAL_E_BAUD_DEFAULT 9600
 #endif
 
-#define DAC_AS_DIGITAL                          // turn on support for using DACs to output digital signals using Arduino standard commands
-
 // Hardware SPI interface is on pins 11, 12, 13
 #ifndef SDCARD_CS_PIN
-  #define SDCARD_CS_PIN        OFF             // unknown or N/A
+  #define SDCARD_CS_PIN        OFF
 #endif
 #ifndef ETHERNET_CS_PIN
   #define ETHERNET_CS_PIN      10
@@ -64,8 +62,8 @@
 #define RELAY14_PIN            37
 #define RELAY15_PIN            38
 #define RELAY16_PIN            39
-#define RELAY17_PIN            A21
-#define RELAY18_PIN            A22
+#define RELAY17_PIN            40
+#define RELAY18_PIN            41
 
 // Digital inputs for sensing events
 #define SENSE1_PIN              2

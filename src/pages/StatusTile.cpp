@@ -13,27 +13,19 @@
 extern int timeZone;
 extern time_t startupTime;
 
-#if OPERATIONAL_MODE != WIFI
-void statusTile(EthernetClient *client) {
-#else
 void statusTile() {
-#endif
   char temp[100] = "";
 
   strcpy_P(temp, htmlStatus1);
   sendHtml(temp);
 
-  statusContents(client);
+  statusContents();
 
   strcpy_P(temp, htmlStatus3);
   sendHtml(temp);
 }
 
-#if OPERATIONAL_MODE != WIFI
-void statusContents(EthernetClient *client) {
-#else
 void statusContents() {
-#endif
   char temp[128];
   char ws1[20];
   char ws2[4];

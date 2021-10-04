@@ -100,19 +100,27 @@ void Weather::poll(void) {
         sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
         String fn = "L" + String(temp) + ".TXT";
 
-        if (!SD.exists(fn)) {
+        if (!SD.exists(fn.c_str())) {
           #if DEBUG_SD == ON
             VLF("MSG: Data file doesn't exist...");
           #endif
           // create the empty file
-          dataFile = SD.open(fn, FILE_WRITE);
+          #ifdef TEENSYDUINO
+            dataFile = SD.open(fn.c_str());
+          #else
+            dataFile = SD.open(fn, FILE_WRITE);
+          #endif
           dataFile.close();
 
           // fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
           // size=250400/day
           
-          dataFile = SD.open(fn, FILE_WRITE);
+          #ifdef TEENSYDUINO
+            dataFile = SD.open(fn.c_str());
+          #else
+            dataFile = SD.open(fn, FILE_WRITE);
+          #endif
           if (dataFile) {
             #if DEBUG_SD == ON
               VLF("MSG: Writing file...");
@@ -136,7 +144,11 @@ void Weather::poll(void) {
         }
 
         // write to the sdcard file
-        dataFile = SD.open(fn, O_READ | O_WRITE);
+        #ifdef TEENSYDUINO
+          dataFile = SD.open(fn.c_str());
+        #else
+          dataFile = SD.open(fn, O_READ | O_WRITE);
+        #endif
         if (dataFile) {
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
@@ -155,7 +167,11 @@ void Weather::poll(void) {
 
         #if DEBUG_SD == ON
           int n;
-          dataFile = SD.open(fn, FILE_READ);
+          #ifdef TEENSYDUINO
+            dataFile = SD.open(fn.c_str());
+          #else
+            dataFile = SD.open(fn, FILE_READ);
+          #endif
           if (dataFile) {
             dataFile.seek(logRecordLocation(t)*80L);
             n = dataFile.read(temp, 80);

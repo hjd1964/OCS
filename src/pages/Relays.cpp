@@ -3,11 +3,7 @@
 #include "../lib/relay/Relay.h"
 #include "../lib/nv/NV.h"
 
-#if OPERATIONAL_MODE != WIFI
-void relaysAjax(EthernetClient *client) {
-#else
 void relaysAjax() {
-#endif
   for (int i = 1; i <= 14; i++) {
     String s = "r" + String(i);
     String a = www.arg(s);

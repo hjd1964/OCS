@@ -5,9 +5,10 @@
 
 #if THERMOSTAT == ON
   #include "../lib/ethernet/webServer/WebServer.h"
+  #include "../lib/wifi/Wifi.h"
 
-  extern void thermostatTile(EthernetClient *client);
-  extern void thermostatContents(EthernetClient *client);
+  extern void thermostatTile();
+  extern void thermostatContents();
 
   const char htmlThermostatBegin[] PROGMEM =
   "<div class=\"obsControl\">"

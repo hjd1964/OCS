@@ -5,9 +5,10 @@
 
 #if LIGHT == ON
   #include "../lib/ethernet/webServer/WebServer.h"
+  #include "../lib/wifi/Wifi.h"
 
-  extern void lightTile(EthernetClient *client);
-  extern void lightContents(EthernetClient *client);
+  extern void lightTile();
+  extern void lightContents();
 
   const char htmlLight1[] PROGMEM = "<div id=\"Light\" class=\"obsControl\" >";
   const char htmlLight3[] PROGMEM = "</div>\r\n";

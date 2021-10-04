@@ -20,7 +20,11 @@
 
   void WebServer::init() {
     #if SD_CARD == ON
-      SDfound = SD.begin(SDCARD_CS_PIN);
+      #if TEENSYDUINO
+        SDfound = SD.begin(BUILTIN_SDCARD);
+      #else
+        SDfound = SD.begin(SDCARD_CS_PIN);
+      #endif
     #else
       if (SDCARD_CS_PIN != OFF) {
         pinMode(SDCARD_CS_PIN, OUTPUT);
@@ -66,7 +70,6 @@
   }
 
   void WebServer::handleClient() {
-    EthernetClient client;
     client = webServer.available();
     if (client) {
       WL("MSG: Webserver new client");
@@ -131,7 +134,7 @@
         if (handlers[handler_number] != NULL) {
           WF("MSG: Webserver running handler# "); WL(handler_number);
           client.print(responseHeader);
-          (*handlers[handler_number])(&client);
+          (*handlers[handler_number])();
           handlerFound = true;
         } else {
           #if SD_CARD == ON
@@ -157,7 +160,7 @@
       }
       
       // handle 404 page not found
-      if (!handlerFound && notFoundHandler != NULL) (*notFoundHandler)(&client);
+      if (!handlerFound && notFoundHandler != NULL) (*notFoundHandler)();
 
       // give the web browser time to receive the data
       delay(1);
@@ -273,6 +276,14 @@
     return EmptyStr;
   }
   
+  void WebServer::sendContent(String s) {
+    client.print(s);
+  }
+
+  void WebServer::sendContent(const char * s) {
+    client.print(s);
+  }
+
   #if SD_CARD == ON
     void WebServer::on(String fn) {
       handler_count++; if (handler_count > HANDLER_COUNT_MAX) { handler_count = HANDLER_COUNT_MAX; return; }
@@ -283,10 +294,14 @@
     void WebServer::sdPage(String fn, EthernetClient *client) {
       char temp[256] = "";
       int n;
-    
+
       // open the sdcard file
       if (SDfound) {
-        File dataFile = SD.open(fn, FILE_READ);
+        #ifdef TEENSYDUINO
+          File dataFile = SD.open(fn.c_str());
+        #else
+          File dataFile = SD.open(fn, FILE_READ);
+        #endif
         if (dataFile) {
           do {
             n = dataFile.available();

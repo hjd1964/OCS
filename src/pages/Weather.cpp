@@ -11,14 +11,10 @@
   #include "htmlScripts.h"
   #include "htmlTabs.h"
 
-  void makeChartCanvas(EthernetClient *client, const char *chartId);
-  void makeChartJs(EthernetClient *client, const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
+  void makeChartCanvas(const char *chartId);
+  void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
 
-  #if OPERATIONAL_MODE != WIFI
-  void weatherPage(EthernetClient *client) {
-  #else
   void weatherPage() {
-  #endif
     char temp[256] = "";
     String a = www.arg("chart");
 
@@ -103,11 +99,7 @@
   }
 
   #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-    #if OPERATIONAL_MODE != WIFI
-    void skyPage(EthernetClient *client) {
-    #else
     void skyPage() {
-    #endif
       char temp[256] = "";
       String a = www.arg("chart");
 
@@ -173,7 +165,7 @@
     }
   #endif
 
-  void makeChartJs(EthernetClient *client, const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
+  void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
     char temp[256] = "";
     char temp1[256] = "";
     char ws1[90] = "";
@@ -204,7 +196,11 @@
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    File dataFile = SD.open(fn, FILE_READ);
+    #ifdef TEENSYDUINO
+      File dataFile = SD.open(fn.c_str());
+    #else
+      File dataFile = SD.open(fn, FILE_READ);
+    #endif
     if (dataFile) {
       for (long i = 0; i < 120; i++) {
         if (((rec + i*hours) - k) >= 2880L) {
@@ -215,7 +211,11 @@
           y -= 2000;
           sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
           fn = "L" + String(temp) + ".TXT";
-          dataFile = SD.open(fn, FILE_READ);
+          #ifdef TEENSYDUINO
+            dataFile = SD.open(fn.c_str());
+          #else
+            dataFile = SD.open(fn, FILE_READ);
+          #endif
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
@@ -257,7 +257,7 @@
     sendHtml(temp);
   }
 
-  void makeChartCanvas(EthernetClient *client, const char *chartId) {
+  void makeChartCanvas(const char *chartId) {
     sendHtml(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
     sendHtml(F("<canvas id=\"")); sendHtml(chartId); sendHtml(F("\" width=\"600\" height=\"200\"></canvas>\r\n"));
     sendHtml(F("</div>\r\n"));

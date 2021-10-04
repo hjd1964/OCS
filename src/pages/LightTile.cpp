@@ -8,27 +8,19 @@
   #include "../lib/relay/Relay.h"
   #include "Pages.h"
 
-  #if OPERATIONAL_MODE != WIFI
-  void lightTile(EthernetClient *client) {
-  #else
   void lightTile() {
-  #endif
     char temp[100];
     
     strcpy_P(temp, htmlLight1);
     sendHtml(temp);
 
-    lightContents(client);
+    lightContents();
 
     strcpy_P(temp,htmlLight3);
     sendHtml(temp);
   }
 
-  #if OPERATIONAL_MODE != WIFI
-  void lightContents(EthernetClient *client) {
-  #else
   void lightContents() {
-  #endif
     char temp[250];
 
     strcpy_P(temp, htmlLighting1);
