@@ -45,10 +45,8 @@
 // The unique MAC address for your OCS
 #define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF}
 
-#define TIME_IP_ADDR       (216,239,35,0) // ..35.0, time.google.com (216.239.35.0) or time-a.timefreq.bldrdoc.gov at         Option
-                                          //         132.163.4.101, 132.163.4.102, 132.163.4.103, etc.
-#define CHECK_IP_ADDR    (100,24,172,113) //
-                                          //         default is arduino.cc.  Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
+#define TIME_IP_ADDR        (129,6,15,28) // ...6,15,28), time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
+#define CHECK_IP_ADDR    (100,24,172,113) //              default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
 
 #define AP_ENABLED                   true //        true, Wifi Access Point Enabled.                                          Adjust
 #define AP_SSID                     "OCS" //       "OCS", Wifi Access Point SSID.                                             Adjust
