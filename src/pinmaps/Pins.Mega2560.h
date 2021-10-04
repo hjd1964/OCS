@@ -31,7 +31,7 @@
 #endif
 
 // Ethernet Adapter reset pin
-#define ETH_RESET_PIN          OFF
+#define ETH_RESET_PIN          ETHERNET_RESET_PIN
 
 // Digital outputs for switching relays
 #define RELAY1_PIN             23

@@ -5,6 +5,15 @@
 
 #include "../commands/ProcessCmds.h"
 
+#ifdef ESP8266
+  #ifndef ETHERNET_W5500
+    #error "The ESP8266 Ethernet option supports the W5500 only"
+  #endif
+  #include <Ethernet2.h>  // https://github.com/adafruit/Ethernet2
+#else
+  #include <Ethernet.h>
+#endif
+
 typedef struct Version {
   uint8_t major;
   uint8_t minor;
@@ -28,6 +37,7 @@ class Observatory {
   private:
     Firmware firmware;
     bool fastNTPSync = false;
+    IPAddress connectCheckIP = IPAddress CHECK_IP_ADDR;
 };
 
 extern Observatory observatory;

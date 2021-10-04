@@ -7,6 +7,7 @@
 
 #include "../lib/ethernet/Ethernet.h"
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/serial/Serial_IP_Ethernet.h"
 #include "../lib/weatherSensor/WeatherSensor.h"
 #include "../lib/relay/Relay.h"
 #include "../lib/sense/Sense.h"
@@ -31,7 +32,7 @@ int timeZone = TIME_ZONE;
 time_t startupTime = 0;
 
 #if CONNECTION_CHECK_HOURS != OFF
-  EthernetClient client;
+  EthernetClient connectionCheckClient;
 #endif
 
 unsigned long msFiveMinuteCounter;
@@ -135,14 +136,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // ----------------------------------------------------------------------
   // initialize ethernet
 
-  #if ETHERNET_RESET_PIN != OFF
-    // hold ethernet shield in reset for 2 seconds
-    pinMode(ETHERNET_RESET_PIN, OUTPUT);
-    digitalWrite(ETHERNET_RESET_PIN, LOW);
-    tasks.yeild(2000);
-    digitalWrite(ETHERNET_RESET_PIN, HIGH);
-  #endif
-
   // Note: Ethernet webserver has limitations
   // HANDLER_COUNT_MAX     16
   // PARAMETER_COUNT_MAX   8
@@ -195,11 +188,12 @@ void Observatory::connectionCheck() {
     static unsigned long nextConnectionCheck = 1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST);
     if ((long)(millis() - nextConnectionCheck) > 0) {
       connectionCheckTry++;
-      int success=client.connect(connectCheck, 80);
+
+      int success = connectionCheckClient.connect(connectCheckIP, 80);
 
       if (success) {
         VLF("MSG: Connection Check Success");
-        client.stop();
+        connectionCheckClient.stop();
         connectionCheckTry = 0;
         nextConnectionCheck = millis() + (1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST));
       } else {
@@ -217,20 +211,28 @@ void Observatory::connectionCheck() {
     #if ETHERNET_RESET_PIN != OFF
       if (!success && connectionCheckTry == CONNECT_RESET_TRIES) {
         VLF("MSG: Reset Ethernet shield");
-        // reset ethernet shield
         digitalWrite(ETHERNET_RESET_PIN, LOW);
-        tasks.yield(2000);
+        tasks.yield(1000);
         digitalWrite(ETHERNET_RESET_PIN, HIGH);
-        tasks.yield(2000);
-        // restart servers
-        Ethernet.begin(m, ip, myDns, gateway, subnet);
-        Cmd.init(9999,500);
-      #if TIME_LOCATION_SOURCE == NTP
-        Udp.begin(localPort);
-      #endif
-      #if WATCHDOG != ON_CC
-        connectionCheckTry = 0;
-      #endif
+        tasks.yield(1000);
+
+        www.restart();
+
+        #if STANDARD_COMMAND_CHANNEL == ON
+          ipSerial.restart();
+        #endif
+
+        #if PERSISTENT_COMMAND_CHANNEL == ON
+          pipSerial.restart();
+        #endif
+
+        #if TIME_LOCATION_SOURCE == NTP
+          tls.restart();
+        #endif
+
+        #if WATCHDOG != ON_CC
+          connectionCheckTry = 0;
+        #endif
       }
     #endif
     }

@@ -9,9 +9,11 @@
   #include "../Ethernet.h"
 
   // Turn ON to allow webserver debug messages
-  #define WEBSERVER_DEBUG OFF
+  #ifndef DEBUG_WEBSERVER
+    #define DEBUG_WEBSERVER OFF
+  #endif
 
-  #if WEBSERVER_DEBUG == ON
+  #if DEBUG_WEBSERVER == ON
     #define W(x) V(x)
     #define WF(x) VF(x)
     #define WL(x) VL(x)
@@ -44,6 +46,10 @@
   class WebServer {
     public:
       void init();
+
+      // restart web server
+      void restart();
+
       void handleClient();
       void setResponseHeader(const char *str);
       void on(String fn, webFunction handler);

@@ -43,6 +43,10 @@ bool TimeLocationSource::init() {
   return active;
 }
 
+void TimeLocationSource::restart() {
+  Udp.begin(localPort);
+}
+
 void TimeLocationSource::set(JulianDate ut1) {
   ut1 = ut1;
 }
@@ -81,7 +85,7 @@ void TimeLocationSource::poll() {
       time_t ntpTime = secsSince1900 - 2208988800UL;
       setTime(ntpTime);
       DLF("MSG: TLS, next NTP query in 24 hours");
-      tasks.setPeriod(handle, 24*60*60*1000L);
+      tasks.setPeriod(handle, 24L*60L*60L*1000L);
       ready = true;
       return;
     }

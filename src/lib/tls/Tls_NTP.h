@@ -15,6 +15,9 @@ class TimeLocationSource {
     // initialize (also enables the RTC PPS if available)
     bool init();
 
+    // restart UDP server
+    void restart();
+
     // true if date/time ready
     inline bool isReady() { return ready; }
 

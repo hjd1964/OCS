@@ -43,7 +43,7 @@
         VF("MSG: Resetting Ethernet Adapter using ETH_RESET_PIN ("); V(ETH_RESET_PIN); VL(")");
         pinMode(ETH_RESET_PIN, OUTPUT); 
         digitalWrite(ETH_RESET_PIN, LOW);
-        delayMicroseconds(500);
+        delay(1000);
         digitalWrite(ETH_RESET_PIN, HIGH);
         delay(1000);
       }
@@ -59,6 +59,10 @@
     WF("MSG: WWW Server started at = "); WL(Ethernet.localIP());
 
     handler_count = 0;
+  }
+
+  void WebServer::restart() {
+    Ethernet.begin(eth_mac, eth_ip, eth_dns, eth_gw, eth_sn);
   }
 
   void WebServer::handleClient() {
