@@ -30,9 +30,9 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-// General purpose initialize for HAL, optionally also early init of SERIAL_IP/PIP or SERIAL_BT
+// General purpose initialize for HAL
 
-#include "../lib/serial/Serial_IP_ESP32.h"
+#include "../lib/serial/Serial_IP_WiFi.h"
 #if defined(SERIAL_IP)
   #define SERIAL_IP_BEGIN() SERIAL_IP.begin(9999);
 #else

@@ -169,21 +169,4 @@
 #define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
 #define ROOF_TIME_LIMIT_SENSE_FAIL      6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Adjust
 
-// MISC. SETTINGS ------------------------------------------------------------------------------------------------------------------
-
-// THAT'S IT FOR USER CONFIGURATION!
-// -------------------------------------------------------------------------------------------------------------------------
-
-// DEBUGGING -----------------------------------------------------------------------------------------------------------------------
-#define DEBUG_CONNECT_CHECK           OFF //    OFF, ON to enable debug code for connection checks.                           Infreq
-#define DEBUG_LOOPTIME                OFF //    OFF, ON to enable debug code for monitoring main loop time.                   Infreq
-#define DEBUG_NPT                     OFF //    OFF, ON to enable debug code for network time protocol.                       Infreq
-#define DEBUG_DS3234                  OFF //    OFF, ON to enable debug code for the DS3234 real time clock.                  Infreq
-#define DEBUG_SD                      OFF //    OFF, ON to enable debug code for the SD card support.                         Infreq
-#define DEBUG_WEBSERVER               OFF //    OFF, ON to enable debug code for the webserver.                               Infreq
-#define DEBUG_CMDSERVER               OFF //    OFF, ON to enable debug code for the command server on port 9999.             Infreq
-#define DEBUG_WEATHER                 OFF //    OFF, ON to enable debug code for the weather sensors.                         Infreq
-#define DEBUG_AJAX_RELAY              OFF //    OFF, ON to enable debug code for webserver AJAX.                              Infreq
-
-// -------------------------------------------------------------------------------------------------------------------------
 #define FileVersionConfig 2

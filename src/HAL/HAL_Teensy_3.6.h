@@ -66,6 +66,19 @@
 
 //--------------------------------------------------------------------------------------------------
 // General purpose initialize for HAL
+
+#include "../lib/serial/Serial_IP_Ethernet.h"
+#if defined(SERIAL_IP)
+  #define SERIAL_IP_BEGIN() SERIAL_IP.begin(9999);
+#else
+  #define SERIAL_IP_BEGIN()
+#endif
+#if defined(SERIAL_PIP)
+  #define SERIAL_PIP_BEGIN() SERIAL_PIP.begin(9998);
+#else
+  #define SERIAL_PIP_BEGIN()
+#endif
+
 #define HAL_INIT() { \
   analogReadResolution(10); \
   analogWriteResolution(HAL_ANALOG_WRITE_BITS); \

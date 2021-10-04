@@ -5,6 +5,15 @@
 
 #if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
 
+  #ifdef ESP8266
+    #ifndef ETHERNET_W5500
+      #error "The ESP8266 Ethernet option supports the W5500 only"
+    #endif
+    #include <Ethernet2.h>  // https://github.com/adafruit/Ethernet2
+  #else
+    #include <Ethernet.h>
+  #endif
+
   bool port9999Assigned = false;
   bool port9998Assigned = false;
 
@@ -53,8 +62,13 @@
     delay(1000);
   }
 
+  void IPSerial::restart() {
+    cmdSvr->begin();
+  }
+
   void IPSerial::end() {
     if (cmdSvrClient.connected()) {
+      if (DEBUG_CMDSERVER) { VLF("MSG: end(), STOP cmdSvrClient."); }
       cmdSvrClient.stop();
     }
   }
@@ -65,21 +79,32 @@
     if (!cmdSvrClient) {
       cmdSvrClient = cmdSvr->available();
       if (cmdSvrClient) {
+        if (DEBUG_CMDSERVER) { VLF("MSG: available(), NEW cmdSvrClient."); }
         clientTimeout = millis() + timeout;
         cmdSvrClient.setTimeout(1000);
       }
     } else {
       if (!cmdSvrClient.connected()) { 
+        if (DEBUG_CMDSERVER) { VLF("MSG: available(), not connected STOP cmdSvrClient."); }
         cmdSvrClient.stop();
         return 0;
       }
       if ((long)(clientTimeout - millis()) < 0) {
+        if (DEBUG_CMDSERVER) { VLF("MSG: available(), timed out STOP cmdSvrClient."); }
         cmdSvrClient.stop();
         return 0;
       }
     }
 
-    return cmdSvrClient.available();
+    int i = cmdSvrClient.available();
+
+    if (DEBUG_CMDSERVER) {
+      if (i > 0) {
+        VF("MSG: available(), recv. buffer has "); V(i); VLF(" chars.");
+      }
+    }
+
+    return i;
   }
 
   int IPSerial::peek(void) {
@@ -96,6 +121,9 @@
     if (!eth_active || !cmdSvrClient) return -1;
     if (resetTimeout) clientTimeout = millis() + timeout;
     int c = cmdSvrClient.read();
+    if (DEBUG_CMDSERVER) {
+      VF("MSG: read(), found: "); VL((char)c);
+    }
     return c;
   }
 

@@ -12,11 +12,22 @@
 
   #include "../ethernet/Ethernet.h"
 
+  #ifdef ESP8266
+    #ifndef ETHERNET_W5500
+      #error "The ESP8266 Ethernet option supports the W5500 only"
+    #endif
+    #include <Ethernet2.h>  // https://github.com/adafruit/Ethernet2
+  #else
+    #include <Ethernet.h>
+  #endif
+
   class IPSerial : public Stream {
     public:
       inline void begin() { begin(9999); }
       void begin(long port);
-      
+
+      void restart();
+
       void end();
 
       int read(void);

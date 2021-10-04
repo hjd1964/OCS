@@ -93,6 +93,9 @@ void setup() {
   // start observatory instance
   observatory.init(FirmwareName, FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch, FirmwareVersionConfig);
 
+  SERIAL_IP_BEGIN();
+  SERIAL_PIP_BEGIN();
+
   // start command channel tasks
   commandChannelInit();
 

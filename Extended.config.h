@@ -13,7 +13,13 @@
 #define DEBUG                         OFF //    OFF, Use ON for background error messages only, use VERBOSE for all           Infreq
                                           //         error and status messages, use CONSOLE for VT100 debug console,
                                           //         or use PROFILER for VT100 task profiler.
+
 #define DEBUG_ECHO_COMMANDS           OFF //    OFF, Use ON to log command/responses to the debug serial port.                Option
+#define DEBUG_CONNECT_CHECK           OFF //    OFF, ON to enable debug code for connection checks.                           Infreq
+#define DEBUG_SD                      OFF //    OFF, ON to enable debug code for the SD card support.                         Infreq
+#define DEBUG_WEBSERVER               OFF //    OFF, ON to enable debug code for the webserver.                               Infreq
+#define DEBUG_CMDSERVER               OFF //    OFF, ON to enable debug code for the command server on port 9999.             Infreq
+
 #define SERIAL_DEBUG               Serial // Serial, Use any h/w serial port. Serial1 or Serial2, etc. as supported.          Option
 #define SERIAL_DEBUG_BAUD            9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
@@ -25,7 +31,6 @@
 
 #define RESPONSE_INTERVAL            1000 //   1000, n. Where n=500..10000 (ms.) Default for LAN latency, Internet use 5000.  Option
 
-#define ETHERNET_RESET_PIN            OFF //    OFF, n. Where n=unused Mega2560 pin #, activates feature and allows the OCS   Option
                                           //         to force a reset of the W5100 Ethernet Shield using this pin.
                                           //         W5100 reset pin must be connected to the pin# specified here and no other.
 
@@ -54,10 +59,10 @@
 #define STA_ENABLED                 false //       false, Wifi Station Enabled.                                               Adjust
 #define STA_SSID                   "Home" //      "Home", Wifi Station SSID to connnect to.                                   Adjust
 #define STA_PASSWORD           "password" //  "password", Wifi Station mode password.                                         Adjust
-#define STA_DHCP_ENABLED            false //       false, Wifi Station/Ethernet DHCP Enabled.                                 Adjust
-#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Wifi Station/Ethernet IP Address.                                   Adjust
-#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Wifi Station/Ethernet GATEWAY Address.                              Adjust
-#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Wifi Station/Ethernet SUBNET Mask.                                  Adjust
+#define STA_DHCP_ENABLED            false //       false, Ethernet/Wifi Station DHCP Enabled.                                 Adjust
+#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Ethernet/Wifi Station IP Address.                                   Adjust
+#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Ethernet/Wifi Station GATEWAY Address.                              Adjust
+#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Ethernet/Wifi Station SUBNET Mask.                                  Adjust
 
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS  OFF // ON reverses the xaxis of weather charts so new data is to the left

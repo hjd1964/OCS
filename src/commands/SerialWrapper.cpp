@@ -111,13 +111,13 @@ void SerialWrapper::begin(long baud) {
     if (isChannel(channel++)) SERIAL_ST4.begin(baud);
   #endif
   #ifdef SERIAL_BT
-    //if (isChannel(channel++)) SERIAL_BT.begin(SERIAL_BT_NAME); // started early in OnStepX.ino
+    //if (isChannel(channel++)) SERIAL_BT.begin(SERIAL_BT_NAME); // started early in .ino file
   #endif
   #ifdef SERIAL_IP
-    //if (isChannel(channel++)) SERIAL_IP.begin(9999); // started early in OnStepX.ino
+    if (isChannel(channel++)) SERIAL_IP.begin(9999);
   #endif
   #ifdef SERIAL_PIP
-    //if (isChannel(channel++)) SERIAL_IP.begin(9999); // started early in OnStepX.ino
+    if (isChannel(channel++)) SERIAL_PIP.begin(9999);
   #endif
   #ifdef SERIAL_LOCAL
     if (isChannel(channel++)) SERIAL_LOCAL.begin(baud);
