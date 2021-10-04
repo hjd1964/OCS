@@ -23,6 +23,7 @@
 #define SERIAL_DEBUG               Serial // Serial, Use any h/w serial port. Serial1 or Serial2, etc. as supported.          Option
 #define SERIAL_DEBUG_BAUD            9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
+
 // SERIAL PORT COMMAND CHANNELS ------------------------------------ see https://onstep.groups.io/g/main/wiki/6-Configuration#SERIAL
 #define SERIAL_A_BAUD_DEFAULT        9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Infreq
 
@@ -31,8 +32,9 @@
 
 #define RESPONSE_INTERVAL            1000 //   1000, n. Where n=500..10000 (ms.) Default for LAN latency, Internet use 5000.  Option
 
-                                          //         to force a reset of the W5100 Ethernet Shield using this pin.
-                                          //         W5100 reset pin must be connected to the pin# specified here and no other.
+#define ETHERNET_RESET_PIN            OFF //    OFF, n. Where n is an unused pin, activates feature and allows the OCS to     Option
+                                          //         force a reset of the Ethernet adapter using this pin.  For a W5100 be
+                                          //         sure its reset pin is only connected to the pin specified here!
 
 #define CONNECTION_CHECK_HOURS        OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
 
