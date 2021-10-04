@@ -17,18 +17,10 @@ void relaysAjax() {
       if (a.equals("true")) {
         relay.on(i);
         state = (uint8_t)true;
-        #if DEBUG_AJAX_RELAY == ON
-          V(s);
-          VLF("=on");
-        #endif
       }
       if (a.equals("false")) {
         relay.off(i);
         state = (uint8_t)false;
-        #if DEBUG_AJAX_RELAY == ON
-          V(s);
-          VLF("=off"); 
-        #endif
       }
       
       // if this relay is from the "Power Panel" store the setting if requested
