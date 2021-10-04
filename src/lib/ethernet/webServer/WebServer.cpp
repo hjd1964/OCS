@@ -56,7 +56,7 @@
     setResponseHeader(http_defaultHeader);
 
     webServer.begin();
-    WF("MSG: WWW Server started at = "); WL(Ethernet.localIP());
+    VLF("MSG: Ethernet started www Server on port 80");
 
     handler_count = 0;
   }
