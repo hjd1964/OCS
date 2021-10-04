@@ -26,8 +26,8 @@
                                           //         ON_CC as above and resets the Mega2560 if the connection check fails.
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
-#define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol per IPAddress settings above or use DS3234_RTC on  Adjust
-                                          //         default SPI interface (CS=53.) Upload once w/DS3234_INIT to set date/time.
+#define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol per IPAddress settings in Extended.config.h or use Adjust
+                                          //          DS3234_RTC on default SPI interface (CS=53.) Upload once w/DS3234_INIT to set date/time.
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd
 #define TIME_DISPLAY                  LST //    LST, Display Standard Time, DST Daylight Time, UTC Universal Time.            Adjust
 
