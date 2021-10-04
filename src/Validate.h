@@ -84,8 +84,8 @@
   #error "Configuration (Config.h): WEATHER_CHARTS, OCS website weather graphic charts, must OFF or ON."
 #endif
 
-#if WEATHER_CHARTS == ON
-  #warning "Configuration (Config.h): WEATHER_CHARTS enabled, be sure you have the micro SD card w/Chart.js installed."
+#if WEATHER_CHARTS != OFF && WEATHER_CHARTS != ON
+  #error "Configuration (Config.h): WEATHER, OCS website weather charts option, must OFF or ON."
 #endif
 
 #if WEATHER_TEMPERATURE != OFF && WEATHER_TEMPERATURE != ON
