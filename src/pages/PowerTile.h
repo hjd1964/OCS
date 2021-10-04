@@ -4,9 +4,6 @@
 #include "../Common.h"
 
 #if POWER == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void powerTile();
   extern void powerContents();
 

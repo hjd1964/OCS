@@ -5,15 +5,6 @@
 
 #if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
 
-  #ifdef ESP8266
-    #ifndef ETHERNET_W5500
-      #error "The ESP8266 Ethernet option supports the W5500 only"
-    #endif
-    #include <Ethernet2.h>  // https://github.com/adafruit/Ethernet2
-  #else
-    #include <Ethernet.h>
-  #endif
-
   bool port9999Assigned = false;
   bool port9998Assigned = false;
 

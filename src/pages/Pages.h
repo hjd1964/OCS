@@ -8,8 +8,6 @@
 #include "../../Extended.config.h"
 
 #include "htmlHeaders.h"
-#include "../lib/ethernet/webServer/WebServer.h"
-#include "../lib/wifi/Wifi.h"
 
 extern void check(char *ss, const char *rs);
 extern void erase(char *ss, const char *rs);

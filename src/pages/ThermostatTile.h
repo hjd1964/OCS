@@ -4,9 +4,6 @@
 #include "../Common.h"
 
 #if THERMOSTAT == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void thermostatTile();
   extern void thermostatContents();
 

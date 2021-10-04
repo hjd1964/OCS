@@ -3,13 +3,11 @@
 // Observatory
 #pragma once
 
+#include "../Common.h"
+
 #include "../commands/ProcessCmds.h"
 
-#include "../lib/ethernet/Ethernet.h"
-#include "../lib/ethernet/webServer/WebServer.h"
 #include "../lib/serial/Serial_IP_Ethernet.h"
-
-#include "../lib/wifi/Wifi.h"
 #include "../lib/serial/Serial_IP_ESP32.h"
 
 typedef struct Version {

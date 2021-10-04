@@ -4,9 +4,6 @@
 #include "../Common.h"
 
 #if ROOF == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void roofTile();
   extern void roofContents();
 

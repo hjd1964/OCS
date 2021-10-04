@@ -4,9 +4,6 @@
 #include "../Common.h"
 
 #if LIGHT == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void lightTile();
   extern void lightContents();
 

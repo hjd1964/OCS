@@ -2,11 +2,11 @@
 #include "ThermostatTile.h"
 
 #if THERMOSTAT == ON
-  #include "weather.h"
   #include "htmlHeaders.h"
   #include "htmlScripts.h"
   #include "htmlTabs.h"
 
+  #include "weather.h"
   #include "../lib/thermostatSensor/ThermostatSensor.h"
   #include "../lib/relay/Relay.h"
   #include "../observatory/thermostat/Thermostat.h"

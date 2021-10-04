@@ -5,9 +5,6 @@
 #include "../Common.h"
 
 #if WEATHER == ON && WEATHER_CHARTS == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void weatherPage();
 
   #define WEATHER_NOMINAL_PRESSURE_SEA_LEVEL 1013.25  // in mb

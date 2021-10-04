@@ -5,9 +5,6 @@
 #include "../Common.h"
 
 #if WEATHER == ON
-  #include "../lib/ethernet/webServer/WebServer.h"
-  #include "../lib/wifi/Wifi.h"
-
   extern void weatherTile();
   extern void weatherContents();
 

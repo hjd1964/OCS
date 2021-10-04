@@ -11,5 +11,10 @@
 #include "debug/Debug.h"
 #include "lib/nv/NV.h"
 #include "lib/convert/Convert.h"
+
+#include "lib/ethernet/Ethernet.h"
+#include "lib/ethernet/webServer/WebServer.h"
+#include "lib/wifi/Wifi.h"
+
 extern NVS nv;
 extern char ocsVersion[30];
