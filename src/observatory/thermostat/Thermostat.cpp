@@ -18,7 +18,7 @@ void Thermostat::init() {
 
   // start polling task
   VF("MSG: Thermostat, start monitor task (rate 5 min priority 7)... ");
-  if (tasks.add(5*60*1000, 0, true, 7, thermostatWrapper, "Thermst")) { VLF("success"); } else { VLF("FAILED!"); }
+  if (tasks.add(5*60*1000UL, 0, true, 7, thermostatWrapper, "Thermst")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 // control temperature in observatory, call once every 5 minutes
