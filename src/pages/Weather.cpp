@@ -54,45 +54,45 @@
     #if WEATHER_TEMPERATURE == ON
       #if STAT_UNITS == IMPERIAL
         // a negative column# means this is a temperature and needs conversion to degrees F
-        makeChartJs(client,"ambientT","Outside Temperature F (last "+periodStr+")",-8,5,-40,120,20,period);
+        makeChartJs("ambientT", "Outside Temperature F (last "+periodStr+")", -8, 5, -40, 120, 20, period);
       #else
-        makeChartJs(client,"ambientT","Outside Temperature C (last "+periodStr+")",8,5,-40,50,10,period);
+        makeChartJs("ambientT", "Outside Temperature C (last "+periodStr+")", 8, 5, -40, 50, 10, period);
       #endif
     #endif
     #if WEATHER_WIND_SPD == ON
       #if STAT_UNITS == IMPERIAL
-        makeChartJs(client,"WS","Wind Speed mph (last "+periodStr+")",-39,5,0,50,10,period);
+        makeChartJs("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period);
       #else
-        makeChartJs(client,"WS","Wind Speed kph (last "+periodStr+")",39,5,0,80,10,period);
+        makeChartJs("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period);
       #endif
     #endif
     #if WEATHER_PRESSURE == ON
       #if STAT_UNITS == IMPERIAL
-        makeChartJs(client,"BP","Barometric Pressure inches Hg (last "+periodStr+")",-26,6,floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50)*0.02953),ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40)*0.02953),1,period);
+        makeChartJs("BP", "Barometric Pressure inches Hg (last "+periodStr+")", -26, 6, floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL - 50)*0.02953), ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL + 40)*0.02953), 1, period);
       #else
-        makeChartJs(client,"BP","Barometric Pressure mb (last "+periodStr+")",26,6,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL-50,WEATHER_NOMINAL_PRESSURE_SEA_LEVEL+40,10,period);
+        makeChartJs("BP", "Barometric Pressure mb (last "+periodStr+")", 26, 6, WEATHER_NOMINAL_PRESSURE_SEA_LEVEL - 50, WEATHER_NOMINAL_PRESSURE_SEA_LEVEL + 40, 10, period);
       #endif
     #endif
     #if WEATHER_HUMIDITY == ON
-      makeChartJs(client,"RH","Relative Humidity % (last "+periodStr+")",33,5,0,100,10,period);
+      makeChartJs("RH", "Relative Humidity % (last "+periodStr+")", 33, 5, 0, 100, 10, period);
     #endif
     sendHtml(F("}\r\n"));
     sendHtml(F("</script>\r\n"));
 
-    strcpy_P(temp,ChartOptions1a); sendHtml(temp);
-    strcpy_P(temp,ChartOptions2); sendHtml(temp);
+    strcpy_P(temp, ChartOptions1a); sendHtml(temp);
+    strcpy_P(temp, ChartOptions2); sendHtml(temp);
     
     #if WEATHER_TEMPERATURE == ON
-      makeChartCanvas(client, "ambientT");
+      makeChartCanvas("ambientT");
     #endif
     #if WEATHER_WIND_SPD == ON
-      makeChartCanvas(client, "WS");
+      makeChartCanvas("WS");
     #endif
     #if WEATHER_PRESSURE == ON
-      makeChartCanvas(client, "BP");
+      makeChartCanvas("BP");
     #endif
     #if WEATHER_HUMIDITY == ON
-      makeChartCanvas(client, "RH");
+      makeChartCanvas("RH");
     #endif
 
     sendHtmlDone(F("</div></body></html>\r\n"));
@@ -136,11 +136,11 @@
       sendHtml(F("window.onload = function(){\r\n"));
 
       #if WEATHER_SKY_QUAL == ON
-        makeChartJs(client, "SQ", "Sky Quality mag/sq arc-sec (last "+periodStr+")", 45, 5, 1, 22, 5, period);
+        makeChartJs("SQ", "Sky Quality mag/sq arc-sec (last "+periodStr+")", 45, 5, 1, 22, 5, period);
       #endif
 
       #if WEATHER_CLOUD_CVR == ON
-        makeChartJs(client, "skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
+        makeChartJs("skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
       #endif
 
       sendHtml(F("}\r\n"));
@@ -154,11 +154,11 @@
       sendHtml(temp);
 
       #if WEATHER_SKY_QUAL == ON
-        makeChartCanvas(client, "SQ");
+        makeChartCanvas("SQ");
       #endif
 
       #if WEATHER_CLOUD_CVR == ON
-        makeChartCanvas(client, "skyT");
+        makeChartCanvas("skyT");
       #endif
 
       sendHtmlDone(F("</div></body></html>\r\n"));
