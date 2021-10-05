@@ -13,7 +13,6 @@
 #define SLAVE                       -8
 #define VERBOSE                     -9
 #define REMOTE                      -10
-#define WIFI                        -11
 #define ETHERNET_W5100              -12
 #define ETHERNET_W5500              -13
 #define DEFAULT_AJAX_RATE           "5"    // normally 5 seconds between updates
@@ -41,15 +40,6 @@
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
 
-// various Weather sensors supported
-#define BME280                      1      // BME280 on I2C (at default address 0x77)
-#define BME280_0x77                 1      // BME280 on I2C (at address 0x77)
-#define BME280_0x76                 2      // BME280 on I2C (at address 0x76)
-#define BME280_SPI                  3      // BME280 on SPI (default CS)
-#define BMP280                      4      // BMP280 on I2C (at default address 0x77)
-#define BMP280_0x77                 4      // BMP280 on I2C (at address 0x77)
-#define BMP280_0x76                 5      // BMP280 on I2C (at address 0x76)
-#define BMP280_SPI                  6      // BMP280 on SPI (default CS)
 #define THLD(v)                     ((v)<<1)  // 10 bit analog threshold, bits 1 through 10
 #define HYST(v)                     ((v)<<11) // 10 bit hysteresis, bits 11 through 20
 #ifndef INPUT_PULLDOWN

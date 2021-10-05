@@ -11,34 +11,19 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF
 #endif
 
-// ESP32 VIRTUAL SERIAL IP COMMAND CHANNEL (EXPERIMENTAL)
-#ifndef SERIAL_IP_MODE
-#define SERIAL_IP_MODE                 OFF //         OFF, Use ACCESS_POINT or STATION to enable the interface (ESP32 only.)
-#endif
-
+// VIRTUAL SERIAL IP COMMAND CHANNEL (EXPERIMENTAL)
 #ifndef STANDARD_COMMAND_CHANNEL
-#define STANDARD_COMMAND_CHANNEL       ON //          ON, Wifi command channel for simultanious connections on port 9999.
+#define STANDARD_COMMAND_CHANNEL       ON //          ON, Ethernet command channel for simultanious connections on port 9999.
 #endif
 
 #ifndef PERSISTENT_COMMAND_CHANNEL
-#define PERSISTENT_COMMAND_CHANNEL     ON //          ON, Wifi command channel for a single connection on port 9998.
+#define PERSISTENT_COMMAND_CHANNEL     ON //          ON, Ethernet command channel for a single connection on port 9998.
 #endif
 
-#ifndef AP_SSID
-#define AP_SSID                     "OCS" //   "OCS", Wifi Access Point SSID.
-#define AP_PASSWORD            "password" //  "password", Wifi Access Point password.
-#define AP_CHANNEL                      7 //           7, Wifi Access Point channel.
-#define AP_IP_ADDR          (192,168,0,1) // ..,168,0,1), Wifi Access Point IP Address.
-#define AP_GW_ADDR          (192,168,0,1) // ..,168,0,1), Wifi Access Point GATEWAY Address.
-#define AP_SN_MASK        (255,255,255,0) // ..55,255,0), Wifi Access Point SUBNET Mask.
-#endif
-
-#ifndef STA_SSID
-#define STA_SSID                   "Home" //      "Home", Wifi Station SSID to connnect to.
-#define STA_PASSWORD           "password" //  "password", Wifi Station mode password.
-#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Wifi Station IP Address.
-#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Wifi Station GATEWAY Address.
-#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Wifi Station SUBNET Mask.
+#ifndef STA_IP_ADDR
+#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Ethernet IP Address.
+#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Ethernet GATEWAY Address.
+#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Ethernet SUBNET Mask.
 #endif
 
 // in milliseconds

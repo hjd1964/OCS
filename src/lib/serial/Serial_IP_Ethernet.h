@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------
-// Polling serial IP for ESP32
+// Polling serial IP for Ethernet
 #pragma once
 
 #include <Arduino.h>

@@ -8,7 +8,6 @@
 #include "../commands/ProcessCmds.h"
 
 #include "../lib/serial/Serial_IP_Ethernet.h"
-#include "../lib/serial/Serial_IP_ESP32.h"
 
 typedef struct Version {
   uint8_t major;

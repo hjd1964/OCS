@@ -2,11 +2,7 @@
 // Loads pinmap model for current configuration
 #pragma once
 
-#if defined(ESP32)
-  #include "Pins.ESP32.h"
-#endif
-
-#if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega2560__)
   #include "Pins.Mega2560.h"
 #endif
 
