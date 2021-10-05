@@ -2,6 +2,7 @@
 // Web server
 
 #include "WebServer.h"
+#include "../../../tasks/OnTask.h"
 
 #if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
 
@@ -122,6 +123,7 @@
 
           line = "";
         } else break;
+        Y;
       }
 
       // process get or post request
@@ -306,6 +308,7 @@
               dataFile.read(temp, n);
               client->write(temp, n);
             }
+            Y;
           } while (n > 0);
           dataFile.close();
         }
