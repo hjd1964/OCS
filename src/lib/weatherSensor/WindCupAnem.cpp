@@ -52,7 +52,7 @@ void CupAnem::poll() {
 
   // convert pulses per sample period to PPM
   long PPM = pulseCountThisElapsed * (60000L/timeElapsed);
-  _windspeed = PPM * WEATHER_SENSOR_WIND_PPM2KPH;
+  _windspeed = WEATHER_SENSOR_WIND_CUP2KPH(PPM);
 }
 
 CupAnem cupAnem;

@@ -9,8 +9,8 @@
 #if WEATHER_SENSOR_WIND_CUP != OFF
 
 // converts from PPM (pulses per minute) to KPH
-#ifndef WEATHER_SENSOR_WIND_PPM2KPH
-#define WEATHER_SENSOR_WIND_PPM2KPH 0.086886F
+#ifndef WEATHER_SENSOR_WIND_CUP2KPH
+#define WEATHER_SENSOR_WIND_CUP2KPH(x) (x*0.086886F)
 #endif
 
 // setup anemometer

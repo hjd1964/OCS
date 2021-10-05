@@ -107,17 +107,23 @@
 
 #define WEATHER_SKY_QUAL              OFF //    OFF, ON for measuring sky quality (darkness in magnitudes per sq arc-sec.)    Option
 
+// Pick one or more weather (outside) sensors:
 #define WEATHER_SENSOR_TPH_BME280     OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
 #define WEATHER_SENSOR_TP_BMP280      OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
 #define WEATHER_SENSOR_TH_DHT         OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
-#define WEATHER_SENSOR_TH_DHT_TYPE  DHT11 //  DHT11, or DHT21, DHT22. DHT device type.                                        Option
+// DHT device type DHT11, or DHT21, DHT22
+#define WEATHER_SENSOR_TH_DHT_TYPE  DHT11
 #define WEATHER_SENSOR_TH_SI7021      OFF //    OFF, 0x40 (I2C Address) to enable. Temperature, humidity.                     Option
+#define WEATHER_SENSOR_T_ANALOG       OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
+// Conversion factor, analog range 0 to 1.0 (x) to Deg. C; example TMP36 device 0.1V (-40°C) to 2.0V (150°C) w/3.3V MCU
+#define WEATHER_SENSOR_T_ANALOG2DEGC(x) (((x*3.3)-0.1)*100.0-40.0)
 
 #define WEATHER_SENSOR_WIND_CUP       OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Wind speed, cup anemometer.          Option
-#define WEATHER_SENSOR_WIND_PPM2KPH 0.087 //  0.087, n. Wind speed conversion factor from pulses per minute to KPH.           Option 
+// Conversion factor, pulses per minute (x) to wind speed in KPH
+#define WEATHER_SENSOR_WIND_CUP2KPH(x) (x*0.087)
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 
-#define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.
+#define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
 #define WEATHER_SENSOR_RAIN_LOW      0.25 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
 #define WEATHER_SENSOR_RAIN_HIGH     0.75 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
 
@@ -131,11 +137,16 @@
 #define COOL_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for cooling/venting.                           Option
 #define THERMOSTAT_HUMIDITY           OFF //    OFF, ON displays indoor humidity.                                             Option
 
+// Pick one or more thermostat (inside) sensors:
 #define THERMOSTAT_SENSOR_TPH_BME280  OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
 #define THERMOSTAT_SENSOR_TP_BMP280   OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
 #define THERMOSTAT_SENSOR_TH_DHT      OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
-#define THERMOSTAT_SENSOR_TH_DHT_TYPE DHT11 //  DHT11, or DHT21, DHT22. DHT device type.                                        Option
+// DHT device type DHT11, or DHT21, DHT22
+#define THERMOSTAT_SENSOR_TH_DHT_TYPE DHT11
 #define THERMOSTAT_SENSOR_TH_SI7021   OFF //    OFF, 0x40 (I2C Address) to enable. Temperature, humidity.                     Option
+#define THERMOSTAT_SENSOR_T_ANALOG    OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
+// Conversion factor, analog (x ranges from 0 to 1.0) to Deg. C; example TMP36 0.1V (-40°C) to 2.0V (150°C) w/3.3V MCU
+#define THERMOSTAT_SENSOR_T_ANALOG2DEGC(x) (((x*3.3)-0.1)*100.0-40.0)
 
 // LIGHTING PANEL ------------------------------------------------------------------------------------------------------------------
 #define LIGHT                         OFF //    OFF, ON to enable the OCS website lighting panel display.                     Option

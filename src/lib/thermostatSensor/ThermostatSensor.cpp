@@ -3,9 +3,12 @@
 #include "ThermostatSensor.h"
 #include <Wire.h>
 
-#if THERMOSTAT_SENSOR_TPH_BME280 != OFF
-  #include "TphBme280.h"
-#endif
+#include "TphBme280.h"
+#include "TpBmp280.h"
+#include "ThDht.h"
+#include "ThSi7021.h"
+#include "TpBmp280.h"
+#include "TAnalog.h"
 
 float _inside_temperature = NAN;
 bool _inside_temperatureAssigned = NAN;
@@ -22,6 +25,22 @@ void ThermostatSensor::init(){
 
   #if THERMOSTAT_SENSOR_TPH_BME280 != OFF
     bme280t.init();
+  #endif
+
+  #if THERMOSTAT_SENSOR_TP_BMP280 != OFF
+    bmp280t.init();
+  #endif
+
+  #if THERMOSTAT_SENSOR_TH_SI7021 != OFF
+    si7021t.init();
+  #endif
+
+  #if THERMOSTAT_SENSOR_TH_DHT != OFF
+    dhtt.init();
+  #endif
+
+  #if THERMOSTAT_SENSOR_T_ANALOG != OFF
+    analogTemperaturet.init();
   #endif
 }
 

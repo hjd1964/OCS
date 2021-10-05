@@ -3,13 +3,14 @@
 #include "WeatherSensor.h"
 #include <Wire.h>
 
+#include "TpBmp280.h"
+#include "TphBme280.h"
+#include "ThDht.h"
+#include "ThSi7021.h"
+#include "TAnalog.h"
 #include "CloudMlx90614.h"
 #include "RainGeneric.h"
 #include "SkyQTsl2591.h"
-#include "ThDht.h"
-#include "ThSi7021.h"
-#include "TpBmp280.h"
-#include "TphBme280.h"
 #include "WindCupAnem.h"
 #include "WindModernRevP.h"
 
@@ -55,6 +56,10 @@ void WeatherSensor::init() {
 
   #if WEATHER_SENSOR_TH_SI7021 != OFF
     si7021w.init();
+  #endif
+
+  #if WEATHER_SENSOR_T_ANALOG != OFF
+    analogTemperaturew.init();
   #endif
 
   #if WEATHER_SENSOR_TH_DHT != OFF
