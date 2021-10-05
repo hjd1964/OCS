@@ -25,10 +25,10 @@
 
 // Hardware SPI interface is on pins 11, 12, 13
 #ifndef SDCARD_CS_PIN
-  #define SDCARD_CS_PIN        OFF
+  #define SDCARD_CS_PIN         BUILTIN_SDCARD
 #endif
 #ifndef ETHERNET_CS_PIN
-  #define ETHERNET_CS_PIN      10
+  #define ETHERNET_CS_PIN       10
 #endif
 #ifndef DS3234_CS_PIN
   #define DS3234_CS_PIN         9               // Default CS Pin for DS3234 on SPI
