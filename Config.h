@@ -39,15 +39,20 @@
 #define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=1..16 (Analog#) measure/display current mains.                Option
 #define STAT_MAINS_AUX_CURRENT_ANALOG OFF //    OFF, n. Where n=1..16 (Analog#) measure/display current mains (aux.)          Option
 
-#define STAT_DC_VOLTAGE_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply voltage.   Option
+// Converts the analog measure (range 0 to 1.0) to Amps
+#define STAT_MAINS_ADU_TO_CURRENT(x)  (x*NAN)
+
+#define STAT_DC_VOLTAGE_ANALOG          1 //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply voltage.   Option
 #define STAT_DC_CURRENT_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply current.   Option
 
 #define STAT_BATTERY_VOLTAGE_ANALOG   OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12V roof battery voltage.     Option
 #define STAT_BATTERY_CURRENT_ANALOG   OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12V roof battery current.     Option
 
-#define STAT_MAINS_ADU_TO_CURRENT     NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Amps.         Adjust
-#define STAT_DC_ADU_TO_VOLTAGE        NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Volts.        Adjust
-#define STAT_DC_ADU_TO_CURRENT        NAN //    NAN, n. Where n converts the analog measure (range 0 to 1.0) to Amps.         Adjust
+// Converts the analog measure (range 0 to 1.0) to Volts
+#define STAT_DC_ADU_TO_VOLTAGE(x)     (x*NAN)
+
+// Converts the analog measure (range 0 to 1.0) to Amps
+#define STAT_DC_ADU_TO_CURRENT(x)     (x*NAN)
 
 // POWER PANEL ---------------------------------------------------------------------------------------------------------------------
 #define POWER                         OFF //    OFF, ON to enable the OCS website power panel display.                        Option

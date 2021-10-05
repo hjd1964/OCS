@@ -85,27 +85,6 @@
 
 #define logRecordLocation(t) (round(hour(t)*3600L+minute(t)*60L+second(t))/30L)
 
-// converts a raw analog reading into voltage for STAT_DC_VOLTAGE_ANALOG and STAT_BATTERY_VOLTAGE_ANALOG
-// return NAN if not implemented or if there's an error
-#ifndef STAT_DC_ADU_TO_VOLTAGE
-  #define STAT_DC_ADU_TO_VOLTAGE NAN
-#endif
-#define aduToDcVolts(f) ((f)*STAT_DC_ADU_TO_VOLTAGE)
-
-// converts a raw analog reading into current for STAT_DC_CURRENT_ANALOG and STAT_BATTERY_CURRENT_ANALOG
-// return NAN if not implemented or if there's an error
-#ifndef STAT_DC_ADU_TO_CURRENT
-  #define STAT_DC_ADU_TO_CURRENT NAN
-#endif
-#define aduToDcAmps(f) ((f)*STAT_DC_ADU_TO_CURRENT)
-
-// converts a raw analog reading into current for STAT_MAINS_CURRENT_ANALOG and STAT_MAINS_AUX_CURRENT_ANALOG
-// return NAN if not implemented or if there's an error
-#ifndef STAT_MAINS_ADU_TO_CURRENT
-  #define STAT_MAINS_ADU_TO_CURRENT NAN
-#endif
-#define aduToMainsAmps(f) ((f)*STAT_MAINS_ADU_TO_CURRENT)
-
 // Roof
 #define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds, this blocks the main-loop so <= ~2 seconds!
 #define ROOF_PRE_MOTION_TIME             1.5  // as above

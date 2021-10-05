@@ -6,6 +6,7 @@
 #ifdef ESP32
   #include "../lib/serial/Serial_IP_ESP32.h"
 #endif
+#include "../lib/serial/Serial_IP_Ethernet.h"
 
 #ifdef MOUNT_PRESENT
   #if ST4_INTERFACE == ON && ST4_HAND_CONTROL == ON
