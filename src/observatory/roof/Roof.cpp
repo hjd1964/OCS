@@ -217,8 +217,8 @@ void Roof::clearStatus(bool last) {
 const char * Roof::getStatus() {
   const char *strErr = getLastError();
   if (strlen(strErr) == 0 && isMoving()) {
-    static char travelMessage[40];
-    sprintf(travelMessage, "Travel: %s%", travel);
+    static char travelMessage[20];
+    sprintf(travelMessage, "Travel: %d%%", travel);
     return travelMessage;
   }
   if (strlen(strErr) == 0) return "No Error";
