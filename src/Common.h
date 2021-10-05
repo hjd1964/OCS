@@ -12,8 +12,5 @@
 #include "lib/nv/NV.h"
 #include "lib/convert/Convert.h"
 
-#include "lib/ethernet/Ethernet.h"
-#include "lib/ethernet/webServer/WebServer.h"
-
 extern NVS nv;
-extern char ocsVersion[30];
+extern char ocsVersion[10];

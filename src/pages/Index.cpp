@@ -38,7 +38,7 @@ void index() {
     strcpy_P(temp, html_head3); sendHtml(temp);
 
     strcpy_P(temp, html_pageHeader1); sendHtml(temp);
-    sprintf(temp, "%s</b>", ocsVersion); sendHtml(temp);
+    sprintf(temp, PROD_ABV " %s</b>", ocsVersion); sendHtml(temp);
     strcpy_P(temp, html_pageHeader2); sendHtml(temp);
     strcpy_P(temp, html_links1s); sendHtml(temp);
     #if WEATHER == ON && WEATHER_CHARTS == ON

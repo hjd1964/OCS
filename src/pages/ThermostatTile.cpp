@@ -13,7 +13,6 @@
 
   void thermostatTile() {
     char temp[256] = "";
-    char ws1[20] = "";
 
     strcpy_P(temp, htmlThermostatBegin);
     sendHtml(temp);
@@ -26,6 +25,7 @@
     sendHtml(F("<br />"));
 
     #if HEAT_RELAY != OFF
+    {
       strcpy_P(temp, htmlThermostatHeat1);
       sendHtml(temp);
 
@@ -36,6 +36,7 @@
         int h = round(thermostat.getHeatSetpoint());
       #endif
 
+      char ws1[20] = "";
       if (h == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
       sprintf_P(temp, htmlThermostatOptionZero, ws1);
       sendHtml(temp);
@@ -55,9 +56,11 @@
       }
       strcpy_P(temp,htmlThermostatHeat2);
       sendHtml(temp);
+    }
     #endif
 
     #if COOL_RELAY != OFF
+    {
       strcpy_P(temp, htmlThermostatCool1);
       sendHtml(temp);
 
@@ -68,6 +71,7 @@
         int c = round(thermostat.getCoolSetpoint());
       #endif
 
+      char ws1[20] = "";
       if (c == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
       sprintf_P(temp, htmlThermostatOptionZero, ws1);
       sendHtml(temp);
@@ -87,6 +91,7 @@
       }
       strcpy_P(temp, htmlThermostatCool2);
       sendHtml(temp);
+    }
     #endif
 
     strcpy_P(temp, htmlThermostatEnd);

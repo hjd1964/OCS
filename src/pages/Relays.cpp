@@ -1,5 +1,7 @@
 // relays -------------------------------------------------------------------------------------------
 #include "Relays.h"
+
+#include "../lib/ethernet/webServer/WebServer.h"
 #include "../lib/relay/Relay.h"
 #include "../lib/nv/NV.h"
 
@@ -18,6 +20,7 @@ void relaysAjax() {
         relay.off(i);
         state = (uint8_t)false;
       }
+      state = state;
       
       // if this relay is from the "Power Panel" store the setting if requested
       if (a.equals("true") || a.equals("false")) {

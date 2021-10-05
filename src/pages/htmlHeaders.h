@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Common.h"
+#include "../lib/ethernet/webServer/WebServer.h"
 
 // pre-defined headers
 const char http_defaultHeader[] PROGMEM =

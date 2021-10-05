@@ -10,6 +10,7 @@
 #endif
 
 #include "../../tasks/OnTask.h"
+#include "../../lib/ethernet/webServer/WebServer.h"
 #include "../../lib/weatherSensor/WeatherSensor.h"
 
 void weatherWrapper() { weather.poll(); }
