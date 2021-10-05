@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------------------------------------------------------
-// BME280 (I2C) for inside Temperature, Pressure, and Humidity
+// BMP280 (I2C) for inside Temperature and Pressure
 #pragma once
 
 #include "../../Common.h"
 
-#if THERMOSTAT_SENSOR_TPH_BME280 != OFF
+#if THERMOSTAT_SENSOR_TP_BMP280 != OFF
 
-class Bme280t {
+class Bmp280t {
   public:
     bool init();
     void poll();
@@ -15,6 +15,6 @@ class Bme280t {
     bool active = false;
 };
 
-extern Bme280t bme280t;
+extern Bmp280t bmp280t;
 
 #endif

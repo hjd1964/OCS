@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------------------------------------------------
-// Weather related functions
+// Si7021 for Temperature and Relative Humidity
 #pragma once
 
 #include "../../Common.h"
@@ -16,10 +16,6 @@ class Si7021w {
 
   private:
     bool active = false;
-
-    float temperature = NAN;
-    float averageTemperature = NAN;
-    float pressure = NAN;
 };
 
 extern Si7021w si7021w;

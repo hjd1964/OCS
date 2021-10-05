@@ -132,6 +132,10 @@
 #define THERMOSTAT_HUMIDITY           OFF //    OFF, ON displays indoor humidity.                                             Option
 
 #define THERMOSTAT_SENSOR_TPH_BME280  OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
+#define THERMOSTAT_SENSOR_TP_BMP280   OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
+#define THERMOSTAT_SENSOR_TH_DHT      OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
+#define THERMOSTAT_SENSOR_TH_DHT_TYPE DHT11 //  DHT11, or DHT21, DHT22. DHT device type.                                        Option
+#define THERMOSTAT_SENSOR_TH_SI7021   OFF //    OFF, 0x40 (I2C Address) to enable. Temperature, humidity.                     Option
 
 // LIGHTING PANEL ------------------------------------------------------------------------------------------------------------------
 #define LIGHT                         OFF //    OFF, ON to enable the OCS website lighting panel display.                     Option

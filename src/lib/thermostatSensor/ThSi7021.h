@@ -1,20 +1,23 @@
 // -----------------------------------------------------------------------------------------------------------------------------
-// BME280 (I2C) for inside Temperature, Pressure, and Humidity
+// Si7021 for inside Temperature and Relative Humidity
 #pragma once
 
 #include "../../Common.h"
 
-#if THERMOSTAT_SENSOR_TPH_BME280 != OFF
+#if THERMOSTAT_SENSOR_TH_SI7021 != OFF
 
-class Bme280t {
+class Si7021t {
   public:
     bool init();
     void poll();
+
+    bool getT = false;
+    bool getH = false;
 
   private:
     bool active = false;
 };
 
-extern Bme280t bme280t;
+extern Si7021t si7021t;
 
 #endif

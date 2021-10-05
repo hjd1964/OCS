@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------------------------------------------------
-// Weather related functions
+// Si7021 for Temperature and Relative Humidity
 #include "ThSi7021.h"
 
 #if WEATHER_SENSOR_TH_SI7021 != OFF

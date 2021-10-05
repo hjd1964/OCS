@@ -1,6 +1,5 @@
 // -----------------------------------------------------------------------------------------------------------------
-// gets outside temperature in deg. C
-// gets relative humidity in %
+// DHT11, 22, etc. for Temperature and Relative Humidity
 #include "ThDht.h"
 
 #if WEATHER_SENSOR_TH_DHT != OFF

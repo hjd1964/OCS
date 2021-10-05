@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------------------------------------------------
-// BME280 (I2C) for Temperature, Pressure, and Humidity
+// BME280 (I2C) for inside Temperature, Pressure, and Humidity
 #include "TphBme280.h"
 
 #if THERMOSTAT_SENSOR_TPH_BME280 != OFF
@@ -35,7 +35,7 @@ bool Bme280t::init() {
     Wire.setClock(HAL_WIRE_CLOCK);
 
     VF("MSG: Bme280t, start monitor task (rate 30s priority 7)... ");
-    if (tasks.add(30000, 0, true, 7, thermostatBme280Wrapper, "weaBme")) {
+    if (tasks.add(30000, 0, true, 7, thermostatBme280Wrapper, "thsBme")) {
       VLF("success");
       _inside_temperatureAssigned = true;
       _inside_pressureAssigned = true;
