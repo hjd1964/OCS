@@ -44,9 +44,9 @@
 
     int period = 1;
     String periodStr = "";
-    if (a.equals("recent") || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
-    if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
-    if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
+    if (a.equals(F("recent")) || a.equals(EmptyStr)) { period = 1; periodStr = F("60 minutes"); }
+    if (a.equals(F("last24"))) { period = 24; periodStr = F("24 hours"); }
+    if (a.equals(F("last48"))) { period = 48; periodStr = F("48 hours"); }
     
     sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
     sendHtml(F("<script>\r\n"));
@@ -127,9 +127,9 @@
 
       int period = 1;
       String periodStr = "";
-      if (a.equals("recent") || a.equals(EmptyStr)) { period = 1; periodStr = "60 minutes"; }
-      if (a.equals("last24")) { period = 24; periodStr = "24 hours"; }
-      if (a.equals("last48")) { period = 48; periodStr = "48 hours"; }
+      if (a.equals(F("recent")) || a.equals(EmptyStr)) { period = 1; periodStr = F("60 minutes"); }
+      if (a.equals(F("last24"))) { period = 24; periodStr = F("24 hours"); }
+      if (a.equals(F("last48"))) { period = 48; periodStr = F("48 hours"); }
       
       sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
       sendHtml(F("<script>\r\n"));
@@ -167,15 +167,12 @@
 
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
     char temp[256] = "";
-    char temp1[256] = "";
     char ws1[90] = "";
     char ws2[90] = "";
     long rec = 0;
     long k = 0;
 
-    strcpy_P(temp1, ChartJs1);
-
-    sprintf(temp, temp1, chartId, chartId, chartId);
+    sprintf_P(temp, ChartJs1, chartId, chartId, chartId);
     sendHtml(temp);
 
     sendHtml(chartName);
@@ -253,7 +250,7 @@
     }
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
-    strcpy_P(temp1,ChartJs4); sprintf(temp,temp1,rangeMax,rangeMin,rangeStep);
+    sprintf_P(temp, ChartJs4, rangeMax, rangeMin, rangeStep);
     sendHtml(temp);
   }
 

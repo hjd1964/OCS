@@ -33,8 +33,6 @@
 
   // macros to help with sending webpage data
   #define sendHtmlStart()
-  //#define sendHtml(x) client->print(x);
-  //#define sendHtmlDone(x) client->print(x);
   #define sendHtml(x) www.sendContent(x);
   #define sendHtmlDone(x) www.sendContent("");
   // misc.
