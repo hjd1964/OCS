@@ -185,8 +185,10 @@ void Weather::poll(void) {
       ss = skyTemp;
       sad = skyDiffTemp;
     }
-    
-    if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
+
+    #if WATCHDOG != OFF
+      if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
+    #endif
   #endif
 }
 

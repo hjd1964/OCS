@@ -35,7 +35,9 @@
 //--------------------------------------------------------------------------------------------------
 // General purpose initialize for HAL
 
+#include "../lib/watchdog/Watchdog.h"
 #include "../lib/serial/Serial_IP_Ethernet.h"
+
 #if defined(SERIAL_IP)
   #define SERIAL_IP_BEGIN() SERIAL_IP.begin(9999);
 #else
@@ -52,6 +54,12 @@
   analogWriteResolution(HAL_ANALOG_WRITE_BITS); \
   nv.init(E2END + 1, true, 0, false); \
   analogReference(DEFAULT); \
+  watchdog.init(8); \
+}
+
+#define HAL_RESET() { \
+  SCB_AIRCR = 0x05FA0004; \
+  asm volatile ("dsb"); \
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,9 +69,9 @@
 
 // Watchdog control macros --------------------------------------------------------------------------
 #if WATCHDOG != OFF
-  #define WDT_ENABLE
-  #define WDT_RESET
-  #define WDT_DISABLE
+  #define WDT_ENABLE watchdog.enable();
+  #define WDT_RESET watchdog.reset();
+  #define WDT_DISABLE watchdog.disable();
 #else
   #define WDT_ENABLE
   #define WDT_RESET

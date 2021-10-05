@@ -49,8 +49,10 @@
 // task manager
 #define TASKS_SKIP_MISSED
 #define TASKS_HWTIMER1_ENABLE
-//#define TASKS_HWTIMER2_ENABLE
-//#define TASKS_HWTIMER3_ENABLE
+#ifdef TEENSYDUINO
+  #define TASKS_HWTIMER2_ENABLE
+  #define TASKS_HWTIMER3_ENABLE
+#endif
 
 #define pinModeEx(n, m) { if (n != OFF) pinMode(n, m); }
 #define digitalReadEx(n) ((n != OFF)?digitalRead(n):false)

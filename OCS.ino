@@ -112,4 +112,5 @@ void setup() {
 
 void loop() {
   tasks.yield();
+  WDT_RESET;
 }

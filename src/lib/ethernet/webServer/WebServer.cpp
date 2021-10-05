@@ -21,7 +21,11 @@
 
   void WebServer::init() {
     #if SD_CARD == ON
-      SDfound = SD.begin(SDCARD_CS_PIN);
+      #if TEENSYDUINO
+        SDfound = SD.begin(BUILTIN_SDCARD);
+      #else
+        SDfound = SD.begin(SDCARD_CS_PIN);
+      #endif
     #else
       if (SDCARD_CS_PIN != OFF) {
         pinMode(SDCARD_CS_PIN, OUTPUT);

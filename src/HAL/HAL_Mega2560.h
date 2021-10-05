@@ -52,7 +52,10 @@
   #define SERIAL_PIP_BEGIN()
 #endif
 
-#define HAL_INIT() { nv.init(4096, false, 0, false); analogReference(DEFAULT); }
+#define HAL_INIT() { \
+  nv.init(4096, false, 0, false); \
+  analogReference(DEFAULT); \
+}
 
 //--------------------------------------------------------------------------------------------------
 // Internal MCU temperature (in degrees C)

@@ -97,7 +97,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     //  :SW#  Set the watchdog reset flag
     #if WATCHDOG != OFF
       if (command[1] == 'W' && parameter[0] == 0) {
-        if (!roofIsMoving()) {
+        if (!roof.isMoving()) {
           strcpy(reply,"Rebooting in 8 seconds...");
           while (true) {};
         } else *commandError = CE_ROOF_IN_MOTION;

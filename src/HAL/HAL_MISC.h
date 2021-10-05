@@ -35,6 +35,8 @@
   nv.init(2048, true, 0, false); \
 }
 
+#define HAL_RESET() { }
+
 //--------------------------------------------------------------------------------------------------
 // Internal MCU temperature (in degrees C)
 #define HAL_TEMP ( NAN )
