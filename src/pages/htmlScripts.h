@@ -1,6 +1,8 @@
 // Javascript for Ajax
 #pragma once
 
+#include "../Common.h"
+
 const char html_ajax_activeA[] PROGMEM =
 "<script>\n"
 "var auto1Tick=0;\n"
@@ -26,12 +28,13 @@ const char html_ajax_activeA[] PROGMEM =
 
   "auto1Tick++;\n"
   "var i;\n"
+  "var request;\n"
   "for (i=0; i<pageList.length-1; i+=2) {\n"
     "if (auto1Tick%pageList[i+1]==0) {\n"
       "thisPage=pageList[i];\n"
       "nocache='?nocache='+Math.random()*1000000;\n";
 const char html_ajax_activeB[] PROGMEM =
-      "var request = new XMLHttpRequest();\n"
+      "request = new XMLHttpRequest();\n"
       "request.onreadystatechange = pageReady(thisPage);\n"
       "request.open('GET',thisPage.toLowerCase()+nocache,true); request.send(null);\n"
     "}"

@@ -23,7 +23,7 @@
       sendHtml(temp);
     #endif
 
-    sendHtml("<br />");
+    sendHtml(F("<br />"));
 
     #if HEAT_RELAY != OFF
       strcpy_P(temp, htmlThermostatHeat1);

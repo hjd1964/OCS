@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Common.h"
+
 const char html_links1[] PROGMEM =
 "<a href=\"/index.htm\" style=\"background-color: #222222;\">Overview</a>";
 

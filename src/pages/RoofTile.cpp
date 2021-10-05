@@ -30,11 +30,7 @@
     }
   }
 
-  #if OPERATIONAL_MODE != WIFI
-  void roofContents(EthernetClient *client) {
-  #else
   void roofContents() {
-  #endif
     char temp[250];
     char ws1[10] = "";
     char ws2[10] = "";
@@ -47,7 +43,7 @@
     if (roof.isClosing()) strcpy(ws1, "Closing");
 
     const char *statusStr = roof.getStatus();
-    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") >= 0) 
+    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ")) 
       strcpy(ws2, "#505090");
     else 
       strcpy(ws2, "red");
