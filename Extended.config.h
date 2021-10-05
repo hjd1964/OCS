@@ -26,6 +26,8 @@
 
 // SERIAL PORT COMMAND CHANNELS ------------------------------------ see https://onstep.groups.io/g/main/wiki/6-Configuration#SERIAL
 #define SERIAL_A_BAUD_DEFAULT        9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Infreq
+#define SERIAL_B_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
+#define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
 #define OPERATIONAL_MODE   ETHERNET_W5100 // ..5100, Default ETHERNET_W5100 or ETHERNET_W5500.                               <-Req'd
