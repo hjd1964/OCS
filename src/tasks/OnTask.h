@@ -79,12 +79,6 @@ extern unsigned char __task_postpone;
 // postpone currently executing task (scheduler picks task up ASAP again on exit)
 #define task_postpone() __task_postpone = true;
 
-// mutex macros, do not run these in hardware timers (not ISR safe)!
-extern unsigned char __task_mutex[];
-#define tasks_mutex_enter(m) bitSet(__task_mutex[(m)/8],(m)%8);
-#define tasks_mutex_exit(m)  bitClear(__task_mutex[(m)/8],(m)%8);
-#define tasks_mutex_busy(m)  (bitRead(__task_mutex[(m)/8],(m)%8))
-
 enum PeriodUnits: uint8_t {PU_NONE, PU_MILLIS, PU_MICROS, PU_SUB_MICROS};
 
 // Timing modes

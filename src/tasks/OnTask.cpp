@@ -68,9 +68,9 @@ Task::~Task() {
 }
 
 bool Task::requestHardwareTimer(uint8_t num, uint8_t hwPriority) {
-  if (num < 1 || num > 4) { DL("ERR: Task::requestHardwareTimer(), timer number out of range"); return false; }
-  if (repeat != true) { DL("ERR: Task::requestHardwareTimer(), repeat must be true"); return false; }
-  if (priority != 0) { DL("ERR: Task::requestHardwareTimer(), s/w priority must be 0 (highest)"); return false; }
+  if (num < 1 || num > 4) { DLF("ERR: Task::requestHardwareTimer(), timer number out of range"); return false; }
+  if (repeat != true) { DLF("ERR: Task::requestHardwareTimer(), repeat must be true"); return false; }
+  if (priority != 0) { DLF("ERR: Task::requestHardwareTimer(), s/w priority must be 0 (highest)"); return false; }
 
   unsigned long hardware_timer_period = period;
   if (period_units == PU_NONE) hardware_timer_period = 0; else
@@ -85,24 +85,24 @@ bool Task::requestHardwareTimer(uint8_t num, uint8_t hwPriority) {
 
   switch (num) {
     case 1:
-      if (HAL_HWTIMER1_FUN != NULL) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER1_FUN not NULL"); return false; }
+      if (HAL_HWTIMER1_FUN != NULL) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER1_FUN not NULL"); return false; }
       HAL_HWTIMER1_FUN = callback;
-      if (!HAL_HWTIMER1_INIT(hwPriority)) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER1_INIT() failed"); return false; }
+      if (!HAL_HWTIMER1_INIT(hwPriority)) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER1_INIT() failed"); return false; }
     break;
     case 2:
-      if (HAL_HWTIMER2_FUN != NULL) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER2_FUN not NULL"); return false; }
+      if (HAL_HWTIMER2_FUN != NULL) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER2_FUN not NULL"); return false; }
       HAL_HWTIMER2_FUN = callback;
-      if (!HAL_HWTIMER2_INIT(hwPriority)) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER2_INIT() failed"); return false; }
+      if (!HAL_HWTIMER2_INIT(hwPriority)) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER2_INIT() failed"); return false; }
     break;
     case 3:
-      if (HAL_HWTIMER3_FUN != NULL) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER3_FUN not NULL"); return false; }
+      if (HAL_HWTIMER3_FUN != NULL) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER3_FUN not NULL"); return false; }
       HAL_HWTIMER3_FUN = callback;
-      if (!HAL_HWTIMER3_INIT(hwPriority)) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER3_INIT() failed"); return false; }
+      if (!HAL_HWTIMER3_INIT(hwPriority)) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER3_INIT() failed"); return false; }
     break;
     case 4:
-      if (HAL_HWTIMER4_FUN != NULL) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER4_FUN not NULL"); return false; }
+      if (HAL_HWTIMER4_FUN != NULL) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER4_FUN not NULL"); return false; }
       HAL_HWTIMER4_FUN = callback;
-      if (HAL_HWTIMER4_INIT(hwPriority)) { DL("ERR: Task::requestHardwareTimer(), HAL_HWTIMER4_INIT() failed"); return false; }
+      if (HAL_HWTIMER4_INIT(hwPriority)) { DLF("ERR: Task::requestHardwareTimer(), HAL_HWTIMER4_INIT() failed"); return false; }
     break;
   }
   hardwareTimer = num;
