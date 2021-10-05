@@ -59,7 +59,9 @@
 
   void IPSerial::end() {
     if (cmdSvrClient.connected()) {
-      if (DEBUG_CMDSERVER) { VLF("MSG: end(), STOP cmdSvrClient."); }
+      #if DEBUG_CMDSERVER == ON
+        VLF("MSG: end(), STOP cmdSvrClient.");
+      #endif
       cmdSvrClient.stop();
     }
   }
@@ -70,18 +72,24 @@
     if (!cmdSvrClient) {
       cmdSvrClient = cmdSvr->available();
       if (cmdSvrClient) {
-        if (DEBUG_CMDSERVER) { VLF("MSG: available(), NEW cmdSvrClient."); }
+        #if DEBUG_CMDSERVER == ON
+          VLF("MSG: available(), NEW cmdSvrClient.");
+        #endif
         clientTimeout = millis() + timeout;
         cmdSvrClient.setTimeout(1000);
       }
     } else {
       if (!cmdSvrClient.connected()) { 
-        if (DEBUG_CMDSERVER) { VLF("MSG: available(), not connected STOP cmdSvrClient."); }
+        #if DEBUG_CMDSERVER == ON
+          VLF("MSG: available(), not connected STOP cmdSvrClient.");
+        #endif
         cmdSvrClient.stop();
         return 0;
       }
       if ((long)(clientTimeout - millis()) < 0) {
-        if (DEBUG_CMDSERVER) { VLF("MSG: available(), timed out STOP cmdSvrClient."); }
+        #if DEBUG_CMDSERVER == ON
+          VLF("MSG: available(), timed out STOP cmdSvrClient.");
+        #endif
         cmdSvrClient.stop();
         return 0;
       }
@@ -89,11 +97,9 @@
 
     int i = cmdSvrClient.available();
 
-    if (DEBUG_CMDSERVER) {
-      if (i > 0) {
-        VF("MSG: available(), recv. buffer has "); V(i); VLF(" chars.");
-      }
-    }
+    #if DEBUG_CMDSERVER == ON
+      if (i > 0) { VF("MSG: available(), recv. buffer has "); V(i); VLF(" chars."); }
+    #endif
 
     return i;
   }
@@ -112,9 +118,9 @@
     if (!eth_active || !cmdSvrClient) return -1;
     if (resetTimeout) clientTimeout = millis() + timeout;
     int c = cmdSvrClient.read();
-    if (DEBUG_CMDSERVER) {
+    #if DEBUG_CMDSERVER == ON
       VF("MSG: read(), found: "); VL((char)c);
-    }
+    #endif
     return c;
   }
 
