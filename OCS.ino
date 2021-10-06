@@ -49,7 +49,7 @@ NVS nv;
 
 #include "src/observatory/Observatory.h"
 
-char ocsVersion[30];
+char ocsVersion[10];
 
 #if DEBUG == PROFILER
   extern void profiler();
@@ -112,4 +112,5 @@ void setup() {
 
 void loop() {
   tasks.yield();
+  WDT_RESET;
 }
