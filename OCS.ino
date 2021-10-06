@@ -39,7 +39,7 @@
 #define FirmwareName                "OCS"
 #define FirmwareVersionMajor        3
 #define FirmwareVersionMinor        00     // minor version 00 to 99
-#define FirmwareVersionPatch        "a"    // for example major.minor patch: 10.03c
+#define FirmwareVersionPatch        "b"    // for example major.minor patch: 10.03c
 #define FirmwareVersionConfig       1      // internal, for tracking configuration file changes
 
 #include "src/Common.h"
@@ -49,7 +49,7 @@ NVS nv;
 
 #include "src/observatory/Observatory.h"
 
-char ocsVersion[10];
+char ocsVersion[30];
 
 #if DEBUG == PROFILER
   extern void profiler();
@@ -112,5 +112,4 @@ void setup() {
 
 void loop() {
   tasks.yield();
-  WDT_RESET;
 }
