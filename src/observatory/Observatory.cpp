@@ -206,7 +206,7 @@ void Observatory::connectionCheck() {
       }
 
     #if WATCHDOG == ON_CC
-      if (!success && !roofIsMoving() && connectionCheckTry >= CONNECT_REBOOT_TRIES) {
+      if (!success && !roof.isMoving() && connectionCheckTry >= CONNECT_REBOOT_TRIES) {
         VLF("MSG: Forcing Watchdog Reboot");
         while (true) {};
       }
