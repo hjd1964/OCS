@@ -50,8 +50,6 @@ bool Tsl2591w::init() {
 void Tsl2591w::poll() {
   if (!active) return;
 
-  if (!skyQualityGood) { _skyQuality = NAN; return; };
-
   // safe-guard to invalidate stale readings after 30 seconds
   if ((long)((last_mag_per_sq_arcsec_time + 30000UL) - millis()) < 0) last_mag_per_sq_arcsec = NAN;
   

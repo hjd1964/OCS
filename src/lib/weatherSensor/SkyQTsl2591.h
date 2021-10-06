@@ -16,7 +16,6 @@ class Tsl2591w {
 
     float last_mag_per_sq_arcsec = NAN;
     unsigned long last_mag_per_sq_arcsec_time = 0;
-    bool skyQualityGood = false;
 };
 
 extern Tsl2591w tsl2591w;
