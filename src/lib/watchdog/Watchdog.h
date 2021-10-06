@@ -7,13 +7,10 @@
 class Watchdog {
   public:
     // initialize and start the watchdog with timeout (to reset MCU) of seconds
-    void init(int seconds);
+    inline void enable(int seconds);
 
     // call atleast once every (seconds) to reset the count or the MCU will be reset if WD is enabled
     inline void reset() { count = 0; }
-
-    // enable the watchdog
-    inline void enable() { enabled = true; }
 
     // disable the watchdog
     inline void disable() { enabled = false; }

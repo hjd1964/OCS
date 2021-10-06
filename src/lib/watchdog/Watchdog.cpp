@@ -6,7 +6,7 @@
 
 void watchdogWrapper() { watchdog.poll(); }
 
-void Watchdog::init(int seconds) {
+void Watchdog::enable(int seconds) {
   if (this->seconds == -1) {
     this->seconds = seconds;
 
@@ -18,6 +18,7 @@ void Watchdog::init(int seconds) {
       if (tasks.requestHardwareTimer(handle, 2)) { VF(" (no hardware timer!)"); }
     } else { VLF("FAILED!"); }
   }
+  enabled = true;
 }
 
 void Watchdog::poll() {

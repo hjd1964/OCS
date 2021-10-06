@@ -60,7 +60,6 @@
   analogReadResolution(10); \
   analogWriteResolution(HAL_ANALOG_WRITE_BITS); \
   nv.init(E2END + 1, true, 0, false); \
-  watchdog.init(8); \
 }
 
 #define HAL_RESET() { \
@@ -74,7 +73,7 @@
 
 // Watchdog control macros --------------------------------------------------------------------------
 #if WATCHDOG != OFF
-  #define WDT_ENABLE watchdog.enable();
+  #define WDT_ENABLE watchdog.enable(8);
   #define WDT_RESET watchdog.reset();
   #define WDT_DISABLE watchdog.disable();
 #else
