@@ -165,6 +165,15 @@
     }
   #endif
 
+  // transmits an Chart.js chart to the html client
+  // \param chartId: the html id tag for the chart to dispay
+  // \param chartName: the name to display on the chart
+  // \param logColumn: the column position (in chars) of the data being charted
+  // \param colWidth: the width (in chars) of the data being charted
+  // \param rangeMin: the low value on the chart
+  // \param rangeMax: the high value on the chart
+  // \param rangeStep: the step size on the chart
+  // \param hours: the number of hours of data to display
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
     char temp[256] = "";
     char ws1[90] = "";
@@ -183,7 +192,7 @@
     time_t t = now();
 
     rec = logRecordLocation(t) - 120L*hours;
-    while (rec<0) { rec += 2880; t -= 24L*60L*60L; }
+    while (rec < 0) { rec += 2880; t -= 24L*60L*60L; }
     int y = year(t);
     y -= 2000;
     sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
