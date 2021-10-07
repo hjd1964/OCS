@@ -117,6 +117,8 @@
 
 #define WEATHER_SENSOR_TP_BMP280      OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
 
+#define WEATHER_SENSOR_TP_BMP085      OFF //    OFF, 0x77 (I2C Address) to enable. Temperature, pressure. For BMP180 also.    Option
+
 #define WEATHER_SENSOR_TH_DHT         OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
 // DHT device type DHT11, or DHT21, DHT22
 #define WEATHER_SENSOR_TH_DHT_TYPE  DHT11
@@ -151,6 +153,8 @@
 #define THERMOSTAT_SENSOR_TPH_BME280  OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
 
 #define THERMOSTAT_SENSOR_TP_BMP280   OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure.             Option
+
+#define THERMOSTAT_SENSOR_TP_BMP085   OFF //    OFF, 0x77 (I2C Address) to enable. Temperature, pressure. For BMP180 also.    Option
 
 #define THERMOSTAT_SENSOR_TH_DHT      OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Temperature, humidity.               Option
 // DHT device type DHT11, or DHT21, DHT22
