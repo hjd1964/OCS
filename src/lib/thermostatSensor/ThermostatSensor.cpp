@@ -5,6 +5,7 @@
 
 #include "TphBme280.h"
 #include "TpBmp280.h"
+#include "TpBmp085.h"
 #include "ThDht.h"
 #include "ThSi7021.h"
 #include "TpBmp280.h"
@@ -29,6 +30,10 @@ void ThermostatSensor::init(){
 
   #if THERMOSTAT_SENSOR_TP_BMP280 != OFF
     bmp280t.init();
+  #endif
+
+  #if THERMOSTAT_SENSOR_TP_BMP280 != OFF
+    bmp085t.init();
   #endif
 
   #if THERMOSTAT_SENSOR_TH_SI7021 != OFF

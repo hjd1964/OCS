@@ -6,9 +6,9 @@
 
 #include "../../tasks/OnTask.h"
 
-#include <Adafruit_BMP280.h>          // https://github.com/adafruit/Adafruit_BME280_Library/tree/156a0537d6b21aaab1d1f104a7001a38ca1ffce3
+#include <Adafruit_BMP280.h>          // https://github.com/adafruit/Adafruit_BMP280_Library
                                       // and https://github.com/adafruit/Adafruit_Sensor
-Adafruit_BMP280 bmpSensor;
+Adafruit_BMP280 bmp280SensorW;
 
 extern float _temperature;
 extern bool _temperatureAssigned;
@@ -23,7 +23,7 @@ bool Bmp280w::init() {
 
   if (_temperatureAssigned || _pressureAssigned) return false;
 
-  if (bmpSensor.begin(WEATHER_SENSOR_TP_BMP280)) {
+  if (bmp280SensorW.begin(WEATHER_SENSOR_TP_BMP280)) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -47,9 +47,9 @@ bool Bmp280w::init() {
 void Bmp280w::poll() {
   if (!active) return;
 
-  _temperature = bmpSensor.readTemperature();
+  _temperature = bmp280SensorW.readTemperature();
   tasks.yield(1000);
-  _pressure = bmpSensor.readPressure()/100.0;
+  _pressure = bmp280SensorW.readPressure()/100.0;
 }
 
 Bmp280w bmp280w;

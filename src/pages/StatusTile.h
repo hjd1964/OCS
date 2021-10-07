@@ -55,3 +55,8 @@ const char htmlInnerStatusBat[] PROGMEM =
 const char htmlInnerStatusBatA[] PROGMEM =
 "&nbsp;&nbsp;Battery Current<div class=\"aStatus\">%s</div><br />";
 #endif
+
+#if STAT_PROCESSOR_RAM != OFF
+const char htmlInnerStatusMemory[] PROGMEM =
+"&nbsp;&nbsp;Free Memory (Bytes)<div class=\"aStatus\">%d</div><br />";
+#endif

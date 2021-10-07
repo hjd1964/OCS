@@ -6,9 +6,9 @@
 
 #include "../../tasks/OnTask.h"
 
-#include <Adafruit_BME280.h>          // https://github.com/adafruit/Adafruit_BME280_Library/tree/156a0537d6b21aaab1d1f104a7001a38ca1ffce3
+#include <Adafruit_BME280.h>          // https://github.com/adafruit/Adafruit_BME280_Library
                                       // and https://github.com/adafruit/Adafruit_Sensor
-Adafruit_BME280 bme280;
+Adafruit_BME280 bme280SensorT;
 
 extern float _inside_temperature;
 extern bool _inside_temperatureAssigned;
@@ -26,7 +26,7 @@ bool Bme280t::init() {
 
   if (_inside_temperatureAssigned || _inside_pressureAssigned || _inside_humidityAssigned) return false;
 
-  if (bme280.begin(THERMOSTAT_SENSOR_TPH_BME280)) {
+  if (bme280SensorT.begin(THERMOSTAT_SENSOR_TPH_BME280)) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -51,11 +51,11 @@ bool Bme280t::init() {
 void Bme280t::poll() {
   if (!active) return;
 
-  _inside_temperature = bme280.readTemperature();
+  _inside_temperature = bme280SensorT.readTemperature();
   tasks.yield(1000);
-  _inside_pressure = bme280.readPressure()/100.0;
+  _inside_pressure = bme280SensorT.readPressure()/100.0;
   tasks.yield(1000);
-  _inside_humidity = bme280.readHumidity();
+  _inside_humidity = bme280SensorT.readHumidity();
 }
 
 Bme280t bme280t;

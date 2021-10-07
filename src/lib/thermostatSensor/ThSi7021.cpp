@@ -7,7 +7,7 @@
 #include "../../tasks/OnTask.h"
 
 #include <Adafruit_Si7021.h> // https://github.com/adafruit/Adafruit_Si7021
-Adafruit_Si7021 siSensor = Adafruit_Si7021();
+Adafruit_Si7021 siSensorT = Adafruit_Si7021();
 
 extern float _thermostat_temperature;
 extern bool _thermostat_temperatureAssigned;
@@ -25,7 +25,7 @@ bool Si7021t::init() {
   if (!_thermostat_temperatureAssigned) getT = true;
   if (!_thermostat_humidityAssigned) getH = true;
 
-  if (siSensor.begin()) {
+  if (siSensorT.begin()) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -49,9 +49,9 @@ bool Si7021t::init() {
 void Si7021t::poll() {
   if (!active) return;
 
-  if (getT) _thermostat_temperature = siSensor.readTemperature();
+  if (getT) _thermostat_temperature = siSensorT.readTemperature();
   tasks.yield(500);
-  if (getH) _thermostat_humidity = siSensor.readHumidity();
+  if (getH) _thermostat_humidity = siSensorT.readHumidity();
 }
 
 Si7021t si7021t;

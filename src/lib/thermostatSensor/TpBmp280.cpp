@@ -6,9 +6,9 @@
 
 #include "../../tasks/OnTask.h"
 
-#include <Adafruit_BMP280.h>          // https://github.com/adafruit/Adafruit_BME280_Library/tree/156a0537d6b21aaab1d1f104a7001a38ca1ffce3
+#include <Adafruit_BMP280.h>          // https://github.com/adafruit/Adafruit_BMP280_Library
                                       // and https://github.com/adafruit/Adafruit_Sensor
-Adafruit_BMP280 bmpSensor;
+Adafruit_BMP280 bmp280SensorT;
 
 extern float _inside_temperature;
 extern bool _inside_temperatureAssigned;
@@ -23,7 +23,7 @@ bool Bmp280t::init() {
 
   if (_inside_temperatureAssigned || _inside_pressureAssigned) return false;
 
-  if (bmpSensor.begin(THERMOSTAT_SENSOR_TP_BMP280)) {
+  if (bmp280SensorT.begin(THERMOSTAT_SENSOR_TP_BMP280)) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -47,9 +47,9 @@ bool Bmp280t::init() {
 void Bmp280t::poll() {
   if (!active) return;
 
-  _inside_temperature = bmpSensor.readTemperature();
+  _inside_temperature = bmp280SensorT.readTemperature();
   tasks.yield(1000);
-  _inside_pressure = bmpSensor.readPressure()/100.0;
+  _inside_pressure = bmp280SensorT.readPressure()/100.0;
 }
 
 Bmp280t bmp280t;

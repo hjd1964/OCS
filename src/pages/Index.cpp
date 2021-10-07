@@ -18,6 +18,10 @@
 #include "../observatory/safety/Safety.h"
 #include "../observatory/thermostat/Thermostat.h"
 
+extern unsigned int __bss_end;
+extern unsigned int __heap_start;
+extern void *__brkval;
+
 void index() {
   {
     char temp[250] = "";

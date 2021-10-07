@@ -3,8 +3,9 @@
 #include "WeatherSensor.h"
 #include <Wire.h>
 
-#include "TpBmp280.h"
 #include "TphBme280.h"
+#include "TpBmp280.h"
+#include "TpBmp085.h"
 #include "ThDht.h"
 #include "ThSi7021.h"
 #include "TAnalog.h"
@@ -52,6 +53,10 @@ void WeatherSensor::init() {
 
   #if WEATHER_SENSOR_TP_BMP280 != OFF
     bmp280w.init();
+  #endif
+
+  #if WEATHER_SENSOR_TP_BMP085 != OFF
+    bmp085w.init();
   #endif
 
   #if WEATHER_SENSOR_TH_SI7021 != OFF

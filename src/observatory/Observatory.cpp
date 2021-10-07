@@ -244,6 +244,7 @@ void Observatory::connectionCheck() {
 }
 
 void Observatory::poll() {
+
   connectionCheck();
 
   #if TIME_LOCATION_SOURCE == NTP
