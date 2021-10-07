@@ -19,12 +19,6 @@
   #error "Configuration (Config.h): CONNECTION_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
 #endif
 
-#if DEBUG_CONNECT_CHECK == ON
-  #define CHECK_FAST 3600.0
-#else
-  #define CHECK_FAST 1UL
-#endif
-
 // Time setup
 #if TIME_ZONE<-12 || TIME_ZONE>14
   #error "Configuration (Config.h): TIME_ZONE must be a number between -12 and 13 (hours.)"
@@ -44,7 +38,7 @@
 #endif
 
 #if TIME_LOCATION_SOURCE == DS3234_INIT
-  #warning "Configuration (Config.h): TIME_LOCATION_SOURCE set to DS3234_INIT, remember to revert to DS3234_RTC after uploading once"
+  //#warning "Configuration (Config.h): TIME_LOCATION_SOURCE set to DS3234_INIT, remember to revert to DS3234_RTC after uploading once"
 #endif
 
 #if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 6) && STAT_MAINS_SENSE != OFF
@@ -285,16 +279,9 @@
 #endif
 
 #if ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_OPEN_RELAY == ROOF_MOTOR_CLOSE_RELAY
-  #if ROOF_MOTOR_RELAY_MOMENTARY == ON
-    #define ROOF_SINGLE_OPEN_CLOSE_RELAY ON
-    #if ROOF_MOTOR_STOP_RELAY == ROOF_MOTOR_OPEN_RELAY
-      #define ROOF_SINGLE_OPEN_CLOSE_STOP_RELAY ON
-    #endif
-  #else
+  #if ROOF_MOTOR_RELAY_MOMENTARY != ON
     #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY and ROOF_MOTOR_CLOSE_RELAY on the same RELAY# is only allowed if ROOF_MOTOR_RELAY_MOMENTARY is used."
   #endif
-#else
-  #define ROOF_SINGLE_OPEN_CLOSE_RELAY OFF
 #endif
 
 #if ROOF == ON && (ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_CLOSE_RELAY == OFF)
