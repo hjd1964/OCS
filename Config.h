@@ -178,8 +178,8 @@
 #define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn WRW lights on/off.           Option
 
 // ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
-#define ROOF                          OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
 #define ROOF_USER_SAFETY_OVERRIDE     OFF //    OFF, ON displays safety override button.                                      Option
+#define ROOF                          OFF //    OFF, ON to enable the OCS website roof/shutter panel display.                 Option
 
 #define ROOF_AUTOCLOSE_DAWN           OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
 #define ROOF_AUTOCLOSE_DAWN_DEFAULT   OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
@@ -206,7 +206,7 @@
 
 // DOME CONTROL PANEL --------------------------------------------------------------------------------------------------------------
 
-#define DOME                          OFF //    OFF, ON to enable the OCS website roll-off roof panel display.                Option
+#define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option
 
 // Driver models (Step/Dir and Servo) see "~/OCS/Constants.h" for a complete list.
 // Usually this will be a GENERIC stepper driver or a servo SERVO_PD (pulse/direction) or SERVO_II (in/in.)
