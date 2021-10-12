@@ -30,7 +30,7 @@ typedef enum RoofError {
   RERR_OPEN_EXCEPT_IN_MOTION
 } RoofError;
 
-#include "../../commands/ProcessCmds.h"
+#include "../../lib/commands/ProcessCmds.h"
 
 typedef struct RoofFault {
   uint16_t openUnknown: 1;

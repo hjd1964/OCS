@@ -2,17 +2,13 @@
 // Observatory
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-#include "../tasks/OnTask.h"
+#include "Observatory.h"
 
-#include "../lib/weatherSensor/WeatherSensor.h"
-#include "../lib/relay/Relay.h"
+#include "../lib/tasks/OnTask.h"
+#include "../libApp/weatherSensor/WeatherSensor.h"
+#include "../libApp/relay/Relay.h"
 #include "../lib/sense/Sense.h"
-
-#include "../lib/tls/Tls_DS3231.h"
-#include "../lib/tls/Tls_DS3234.h"
-#include "../lib/tls/Tls_GPS.h"
-#include "../lib/tls/Tls_NTP.h"
-#include "../lib/tls/Tls_Teensy.h"
+#include "../lib/tls/Tls.h"
 
 #include "power/Power.h"
 #include "roof/Roof.h"
@@ -22,8 +18,6 @@
 
 #include "../pages/Pages.h"
 
-#include "Observatory.h"
-
 int timeZone = TIME_ZONE;
 time_t startupTime = 0;
 
@@ -32,6 +26,7 @@ time_t startupTime = 0;
 #endif
 
 unsigned long msFiveMinuteCounter;
+bool xBusy = false;
 bool validKey = true;
 
 void observatoryWrapper() { observatory.poll(); }
@@ -234,7 +229,7 @@ void Observatory::connectionCheck() {
           tls.restart();
         #endif
 
-        #if WATCHDOG != ON_CC
+        #if CONNECTION_FAIL_WATCHDOG == OFF
           connectionCheckTry = 0;
         #endif
       }

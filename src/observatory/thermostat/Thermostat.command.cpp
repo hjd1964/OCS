@@ -5,10 +5,16 @@
 
 #if THERMOSTAT == ON
 
-#include "../../lib/weatherSensor/WeatherSensor.h"
-#include "../../lib/relay/Relay.h"
+#include "../../libApp/weatherSensor/WeatherSensor.h"
+#include "../../libApp/relay/Relay.h"
 
 bool Thermostat::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
+  UNUSED(*commandError);
+  UNUSED(*numericReply);
+  UNUSED(*supressFrame);
+  UNUSED(*parameter);
+  UNUSED(*command);
+  UNUSED(*reply);
 
   if (command[0] == 'G') {
     #if HEAT_RELAY != OFF

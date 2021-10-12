@@ -46,7 +46,7 @@
 NVS nv;
 #include "src/Validate.h"
 #include "src/lib/sense/Sense.h"
-#include "src/tasks/OnTask.h"
+#include "src/lib/tasks/OnTask.h"
 
 #include "src/observatory/Observatory.h"
 

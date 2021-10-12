@@ -50,6 +50,7 @@
   #endif
 #endif
 
+// Relays
 #ifndef RELAY1_DEFAULT_STATE
 #define RELAY1_DEFAULT_STATE OFF
 #endif

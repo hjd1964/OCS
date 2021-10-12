@@ -4,7 +4,6 @@
 // digital mode reads have basic hf EMI/RFI noise filtering
 
 #include "Sense.h"
-#include "../../Common.h"
 
 SenseInput::SenseInput(int pin, int initState, int32_t trigger) {
   this->pin = pin;

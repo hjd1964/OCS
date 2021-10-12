@@ -43,6 +43,59 @@
   #define ETH_RESET_PIN            OFF
 #endif
 
+// Dome control
+#ifndef DOME_ENABLE_PIN
+#define DOME_ENABLE_PIN            OFF
+#endif
+#ifndef DOME_M0_PIN
+#define DOME_M0_PIN                OFF
+#endif
+#ifndef DOME_M1_PIN
+#define DOME_M1_PIN                OFF
+#endif
+#ifndef DOME_M2_PIN
+#define DOME_M2_PIN                OFF
+#endif
+#ifndef DOME_M3_PIN
+#define DOME_M3_PIN                OFF
+#endif
+#ifndef DOME_STEP_PIN
+#define DOME_STEP_PIN              OFF
+#endif
+#ifndef DOME_DIR_PIN
+#define DOME_DIR_PIN               OFF
+#endif
+#ifndef DOME_DECAY_PIN
+#define DOME_DECAY_PIN             OFF
+#endif
+#ifndef DOME_SERVO_PH1_PIN
+#define DOME_SERVO_PH1_PIN         OFF
+#endif
+#ifndef DOME_SERVO_PH2_PIN
+#define DOME_SERVO_PH2_PIN         OFF
+#endif
+#ifndef DOME_SERVO_ENC1_PIN
+#define DOME_SERVO_ENC1_PIN        OFF
+#endif
+#ifndef DOME_SERVO_ENC2_PIN
+#define DOME_SERVO_ENC2_PIN        OFF
+#endif
+#ifndef DOME_FAULT_PIN
+#define DOME_FAULT_PIN             OFF
+#endif
+#ifndef DOME_SENSE_HOME_PIN
+#define DOME_SENSE_HOME_PIN        OFF
+#endif
+#ifndef SENSE_LIMIT_PIN
+#define SENSE_LIMIT_PIN             OFF
+#endif
+#ifndef DOME_SENSE_LIMIT_MIN_PIN
+#define DOME_SENSE_LIMIT_MIN_PIN SENSE_LIMIT_PIN
+#endif
+#ifndef DOME_SENSE_LIMIT_MAX_PIN
+#define DOME_SENSE_LIMIT_MAX_PIN SENSE_LIMIT_PIN
+#endif
+
 // Digital outputs for switching relays
 #ifndef RELAY1_PIN
 #define RELAY1_PIN                  OFF

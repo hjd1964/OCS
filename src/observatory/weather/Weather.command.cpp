@@ -5,9 +5,15 @@
 
 #if WEATHER == ON
 
-#include "../../lib/weatherSensor/WeatherSensor.h"
+#include "../../libApp/weatherSensor/WeatherSensor.h"
 
 bool Weather::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
+  UNUSED(*commandError);
+  UNUSED(*numericReply);
+  UNUSED(*supressFrame);
+  UNUSED(*parameter);
+  UNUSED(*command);
+  UNUSED(*reply);
 
   #if WEATHER_TEMPERATURE == ON
   //  :G1#  Get outside temperature

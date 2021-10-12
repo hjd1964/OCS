@@ -5,8 +5,8 @@
 
 #if ROOF == ON
 
-#include "../../tasks/OnTask.h"
-#include "../../lib/relay/Relay.h"
+#include "../../lib/tasks/OnTask.h"
+#include "../../libApp/relay/Relay.h"
 #include "../../lib/sense/Sense.h"
 
 void roofWrapper() { roof.poll(); }

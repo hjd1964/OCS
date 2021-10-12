@@ -5,7 +5,7 @@
 
 #include "../Common.h"
 
-#include "../commands/ProcessCmds.h"
+#include "../lib/commands/ProcessCmds.h"
 
 #include "../lib/serial/Serial_IP_Ethernet.h"
 

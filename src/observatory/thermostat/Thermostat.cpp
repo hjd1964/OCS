@@ -5,9 +5,9 @@
 
 #if THERMOSTAT == ON
 
-#include "../../tasks/OnTask.h"
-#include "../../lib/thermostatSensor/ThermostatSensor.h"
-#include "../../lib/relay/Relay.h"
+#include "../../lib/tasks/OnTask.h"
+#include "../../libApp/thermostatSensor/ThermostatSensor.h"
+#include "../../libApp/relay/Relay.h"
 
 void thermostatWrapper() { thermostat.poll(); }
 

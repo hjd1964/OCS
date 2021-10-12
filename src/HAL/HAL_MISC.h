@@ -3,12 +3,15 @@
 
 // We define a more generic symbol, in case more Platform_Name boards based on different lines are supported
 
-// 1/100 second sidereal timer
-#define HAL_SIDEREAL_FRAC 100.0
+// 1/100 second resolution
+#define HAL_FRACTIONAL_SEC 100.0
 
 // Most platforms default to 8 bit PWM
 #ifndef HAL_ANALOG_WRITE_BITS
   #define HAL_ANALOG_WRITE_BITS 8
+#endif
+#ifndef HAL_ANALOG_WRITE_RANGE
+  #define HAL_ANALOG_WRITE_RANGE 255
 #endif
 
 // Lower limit (fastest) step rate in uS for this platform (in SQW mode) and width of step pulse

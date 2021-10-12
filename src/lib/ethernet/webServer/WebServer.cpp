@@ -2,10 +2,9 @@
 // Web server
 
 #include "WebServer.h"
-#include "../../../tasks/OnTask.h"
+#include "../../tasks/OnTask.h"
 
-#if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
-
+#if defined(OPERATIONAL_MODE) && (OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500)
   // SD CARD support, simply enable and provide a webserver.on("filename.htm") to serve each file
   #ifndef SD_CARD
     #define SD_CARD OFF
@@ -20,17 +19,19 @@
   const char http_defaultHeader[] PROGMEM = "HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "\r\n";
 
   void WebServer::init() {
-    #if SD_CARD == ON
-      #if TEENSYDUINO
-        SDfound = SD.begin(BUILTIN_SDCARD);
+    #if defined(SDCARD_CS_PIN)
+      #if SD_CARD == ON
+        #if TEENSYDUINO
+          SDfound = SD.begin(BUILTIN_SDCARD);
+        #else
+          SDfound = SD.begin(SDCARD_CS_PIN);
+        #endif
       #else
-        SDfound = SD.begin(SDCARD_CS_PIN);
+        if (SDCARD_CS_PIN != OFF) {
+          pinMode(SDCARD_CS_PIN, OUTPUT);
+          digitalWrite(SDCARD_CS_PIN, HIGH);
+        }
       #endif
-    #else
-      if (SDCARD_CS_PIN != OFF) {
-        pinMode(SDCARD_CS_PIN, OUTPUT);
-        digitalWrite(SDCARD_CS_PIN, HIGH);
-      }
     #endif
 
     if (!eth_active) {
@@ -321,5 +322,4 @@
   #endif
 
   WebServer www;
-
 #endif

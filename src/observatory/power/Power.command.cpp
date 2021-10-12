@@ -3,9 +3,10 @@
 
 #include "Power.h"
 
-#include "../../lib/relay/Relay.h"
+#include "../../libApp/relay/Relay.h"
 
 bool Power::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
+  UNUSED(supressFrame);
 
   if (command[0] == 'G') {
     //  :GRn#  Get Relay n state

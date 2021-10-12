@@ -2,13 +2,9 @@
 // Polling serial IP for Ethernet
 #pragma once
 
-#include <Arduino.h>
-#include "../../Constants.h"
-#include "../../Config.common.h"
-#include "../../HAL/HAL.h"
-#include "../../debug/Debug.h"
+#include "../../Common.h"
 
-#if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
+#if defined(OPERATIONAL_MODE) && (OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500)
 
   #include "../ethernet/Ethernet.h"
 

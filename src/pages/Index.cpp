@@ -13,7 +13,7 @@
 #include "LightTile.h"
 #include "RoofTile.h"
 
-#include "../lib/relay/Relay.h"
+#include "../libApp/relay/Relay.h"
 #include "../observatory/roof/Roof.h"
 #include "../observatory/safety/Safety.h"
 #include "../observatory/thermostat/Thermostat.h"

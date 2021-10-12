@@ -11,12 +11,20 @@
   #error "Configuration (Config.h): ETHERNET_RESET_PIN must OFF or a number between 0 and 54 (Pin#.)"
 #endif
 
-#if WATCHDOG != OFF && WATCHDOG != ON && WATCHDOG != ON_CC
-  #error "Configuration (Config.h): WATCHDOG must be either ON, ON_CC, or OFF."
+#if WATCHDOG != OFF && WATCHDOG != ON
+  #error "Configuration (Config.h): WATCHDOG must be either ON or OFF."
 #endif
 
 #if (CONNECTION_CHECK_HOURS < 1 || CONNECTION_CHECK_HOURS > 48) && CONNECTION_CHECK_HOURS != OFF && DEBUG_CONNECT_CHECK == OFF
   #error "Configuration (Config.h): CONNECTION_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
+#endif
+
+#if CONNECTION_FAIL_WATCHDOG != OFF && CONNECTION_FAIL_WATCHDOG != ON
+  #error "Configuration (Config.h): CONNECTION_FAIL_WATCHDOG must be either ON or OFF."
+#endif
+
+#if CONNECTION_FAIL_WATCHDOG == ON && WATCHDOG != ON
+  #error "Configuration (Config.h): CONNECTION_FAIL_WATCHDOG ON requires WATCHDOG ON."
 #endif
 
 // Time setup
@@ -67,6 +75,10 @@
 
 #if (STAT_BATTERY_CURRENT_ANALOG < 1 || STAT_BATTERY_CURRENT_ANALOG > 16) && STAT_BATTERY_CURRENT_ANALOG != OFF
   #error "Configuration (Config.h): STAT_BATTERY_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
+#endif
+
+#if STAT_PROCESSOR_RAM != OFF && !defined(__AVR_ATmega2560__)
+  #error "Configuration (Config.h): STAT_PROCESSOR_RAM ON is only supported on the Mega2560."
 #endif
 
 // Weather

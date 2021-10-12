@@ -4,7 +4,7 @@
 
 #include "../../Common.h"
 
-#include "../../commands/ProcessCmds.h"
+#include "../../lib/commands/ProcessCmds.h"
 
 class Power {
   public:

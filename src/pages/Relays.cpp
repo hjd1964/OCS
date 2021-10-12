@@ -2,7 +2,7 @@
 #include "Relays.h"
 
 #include "../lib/ethernet/webServer/WebServer.h"
-#include "../lib/relay/Relay.h"
+#include "../libApp/relay/Relay.h"
 #include "../lib/nv/NV.h"
 
 void relaysAjax() {

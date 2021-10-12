@@ -8,7 +8,7 @@
 #include "htmlTabs.h"
 
 #include "../lib/sense/Sense.h"
-#include "../lib/analog/Analog.h"
+#include "../libApp/analog/Analog.h"
 
 extern int timeZone;
 extern time_t startupTime;

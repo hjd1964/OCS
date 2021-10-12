@@ -3,7 +3,7 @@
 
 #include "../../Common.h"
 
-#if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
+#if defined(OPERATIONAL_MODE) && (OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500)
   #ifdef ESP8266
     #ifndef ETHERNET_W5500
       #error "The ESP8266 Ethernet option supports the W5500 only"

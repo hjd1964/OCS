@@ -4,8 +4,8 @@
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-#include "../../tasks/OnTask.h"
-#include "../../lib/weatherSensor/WeatherSensor.h"
+#include "../../lib/tasks/OnTask.h"
+#include "../../libApp/weatherSensor/WeatherSensor.h"
 #include "../../lib/sense/Sense.h"
 #include "../weather/Weather.h"
 #include "../roof/Roof.h"

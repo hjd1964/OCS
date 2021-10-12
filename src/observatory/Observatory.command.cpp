@@ -2,11 +2,11 @@
 // Observatory commands
 
 #include "../Common.h"
-#include "../tasks/OnTask.h"
+#include "../lib/tasks/OnTask.h"
 
 #include "../lib/convert/Convert.h"
 #include "../lib/sense/Sense.h"
-#include "../lib/analog/Analog.h"
+#include "../libApp/analog/Analog.h"
 
 #include "Observatory.h"
 #include "safety/Safety.h"
@@ -97,10 +97,16 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     //  :SW#  Set the watchdog reset flag
     #if WATCHDOG != OFF
       if (command[1] == 'W' && parameter[0] == 0) {
-        if (!roof.isMoving()) {
+        #if ROOF == ON
+        if (!roof.isMoving())
+        #endif
+        {
           strcpy(reply,"Rebooting in 8 seconds...");
           while (true) {};
-        } else *commandError = CE_ROOF_IN_MOTION;
+        }
+        #if ROOF == ON
+        else *commandError = CE_ROOF_IN_MOTION;
+        #endif
       } else
     #endif
       return false;
