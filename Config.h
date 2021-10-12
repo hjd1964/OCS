@@ -54,6 +54,8 @@
 // Converts the analog measure (range 0 to 1.0) to Amps
 #define STAT_DC_ANALOG_TO_CURRENT(x) (x*NAN)
 
+#define STAT_PROCESSOR_RAM            OFF //    OFF, ON for display of Processor free RAM resources. Mega2560 only.           Option
+
 // POWER PANEL ---------------------------------------------------------------------------------------------------------------------
 #define POWER                         OFF //    OFF, ON to enable the OCS website power panel display.                        Option
 
