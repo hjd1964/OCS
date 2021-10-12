@@ -256,7 +256,6 @@
           sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
           sendHtml(temp);
         }
-        Y;
       }
       dataFile.close();
     }
@@ -357,7 +356,6 @@
           sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
           sendHtml(temp);
         }
-        Y;
       }
       dataFile.close();
     }
