@@ -3,8 +3,7 @@
 #pragma once
 
 #include "../../Common.h"
-
-#include "../../lib/commands/ProcessCmds.h"
+#include "../../libApp/commands/ProcessCmds.h"
 
 class Power {
   public:

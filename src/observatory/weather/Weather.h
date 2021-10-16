@@ -6,7 +6,7 @@
 
 #if WEATHER == ON
 
-#include "../../lib/commands/ProcessCmds.h"
+#include "../../libApp/commands/ProcessCmds.h"
 
 #define SecondsBetweenLogEntries 30
 

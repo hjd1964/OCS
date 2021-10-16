@@ -39,6 +39,7 @@
                                           //         sure its reset pin is only connected to the pin specified here!
 
 #define CONNECTION_CHECK_HOURS        OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
+#define CONNECTION_FAIL_WATCHDOG      OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 
 // IP ADDRESS SETTINGS -------------------------------------------------------------------------------------------------------------
 // These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
@@ -47,13 +48,13 @@
 // The unique MAC address for your OCS
 #define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF}
 
-#define TIME_IP_ADDR        (129,6,15,28) // ...6,15,28), time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
-#define CHECK_IP_ADDR    (100,24,172,113) //              default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
+#define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
+#define CHECK_IP_ADDR    {100,24,172,113} //              default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
 
-#define STA_DHCP_ENABLED            false //       false, Ethernet DHCP Enabled.                                 Adjust
-#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Ethernet IP Address.                                   Adjust
-#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Ethernet GATEWAY Address.                              Adjust
-#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Ethernet SUBNET Mask.                                  Adjust
+#define STA_DHCP_ENABLED            false //       false, Ethernet DHCP Enabled.                                              Adjust
+#define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Ethernet IP Address.                                                Adjust
+#define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Ethernet GATEWAY Address.                                           Adjust
+#define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Ethernet SUBNET Mask.                                               Adjust
 
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS  OFF // ON reverses the xaxis of weather charts so new data is to the left

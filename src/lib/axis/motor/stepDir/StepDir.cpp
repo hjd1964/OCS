@@ -22,8 +22,8 @@ bool StepDirMotor::init(void (*volatile move)(), void (*volatile moveFF)(), void
   if (_move == NULL) { D(axisPrefix); DLF("nothing to do exiting!"); return false; }
 
   // get the axis monitor handle, by name
-  char taskName[] = "mtrAx_";
-  taskName[5] = axisNumber + '0';
+  char taskName[] = "Ax_Mtr";
+  taskName[2] = axisNumber + '0';
   mtrHandle = tasks.getHandleByName(taskName);
   if (mtrHandle == 0) { D(axisPrefix); DLF("no axis monitor, exiting!"); return false; }
 
@@ -54,7 +54,6 @@ bool StepDirMotor::init(void (*volatile move)(), void (*volatile moveFF)(), void
   pinModeEx(Pins->enable, OUTPUT);
   // driver enabled for possible TMC current calibration
   digitalWriteEx(Pins->enable, Pins->enabledState)
-
 
   // now disable the driver
   power(false);

@@ -4,9 +4,10 @@
 
 #include "../../Common.h"
 
-#if defined(OPERATIONAL_MODE) && OPERATIONAL_MODE == WIFI
+#if defined(OPERATIONAL_MODE) && OPERATIONAL_MODE == WIFI && \
+    defined(SERIAL_IP_MODE) && (SERIAL_IP_MODE == STATION || SERIAL_IP_MODE == ACCESS_POINT)
 
-#if defined(ESP32) && (SERIAL_IP_MODE == STATION || SERIAL_IP_MODE == ACCESS_POINT)
+  #include "../ethernet/WifiManager.h"
 
   #include <WiFi.h>
   #include <WiFiClient.h>
@@ -67,16 +68,13 @@
       IPAddress wifi_ap_sn = IPAddress AP_SN_MASK;
   };
 
-  #if STANDARD_COMMAND_CHANNEL == ON
+  #if defined(STANDARD_IPSERIAL_CHANNEL) && STANDARD_IPSERIAL_CHANNEL == ON
     extern IPSerial ipSerial;
     #define SERIAL_IP ipSerial
   #endif
 
-  #if PERSISTENT_COMMAND_CHANNEL == ON
+  #if defined(PERSISTENT_IPSERIAL_CHANNEL) && PERSISTENT_IPSERIAL_CHANNEL == ON
     extern IPSerial pipSerial;
     #define SERIAL_PIP pipSerial
   #endif
-
-#endif
-
 #endif

@@ -4,10 +4,8 @@
 #pragma once
 
 #include "../Common.h"
-
-#include "../lib/commands/ProcessCmds.h"
-
-#include "../lib/serial/Serial_IP_Ethernet.h"
+#include "../libApp/commands/ProcessCmds.h"
+#include "../lib/ethernet/EthernetManager.h"
 
 typedef struct Version {
   uint8_t major;

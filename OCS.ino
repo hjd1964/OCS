@@ -69,12 +69,15 @@ void sensesPoll() {
 }
 
 void setup() {
-  sprintf(ocsVersion, "%d.%d%s", FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch);
+  sprintf(ocsVersion, "%d.%02d%s", FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch);
   
   #if DEBUG != OFF
     SERIAL_DEBUG.begin(SERIAL_DEBUG_BAUD);
     delay(2000);
   #endif
+
+  VF("MSG: OCS "); VL(ocsVersion);
+  VF("MSG: MCU = "); VLF(MCU_STR);
 
   // start low level hardware
   VLF("MSG: Setup, HAL initalize");

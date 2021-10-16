@@ -6,7 +6,7 @@
 
 #if THERMOSTAT == ON
 
-#include "../../lib/commands/ProcessCmds.h"
+#include "../../libApp/commands/ProcessCmds.h"
 
 class Thermostat {
   public:
