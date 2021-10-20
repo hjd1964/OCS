@@ -11,19 +11,13 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF
 #endif
 
-// VIRTUAL SERIAL IP COMMAND CHANNEL (EXPERIMENTAL)
+// VIRTUAL SERIAL IP COMMAND CHANNELS
 #ifndef STANDARD_COMMAND_CHANNEL
-#define STANDARD_COMMAND_CHANNEL       ON //          ON, Ethernet command channel for simultanious connections on port 9999.
+#define STANDARD_COMMAND_CHANNEL       ON // Ethernet command channel for simultanious connections on port 9999.
 #endif
 
 #ifndef PERSISTENT_COMMAND_CHANNEL
-#define PERSISTENT_COMMAND_CHANNEL     ON //          ON, Ethernet command channel for a single connection on port 9998.
-#endif
-
-#ifndef STA_IP_ADDR
-#define STA_IP_ADDR        (192,168,1,50) // ..168,1,50), Ethernet IP Address.
-#define STA_GW_ADDR         (192,168,1,1) // ..,168,1,1), Ethernet GATEWAY Address.
-#define STA_SN_MASK       (255,255,255,0) // ..55,255,0), Ethernet SUBNET Mask.
+#define PERSISTENT_COMMAND_CHANNEL     ON // Ethernet command channel for a single connection on port 9998.
 #endif
 
 // in milliseconds

@@ -134,7 +134,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #if OPERATIONAL_MODE == WIFI
     wifiStart();
   #else
-    www.init();
+    www.begin();
     www.setResponseHeader(http_defaultHeader);
   #endif
 
