@@ -2,11 +2,6 @@
 // Common includes
 #pragma once
 
-#define SERIAL_IP_MODE ON
-#define WEB_SERVER ON
-#define STANDARD_IPSERIAL_CHANNEL ON
-#define PERSISTENT_IPSERIAL_CHANNEL ON
-
 #include <Arduino.h>
 #include "Constants.h"
 #include "lib/Constants.h"

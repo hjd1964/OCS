@@ -11,14 +11,16 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF
 #endif
 
-// VIRTUAL SERIAL IP COMMAND CHANNELS
-#ifndef STANDARD_COMMAND_CHANNEL
-#define STANDARD_COMMAND_CHANNEL       ON // Ethernet command channel for simultanious connections on port 9999.
-#endif
+// enable IP functionality
 
-#ifndef PERSISTENT_COMMAND_CHANNEL
-#define PERSISTENT_COMMAND_CHANNEL     ON // Ethernet command channel for a single connection on port 9998.
-#endif
+// optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
+// OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
+#define SERIAL_SERVER BOTH                       // for SERIAL_SIP, SERIAL_PIP1, etc.
+
+// optional web-server
+#define WEB_SERVER ON                            // for website at port 80
+
+// VIRTUAL SERIAL IP COMMAND CHANNELS
 
 // in milliseconds
 #ifndef WEATHER_SENSOR_SAMPLE_PERIOD

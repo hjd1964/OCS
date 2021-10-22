@@ -43,18 +43,6 @@
 //--------------------------------------------------------------------------------------------------
 // General purpose initialize for HAL
 
-#include "../lib/serial/Serial_IP_Ethernet.h"
-#if defined(SERIAL_IP)
-  #define SERIAL_IP_BEGIN() SERIAL_IP.begin(9999, 2L*1000L);
-#else
-  #define SERIAL_IP_BEGIN()
-#endif
-#if defined(SERIAL_PIP)
-  #define SERIAL_PIP_BEGIN() SERIAL_PIP.begin(9998, 120L*1000L, true);
-#else
-  #define SERIAL_PIP_BEGIN()
-#endif
-
 #define HAL_INIT() { \
   nv.init(4096, false, 0, false); \
   analogReference(DEFAULT); \
