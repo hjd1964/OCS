@@ -40,12 +40,9 @@
 #endif
 
 // Ethernet Adapter reset pin
-#if ETHERNET_RESET_PIN != OFF
-  #if ETHERNET_RESET_PIN != 6
-    #error "The Teensy3.6 supports the W5500 Ethernet only and ETHERNET_RESET_PIN must be OFF or 6 only"
-  #endif
+#ifndef ETHERNET_RESET_PIN
+  #define ETHERNET_RESET_PIN   OFF         
 #endif
-#define ETH_RESET_PIN           6
 
 // Digital outputs for switching relays
 #define RELAY1_PIN             24

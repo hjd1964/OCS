@@ -33,8 +33,8 @@
 #endif
 
 // Ethernet Adapter reset pin
-#ifndef ETH_RESET_PIN
-  #define ETH_RESET_PIN            OFF
+#ifndef ETHERNET_RESET_PIN
+  #define ETHERNET_RESET_PIN       OFF
 #endif
 
 // Dome control
