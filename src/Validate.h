@@ -49,8 +49,8 @@
   //#warning "Configuration (Config.h): TIME_LOCATION_SOURCE set to DS3234_INIT, remember to revert to DS3234_RTC after uploading once"
 #endif
 
-#if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 6) && STAT_MAINS_SENSE != OFF
-  #error "Configuration (Config.h): STAT_MAINS_SENSE must OFF or a number between 1 and 6 (SENSE#.)"
+#if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 8) && STAT_MAINS_SENSE != OFF
+  #error "Configuration (Config.h): STAT_MAINS_SENSE must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
 #if (STAT_MAINS_CURRENT_ANALOG < 1 || STAT_MAINS_CURRENT_ANALOG > 16) && STAT_MAINS_CURRENT_ANALOG != OFF
@@ -257,8 +257,8 @@
   #error "Configuration (Config.h): LIGHT_OUTSIDE_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
 
-#if (LIGHT_SW_SENSE < 1 || LIGHT_SW_SENSE > 6) && LIGHT_SW_SENSE != OFF
-  #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 6 (SENSE#.)"
+#if (LIGHT_SW_SENSE < 1 || LIGHT_SW_SENSE > 8) && LIGHT_SW_SENSE != OFF
+  #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
 // ROOF
@@ -334,20 +334,20 @@
   #endif
 #endif
 
-#if (ROOF_INTERLOCK_SENSE < 1 || ROOF_INTERLOCK_SENSE > 6) && ROOF_INTERLOCK_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_INTERLOCK must be OFF or a number between 1 and 6 (SENSE#.)"
+#if (ROOF_INTERLOCK_SENSE < 1 || ROOF_INTERLOCK_SENSE > 8) && ROOF_INTERLOCK_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_INTERLOCK must be OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
 #if ROOF == ON && (ROOF_LIMIT_CLOSED_SENSE == OFF || ROOF_LIMIT_OPENED_SENSE == OFF)
   #error "Configuration (Config.h): Roof open and close limit sensors are both required if ROOF control is enabled."
 #endif
 
-#if (ROOF_LIMIT_CLOSED_SENSE < 1 || ROOF_LIMIT_CLOSED_SENSE > 6) && ROOF_LIMIT_CLOSED_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 6 (SENSE#.)"
+#if (ROOF_LIMIT_CLOSED_SENSE < 1 || ROOF_LIMIT_CLOSED_SENSE > 8) && ROOF_LIMIT_CLOSED_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_CLOSED must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
-#if (ROOF_LIMIT_OPENED_SENSE < 1 || ROOF_LIMIT_OPENED_SENSE > 6) && ROOF_LIMIT_OPENED_SENSE != OFF
-  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 6 (SENSE#.)"
+#if (ROOF_LIMIT_OPENED_SENSE < 1 || ROOF_LIMIT_OPENED_SENSE > 8) && ROOF_LIMIT_OPENED_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
 #if ROOF_TIME_AVG<30 || ROOF_TIME_AVG>1200
