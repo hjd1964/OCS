@@ -77,6 +77,26 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   relay.init();
 
+  // Restore relay state
+  #if POWER_DEVICE1_RELAY != OFF && POWER_DEVICE1_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE1)) relay.on(POWER_DEVICE1_RELAY);
+  #endif
+  #if POWER_DEVICE2_RELAY != OFF && POWER_DEVICE2_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE2)) relay.on(POWER_DEVICE2_RELAY);
+  #endif
+  #if POWER_DEVICE3_RELAY != OFF && POWER_DEVICE3_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE3)) relay.on(POWER_DEVICE3_RELAY);
+  #endif
+  #if POWER_DEVICE4_RELAY != OFF && POWER_DEVICE4_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE4)) relay.on(POWER_DEVICE4_RELAY);
+  #endif
+  #if POWER_DEVICE5_RELAY != OFF && POWER_DEVICE5_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE5)) relay.on(POWER_DEVICE5_RELAY);
+  #endif
+  #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
+    if (nv.readC(NV_POWER_DEVICE6)) relay.on(POWER_DEVICE6_RELAY);
+  #endif
+
   // senses are added in order and "forced" so all are present even if
   // the pin is OFF; this means the sense handle is the sense number
   if (SENSE1_PIN != OFF) sense.add(SENSE1_PIN, SENSE1_INIT_STATE, SENSE1_ON_STATE, true);
@@ -103,26 +123,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
 
   WDT_ENABLE;
-
-  // Restore relay state
-  #if POWER_DEVICE1_RELAY != OFF && POWER_DEVICE1_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE1)) relay.on(POWER_DEVICE1_RELAY);
-  #endif
-  #if POWER_DEVICE2_RELAY != OFF && POWER_DEVICE2_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE2)) relay.on(POWER_DEVICE2_RELAY);
-  #endif
-  #if POWER_DEVICE3_RELAY != OFF && POWER_DEVICE3_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE3)) relay.on(POWER_DEVICE3_RELAY);
-  #endif
-  #if POWER_DEVICE4_RELAY != OFF && POWER_DEVICE4_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE4)) relay.on(POWER_DEVICE4_RELAY);
-  #endif
-  #if POWER_DEVICE5_RELAY != OFF && POWER_DEVICE5_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE5)) relay.on(POWER_DEVICE5_RELAY);
-  #endif
-  #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
-    if (nv.readC(NV_POWER_DEVICE6)) relay.on(POWER_DEVICE6_RELAY);
-  #endif
 
   // ----------------------------------------------------------------------
   // initialize ethernet
