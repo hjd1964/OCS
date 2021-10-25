@@ -30,7 +30,7 @@ typedef enum RoofError {
   RERR_OPEN_EXCEPT_IN_MOTION
 } RoofError;
 
-#include "../../lib/commands/ProcessCmds.h"
+#include "../../libApp/commands/ProcessCmds.h"
 
 typedef struct RoofFault {
   uint16_t openUnknown: 1;
@@ -105,6 +105,8 @@ class Roof {
     // for soft start etc, pwm power level (required)
     int powerLevel();
 
+    bool autoClose = ROOF_AUTOCLOSE_DAWN_DEFAULT == ON;
+
   private:
     // called repeatedly to open the roof
     void continueOpening();
@@ -112,7 +114,6 @@ class Roof {
     // called repeatedly to close the roof
     void continueClosing();
 
-    bool autoClose = ROOF_AUTOCLOSE_DAWN_DEFAULT == ON;
     bool autoCloseInitiated = false;
 
     // roof status and errors
