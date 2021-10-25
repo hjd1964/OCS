@@ -17,8 +17,17 @@
     strcpy_P(temp, htmlThermostatBegin);
     sendHtml(temp);
 
+    strcpy_P(temp, htmlThermostatTemperature1);
+    sendHtml(temp);
+    thermostatTemperatureContents();
+    strcpy_P(temp, htmlThermostatTemperature2);
+    sendHtml(temp);
+
     #if THERMOSTAT_HUMIDITY == ON
-      strcpy_P(temp, htmlThermostatHumidity);
+      strcpy_P(temp, htmlThermostatHumidity1);
+      sendHtml(temp);
+      thermostatHumidityContents();
+      strcpy_P(temp, htmlThermostatHumidity2);
       sendHtml(temp);
     #endif
 
@@ -98,7 +107,7 @@
     sendHtml(temp);
   }
 
-  void thermostatContents() {
+  void thermostatTemperatureContents() {
     char temp[40] = "";
     
     float t = thermostatSensor.temperature();
@@ -124,16 +133,15 @@
   }
 
   #if THERMOSTAT_HUMIDITY == ON
-    void thermostatHumidityContents(EthernetClient *client) {
-      char temp[80] = "";
-      char ws1[20] = "";
-      char ws2[20] = "";
+    void thermostatHumidityContents() {
+      char temp[40] = "";
       
-      float h = thermostatInsideHumidity();
+      float h = thermostatSensor.humidity();
       if (isnan(h)) {
         strcpy(temp, "Invalid");
       } else {
-        sprintF(temp, "%5.1f %", h);
+        sprintF(temp, "%5.1f ", h);
+        strcat(temp, "%");
       }
       sendHtml(temp);
     }

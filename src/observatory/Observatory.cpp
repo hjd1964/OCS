@@ -155,9 +155,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     www.on("weather", weatherContents);
   #endif
   #if THERMOSTAT == ON
-    www.on("thermostat", thermostatContents);
+    www.on("thermostatt", thermostatTemperatureContents);
     #if THERMOSTAT_HUMIDITY == ON
-      www.on("thermostath", thermostath);
+      www.on("thermostath", thermostatHumidityContents);
     #endif
   #endif
   #if ROOF == ON

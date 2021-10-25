@@ -15,7 +15,7 @@ const char html_ajax_activeA[] PROGMEM =
     "'Weather',32,"
   #endif
   #if THERMOSTAT == ON
-    "'Thermostat',61,"
+    "'ThermostatT',61,"
       #if THERMOSTAT_HUMIDITY == ON
         "'ThermostatH',118,"
       #endif

@@ -5,16 +5,23 @@
 
 #if THERMOSTAT == ON
   extern void thermostatTile();
-  extern void thermostatContents();
+  extern void thermostatTemperatureContents();
+  extern void thermostatHumidityContents();
 
   const char htmlThermostatBegin[] PROGMEM =
   "<div class=\"obsControl\">"
-  "<b>Thermostat</b><br />"
-  "&nbsp;&nbsp;Temperature (Inside)<div id=\"Thermostat\" class=\"aStatus\"></div><br />";
+  "<b>Thermostat</b><br />";
+
+  const char htmlThermostatTemperature1[] PROGMEM =
+  "&nbsp;&nbsp;Temperature (Inside)<div id=\"ThermostatT\" class=\"aStatus\">";
+  const char htmlThermostatTemperature2[] PROGMEM =
+  "</div><br />";
 
   #if THERMOSTAT_HUMIDITY == ON
-    const char htmlThermostatHumidity[] PROGMEM =
-    "&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\"></div><br />";
+    const char htmlThermostatHumidity1[] PROGMEM =
+    "&nbsp;&nbsp;Relative Humidity (Inside)<div id=\"ThermostatH\" class=\"aStatus\">";
+    const char htmlThermostatHumidity2[] PROGMEM =
+    "</div><br />";
   #endif
 
   const char htmlThermostatHeat1[] PROGMEM =

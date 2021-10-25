@@ -19,7 +19,7 @@ extern void lightContents();
 extern void powerContents();
 extern void roofContents();
 extern void statusContents();
-extern void thermostatContents();
+extern void thermostatTemperatureContents();
 extern void thermostatHumidityContents();
 extern void weatherContents();
 

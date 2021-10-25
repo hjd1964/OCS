@@ -50,7 +50,6 @@ bool Bme280t::init() {
 // update
 void Bme280t::poll() {
   if (!active) return;
-
   _inside_temperature = bme280SensorT.readTemperature();
   tasks.yield(1000);
   _inside_pressure = bme280SensorT.readPressure()/100.0;
