@@ -39,8 +39,8 @@
       sendHtml(temp);
 
       #if STAT_UNITS == IMPERIAL
-        int h = round(getHeatSetpoint()*(9.0/5.0) + 32.0);
-      if (getHeatSetpoint() == 0) h = 0;
+        int h = round(thermostat.getHeatSetpoint()*(9.0/5.0) + 32.0);
+      if (thermostat.getHeatSetpoint() == 0) h = 0;
       #else
         int h = round(thermostat.getHeatSetpoint());
       #endif
@@ -74,8 +74,8 @@
       sendHtml(temp);
 
       #if STAT_UNITS == IMPERIAL
-        int c = round(getCoolSetpoint()*(9.0/5.0) + 32.0);
-        if (getCoolSetpoint() == 0) c = 0;
+        int c = round(thermostat.getCoolSetpoint()*(9.0/5.0) + 32.0);
+        if (thermostat.getCoolSetpoint() == 0) c = 0;
       #else
         int c = round(thermostat.getCoolSetpoint());
       #endif

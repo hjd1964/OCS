@@ -37,7 +37,7 @@
         strcpy(ws1, "Invalid");
       } else {
         #if STAT_UNITS == IMPERIAL
-          sprintF(ws1, "%5.1f &deg;F", ff*1.8F + 32.0F);
+          sprintF(ws1, "%5.1f &deg;F", f*1.8F + 32.0F);
         #else
           sprintF(ws1, "%5.1f &deg;C", f);
         #endif
