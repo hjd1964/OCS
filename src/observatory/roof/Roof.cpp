@@ -367,7 +367,7 @@ void Roof::continueOpening() {
   // Detect that the roof has finished opening
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) delay(ROOF_POST_MOTION_TIME*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (long)0);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeAvg);
@@ -444,7 +444,7 @@ void Roof::continueClosing() {
   // Detect that the roof has finished closing
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) delay(ROOF_POST_MOTION_TIME*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeAvg);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (long)0);
