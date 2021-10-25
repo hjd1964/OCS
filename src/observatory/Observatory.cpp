@@ -259,7 +259,7 @@ void Observatory::poll() {
   www.handleClient();
 
   // a wall switch can control lights
-  #if LIGHT_SW_SENSE == ON && LIGHT_WRW_RELAY != OFF
+  #if LIGHT_SW_SENSE != OFF && LIGHT_WRW_RELAY != OFF
     if (sense.changed(LIGHT_SW_SENSE)) {
       if (sense.isOn(LIGHT_SW_SENSE)) relay.on(LIGHT_WRW_RELAY); else relay.off(LIGHT_WRW_RELAY);
     }
