@@ -19,11 +19,11 @@ void Relay::init() {
 
   // start relay polling task
   VF("MSG: Relay, start monitor task (rate 100ms priority 0)... ");
-  if (tasks.add(1, 0, true, 0, pollWrapper, "Relays")) { VLF("success"); } else { VLF("FAILED!"); }
+  if (tasks.add(100, 0, true, 0, pollWrapper, "Relays")) { VLF("success"); } else { VLF("FAILED!"); }
 
   // start relay pwm task
   VF("MSG: Relay, start pwm task (rate 1ms priority 0)... ");
-  uint8_t handle = tasks.add(100, 0, true, 0, pwmWrapper, "RelyPwm");
+  uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
   if (handle) {
     VF("success");
     if (!tasks.requestHardwareTimer(handle, 1, 0)) { VF(" (no hardware timer!)"); }
