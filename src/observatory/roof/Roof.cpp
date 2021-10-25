@@ -15,7 +15,7 @@ void roofWrapper() { roof.poll(); }
 void Roof::init() {
   // start polling task
   VF("MSG: Roof, start monitor task (rate 10ms priority 0)... ");
-  if (tasks.add(10, 0, true, 0, roofWrapper, "Thermst")) { VLF("success"); } else { VLF("FAILED!"); }
+  if (tasks.add(10, 0, true, 0, roofWrapper, "Roof")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 // Start opening the roof, returns true if successful or false otherwise (required)
