@@ -4,6 +4,9 @@
 #include "../Common.h"
 
 #if ROOF == ON
+
+  #include "../pages/Pages.h"
+
   extern void roofTile();
   extern void roofContents();
 

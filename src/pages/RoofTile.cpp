@@ -10,7 +10,7 @@
 
   void roofTile() {
     {
-      char temp[250] = "";
+      char temp[500] = "";
       strcpy_P(temp, htmlRoof1);
       sendHtml(temp);
     }
@@ -18,13 +18,13 @@
     roofContents();
 
     {
-      char temp[250] = "";
+      char temp[500] = "";
       strcpy_P(temp, htmlRoof2);
       sendHtml(temp);
 
       strcpy_P(temp, htmlRoof3);
       #if ROOF_AUTOCLOSE_DAWN == ON
-        if (roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
+        if (roof.autoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
       #endif
       sendHtml(temp);
     }
