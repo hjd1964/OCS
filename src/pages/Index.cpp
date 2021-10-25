@@ -72,7 +72,7 @@ void index() {
   #endif
 
   {
-    char temp[350] = "";
+    char temp[400] = "";
 
     sendHtml(F("</div>\r\n"));
 
