@@ -90,7 +90,6 @@ void Weather::poll(void) {
 
       // only log if the time is set and we have an SD card
       if (timeStatus() != timeNotSet && www.SDfound) {
-
         char temp[256] = "";
 
         time_t t = now();
@@ -99,34 +98,29 @@ void Weather::poll(void) {
         sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
         String fn = "L" + String(temp) + ".TXT";
 
+        #if DEBUG_SD == ON
+          VF("MSG: Weather, log "); VL(fn);
+        #endif
+
         if (!SD.exists(fn.c_str())) {
           #if DEBUG_SD == ON
-            VLF("MSG: Data file doesn't exist...");
+            VLF("MSG: Weather, log doesn't exist...");
           #endif
-          // create the empty file
-          #ifdef TEENSYDUINO
-            dataFile = SD.open(fn.c_str());
-          #else
-            dataFile = SD.open(fn, FILE_WRITE);
-          #endif
+            dataFile = SD.open(fn.c_str(), O_WRITE | O_CREAT);
           dataFile.close();
 
           // fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
           // size=250400/day
           
-          #ifdef TEENSYDUINO
-            dataFile = SD.open(fn.c_str());
-          #else
-            dataFile = SD.open(fn, FILE_WRITE);
-          #endif
+          dataFile = SD.open(fn.c_str(), O_WRITE);
           if (dataFile) {
             #if DEBUG_SD == ON
-              VLF("MSG: Writing file...");
+              VLF("MSG: Weather, log create file...");
             #endif
             for (int i = 0; i < 2880; i++) {
               #if DEBUG_SD == ON
-                VF("MSG: Writing record#"); VL(i);
+                VF("MSG: Weather, log create writing record#"); VL(i);
               #endif
               //               time   sa    sad   lad   p      h     wind  sq
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
@@ -137,18 +131,23 @@ void Weather::poll(void) {
             dataFile.close();
           } else { 
             #if DEBUG_SD == ON
-              VLF("MSG: Failed to create file"); 
+              VLF("MSG: Weather, log create failed"); 
             #endif
           }
         }
 
-        // write to the sdcard file
-        #ifdef TEENSYDUINO
-          dataFile = SD.open(fn.c_str());
-        #else
-          dataFile = SD.open(fn, O_READ | O_WRITE);
+        #if DEBUG_SD == ON
+          VLF("MSG: Weather, log opening file");
         #endif
+
+        // write to the sdcard file
+        dataFile = SD.open(fn.c_str(), O_READ | O_WRITE);
         if (dataFile) {
+
+          #if DEBUG_SD == ON
+            VLF("MSG: Weather, log writing data...");
+          #endif
+
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
           dataFile.write(temp); dataFile.write(":");                                     //00, 8 (time)
@@ -161,23 +160,26 @@ void Weather::poll(void) {
           dtostrf2(q,5,2,-9.99,99.99,temp);   dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
           for (int i = 0; i < 29; i++) dataFile.write(" ");                              //  ,29
           dataFile.write("\r\n");                                                        //  , 2
+
+          #if DEBUG_SD == ON
+            VLF("MSG: Weather, log close file");
+          #endif
+
           dataFile.close();
         }
 
         #if DEBUG_SD == ON
+          VLF("MSG: Weather, log debug output opening...");
           int n;
-          #ifdef TEENSYDUINO
-            dataFile = SD.open(fn.c_str());
-          #else
-            dataFile = SD.open(fn, FILE_READ);
-          #endif
+          dataFile = SD.open(fn.c_str(), O_READ);
           if (dataFile) {
             dataFile.seek(logRecordLocation(t)*80L);
             n = dataFile.read(temp, 80);
-            Serial.write(temp, n);
-            Serial.write(temp,"\r\n");
+            VL(n);
+            VL(temp);
             dataFile.close();
           }
+          VLF("MSG: Weather, log debug output closed");
         #endif
       }
 

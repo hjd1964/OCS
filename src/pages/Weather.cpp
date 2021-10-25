@@ -204,11 +204,7 @@
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    #ifdef TEENSYDUINO
-      File dataFile = SD.open(fn.c_str());
-    #else
-      File dataFile = SD.open(fn, FILE_READ);
-    #endif
+    File dataFile = SD.open(fn.c_str(), O_READ);
     if (dataFile) {
       for (long i = 0; i < 120; i++) {
         if (((rec + i*hours) - k) >= 2880L) {
@@ -219,11 +215,7 @@
           y -= 2000;
           sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
           fn = "L" + String(temp) + ".TXT";
-          #ifdef TEENSYDUINO
-            dataFile = SD.open(fn.c_str());
-          #else
-            dataFile = SD.open(fn, FILE_READ);
-          #endif
+          dataFile = SD.open(fn.c_str(), O_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
@@ -302,11 +294,7 @@
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    #ifdef TEENSYDUINO
-      File dataFile = SD.open(fn.c_str());
-    #else
-      File dataFile = SD.open(fn, FILE_READ);
-    #endif
+    File dataFile = SD.open(fn.c_str(), O_READ);
     if (dataFile) {
       for (long i = 0; i < 120; i++) {
         startRecord += hours;
@@ -319,11 +307,7 @@
           y -= 2000;
           sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
           fn = "L" + String(temp) + ".TXT";
-          #ifdef TEENSYDUINO
-            dataFile = SD.open(fn.c_str());
-          #else
-            dataFile = SD.open(fn, FILE_READ);
-          #endif
+          dataFile = SD.open(fn.c_str(), O_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
