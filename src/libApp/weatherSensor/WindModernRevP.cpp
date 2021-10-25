@@ -35,7 +35,7 @@ bool WindRevP::init() {
 void WindRevP::poll() {
   if (!active) return;
 
-  int adu = round(analog.read(WEATHER_SENSOR_WIND_REV_P)*1023.0F);
+  int adu = round(analog.read(WEATHER_SENSOR_WIND_REV_P)*1023.0F*(HAL_VCC/5.0F));
   _windspeed = powf((((float)adu - 264.0F) / 85.6814F), 3.36814F)*1.60934F;
 
   // Temperature compensation isn't implemented
