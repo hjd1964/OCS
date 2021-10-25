@@ -11,6 +11,9 @@
 // 1/500 second resolution
 #define HAL_FRACTIONAL_SEC 500.0
 
+// volatage for ADC conversions
+#define HAL_VCC 3.3F
+
 // This platform has 16 bit PWM
 #ifndef HAL_ANALOG_WRITE_BITS
   #define HAL_ANALOG_WRITE_BITS 8
