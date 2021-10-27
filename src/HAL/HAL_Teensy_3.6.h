@@ -5,11 +5,8 @@
 // We define a more generic symbol, in case more Teensy boards based on different lines are supported
 #define __TEENSYDUINO__
 
-// This platform has digitalReadFast, digitalWriteFast, etc.
-#define HAL_HAS_DIGITAL_FAST
-
-// 1/1000 second resolution
-#define HAL_FRACTIONAL_SEC 1000.0
+// 1/100 second resolution
+#define HAL_FRACTIONAL_SEC 100.0F
 
 // volatage for ADC conversions
 #define HAL_VCC 3.3F

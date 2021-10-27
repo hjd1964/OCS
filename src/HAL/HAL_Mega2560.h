@@ -5,12 +5,8 @@
 // We define a more generic symbol, in case more Teensy boards based on different lines are supported
 // __AVR__
 
-// This platform has digitalReadFast, digitalWriteFast, etc.
-#include <digitalWriteFast.h> // https://github.com/watterott/Arduino-Libs/archive/master.zip
-#define HAL_HAS_DIGITAL_FAST
-
 // 1/100 second resolution
-#define HAL_FRACTIONAL_SEC 100.0
+#define HAL_FRACTIONAL_SEC 100.0F
 
 // volatage for ADC conversions
 #define HAL_VCC 5.0F

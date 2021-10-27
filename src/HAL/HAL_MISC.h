@@ -4,7 +4,7 @@
 // We define a more generic symbol, in case more Platform_Name boards based on different lines are supported
 
 // 1/100 second resolution
-#define HAL_FRACTIONAL_SEC 100.0
+#define HAL_FRACTIONAL_SEC 100.0F
 
 // volatage for ADC conversions
 #define HAL_VCC 3.3F
