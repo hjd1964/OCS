@@ -264,6 +264,9 @@ void Observatory::poll() {
       if (sense.isOn(LIGHT_SW_SENSE)) relay.on(LIGHT_WRW_RELAY); else relay.off(LIGHT_WRW_RELAY);
     }
   #endif
+
+  // keep DHCP alive if used
+  if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
 }
 
 Observatory observatory;
