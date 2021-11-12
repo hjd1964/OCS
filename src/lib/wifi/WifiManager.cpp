@@ -26,7 +26,7 @@ bool WifiManager::init() {
     VF("MSG: WiFi, AP Enable   = "); VL(settings.accessPointEnabled);
     VF("MSG: WiFi, AP Fallback = "); VL(settings.stationApFallback);
     VF("MSG: WiFi, Sta Enable  = "); VL(settings.stationEnabled);
-  
+
     if (settings.accessPointEnabled) {
       VF("MSG: WiFi, AP SSID     = "); VL(settings.ap.ssid);
       VF("MSG: WiFi, AP PWD      = "); VL(settings.ap.pwd);
@@ -103,6 +103,7 @@ bool WifiManager::init() {
 
 void WifiManager::setStation(int number) {
   if (number >= 1 && number <= WifiStationCount) stationNumber = number;
+  sta = &settings.station[stationNumber - 1];
 }
 
 void WifiManager::disconnect() {
