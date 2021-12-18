@@ -11,11 +11,11 @@
 #define HAL_VCC 3.3F
 
 // This platform has 15 bit PWM
-#ifndef HAL_ANALOG_WRITE_BITS
-  #define HAL_ANALOG_WRITE_BITS 8
+#ifndef ANALOG_WRITE_PWM_BITS
+  #define ANALOG_WRITE_PWM_BITS 8
 #endif
-#ifndef HAL_ANALOG_WRITE_RANGE
-  #define HAL_ANALOG_WRITE_RANGE 255
+#ifndef ANALOG_WRITE_PWM_RANGE
+  #define ANALOG_WRITE_PWM_RANGE 255
 #endif
 
 #define HAL_FAST_PROCESSOR
@@ -49,7 +49,7 @@
 
 #define HAL_INIT() { \
   analogReadResolution(10); \
-  analogWriteResolution(HAL_ANALOG_WRITE_BITS); \
+  analogWriteResolution(ANALOG_WRITE_PWM_BITS); \
   nv.init(E2END + 1, true, 0, false); \
 }
 

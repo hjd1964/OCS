@@ -65,36 +65,35 @@
   #define TMC_DRIVER_PRESENT
 #endif
 
-// common axis driver settings, RA/AZM
-#ifndef DOME_DRIVER_MICROSTEPS
-#define DOME_DRIVER_MICROSTEPS       OFF  // normal microstep mode 
-#endif
-#ifndef DOME_DRIVER_MICROSTEPS_GOTO
-#define DOME_DRIVER_MICROSTEPS_GOTO  OFF  // microstep mode to use during slews
-#endif
-#ifndef DOME_DRIVER_DECAY
-#define DOME_DRIVER_DECAY            OFF  // OFF for default
-#endif
-#ifndef DOME_DRIVER_DECAY_GOTO
-#define DOME_DRIVER_DECAY_GOTO       OFF  // OFF for default
-#endif
-#ifndef DOME_DRIVER_STATUS
-#define DOME_DRIVER_STATUS           OFF  // driver status reporting (ON for TMC SPI or HIGH/LOW for fault pin)
-#endif
-#ifndef DOME_PARAMETER1      
-#define DOME_PARAMETER1              DOME_DRIVER_MICROSTEPS
-#endif
-#ifndef DOME_PARAMETER2 
-#define DOME_PARAMETER2              OFF
-#endif
-#ifndef DOME_ENABLE_STATE
-#define DOME_ENABLE_STATE            LOW  // default state of ENable pin for motor power on
-#endif
-#ifndef DOME_STEP_STATE
-#define DOME_STEP_STATE              HIGH // default signal transition state for a step
-#endif
+// common axis driver settings
+#ifdef DOME_DRIVER_SD
+  #ifndef DOME_DRIVER_MICROSTEPS
+  #define DOME_DRIVER_MICROSTEPS       OFF  // normal microstep mode 
+  #endif
+  #ifndef DOME_DRIVER_MICROSTEPS_GOTO
+  #define DOME_DRIVER_MICROSTEPS_GOTO  OFF  // microstep mode to use during slews
+  #endif
+  #ifndef DOME_DRIVER_DECAY
+  #define DOME_DRIVER_DECAY            OFF  // OFF for default
+  #endif
+  #ifndef DOME_DRIVER_DECAY_GOTO
+  #define DOME_DRIVER_DECAY_GOTO       OFF  // OFF for default
+  #endif
+  #ifndef DOME_DRIVER_STATUS
+  #define DOME_DRIVER_STATUS           OFF  // driver status reporting (ON for TMC SPI or HIGH/LOW for fault pin)
+  #endif
+  #ifndef DOME_ENABLE_STATE
+  #define DOME_ENABLE_STATE            LOW  // default state of ENable pin for motor power on
+  #endif
+  #ifndef DOME_STEP_STATE
+  #define DOME_STEP_STATE              HIGH // default signal transition state for a step
+  #endif
+  #define DOME_PARAMETER1              DOME_DRIVER_MICROSTEPS
+  #define DOME_PARAMETER2              OFF
+  #define DOME_PARAMETER3              OFF
 
-#define DRIVER_STEP_DEFAULTS
+  #define DRIVER_STEP_DEFAULTS
+#endif
 
 // assign DRIVER_TYPE
 #if DOME_DRIVER_MODEL >= SERVO_DRIVER_FIRST
@@ -105,37 +104,36 @@
   #define SERVO_DRIVER_PRESENT
 #endif
 
-// common axis driver settings, RA/AZM
-#ifndef DOME_SERVO_P
-#define DOME_SERVO_P                 2.0    // P = proportional
-#endif
-#ifndef DOME_SERVO_I
-#define DOME_SERVO_I                 5.0    // I = integral
-#endif
-#ifndef DOME_SERVO_D
-#define DOME_SERVO_D                 1.0    // D = derivative
-#endif
-#ifndef DOME_SERVO_ENCODER
-#define DOME_SERVO_ENCODER           ENC_AB
-#endif
-#ifndef DOME_SERVO_ENCODER_TRIGGER
-#define DOME_SERVO_ENCODER_TRIGGER   CHANGE // ignored for ENC_AB
-#endif
-#ifndef DOME_SERVO_PH1_STATE
-#define DOME_SERVO_PH1_STATE         LOW    // default state motor driver IN1 (SERVO_II) or PHASE (SERVO_PD) pin
-#endif
-#ifndef DOME_SERVO_PH2_STATE
-#define DOME_SERVO_PH2_STATE         LOW    // default state motor driver IN2 or DIR pin
-#endif
-#ifndef DOME_DRIVER_STATUS
-#define DOME_DRIVER_STATUS           OFF    // driver status reporting (ON for TMC SPI or HIGH/LOW for fault pin)
-#endif
-#ifndef DOME_PARAMETER1      
-#define DOME_PARAMETER1              1      // subdivisions always 1
-#endif
-#ifndef DOME_PARAMETER2 
-#define DOME_PARAMETER2              0      // not used
-#endif
-#ifndef DOME_ENABLE_STATE
-#define DOME_ENABLE_STATE            LOW    // default state of ENable pin for motor power on
+// common axis driver settings
+#ifdef DOME_SERVO
+  #ifndef DOME_SERVO_P
+  #define DOME_SERVO_P                 2.0    // P = proportional
+  #endif
+  #ifndef DOME_SERVO_I
+  #define DOME_SERVO_I                 5.0    // I = integral
+  #endif
+  #ifndef DOME_SERVO_D
+  #define DOME_SERVO_D                 1.0    // D = derivative
+  #endif
+  #ifndef DOME_SERVO_ENCODER
+  #define DOME_SERVO_ENCODER           ENC_AB
+  #endif
+  #ifndef DOME_SERVO_ENCODER_TRIGGER
+  #define DOME_SERVO_ENCODER_TRIGGER   CHANGE // ignored for ENC_AB
+  #endif
+  #ifndef DOME_SERVO_PH1_STATE
+  #define DOME_SERVO_PH1_STATE         LOW    // default state motor driver IN1 (SERVO_II) or PHASE (SERVO_PD) pin
+  #endif
+  #ifndef DOME_SERVO_PH2_STATE
+  #define DOME_SERVO_PH2_STATE         LOW    // default state motor driver IN2 or DIR pin
+  #endif
+  #ifndef DOME_DRIVER_STATUS
+  #define DOME_DRIVER_STATUS           OFF    // driver status reporting (ON for TMC SPI or HIGH/LOW for fault pin)
+  #endif
+  #ifndef DOME_ENABLE_STATE
+  #define DOME_ENABLE_STATE            LOW    // default state of ENable pin for motor power on
+  #endif
+  #define DOME_PARAMETER1              DOME_SERVO_P
+  #define DOME_PARAMETER2              DOME_SERVO_I
+  #define DOME_PARAMETER3              DOME_SERVO_D
 #endif
