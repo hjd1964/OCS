@@ -105,7 +105,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
           while (true) {};
         }
         #if ROOF == ON
-        else *commandError = CE_ROOF_IN_MOTION;
+        else *commandError = CE_SLEW_IN_MOTION;
         #endif
       } else
     #endif
