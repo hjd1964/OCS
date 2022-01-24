@@ -206,3 +206,8 @@
 #ifndef SENSE8_INIT_STATE
 #define SENSE8_INIT_STATE INPUT_PULLUP
 #endif
+
+// use the HAL specified default NV driver
+#ifndef NV_DRIVER
+  #define NV_DRIVER NV_DEFAULT
+#endif
