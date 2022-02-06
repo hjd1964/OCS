@@ -241,4 +241,6 @@
                                           //         |THLD(n) Where n=1..1023 (ADU) for Analog threshold.
                                           //         |HYST(n) Where n=0..1023 (ADU) for +/- Hystersis range.
 
+// ---------------------------------------------------------------------------------------------------------------------------------
 #define FileVersionConfig 2
+#include "Extended.config.h"
