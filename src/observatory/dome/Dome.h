@@ -3,7 +3,7 @@
 
 #include "../../Common.h"
 
-#if DOME != OFF
+#if DOME_DRIVER_MODEL != OFF
 #include "../../lib/axis/Axis.h"
 
 class Dome {
@@ -13,9 +13,9 @@ class Dome {
   private:
 };
 
-#ifdef DOME_DRIVER_SD
+#ifdef DOME_DRIVER_PRESENT
   extern StepDirMotor motor3;
-#elif defined(DOME_SERVO)
+#elif defined(DOME_SERVO_PRESENT)
   extern ServoMotor motor3;
 #endif
 extern IRAM_ATTR void moveAxis3();

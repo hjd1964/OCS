@@ -40,7 +40,7 @@
 #define FirmwareVersionMajor        3
 #define FirmwareVersionMinor        01     // minor version 00 to 99
 #define FirmwareVersionPatch        "e"    // for example major.minor patch: 10.03c
-#define FirmwareVersionConfig       m      // internal, for tracking configuration file changes
+#define FirmwareVersionConfig       2      // internal, for tracking configuration file changes
 
 #include "src/Common.h"
 NVS nv;

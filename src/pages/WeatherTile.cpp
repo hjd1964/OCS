@@ -15,12 +15,12 @@
     char temp[128] = "";
 
     strcpy_P(temp, htmlWeather1);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     weatherContents();
 
     strcpy_P(temp,htmlWeather3);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
   void weatherContents() {
@@ -29,7 +29,7 @@
     float f;
 
     strcpy_P(temp, htmlInnerWeather1);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     #if WEATHER_TEMPERATURE == ON
       f = weatherSensor.temperature();
@@ -43,7 +43,7 @@
         #endif
       }
       sprintf_P(temp, htmlInnerWeatherTemp, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_PRESSURE == ON
@@ -58,7 +58,7 @@
       #endif
       }
       sprintf_P(temp, htmlInnerWeatherPres, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_HUMIDITY == ON
@@ -69,7 +69,7 @@
         sprintF(ws1, "%6.1f %", f);
       } 
       sprintf_P(temp, htmlInnerWeatherHumd, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_WIND_SPD == ON
@@ -84,7 +84,7 @@
         #endif
       }
       sprintf_P(temp, htmlInnerWeatherWind, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_RAIN == ON
@@ -92,7 +92,7 @@
       int i = lroundf(weatherSensor.rain());
       if (i < 0 || i > 3) i = 0;
       sprintf_P(temp, htmlInnerWeatherRain, rainSensorStr[i]);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_SKY_QUAL == ON
@@ -103,26 +103,26 @@
         sprintF(ws1, "%4.1fmpsas", f);
       }
       sprintf_P(temp, htmlInnerWeatherSq, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_CLOUD_CVR == ON
       strcpy(ws1, weather.cloudCoverDescription());
       sprintf_P(temp, htmlInnerWeatherCloud, ws1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     #endif
 
     #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON
       if (safety.isSafe()) {
         strcpy_P(temp, htmlInnerWeatherSafe);
-        sendHtml(temp);
+        sendHtmlC(temp);
         strcpy_P(temp, htmlInnerWeatherSafe1);
-        sendHtml(temp);
+        sendHtmlC(temp);
       } else {
         strcpy_P(temp, htmlInnerWeatherUnSafe);
-        sendHtml(temp);
+        sendHtmlC(temp);
         strcpy_P(temp, htmlInnerWeatherUnSafe1);
-        sendHtml(temp);
+        sendHtmlC(temp);
       }
     #endif
 

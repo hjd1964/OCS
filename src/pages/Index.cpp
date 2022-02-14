@@ -29,29 +29,29 @@ void index() {
     sendHtmlStart();
 
     // send a standard http response header with some css
-    strcpy_P(temp, html_head1); sendHtml(temp);
-    strcpy_P(temp, html_main_css1); sendHtml(temp);
-    strcpy_P(temp, html_main_css2); sendHtml(temp);
-    strcpy_P(temp, html_main_css4); sendHtml(temp);
-    strcpy_P(temp, html_main_css6); sendHtml(temp);
-    strcpy_P(temp, html_main_css7); sendHtml(temp);
-    strcpy_P(temp, html_main_css8); sendHtml(temp);
-    strcpy_P(temp, html_main_css10); sendHtml(temp);
-    strcpy_P(temp, html_main_css11); sendHtml(temp);
+    strcpy_P(temp, html_head1); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css1); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css2); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css4); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css6); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css7); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css8); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css10); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css11); sendHtmlC(temp);
 
-    strcpy_P(temp, html_head3); sendHtml(temp);
+    strcpy_P(temp, html_head3); sendHtmlC(temp);
 
-    strcpy_P(temp, html_pageHeader1); sendHtml(temp);
-    sprintf(temp, PROD_ABV " %s</b>", ocsVersion); sendHtml(temp);
-    strcpy_P(temp, html_pageHeader2); sendHtml(temp);
-    strcpy_P(temp, html_links1s); sendHtml(temp);
+    strcpy_P(temp, html_pageHeader1); sendHtmlC(temp);
+    sprintf(temp, PROD_ABV " %s</b>", ocsVersion); sendHtmlC(temp);
+    strcpy_P(temp, html_pageHeader2); sendHtmlC(temp);
+    strcpy_P(temp, html_links1s); sendHtmlC(temp);
     #if WEATHER == ON && WEATHER_CHARTS == ON
-      strcpy_P(temp, html_links2); sendHtml(temp);
+      strcpy_P(temp, html_links2); sendHtmlC(temp);
       #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-        strcpy_P(temp, html_links3); sendHtml(temp);
+        strcpy_P(temp, html_links3); sendHtmlC(temp);
       #endif
     #endif
-    strcpy_P(temp, html_pageHeader3); sendHtml(temp);
+    strcpy_P(temp, html_pageHeader3); sendHtmlC(temp);
   }
 
   statusTile();
@@ -74,22 +74,23 @@ void index() {
   {
     char temp[400] = "";
 
-    sendHtml(F("</div>\r\n"));
+    sendHtmlC(F("</div>\r\n"));
 
     // javascript for ajax relay control
     strcpy_P(temp, html_ajax_activeA);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     strcpy_P(temp, html_ajax_activeB);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     strcpy_P(temp, html_ajax_setRelay);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     strcpy_P(temp, html_ajax_setVar);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
-    sendHtmlDone(F("</body></html>\r\n"));
+    sendHtmlC(F("</body></html>\r\n"));
+    sendHtmlDone();
   }
 }
 

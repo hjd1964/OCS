@@ -13,12 +13,12 @@
     char temp[100];
     
     strcpy_P(temp, htmlLight1);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     lightContents();
 
     strcpy_P(temp,htmlLight3);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
   void lightContents() {
@@ -31,7 +31,7 @@
     #if LIGHT_WRR_RELAY != OFF
       if (relay.isOn(LIGHT_WRR_RELAY)) check(temp, "%___WRR"); else erase(temp, "%___WRR");
     #endif
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     strcpy_P(temp, htmlLighting2);
     #if LIGHT_ORW_RELAY != OFF
@@ -40,10 +40,10 @@
     #if LIGHT_ORR_RELAY != OFF
       if (relay.isOn(LIGHT_ORR_RELAY)) check(temp, "%___ORR"); else erase(temp, "%___ORR");
     #endif
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     strcpy_P(temp, htmlLighting3);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
 #endif

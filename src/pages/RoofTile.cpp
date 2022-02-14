@@ -12,7 +12,7 @@
     {
       char temp[500] = "";
       strcpy_P(temp, htmlRoof1);
-      sendHtml(temp);
+      sendHtmlC(temp);
     }
 
     roofContents();
@@ -20,13 +20,13 @@
     {
       char temp[500] = "";
       strcpy_P(temp, htmlRoof2);
-      sendHtml(temp);
+      sendHtmlC(temp);
 
       strcpy_P(temp, htmlRoof3);
       #if ROOF_AUTOCLOSE_DAWN == ON
         if (roof.autoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
       #endif
-      sendHtml(temp);
+      sendHtmlC(temp);
     }
   }
 
@@ -48,7 +48,7 @@
     else 
       strcpy(ws2, "red");
     sprintf_P(temp, htmlInnerRoofStat, ws1, ws2, statusStr);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
 #endif

@@ -21,7 +21,3 @@ extern char ocsVersion[10];
   #define AXIS_PRESENT
 #endif
 
-#if DOME_DRIVER_MODEL != OFF
-  #define DOME_PRESENT
-#endif
-

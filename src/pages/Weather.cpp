@@ -23,26 +23,26 @@
     sendHtmlStart();
 
     // send a standard http response header with some css
-    strcpy_P(temp, html_head1); sendHtml(temp);
-    strcpy_P(temp, html_main_css1); sendHtml(temp); 
-    strcpy_P(temp, html_main_css2); sendHtml(temp);
-    strcpy_P(temp, html_main_css4); sendHtml(temp);
-    strcpy_P(temp, html_main_css6); sendHtml(temp);
-    strcpy_P(temp, html_main_css7); sendHtml(temp);
-    strcpy_P(temp, html_main_css8); sendHtml(temp);
-    strcpy_P(temp, html_main_css10); sendHtml(temp);
-    strcpy_P(temp, html_main_css11); sendHtml(temp);
+    strcpy_P(temp, html_head1); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css1); sendHtmlC(temp); 
+    strcpy_P(temp, html_main_css2); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css4); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css6); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css7); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css8); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css10); sendHtmlC(temp);
+    strcpy_P(temp, html_main_css11); sendHtmlC(temp);
 
-    strcpy_P(temp, html_head3); sendHtml(temp);
+    strcpy_P(temp, html_head3); sendHtmlC(temp);
 
-    strcpy_P(temp, html_pageHeader1); sendHtml(temp);
-    strcpy_P(temp, html_pageHeader2); sendHtml(temp);
-    strcpy_P(temp, html_links1); sendHtml(temp);
-    strcpy_P(temp, html_links2s); sendHtml(temp);
+    strcpy_P(temp, html_pageHeader1); sendHtmlC(temp);
+    strcpy_P(temp, html_pageHeader2); sendHtmlC(temp);
+    strcpy_P(temp, html_links1); sendHtmlC(temp);
+    strcpy_P(temp, html_links2s); sendHtmlC(temp);
     #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-      strcpy_P(temp, html_links3); sendHtml(temp);
+      strcpy_P(temp, html_links3); sendHtmlC(temp);
     #endif
-    strcpy_P(temp, html_pageHeader3); sendHtml(temp);
+    strcpy_P(temp, html_pageHeader3); sendHtmlC(temp);
 
     int period = 1;
     String periodStr = "";
@@ -50,9 +50,9 @@
     if (a.equals(F("last24"))) { period = 24; periodStr = F("24 hours"); }
     if (a.equals(F("last48"))) { period = 48; periodStr = F("48 hours"); }
     
-    sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
-    sendHtml(F("<script>\r\n"));
-    sendHtml(F("window.onload = function(){\r\n"));
+    sendHtmlC(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
+    sendHtmlC(F("<script>\r\n"));
+    sendHtmlC(F("window.onload = function(){\r\n"));
     #if WEATHER_TEMPERATURE == ON
       #if STAT_UNITS == IMPERIAL
         // a negative column# means this is a temperature and needs conversion to degrees F
@@ -78,11 +78,11 @@
     #if WEATHER_HUMIDITY == ON
       makeChartJs("RH", "Relative Humidity % (last "+periodStr+")", 33, 5, 0, 100, 10, period);
     #endif
-    sendHtml(F("}\r\n"));
-    sendHtml(F("</script>\r\n"));
+    sendHtmlC(F("}\r\n"));
+    sendHtmlC(F("</script>\r\n"));
 
-    strcpy_P(temp, ChartOptions1a); sendHtml(temp);
-    strcpy_P(temp, ChartOptions2); sendHtml(temp);
+    strcpy_P(temp, ChartOptions1a); sendHtmlC(temp);
+    strcpy_P(temp, ChartOptions2); sendHtmlC(temp);
     
     #if WEATHER_TEMPERATURE == ON
       makeChartCanvas("ambientT");
@@ -97,7 +97,8 @@
       makeChartCanvas("RH");
     #endif
 
-    sendHtmlDone(F("</div></body></html>\r\n"));
+    sendHtmlC(F("</div></body></html>\r\n"));
+    sendHtmlDone();
   }
 
   #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
@@ -108,24 +109,24 @@
       sendHtmlStart();
       
       // send a standard http response header with some css
-      strcpy_P(temp, html_head1); sendHtml(temp);
-      strcpy_P(temp, html_main_css1); sendHtml(temp); 
-      strcpy_P(temp, html_main_css2); sendHtml(temp);
-      strcpy_P(temp, html_main_css4); sendHtml(temp);
-      strcpy_P(temp, html_main_css6); sendHtml(temp);
-      strcpy_P(temp, html_main_css7); sendHtml(temp);
-      strcpy_P(temp, html_main_css8); sendHtml(temp);
-      strcpy_P(temp, html_main_css10); sendHtml(temp);
-      strcpy_P(temp, html_main_css11); sendHtml(temp);
+      strcpy_P(temp, html_head1); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css1); sendHtmlC(temp); 
+      strcpy_P(temp, html_main_css2); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css4); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css6); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css7); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css8); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css10); sendHtmlC(temp);
+      strcpy_P(temp, html_main_css11); sendHtmlC(temp);
 
-      strcpy_P(temp, html_head3); sendHtml(temp);
+      strcpy_P(temp, html_head3); sendHtmlC(temp);
 
-      strcpy_P(temp, html_pageHeader1); sendHtml(temp);
-      strcpy_P(temp, html_pageHeader2); sendHtml(temp);
-      strcpy_P(temp, html_links1);  sendHtml(temp);
-      strcpy_P(temp, html_links2);  sendHtml(temp);
-      strcpy_P(temp, html_links3s); sendHtml(temp);
-      strcpy_P(temp, html_pageHeader3); sendHtml(temp);
+      strcpy_P(temp, html_pageHeader1); sendHtmlC(temp);
+      strcpy_P(temp, html_pageHeader2); sendHtmlC(temp);
+      strcpy_P(temp, html_links1);  sendHtmlC(temp);
+      strcpy_P(temp, html_links2);  sendHtmlC(temp);
+      strcpy_P(temp, html_links3s); sendHtmlC(temp);
+      strcpy_P(temp, html_pageHeader3); sendHtmlC(temp);
 
       int period = 1;
       String periodStr = "";
@@ -133,9 +134,9 @@
       if (a.equals(F("last24"))) { period = 24; periodStr = F("24 hours"); }
       if (a.equals(F("last48"))) { period = 48; periodStr = F("48 hours"); }
       
-      sendHtml(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
-      sendHtml(F("<script>\r\n"));
-      sendHtml(F("window.onload = function(){\r\n"));
+      sendHtmlC(F("<script type=\"text/javascript\" src=\"Chart.js\"></script>\r\n"));
+      sendHtmlC(F("<script>\r\n"));
+      sendHtmlC(F("window.onload = function(){\r\n"));
 
       #if WEATHER_SKY_QUAL == ON
         makeChartJs("SQ", "Sky Quality mag/sq arc-sec (last "+periodStr+")", 45, 5, 1, 22, 5, period);
@@ -145,15 +146,15 @@
         makeChartJs("skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
       #endif
 
-      sendHtml(F("}\r\n"));
+      sendHtmlC(F("}\r\n"));
 
-      sendHtml(F("</script>\r\n"));
+      sendHtmlC(F("</script>\r\n"));
 
       strcpy_P(temp,ChartOptions1b);
-      sendHtml(temp);
+      sendHtmlC(temp);
 
       strcpy_P(temp,ChartOptions2);
-      sendHtml(temp);
+      sendHtmlC(temp);
 
       #if WEATHER_SKY_QUAL == ON
         makeChartCanvas("SQ");
@@ -163,7 +164,8 @@
         makeChartCanvas("skyT");
       #endif
 
-      sendHtmlDone(F("</div></body></html>\r\n"));
+      sendHtmlC(F("</div></body></html>\r\n"));
+      sendHtmlDone();
     }
   #endif
 
@@ -184,12 +186,12 @@
     long k = 0;
 
     sprintf_P(temp, ChartJs1, chartId, chartId, chartId);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
-    sendHtml(chartName);
+    sendHtmlC(chartName);
 
     strcpy_P(temp, ChartJs3);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     time_t t = now();
 
@@ -246,7 +248,7 @@
             if (hours == 48) dtostrf((120-i)/2.5, 1, 1, ws1);
           #endif
           sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
-          sendHtml(temp);
+          sendHtmlC(temp);
         }
       }
       dataFile.close();
@@ -254,7 +256,7 @@
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
     sprintf_P(temp, ChartJs4, rangeMax, rangeMin, rangeStep);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
   // transmits an Chart.js chart to the html client
@@ -274,12 +276,12 @@
     long k = 0;
 
     sprintf_P(temp, ChartJs1, chartId, chartId, chartId);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
-    sendHtml(chartName);
+    sendHtmlC(chartName);
 
     strcpy_P(temp, ChartJs3);
-    sendHtml(temp);
+    sendHtmlC(temp);
 
     long spanInHours = 120L*hours;
 
@@ -338,7 +340,7 @@
             if (hours == 48) dtostrf((120-i)/2.5, 1, 1, ws1);
           #endif
           sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
-          sendHtml(temp);
+          sendHtmlC(temp);
         }
       }
       dataFile.close();
@@ -346,13 +348,13 @@
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
     sprintf_P(temp, ChartJs4, rangeMax, rangeMin, rangeStep);
-    sendHtml(temp);
+    sendHtmlC(temp);
   }
 
   void makeChartCanvas(const char *chartId) {
-    sendHtml(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
-    sendHtml(F("<canvas id=\"")); sendHtml(chartId); sendHtml(F("\" width=\"600\" height=\"200\"></canvas>\r\n"));
-    sendHtml(F("</div>\r\n"));
+    sendHtmlC(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
+    sendHtmlC(F("<canvas id=\"")); sendHtmlC(chartId); sendHtmlC(F("\" width=\"600\" height=\"200\"></canvas>\r\n"));
+    sendHtmlC(F("</div>\r\n"));
   }
 
 #endif
