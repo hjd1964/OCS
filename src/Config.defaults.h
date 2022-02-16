@@ -211,3 +211,151 @@
 #ifndef NV_DRIVER
   #define NV_DRIVER NV_DEFAULT
 #endif
+
+// -----------------------------------------------------------------------------------
+// dome settings
+#ifndef DOME_DRIVER_MODEL
+#define DOME_DRIVER_MODEL             OFF                         // specify a driver to enable
+#endif
+#ifndef DOME_STEPS_PER_DEGREE
+#define DOME_STEPS_PER_DEGREE         64.0
+#endif
+#ifndef DOME_REVERSE
+#define DOME_REVERSE                  OFF
+#endif
+#ifndef DOME_POWER_DOWN
+#define DOME_POWER_DOWN               OFF
+#endif
+#ifndef DOME_ENABLE_STATE
+#define DOME_ENABLE_STATE             LOW
+#endif
+#ifndef DOME_SLEW_RATE_DESIRED
+#define DOME_SLEW_RATE_DESIRED        3.0                         // in degrees/sec
+#endif
+#ifndef DOME_ACCELERATION_TIME
+#define DOME_ACCELERATION_TIME        2                           // in seconds, to selected rate
+#endif
+#ifndef DOME_RAPID_STOP_TIME
+#define DOME_RAPID_STOP_TIME          1                           // in seconds, to stop
+#endif
+#ifndef DOME_BACKLASH_RATE
+#define DOME_BACKLASH_RATE            (DOME_SLEW_RATE_DESIRED/4) // in degrees/sec
+#endif
+#ifndef DOME_LIMIT_MIN
+#define DOME_LIMIT_MIN                -180                        // in degrees
+#endif
+#ifndef DOME_LIMIT_MAX
+#define DOME_LIMIT_MAX                180                         // in degrees
+#endif
+#ifndef DOME_SENSE_HOME
+#define DOME_SENSE_HOME               OFF
+#endif
+#ifndef DOME_SENSE_HOME_INIT
+#define DOME_SENSE_HOME_INIT          INPUT_PULLUP
+#endif
+#ifndef DOME_SENSE_LIMIT_MIN
+#define DOME_SENSE_LIMIT_MIN          OFF
+#endif
+#ifndef DOME_SENSE_LIMIT_MAX
+#define DOME_SENSE_LIMIT_MAX          OFF
+#endif
+#ifndef DOME_SENSE_LIMIT_INIT
+#define DOME_SENSE_LIMIT_INIT         INPUT_PULLUP
+#endif
+#if DOME_DRIVER_MODEL >= DRIVER_FIRST && DOME_DRIVER_MODEL <= DRIVER_LAST
+  #define DOME_DRIVER_PRESENT
+  #if DOME_DRIVER_MODEL == TMC2130 || DOME_DRIVER_MODEL == TMC5160
+  #define DOME_DRIVER_TMC_SPI
+  #endif
+  #ifndef DOME_STEP_STATE
+  #define DOME_STEP_STATE               HIGH
+  #endif
+  #ifndef DOME_DRIVER_MICROSTEPS
+  #define DOME_DRIVER_MICROSTEPS        OFF
+  #endif
+  #ifndef DOME_DRIVER_MICROSTEPS_GOTO
+  #define DOME_DRIVER_MICROSTEPS_GOTO   OFF
+  #endif
+  #ifndef DOME_DRIVER_DECAY
+  #define DOME_DRIVER_DECAY             OFF
+  #endif
+  #ifndef DOME_DRIVER_DECAY_GOTO
+  #define DOME_DRIVER_DECAY_GOTO        OFF
+  #endif
+  #ifndef DOME_DRIVER_IHOLD
+  #define DOME_DRIVER_IHOLD             OFF
+  #endif
+  #ifndef DOME_DRIVER_IRUN
+  #define DOME_DRIVER_IRUN              OFF
+  #endif
+  #ifndef DOME_DRIVER_IGOTO
+  #define DOME_DRIVER_IGOTO             OFF
+  #endif
+  #ifndef DOME_DRIVER_STATUS
+  #define DOME_DRIVER_STATUS            OFF
+  #endif
+  #define DOME_PARAMETER1               DOME_DRIVER_MICROSTEPS
+  #define DOME_PARAMETER2               DOME_DRIVER_MICROSTEPS_GOTO
+  #define DOME_PARAMETER3               DOME_DRIVER_IHOLD
+  #define DOME_PARAMETER4               DOME_DRIVER_IRUN
+  #define DOME_PARAMETER5               DOME_DRIVER_IGOTO
+  #define DOME_PARAMETER6               OFF
+#endif
+#if DOME_DRIVER_MODEL >= SERVO_DRIVER_FIRST
+  #define DOME_SERVO_PRESENT
+  #ifndef DOME_SERVO_P
+  #define DOME_SERVO_P                  2.0
+  #endif
+  #ifndef DOME_SERVO_I
+  #define DOME_SERVO_I                  5.0
+  #endif
+  #ifndef DOME_SERVO_D
+  #define DOME_SERVO_D                  1.0
+  #endif
+  #ifndef DOME_SERVO_P_GOTO
+  #define DOME_SERVO_P_GOTO             DOME_SERVO_P
+  #endif
+  #ifndef DOME_SERVO_I_GOTO
+  #define DOME_SERVO_I_GOTO             DOME_SERVO_I
+  #endif
+  #ifndef DOME_SERVO_D_GOTO
+  #define DOME_SERVO_D_GOTO             DOME_SERVO_D
+  #endif
+  #ifndef DOME_SERVO_ENCODER
+  #define DOME_SERVO_ENCODER            ENC_AB
+  #endif
+  #ifndef DOME_SERVO_ENCODER_TRIGGER
+  #define DOME_SERVO_ENCODER_TRIGGER    CHANGE
+  #endif
+  #ifndef DOME_SERVO_FEEDBACK
+  #define DOME_SERVO_FEEDBACK           FB_PID
+  #endif
+  #ifndef DOME_SERVO_PH1_STATE
+  #define DOME_SERVO_PH1_STATE          LOW
+  #endif
+  #ifndef DOME_SERVO_PH2_STATE
+  #define DOME_SERVO_PH2_STATE          LOW
+  #endif
+  #define DOME_PARAMETER1               DOME_SERVO_P
+  #define DOME_PARAMETER2               DOME_SERVO_I
+  #define DOME_PARAMETER3               DOME_SERVO_D
+  #define DOME_PARAMETER4               DOME_SERVO_P_GOTO
+  #define DOME_PARAMETER5               DOME_SERVO_I_GOTO
+  #define DOME_PARAMETER6               DOME_SERVO_D_GOTO
+#endif
+
+#if defined(DOME_DRIVER_PRESENT)
+  #define STEP_DIR_MOTOR_PRESENT
+#endif
+
+#if defined(DOME_DRIVER_TMC_SPI)
+  #define TMC_DRIVER_PRESENT
+#endif
+
+#if defined(DOME_SERVO_PRESENT)
+  #define SERVO_MOTOR_PRESENT
+#endif
+
+#if defined(SERVO_MOTOR_PRESENT) || defined(STEP_DIR_MOTOR_PRESENT)
+  #define MOTOR_PRESENT
+#endif
