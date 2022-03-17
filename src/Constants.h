@@ -62,7 +62,7 @@
 #define logRecordLocation(t) (round(hour(t)*3600L+minute(t)*60L+second(t))/30L)
 
 // NV addresses
-#define INIT_NV_KEY                 3062703966UL
+#define INIT_NV_KEY                 3062703967UL
 
 #define NV_KEY                      0      // bytes: 4   , addr:   0..  3
 #define NV_HEAT_SETPOINT            4      // bytes: 4   , addr:   4..  7

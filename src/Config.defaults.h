@@ -1,5 +1,15 @@
 #pragma once
 
+// use the HAL specified default NV driver
+#ifndef NV_DRIVER
+#define NV_DRIVER                     NV_DEFAULT
+#endif
+
+// option to clear NV
+#ifndef NV_WIPE
+#define NV_WIPE                       OFF
+#endif
+
 // serial ports
 #ifndef SERIAL_A_BAUD_DEFAULT
 #define SERIAL_A_BAUD_DEFAULT         9600
@@ -205,11 +215,6 @@
 #endif
 #ifndef SENSE8_INIT_STATE
 #define SENSE8_INIT_STATE INPUT_PULLUP
-#endif
-
-// use the HAL specified default NV driver
-#ifndef NV_DRIVER
-  #define NV_DRIVER NV_DEFAULT
 #endif
 
 // -----------------------------------------------------------------------------------

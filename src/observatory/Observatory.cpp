@@ -38,16 +38,14 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   strcpy(firmware.version.patch, fwPatch);
   firmware.version.config = fwConfig;
 
-  if (nv.readUL(NV_KEY) != INIT_NV_KEY) {
-    validKey = false;
+  // if requested, cause defaults to be written back into NV
+  if (NV_WIPE == ON) { nv.writeKey(0); }
 
-    VF("MSG: Observatory Wipe NV "); V(nv.size); VLF(" Bytes");
-    for (int i = 0; i < (int)nv.size; i++) nv.write(i, (char)0);
-    VLF("MSG: Observatory, Wipe NV waiting for commit");
-    while (!nv.committed()) { nv.poll(false); delay(10); }
-
-    VLF("MSG: Observatory, NV reset to defaults");
-  } else { VLF("MSG: Observatory, correct NV key found"); }
+  // get nv ready
+  if (!nv.isKeyValid(INIT_NV_KEY)) {
+    VF("MSG: NV, invalid key wipe "); V(nv.size); VLF(" bytes");
+    if (nv.verify()) { VLF("MSG: NV, ready for reset to defaults"); }
+  } else { VLF("MSG: NV, correct key found"); }
 
   // disable SPI devices at start up
   if (SDCARD_CS_PIN != OFF) {
@@ -65,14 +63,13 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     digitalWrite(AUX_CS_PIN, HIGH);
   }
 
-  if (!validKey) {
-    while (!nv.committed()) nv.poll();
-    nv.write(NV_KEY, (uint32_t)INIT_NV_KEY);
-    while (!nv.committed()) { nv.poll(); delay(10); }
-    nv.ignoreCache(true);
-    uint32_t key = nv.readUL(NV_KEY);
-    if (key != (uint32_t)INIT_NV_KEY) { DLF("ERR: Observatory, NV reset failed to read back key!"); } else { VLF("MSG: Observatory, NV reset complete"); }
-    nv.ignoreCache(false);
+  // init is done, write the NV key if necessary
+  if (!nv.isKeyValid()) {
+    if (!nv.initError) {
+      nv.writeKey((uint32_t)INIT_NV_KEY);
+      nv.wait();
+      if (!nv.isKeyValid(INIT_NV_KEY)) { DLF("ERR: NV, failed to read back key!"); } else { VLF("MSG: NV, reset complete"); }
+    }
   }
 
   relay.init();
