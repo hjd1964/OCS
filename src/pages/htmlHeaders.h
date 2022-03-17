@@ -3,12 +3,6 @@
 #include "../Common.h"
 #include "../lib/ethernet/webServer/WebServer.h"
 
-// pre-defined headers
-const char http_defaultHeader[] PROGMEM =
-"HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "\r\n";
-const char http_autoRefreshHeader[] PROGMEM =
-"HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "Refresh: 5\r\n" "\r\n";
-
 // common web site framework
 const char html_head1[] PROGMEM =
 "<!DOCTYPE HTML>\r\n"
