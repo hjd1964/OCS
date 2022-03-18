@@ -38,9 +38,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   strcpy(firmware.version.patch, fwPatch);
   firmware.version.config = fwConfig;
 
-  // if requested, cause defaults to be written back into NV
-  if (NV_WIPE == ON) { nv.writeKey(0); }
-
   // get nv ready
   if (!nv.isKeyValid(INIT_NV_KEY)) {
     VF("MSG: NV, invalid key wipe "); V(nv.size); VLF(" bytes");
@@ -64,7 +61,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   }
 
   // init is done, write the NV key if necessary
-  if (!nv.isKeyValid()) {
+  if (!nv.hasValidKey()) {
     if (!nv.initError) {
       nv.writeKey((uint32_t)INIT_NV_KEY);
       nv.wait();
