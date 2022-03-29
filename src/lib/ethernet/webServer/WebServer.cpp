@@ -220,7 +220,7 @@
       if (thisArg != "") {
         if (++parameter_count > PARAMETER_COUNT_MAX) parameter_count = PARAMETER_COUNT_MAX;
         parameters[parameter_count - 1] = thisArg;
-        values[parameter_count - 1] = thisVal;
+        values[parameter_count - 1] = thisVal.trim();
       }
       if ((int)line->length() > j1) *line = line->substring(j1); else *line = "";
 

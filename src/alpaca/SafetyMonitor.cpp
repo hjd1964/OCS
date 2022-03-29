@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------
-// Alpaca Safety monitor
+// Alpaca Safety Monitor
 
 #include <ArduinoJson.h>
 
@@ -20,7 +20,7 @@ void alpacaSafetyMonitorConnected() {
     if (connected.toLowerCase().equals("true")) safetyMonitorConnected++; else
     if (connected.toLowerCase().equals("false")) safetyMonitorConnected--; else {
       exceptionCode = InvalidValueException;
-      exceptionValue = "Connected: Invalid value";
+      exceptionValue = "Invalid value";
     }
     if (safetyMonitorConnected < 0) safetyMonitorConnected = 0;
   } else {

@@ -12,12 +12,15 @@ Adafruit_BME280 bme280SensorW;
 
 extern float _temperature;
 extern bool _temperatureAssigned;
+extern char _temperatureName[40];
 
 extern float _pressure;
 extern bool _pressureAssigned;
+extern char _pressureName[40];
 
 extern float _humidity;
 extern bool _humidityAssigned;
+extern char _humidityName[40];
 
 void bme280Wrapper() { bme280w.poll(); }
 
@@ -37,9 +40,18 @@ bool Bme280w::init() {
     VF("MSG: Bme280w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, bme280Wrapper, "weaBme")) {
       VLF("success");
-      _temperatureAssigned = true;
-      _pressureAssigned = true;
-      _humidityAssigned = true;
+      if (!_temperatureAssigned) {
+        _temperatureAssigned = true;
+        strcpy(_temperatureName, "Bosch BME280 Temperature Sensor on I2C");
+      }
+      if (!_pressureAssigned) {
+        _pressureAssigned = true;
+        strcpy(_pressureName, "Bosch BME280 Pressure Sensor on I2C");
+      }
+      if (!_humidityAssigned) {
+        _humidityAssigned = true;
+        strcpy(_humidityName, "Bosch BME280 Humidity Sensor on I2C");
+      }
       active = true;
     } else { VLF("FAILED!"); }
   } else { DF("WRN: Bme280w.init(), BME280 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(WEATHER_SENSOR_TPH_BME280, HEX); DLF(") not found"); }

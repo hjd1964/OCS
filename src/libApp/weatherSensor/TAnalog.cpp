@@ -10,6 +10,7 @@
 
 extern float _temperature;
 extern bool _temperatureAssigned;
+extern char _temperatureName[40];
 
 void AnalogwWrapper() { analogTemperaturew.poll(); }
 
@@ -20,6 +21,7 @@ bool AnalogTemperaturew::init() {
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, AnalogwWrapper)) {
     VLF("success");
     _temperatureAssigned = true;
+    strcpy(_temperatureName, "Generic Temperature Sensor on Analog Input");
     active = true;
   } else { VLF("FAILED!"); }
 

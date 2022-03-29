@@ -18,30 +18,37 @@
 // in degrees Celsius
 float _temperature = NAN;
 bool _temperatureAssigned = false;
+char _temperatureName[40] = "Unknown/Inactive";
 
 // in degrees Celsius
 float _skyTemperature = NAN;
 bool _skyTemperatureAssigned = false;
+char _skyTemperatureName[40] = "Unknown/Inactive";
 
 // in kph
 float _windspeed = NAN;
 bool _windSpeedAssigned = false;
+char _windSpeedName[40] = "Unknown/Inactive";
 
 // in mb
 float _pressure = NAN;
 bool _pressureAssigned = false;
+char _pressureName[40] = "Unknown/Inactive";
 
 // 1 is Rain, 2 is Warn, and 3 is Dry
 float _humidity = NAN;
 bool _humidityAssigned = false;
+char _humidityName[40] = "Unknown/Inactive";
 
 // 1, 2, 3
 float _rainSense = NAN;
 bool _rainSenseAssigned = false;
+char _rainSenseName[40] = "Unknown/Inactive";
 
 // in mag/arc-sec^2
 float _skyQuality = NAN;
 bool _skyQualityAssigned = false;
+char _skyQualityName[40] = "Unknown/Inactive";
 
 void WeatherSensor::init() {
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
@@ -99,6 +106,7 @@ float WeatherSensor::temperature() {
   if (!isnan(_temperature) && (_temperature < -60.0F || _temperature > 60.0F)) _temperature = NAN;
   return _temperature;
 }
+char* WeatherSensor::temperatureName() { return _temperatureName; }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky IR temperature in deg. C
@@ -107,6 +115,7 @@ float WeatherSensor::skyTemperature() {
   if (!isnan(_skyTemperature) && (_skyTemperature < -60.0F || _skyTemperature > 60.0F)) _skyTemperature = NAN;
   return _skyTemperature;
 }
+char* WeatherSensor::skyTemperatureName() { return _skyTemperatureName; }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets windspeed in kph
@@ -115,6 +124,7 @@ float WeatherSensor::windspeed() {
   if (!isnan(_windspeed) && (_windspeed < 0.0F || _windspeed > 250.0F)) _windspeed = NAN;
   return _windspeed;
 }
+char* WeatherSensor::windspeedName() { return _windSpeedName; }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets barometric pressure in mb
@@ -123,6 +133,7 @@ float WeatherSensor::pressure() {
   if (!isnan(_pressure) && (_pressure < 100.0F || _pressure > 1100.0F)) _pressure = NAN;
   return _pressure;
 }
+char* WeatherSensor::pressureName() { return _pressureName; }
 
 float WeatherSensor::pressureSeaLevel() {
   return (pressure()/powf(1.0-((float)(WEATHER_ALTITUDE))/44330.0F, 5.255F));
@@ -136,6 +147,7 @@ float WeatherSensor::humidity() {
   if (_humidity < 0.0) _humidity = NAN;
   return _humidity;
 }
+char* WeatherSensor::humidityName() { return _humidityName; }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets rain sensor info. 1 is Rain, 2 is Warn, and 3 is Dry
@@ -144,6 +156,7 @@ float WeatherSensor::rain() {
   if (_rainSense != 1.0F && _rainSense != 2.0F && _rainSense != 3.0F) _rainSense = NAN;
   return _rainSense;
 }
+char* WeatherSensor::rainSenseName() { return _rainSenseName; }
 
 // -----------------------------------------------------------------------------------------------------------------
 // gets sky brightness in mag/arc-sec^2
@@ -151,5 +164,6 @@ float WeatherSensor::rain() {
 float WeatherSensor::skyQuality() {
   return _skyQuality;
 }
+char* WeatherSensor::skyQualityName() { return _skyQualityName; }
 
 WeatherSensor weatherSensor;

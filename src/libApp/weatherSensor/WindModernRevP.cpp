@@ -12,6 +12,7 @@
 
 extern float _windspeed;
 extern bool _windSpeedAssigned;
+extern char _windSpeedName[40];
 
 void windRevPWrapper() { windRevP.poll(); }
 
@@ -25,6 +26,7 @@ bool WindRevP::init() {
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, windRevPWrapper)) {
     VLF("success");
     _windSpeedAssigned = true;
+    strcpy(_windSpeedName, "Modern Devices Rev.P Hot Wire Anemometer on Analog Input");
     active = true;
   } else { VLF("FAILED!"); }
 

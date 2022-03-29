@@ -13,6 +13,7 @@ Adafruit_MLX90614 mlxSensor = Adafruit_MLX90614();  // I2C address 0x5A
 // in degrees Celsius
 extern float _skyTemperature;
 extern bool _skyTemperatureAssigned;
+extern char _skyTemperatureName[40];
 
 void mlx90614Wrapper() { mlx90614w.poll(); }
 
@@ -34,6 +35,7 @@ bool Mlx90614w::init() {
     if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "m90614")) {
       VLF("success");
       _skyTemperatureAssigned = true;
+      sprintf(_skyTemperatureName, "Melexis MLX90614 IR Sensor on I2C");
       active = true;
     } else { VLF("FAILED!"); }
   } else { DF("WRN: Mlx90614w.init(), MLX90614 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(WEATHER_SENSOR_CLOUD_MLX90614, HEX); DLF(") not found"); }

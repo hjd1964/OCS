@@ -11,9 +11,11 @@ Adafruit_Si7021 siSensorW = Adafruit_Si7021();
 
 extern float _temperature;
 extern bool _temperatureAssigned;
+extern char _temperatureName[40];
 
 extern float _humidity;
 extern bool _humidityAssigned;
+extern char _humidityName[40];
 
 void si7021Wrapper() { si7021w.poll(); }
 
@@ -36,8 +38,14 @@ bool Si7021w::init() {
     VF("MSG: Si7021w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, si7021Wrapper, "weaSi7")) {
       VLF("success");
-      _temperatureAssigned = true;
-      _humidityAssigned = true;
+      if (!_temperatureAssigned) {
+        _temperatureAssigned = true;
+        strcpy(_temperatureName, "Silicon Labs SI7021 Temperature Sensor");
+      }
+      if (!_humidityAssigned) {
+        _humidityAssigned = true;
+        strcpy(_humidityName, "Silicon Labs SI7021 Humidity Sensor");
+      }
       active = true;
     } else { VLF("FAILED!"); }
   } else { DLF("WRN: Si7021w.init(), SI7021 (I2C 0x40) not found"); }

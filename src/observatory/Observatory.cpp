@@ -185,6 +185,35 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
   apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/issafe", alpacaSafetyMonitorIsSafe);
 
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/connected", alpacaObservingConditionsConnected);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/averageperiod", alpacaObservingConditionsAveragePeriod);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/cloudcover", alpacaObservingConditionsCloudCover);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/dewpoint", alpacaObservingConditionsDewPoint);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/humidity", alpacaObservingConditionsHumidity);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/pressure", alpacaObservingConditionsPressure);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/rainrate", alpacaObservingConditionsRainRate);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skybrightness", alpacaObservingConditionsSkyBrightness);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skyquality", alpacaObservingConditionsSkyQuality);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skytemperature", alpacaObservingConditionsSkyTemperature);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/starfwhm", alpacaObservingConditionsStarFwhm);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/temperature", alpacaObservingConditionsTemperature);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/winddirection", alpacaObservingConditionsWindDirection);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windgust", alpacaObservingConditionsWindGust);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windspeed", alpacaObservingConditionsWindSpeed);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/refresh", alpacaObservingConditionsRefresh);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/sensordescription", alpacaObservingConditionsSensorDescription);
+  apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/timesincelastupdate", alpacaObservingConditionsTimeSinceLastUpdate);
+
   apc.onNotFound(alpacaNotFoundError);
 
   www.begin();

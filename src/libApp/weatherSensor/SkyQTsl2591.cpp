@@ -18,6 +18,7 @@ Adafruit_TSL2591 tlsSensor = Adafruit_TSL2591(2591);
 extern float _temperature;
 extern float _skyQuality;
 extern bool _skyQualityAssigned;
+extern char _skyQualityName[40];
 
 void tsl2591Wrapper() { tsl2591w.poll(); }
 
@@ -37,6 +38,7 @@ bool Tsl2591w::init() {
     if (tasks.add(30000, 0, true, 7, tsl2591Wrapper, "Tsl2591")) {
       VLF("success");
       _skyQualityAssigned = true;
+      strcpy(_skyQualityName, "AMS TSL2591 Ambient Light Sensor on I2C");
       tlsSensor.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
       tlsSensor.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
       active = true;

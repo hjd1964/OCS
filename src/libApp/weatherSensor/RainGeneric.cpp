@@ -12,6 +12,7 @@
 
 extern float _rainSense;
 extern bool _rainSenseAssigned;
+extern char _rainSenseName[40];
 
 void rainGenericWrapper() { rainGeneric.poll(); }
 
@@ -25,6 +26,7 @@ bool RainGeneric::init() {
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, rainGenericWrapper)) {
     VLF("success");
     _rainSenseAssigned = true;
+    strcpy(_rainSenseName, "Generic Rain Sensor on Analog Input");
     active = true;
   } else { VLF("FAILED!"); }
 

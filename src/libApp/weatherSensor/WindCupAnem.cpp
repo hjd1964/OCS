@@ -11,6 +11,7 @@
 
 extern float _windspeed;
 extern bool _windSpeedAssigned;
+extern char _windSpeedName[40];
 
 volatile unsigned long _cupAnemometerPulseCount = 0;
 void cupAnemISR() { _cupAnemometerPulseCount++; }
@@ -30,6 +31,7 @@ bool CupAnem::init() {
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 1, cupAnemTask, "cupAnem")) {
     VLF("success");
     _windSpeedAssigned = true;
+    strcpy(_windSpeedName, "Generic Cup Anemometer on Digital Input");
     attachInterrupt(digitalPinToInterrupt(sensePin[index]), cupAnemISR, RISING);
     active = true;
   } else { VLF("FAILED!"); }

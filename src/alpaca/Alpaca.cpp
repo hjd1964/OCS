@@ -6,7 +6,7 @@
 #include "../Common.h"
 #include "Alpaca.h"
 
-StaticJsonDocument<200> alpacaJsonDoc;
+StaticJsonDocument<1000> alpacaJsonDoc;
 uint32_t alpacaServerTransactionID = 0;
 
 // common
@@ -70,7 +70,7 @@ void alpacaName() {
 void alpacaDefaultAction() {
   alpacaJsonStart();
   alpacaJsonDoc["Value"] = "";
-  alpacaJsonFinish(ActionNotImplementedException, "Action Not Implemented");
+  alpacaJsonFinish(NotImplementedException, "Action Not Implemented");
 }
 
 void alpacaDefaultSupportedActions() {

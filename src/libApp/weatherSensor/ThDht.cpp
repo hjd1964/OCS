@@ -8,9 +8,11 @@
 
 extern float _temperature;
 extern bool _temperatureAssigned;
+extern char _temperatureName[40];
 
 extern float _humidity;
 extern bool _humidityAssigned;
+extern char _humidityName[40];
 
 void dhtWrapper() { dhtw.poll(); }
 
@@ -32,8 +34,14 @@ bool Dhtw::init() {
   VF("MSG: Dhtw, start monitor task (default rate priority 7)... ");
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, dhtWrapper)) {
     VLF("success");
-    _temperatureAssigned = true;
-    _humidityAssigned = true;
+    if (!_temperatureAssigned) {
+      _temperatureAssigned = true;
+      sprintf(_temperatureName, "Aosong DHT (type %d) Temperature Sensor", WEATHER_SENSOR_TH_DHT_TYPE);
+    }
+    if (!_humidityAssigned) {
+      _humidityAssigned = true;
+      sprintf(_humidityName, "Aosong DHT (type %d) Humidity Sensor", WEATHER_SENSOR_TH_DHT_TYPE);
+    }
     active = true;
   } else { VLF("FAILED!"); }
 

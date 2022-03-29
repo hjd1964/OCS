@@ -19,9 +19,13 @@ extern uint32_t alpacaServerTransactionID;
 
 // ASCOM exceptions
 #define NoException                   0x000
-#define MethodNotImplementedException 0x400
-#define InvalidValueException         0x405
-#define ActionNotImplementedException 0x40C
+#define InvalidOperationException     0x40B
+#define InvalidValueException         0x401
+#define NotConnectedException         0x400
+#define NotImplementedException       0x400
+#define ParkedException               0x408
+#define SlavedException               0x409
+#define ValueNotSetException          0x402
 
 // setup
 extern void alpacaSetup();
@@ -46,11 +50,31 @@ extern void alpacaName();
 extern void alpacaDefaultAction();
 extern void alpacaDefaultSupportedActions();
 
+// error handling
+extern void handleRequestFailed();
+extern void alpacaServerError();
+
 // ASCOM Safety Monitor methods
 extern void alpacaSafetyMonitorConnected();
 extern void alpacaNotFoundError();
 extern void alpacaSafetyMonitorIsSafe();
 
-// error handling
-extern void handleRequestFailed();
-extern void alpacaServerError();
+// ASCOM Observing Conditions methods
+extern void alpacaObservingConditionsConnected();
+extern void alpacaObservingConditionsAveragePeriod();
+extern void alpacaObservingConditionsCloudCover();
+extern void alpacaObservingConditionsDewPoint();
+extern void alpacaObservingConditionsHumidity();
+extern void alpacaObservingConditionsPressure();
+extern void alpacaObservingConditionsRainRate();
+extern void alpacaObservingConditionsSkyBrightness();
+extern void alpacaObservingConditionsSkyQuality();
+extern void alpacaObservingConditionsSkyTemperature();
+extern void alpacaObservingConditionsStarFwhm();
+extern void alpacaObservingConditionsTemperature();
+extern void alpacaObservingConditionsWindDirection();
+extern void alpacaObservingConditionsWindGust();
+extern void alpacaObservingConditionsWindSpeed();
+extern void alpacaObservingConditionsRefresh();
+extern void alpacaObservingConditionsSensorDescription();
+extern void alpacaObservingConditionsTimeSinceLastUpdate();
