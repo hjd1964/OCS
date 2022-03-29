@@ -18,6 +18,10 @@
 
 #include "../pages/Pages.h"
 
+#include "../alpaca/Alpaca.h"
+
+WebServer apc;
+
 int timeZone = TIME_ZONE;
 time_t startupTime = 0;
 
@@ -158,8 +162,33 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     www.on("Chart.js", NULL);
   #endif
   www.on("/", index);
+  www.onNotFound(handleNotFound);
+
+  // ASCOM Alpaca
+  apc.on("setup", alpacaSetup);
+  apc.on("setup/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSafetyMonitor);
+
+  apc.on("management/apiversions", alpacaManagementApiVersions);
+  apc.on("management/v1/description", alpacaManagementDescription);
+  apc.on("management/v1/configureddevices", alpacaManagementConfiguredDevices);
+
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/connected", alpacaSafetyMonitorConnected);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+  apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/issafe", alpacaSafetyMonitorIsSafe);
+
+  apc.onNotFound(alpacaNotFoundError);
 
   www.begin();
+  apc.begin(ALPACA_PORT);
 
   #if TIME_LOCATION_SOURCE != OFF
     tls.init();
@@ -246,6 +275,9 @@ void Observatory::poll() {
 
   // serve web-pages
   www.handleClient();
+
+  // serve ASCOM Alpaca
+  apc.handleClient();
 
   // a wall switch can control lights
   #if LIGHT_SW_SENSE != OFF && LIGHT_WRW_RELAY != OFF
