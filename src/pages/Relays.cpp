@@ -47,7 +47,7 @@ void relaysAjax() {
       // get relay state
       if (a.equals("get")) {
         s = String(relay.isOn(i));
-        sendHtmlC(s);
+        www.sendContent(s);
         break;
       }
     }

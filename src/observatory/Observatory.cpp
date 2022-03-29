@@ -127,9 +127,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   #if OPERATIONAL_MODE == WIFI
     wifiStart();
-  #else
-    www.begin();
-    www.setResponseHeader(http_defaultHeader);
   #endif
 
   www.on("index.htm", index);
@@ -162,9 +159,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
   www.on("/", index);
 
-  #if OPERATIONAL_MODE == WIFI
-    www.begin();
-  #endif
+  www.begin();
 
   #if TIME_LOCATION_SOURCE != OFF
     tls.init();

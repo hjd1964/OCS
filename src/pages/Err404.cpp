@@ -3,10 +3,8 @@
 #include "../Common.h"
 #include "../lib/ethernet/webServer/WebServer.h"
 
-#if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
-  void handleNotFound() {
-    String message = "File Not Found\n\n";
-    www.sendContent(message);
-    VLF("File not found");
-  }
-#endif
+void handleNotFound() {
+  String message = "<big>OCS Server, Error 404:</big>\r\n\r\nResource not found.\r\n";
+  www.send(404, "text/plain", message);
+  VLF("MSG: OCS Server, Error 404: Resource not found.");
+}

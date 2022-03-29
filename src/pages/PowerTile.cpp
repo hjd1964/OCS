@@ -12,12 +12,12 @@
   void powerTile() {
     char temp[50];
     strcpy_P(temp, htmlPowerBegin);
-    sendHtmlC(temp);
+    www.sendContent(temp);
 
     powerContents();
 
     strcpy_P(temp, htmlPowerEnd);
-    sendHtmlC(temp);
+    www.sendContent(temp);
   }
 
   void powerContents() {
@@ -30,7 +30,7 @@
     #if POWER_DEVICE2_RELAY != OFF
       if (relay.isOn(POWER_DEVICE2_RELAY)) check(temp, "%___PD2"); else erase(temp, "%___PD2");
     #endif
-    sendHtmlC(temp);
+    www.sendContent(temp);
 
     strcpy_P(temp, htmlPowerB);
     #if POWER_DEVICE3_RELAY != OFF
@@ -39,7 +39,7 @@
     #if POWER_DEVICE4_RELAY != OFF
       if (relay.isOn(POWER_DEVICE4_RELAY)) check(temp, "%___PD4"); else erase(temp, "%___PD4");
     #endif
-    sendHtmlC(temp);
+    www.sendContent(temp);
 
     strcpy_P(temp, htmlPowerC);
     #if POWER_DEVICE5_RELAY != OFF
@@ -48,7 +48,7 @@
     #if POWER_DEVICE6_RELAY != OFF
       if (relay.isOn(POWER_DEVICE6_RELAY)) check(temp, "%___PD6"); else erase(temp, "%___PD6");
     #endif
-    sendHtmlC(temp);
+    www.sendContent(temp);
   }
 
 #endif
