@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// Pin map for OCS on the Arduino Mega2560
+// Pin map for OCS hardware 1 or 2 using the Mega1280 or Mega2560
 #pragma once
 
 #if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)

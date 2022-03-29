@@ -2,6 +2,11 @@
 // Validate current configuration
 #pragma once
 
+// Pinmap
+#if PINMAP != OFF && (PINMAP < PINMAP_FIRST || PINMAP > PINMAP_LAST)
+  #error "Configuration (Config.h): Unrecognized PINMAP must OFF or set to a known pinmap."
+#endif
+
 // Ethernet setup
 #if RESPONSE_INTERVAL < 500 || RESPONSE_INTERVAL > 10000
   #error "Configuration (Config.h): RESPONSE_INTERVAL must be a number between 500 and 10000 (milliseconds.)"

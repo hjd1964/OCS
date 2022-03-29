@@ -4,6 +4,17 @@
 
 // Settings ------------------------------------------------------------------------------------------------------------------------
 
+// Pinmaps
+#define PINMAP_FIRST                1
+// Mega2560 based:
+#define OCS1                        1      // OCS V1 board (6 SSR + 6 MECH RELAY + 6 DIN + 6 AIN)
+#define OCS2                        1      // OCS V2 board (as above with onboard 5V switching regulator)
+#define LEGACY                      1      // Generic Mega2560 board (for builds using eBay relay boards, etc.)
+// Teensy3.5/3.6/4.1 based:
+#define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ opt eBay 8CH) + 6 DIN + 6 AIN)
+#define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
+#define PINMAP_LAST                 3
+
 // TIME LOCATION SOURCE devices supported
 #define TLS_FIRST                   1
 #define DS3231                      1      // DS3231 RTC on I2C

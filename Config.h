@@ -6,20 +6,16 @@
  *                      and join the OCS Groups.io at https://onstep.groups.io/g/onstep-ocs
 */
 
-// For the Mega2560...
-
-// Relay's are mapped to digital output pins: 23,25,27,29,31,33,35,37,39,41,43,45,47,49,xx,xx,xx,xx          (ON == HIGH, OFF = LOW)
-//                                    Relay#:  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
-
-// Sense's are mapped to digital input pins:  22,24,26,28,30,32,xx,xx                   (HIGH == ON, LOW = OFF, internal PULLUP off)
-//                                   Sense#:   1  2  3  4  5  6  7  8
-
-// Analog inputs are mapped to pins:          A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15
-//                                   Analog#:  1  2  3  4  5  6  7  8  9 10  11  12  13  14  15  16
+// ******         _RELAY and _SENSE numbers are mapped to pins in a platform specific pinmap, see: /src/pinmaps               ******
+// ******                            Additional settings are present in /src/Config.defaults.h                                ******
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
 // <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
+
+// PINMAP --------------------------------------------------------------------------------------------------------------------------
+#define PINMAP                       OCS4 //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4.                            <-Req'd
+                                          //         Other boards/more info. in ~/src/Constants.h
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON, ON_CC.  ON resets Mega2560 after 8 sec. if it hangs for any reason.  Option
