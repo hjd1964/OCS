@@ -33,7 +33,8 @@ extern void alpacaManagementDescription();
 extern void alpacaManagementConfiguredDevices();
 
 // common
-extern void alpacaFrame(int errorNumber, String errorMessage);
+extern void alpacaJsonStart();
+extern void alpacaJsonFinish(int errorNumber, String errorMessage);
 extern void alpacaMethodNotImplemented();
 extern void alpacaDescription();
 extern void alpacaDriverInfo();

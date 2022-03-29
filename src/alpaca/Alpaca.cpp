@@ -11,108 +11,70 @@ uint32_t alpacaServerTransactionID = 0;
 
 // common
 
-void alpacaFrame(int errorNumber, String errorMessage) {
+// Start for html Json frame
+void alpacaJsonStart() {
+  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  apc.send(200, "application/json", String());
+  alpacaJsonDoc.clear();
+}
+
+// End of html Json frame
+void alpacaJsonFinish(int errorNumber, String errorMessage) {
   alpacaJsonDoc["ServerTransactionID"] = alpacaServerTransactionID++;
   String v = apc.argLowerCase("ClientTransactionID");
   if (!v.equals(EmptyStr)) { alpacaJsonDoc["ClientTransactionID"] = v.toInt(); }
   alpacaJsonDoc["ErrorNumber"] = errorNumber;
   alpacaJsonDoc["ErrorMessage"] = errorMessage;
+  serializeJson(alpacaJsonDoc, apc.client);
+  apc.sendContent("");
 }
 
 void alpacaMethodNotImplemented() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = "";
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 void alpacaDescription() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = "ONCUE OCS w/" PINMAP_STR;
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 void alpacaDriverInfo() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = "OCS Alpaca Driver for Safety, Dome, Etc. version " ALPACA_DRIVER_VERSION;
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 void alpacaDriverVersion() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = ALPACA_DRIVER_VERSION;
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 void alpacaInterfaceVersion() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = ALPACA_INTERFACE_VERSION;
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 void alpacaName() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = "OCS Alpaca Driver";
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
 
 // common defaults
 
 void alpacaDefaultAction() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc["Value"] = "";
-  alpacaFrame(ActionNotImplementedException, "Action Not Implemented");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(ActionNotImplementedException, "Action Not Implemented");
 }
 
 void alpacaDefaultSupportedActions() {
-  apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
-  apc.send(200, "application/json", String());
-
-  alpacaJsonDoc.clear();
+  alpacaJsonStart();
   alpacaJsonDoc.createNestedArray("Value");
-  alpacaFrame(0, "");
-  serializeJson(alpacaJsonDoc, apc.client);
-
-  apc.sendContent("");
+  alpacaJsonFinish(NoException, "");
 }
