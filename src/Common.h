@@ -5,7 +5,8 @@
 #include <Arduino.h>
 #include "Constants.h"
 #include "lib/Constants.h"
-#include "Config.common.h"
+#include "../Config.h"
+#include "Config.defaults.h"
 #include "HAL/HAL.h"
 #include "lib/Macros.h"
 #include "pinmaps/Models.h"
