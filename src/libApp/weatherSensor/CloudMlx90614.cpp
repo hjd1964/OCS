@@ -36,7 +36,7 @@ bool Mlx90614w::init() {
       _skyTemperatureAssigned = true;
       active = true;
     } else { VLF("FAILED!"); }
-  } else { DF("WRN: Mlx90614w.init(), MLX90614 (I2C 0x"); SERIAL_DEBUG.print(WEATHER_SENSOR_CLOUD_MLX90614, HEX); DLF(") not found"); }
+  } else { DF("WRN: Mlx90614w.init(), MLX90614 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(WEATHER_SENSOR_CLOUD_MLX90614, HEX); DLF(") not found"); }
 
   return active;
 }

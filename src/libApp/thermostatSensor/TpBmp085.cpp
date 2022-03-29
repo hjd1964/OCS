@@ -38,7 +38,7 @@ bool Bmp085t::init() {
       _inside_pressureAssigned = true;
       active = true;
     } else { VLF("FAILED!"); }
-  } else { DF("WRN: Bmp085t.init(), BMP085 (I2C 0x"); SERIAL_DEBUG.print(THERMOSTAT_SENSOR_TP_BMP085, HEX); DLF(") not found"); }
+  } else { DF("WRN: Bmp085t.init(), BMP085 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(THERMOSTAT_SENSOR_TP_BMP085, HEX); DLF(") not found"); }
 
   return active;
 }

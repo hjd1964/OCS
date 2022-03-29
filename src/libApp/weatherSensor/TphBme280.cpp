@@ -42,7 +42,7 @@ bool Bme280w::init() {
       _humidityAssigned = true;
       active = true;
     } else { VLF("FAILED!"); }
-  } else { DF("WRN: Bme280w.init(), BME280 (I2C 0x"); SERIAL_DEBUG.print(WEATHER_SENSOR_TPH_BME280, HEX); DLF(") not found"); }
+  } else { DF("WRN: Bme280w.init(), BME280 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(WEATHER_SENSOR_TPH_BME280, HEX); DLF(") not found"); }
 
   return active;
 }
