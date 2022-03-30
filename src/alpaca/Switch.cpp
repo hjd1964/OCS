@@ -25,31 +25,31 @@ void findMaxSwitch() {
   #if POWER_DEVICE2_RELAY != OFF
     switchRelay[maxSwitch] = POWER_DEVICE2_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device2 Relay");
-    strcpy(switchName[maxSwitch], POWER_DEVICE1_NAME);
+    strcpy(switchName[maxSwitch], POWER_DEVICE2_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE3_RELAY != OFF
     switchRelay[maxSwitch] = POWER_DEVICE3_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device3 Relay");
-    strcpy(switchName[maxSwitch], POWER_DEVICE2_NAME);
+    strcpy(switchName[maxSwitch], POWER_DEVICE3_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE4_RELAY != OFF
     switchRelay[maxSwitch] = POWER_DEVICE4_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device4 Relay");
-    strcpy(switchName[maxSwitch], POWER_DEVICE3_NAME);
+    strcpy(switchName[maxSwitch], POWER_DEVICE4_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE5_RELAY != OFF
     switchRelay[maxSwitch] = POWER_DEVICE5_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device5 Relay");
-    strcpy(switchName[maxSwitch], POWER_DEVICE4_NAME);
+    strcpy(switchName[maxSwitch], POWER_DEVICE5_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE6_RELAY != OFF
     switchRelay[maxSwitch] = POWER_DEVICE6_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device6 Relay");
-    strcpy(switchName[maxSwitch], POWER_DEVICE5_NAME);
+    strcpy(switchName[maxSwitch], POWER_DEVICE6_NAME);
     maxSwitch++;
   #endif
   #if LIGHT_WRW_RELAY != OFF
@@ -146,7 +146,6 @@ void alpacaSwitchGetSwitchValue() {
   if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
   int id = apc.argLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
-  alpacaJsonStart();
   alpacaJsonDoc["Value"] = relay.isOn(switchRelay[id]) ? 1.0 : 0.0;
   alpacaJsonFinish(NoException, "");
 }
@@ -191,9 +190,9 @@ void alpacaSwitchSetSwitchValue() {
   if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
   int id = apc.argLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
-  int32_t state = round(atof(apc.argLowerCase("state").c_str()));
-  if (state == 1) relay.on(switchRelay[id]); else
-    if (state == 0) relay.off(switchRelay[id]); else
+  int32_t value = round(atof(apc.argLowerCase("value").c_str()));
+  if (value == 1) relay.on(switchRelay[id]); else
+    if (value == 0) relay.off(switchRelay[id]); else
       { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
   alpacaJsonFinish(NoException, "");
 }
