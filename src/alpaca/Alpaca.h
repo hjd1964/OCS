@@ -30,6 +30,8 @@ extern uint32_t alpacaServerTransactionID;
 // setup
 extern void alpacaSetup();
 extern void alpacaSetupSafetyMonitor();
+extern void alpacaSetupObservingConditions();
+extern void alpacaSetupSwitch();
 
 // management
 extern void alpacaManagementApiVersions();
@@ -53,10 +55,10 @@ extern void alpacaDefaultSupportedActions();
 // error handling
 extern void handleRequestFailed();
 extern void alpacaServerError();
+extern void alpacaNotFoundError();
 
 // ASCOM Safety Monitor methods
 extern void alpacaSafetyMonitorConnected();
-extern void alpacaNotFoundError();
 extern void alpacaSafetyMonitorIsSafe();
 
 // ASCOM Observing Conditions methods
@@ -78,3 +80,18 @@ extern void alpacaObservingConditionsWindSpeed();
 extern void alpacaObservingConditionsRefresh();
 extern void alpacaObservingConditionsSensorDescription();
 extern void alpacaObservingConditionsTimeSinceLastUpdate();
+
+// ASCOM Switch methods
+extern void alpacaSwitchConnected();
+extern void alpacaSwitchMaxSwitch();
+extern void alpacaSwitchCanWrite();
+extern void alpacaSwitchGetSwitch();
+extern void alpacaSwitchGetSwitchDescription();
+extern void alpacaSwitchGetSwitchName();
+extern void alpacaSwitchGetSwitchValue();
+extern void alpacaSwitchMaxSwitchValue();
+extern void alpacaSwitchMinSwitchValue();
+extern void alpacaSwitchSetSwitch();
+extern void alpacaSwitchSetSwitchName();
+extern void alpacaSwitchSetSwitchValue();
+extern void alpacaSwitchSwitchStep();

@@ -46,5 +46,12 @@ void alpacaManagementConfiguredDevices() {
   device["UniqueID"] = "42865d9a-8ea6-4fa7-b371-a90f44481998";
   devices.add(device);
 
+  device.clear();
+  device["DeviceName"] = "OCS Switch";
+  device["DeviceType"] = "Switch";
+  device["DeviceNumber"] = 0;
+  device["UniqueID"] = "688e6fe6-b754-4791-a462-63c5ab3b747d";
+  devices.add(device);
+
   alpacaJsonFinish(NoException, "");
 }

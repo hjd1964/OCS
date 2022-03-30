@@ -167,6 +167,8 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // ASCOM Alpaca
   apc.on("setup", alpacaSetup);
   apc.on("setup/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSafetyMonitor);
+  apc.on("setup/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupObservingConditions);
+  apc.on("setup/v1/switch/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSwitch);
 
   apc.on("management/apiversions", alpacaManagementApiVersions);
   apc.on("management/v1/description", alpacaManagementDescription);
@@ -213,6 +215,30 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/refresh", alpacaObservingConditionsRefresh);
   apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/sensordescription", alpacaObservingConditionsSensorDescription);
   apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/timesincelastupdate", alpacaObservingConditionsTimeSinceLastUpdate);
+
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/connected", alpacaSwitchConnected);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitch", alpacaSwitchMaxSwitch);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/canwrite", alpacaSwitchCanWrite);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitch", alpacaSwitchGetSwitch);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchdescription", alpacaSwitchGetSwitchDescription);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchname", alpacaSwitchGetSwitchName);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchvalue", alpacaSwitchGetSwitchValue);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitchvalue", alpacaSwitchMaxSwitchValue);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/minswitchvalue", alpacaSwitchMinSwitchValue);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitch", alpacaSwitchSetSwitch);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchname", alpacaSwitchSetSwitchName);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchvalue", alpacaSwitchSetSwitchValue);
+  apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/switchstep", alpacaSwitchSwitchStep);
 
   apc.onNotFound(alpacaNotFoundError);
 
