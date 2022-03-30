@@ -55,25 +55,25 @@ void findMaxSwitch() {
   #if LIGHT_WRW_RELAY != OFF
     switchRelay[maxSwitch] = LIGHT_WRW_RELAY;
     strcpy(switchDescription[maxSwitch], "Lights WRW Relay");
-    strcpy(switchName[maxSwitch], "Warm room white lights");
+    strcpy(switchName[maxSwitch], "Warm Room White Lights");
     maxSwitch++;
   #endif
   #if LIGHT_WRR_RELAY != OFF
     switchRelay[maxSwitch] = LIGHT_WRR_RELAY;
     strcpy(switchDescription[maxSwitch], "Lights WRR Relay");
-    strcpy(switchName[maxSwitch], "Warm room red lights");
+    strcpy(switchName[maxSwitch], "Warm Room Red Lights");
     maxSwitch++;
   #endif
   #if LIGHT_ORW_RELAY != OFF
     switchRelay[maxSwitch] = LIGHT_ORW_RELAY;
     strcpy(switchDescription[maxSwitch], "Lights ORW Relay");
-    strcpy(switchName[maxSwitch], "Observing room white lights");
+    strcpy(switchName[maxSwitch], "Observing Room White Lights");
     maxSwitch++;
   #endif
   #if LIGHT_ORR_RELAY != OFF
     switchRelay[maxSwitch] = LIGHT_ORR_RELAY;
     strcpy(switchDescription[maxSwitch], "Lights ORR Relay");
-    strcpy(switchName[maxSwitch], "Observing room red lights");
+    strcpy(switchName[maxSwitch], "Observing Room Red Lights");
     maxSwitch++;
   #endif
 }
