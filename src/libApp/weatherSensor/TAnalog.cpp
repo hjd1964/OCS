@@ -18,7 +18,7 @@ bool AnalogTemperaturew::init() {
   if (_temperatureAssigned) return false;
 
   VF("MSG: TAnalogw, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, AnalogwWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, AnalogwWrapper, "weaDht")) {
     VLF("success");
     _temperatureAssigned = true;
     strcpy(_temperatureName, "Generic Temperature Sensor on Analog Input");

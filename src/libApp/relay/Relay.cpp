@@ -25,9 +25,8 @@ void Relay::init() {
   VF("MSG: Relay, start pwm task (rate 1ms priority 0)... ");
   uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
   if (handle) {
-    VF("success");
-    if (!tasks.requestHardwareTimer(handle, 1, 0)) { VF(" (no hardware timer!)"); }
-    VL("");
+    VLF("success");
+    tasks.requestHardwareTimer(handle, 2, 0);
   } else { VLF("FAILED!"); }
 }
 

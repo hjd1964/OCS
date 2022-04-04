@@ -23,7 +23,7 @@ bool WindRevP::init() {
   if (_windSpeedAssigned) return false;
 
   VF("MSG: WindRevP, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, windRevPWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, windRevPWrapper, "weaRevP")) {
     VLF("success");
     _windSpeedAssigned = true;
     strcpy(_windSpeedName, "Modern Devices Rev.P Hot Wire Anemometer on Analog Input");

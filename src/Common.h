@@ -18,7 +18,7 @@ extern NVS nv;
 
 extern char ocsVersion[10];
 
-#if DOME_DRIVER_MODEL != OFF
+#if AXIS1_DRIVER_MODEL != OFF
   #define AXIS_PRESENT
 #endif
 

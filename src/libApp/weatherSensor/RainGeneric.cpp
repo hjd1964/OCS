@@ -23,7 +23,7 @@ bool RainGeneric::init() {
   if (_rainSenseAssigned) return false;
 
   VF("MSG: RainGeneric, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, rainGenericWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, rainGenericWrapper,"weaRain")) {
     VLF("success");
     _rainSenseAssigned = true;
     strcpy(_rainSenseName, "Generic Rain Sensor on Analog Input");

@@ -30,7 +30,7 @@ bool Dhtt::init() {
   dhtSensor->begin();
 
   VF("MSG: Dhtt, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, thermostatDhtWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, thermostatDhtWrapper, "thsDht")) {
     VLF("success");
     _inside_temperatureAssigned = true;
     _inside_humidityAssigned = true;

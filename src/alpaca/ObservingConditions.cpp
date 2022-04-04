@@ -149,7 +149,7 @@ void alpacaObservingConditionsSensorDescription() {
 
   if (sensorName.equals("cloudcover")) {
     if (!isnan(weatherSensor.skyTemperature()) && !isnan(weatherSensor.temperature())) {
-      char temp[80] = "";
+      char temp[128] = "";
       strcpy(temp, weatherSensor.skyTemperatureName());
       strcat(temp, " & ");
       strcat(temp, weatherSensor.temperatureName());
@@ -163,7 +163,7 @@ void alpacaObservingConditionsSensorDescription() {
 
   if (sensorName.equals("dewpoint")) {
     if (!isnan(weatherSensor.temperature()) && !isnan(weatherSensor.humidity())) {
-      char temp[80] = "";
+      char temp[128] = "";
       strcpy(temp, weatherSensor.temperatureName());
       strcat(temp, " & ");
       strcat(temp, weatherSensor.humidityName());

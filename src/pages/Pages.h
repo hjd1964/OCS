@@ -18,6 +18,7 @@ extern void indexAjax();
 extern void lightContents();
 extern void powerContents();
 extern void roofContents();
+extern void domeContents();
 extern void statusContents();
 extern void thermostatTemperatureContents();
 extern void thermostatHumidityContents();

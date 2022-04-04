@@ -97,6 +97,7 @@
                     isPut = true;
                     line = line.substring(index + 4);
                     handler_number = getHandler(&line);
+                    if (handler_number >= 0) processPut(&line);
                   }
                 }
               }
@@ -124,7 +125,7 @@
           handlerFound = true;
         } else {
           #if SD_CARD == ON
-            char temp[255];
+            char temp[512];
             if (handlers_fn[handler_number].endsWith(".js")) {
               if (modifiedSinceFound) {
                 WLF("MSG: Webserver sending js304Header");
@@ -163,7 +164,7 @@
       }
 
       // give the web browser time to receive the data
-      delay(2);
+      tasks.yield(50);
   
       // close the connection:
       client.stop();
@@ -206,6 +207,8 @@
   void WebServer::processGet(String* line) {
     WLF("MSG: Webserver checking header GET parameters");
 
+    if (line->equals(EmptyStr)) { WLF("MSG: Webserver GET empty"); return; }
+
     // isolate any parameters, get their values
     // look for form "?a=1&" or "&a=1"
     while ((*line)[0] == '?' || (*line)[0] == '&') {
@@ -234,9 +237,11 @@
     // make all tokens start with '&'
     *line = "&" + *line;
 
+    if (line->equals("&")) { WLF("MSG: Webserver PUT empty"); return; }
+
     // isolate any parameters, get their values
     // look for form "&a=1"
-    while ((*line)[0] == '&') {
+    while ((*line)[0] == '?' || (*line)[0] == '&') {
       *line = line->substring(1);
       int j  = line->indexOf('=');
       if (j == -1) j = line->length();
@@ -244,11 +249,12 @@
       int j1 = line->indexOf('&');
       if (j1 == -1) j1 = line->length() + 1;
       String thisArg = line->substring(0, j);
+      if (thisArg.startsWith('?')) thisArg = thisArg.substring(1);
       String thisVal = line->substring(j + 1, j1);
       if (thisArg != "") {
         if (++parameter_count > PARAMETER_COUNT_MAX) parameter_count = PARAMETER_COUNT_MAX;
         parameters[parameter_count - 1] = thisArg;
-        values[parameter_count - 1] = thisVal;
+        values[parameter_count - 1] = thisVal.trim();
       }
       if ((int)line->length() > j1) *line = line->substring(j1); else *line = "";
 
@@ -261,6 +267,8 @@
 
     // make all tokens start with '&'
     *line = "&" + *line;
+
+    if (line->equals(EmptyStr)) { WLF("MSG: Webserver POST empty"); return; }
 
     // isolate any parameters, get their values
     // look for form "&a=1"
@@ -360,7 +368,7 @@
     }
     
     void WebServer::sdPage(String fn, EthernetClient *client) {
-      char temp[256] = "";
+      char temp[512] = "";
       int n;
 
       // open the sdcard file

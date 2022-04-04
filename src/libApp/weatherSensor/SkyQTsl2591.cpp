@@ -35,7 +35,7 @@ bool Tsl2591w::init() {
     Wire.setClock(HAL_WIRE_CLOCK);
 
     VF("MSG: Tsl2591w, start monitor task (rate 30s priority 7)... ");
-    if (tasks.add(30000, 0, true, 7, tsl2591Wrapper, "Tsl2591")) {
+    if (tasks.add(30000, 0, true, 7, tsl2591Wrapper, "weaTsl")) {
       VLF("success");
       _skyQualityAssigned = true;
       strcpy(_skyQualityName, "AMS TSL2591 Ambient Light Sensor on I2C");

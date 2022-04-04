@@ -15,6 +15,7 @@
 #include "safety/Safety.h"
 #include "thermostat/Thermostat.h"
 #include "weather/Weather.h"
+#include "dome/Dome.h"
 
 #include "../pages/Pages.h"
 
@@ -31,6 +32,7 @@ time_t startupTime = 0;
 
 unsigned long msFiveMinuteCounter;
 bool xBusy = false;
+InitError initError = {false, false, false, false, false};
 bool validKey = true;
 
 void observatoryWrapper() { observatory.poll(); }
@@ -120,6 +122,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     weather.init();
   #endif
 
+  #if AXIS1_DRIVER_MODEL != OFF
+    dome.init();
+  #endif
+
   WDT_ENABLE;
 
   // ----------------------------------------------------------------------
@@ -157,6 +163,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
   #if ROOF == ON
     www.on("roofstatus", roofContents);
+  #endif
+  #if DOME == ON
+    www.on("domestatus", domeContents);
   #endif
   #if WEATHER_CHARTS == ON
     www.on("Chart.js", NULL);
@@ -239,6 +248,43 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchname", alpacaSwitchSetSwitchName);
   apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchvalue", alpacaSwitchSetSwitchValue);
   apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/switchstep", alpacaSwitchSwitchStep);
+
+  // ASCOM Dome methods
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/connected", alpacaDomeConnected);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/altitude", alpacaDomeAltitude);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/athome", alpacaDomeAtHome);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/atpark", alpacaDomeAtPark);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/azimuth", alpacaDomeAzimuth);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canfindhome", alpacaDomeCanFindHome);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canpark", alpacaDomeCanPark);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetaltitude", alpacaDomeCanSetAltitude);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetazimuth", alpacaDomeCanSetAzimuth);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetpark", alpacaDomeCanSetPark);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetshutter", alpacaDomeCanSetShutter);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canslave", alpacaDomeCanSlave);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansyncazimuth", alpacaDomeCanSyncAzimuth);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/shutterstatus", alpacaDomeShutterStatus);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slaved", alpacaDomeSlaved);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewing", alpacaDomeSlewing);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/abortslew", alpacaDomeAbortSlew);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/closeshutter", alpacaDomeCloseShutter);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/findhome", alpacaDomeFindHome);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/openshutter", alpacaDomeOpenShutter);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/park", alpacaDomePark);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/setpark", alpacaDomeSetPark);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoaltitude", alpacaDomeSlewToAltitude);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoazimuth", alpacaDomeSlewToAzimuth);
+  apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/synctoazimuth", alpacaDomeSyncToAzimuth);
 
   apc.onNotFound(alpacaNotFoundError);
 

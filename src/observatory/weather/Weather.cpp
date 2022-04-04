@@ -90,7 +90,7 @@ void Weather::poll(void) {
 
       // only log if the time is set and we have an SD card
       if (timeStatus() != timeNotSet && www.SDfound) {
-        char temp[256] = "";
+        char temp[512] = "";
 
         time_t t = now();
         int y = year(t);

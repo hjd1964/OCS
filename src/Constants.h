@@ -56,7 +56,7 @@
 #define TLS_TIMELIB
 
 // task manager
-#define TASKS_MAX                   20     // up to 20 tasks
+#define TASKS_MAX                   32     // up to 32 tasks
 #define TASKS_SKIP_MISSED
 #define TASKS_HWTIMER1_ENABLE
 #ifdef TEENSYDUINO
@@ -73,7 +73,7 @@
 #define logRecordLocation(t) (round(hour(t)*3600L+minute(t)*60L+second(t))/30L)
 
 // NV addresses
-#define INIT_NV_KEY                 3062703967UL
+#define INIT_NV_KEY                 3062703968UL
 
 #define NV_KEY                      0      // bytes: 4   , addr:   0..  3
 #define NV_HEAT_SETPOINT            4      // bytes: 4   , addr:   4..  7
@@ -86,3 +86,4 @@
 #define NV_POWER_DEVICE4            23     // bytes: 1   , addr:  23.. 23
 #define NV_POWER_DEVICE5            24     // bytes: 1   , addr:  24.. 24
 #define NV_POWER_DEVICE6            25     // bytes: 1   , addr:  25.. 25
+#define NV_DOME_SETTINGS_BASE       26     // bytes: 21  , addr:  26.. 46

@@ -32,7 +32,7 @@ bool Mlx90614w::init() {
     Wire.setClock(HAL_WIRE_CLOCK);
 
     VF("MSG: Mlx90614w, start monitor task (default rate priority 7)... ");
-    if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "m90614")) {
+    if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "weaMlx")) {
       VLF("success");
       _skyTemperatureAssigned = true;
       sprintf(_skyTemperatureName, "Melexis MLX90614 IR Sensor on I2C");

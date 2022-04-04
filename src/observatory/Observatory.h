@@ -7,6 +7,16 @@
 #include "../libApp/commands/ProcessCmds.h"
 #include "../lib/ethernet/EthernetManager.h"
 
+typedef struct InitError {
+  uint8_t nv:1;       // NV data size/structure error (disables writes to NV)
+  uint8_t value:1;    // invalid value error
+  uint8_t driver:1;   // the stepper driver wasn't detected properly (TMC SPI drivers only)
+  uint8_t weather:1;  // the weather source (BME280, etc.) was not found
+  uint8_t tls:1;      // the time location source (DS3231, GPS, etc.) was not found
+} InitError;
+
+extern InitError initError;
+
 typedef struct Version {
   uint8_t major;
   uint8_t minor;

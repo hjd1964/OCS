@@ -32,7 +32,7 @@ bool Dhtw::init() {
   dhtSensor->begin();
 
   VF("MSG: Dhtw, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, dhtWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, dhtWrapper, "weaDht")) {
     VLF("success");
     if (!_temperatureAssigned) {
       _temperatureAssigned = true;

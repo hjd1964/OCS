@@ -23,6 +23,9 @@ const char html_ajax_activeA[] PROGMEM =
   #if ROOF == ON
     "'RoofStatus',3,"
   #endif
+  #if DOME == ON
+    "'DomeStatus',2,"
+  #endif
   "'',0"
   "];\n"
 
@@ -54,7 +57,7 @@ const char html_ajax_setRelay[] PROGMEM =
 "function SetRelay(relay,value) {\n"
   "nocache = '&nocache=' + Math.random() * 1000000;\n"
   "var request = new XMLHttpRequest();\n"
-  "request.open('GET','relay?r'+relay+'='+value+nocache,true);\n"
+  "request.open('PUT','relay?r'+relay+'='+value+nocache,true);\n"
   "request.send(null);\n"
 "}\n"
 "</script>\n";
@@ -64,7 +67,7 @@ const char html_ajax_setVar[] PROGMEM =
 "function SetVar(name,value) {\n"
   "nocache = '&nocache=' + Math.random() * 1000000;\n"
   "var request = new XMLHttpRequest();\n"
-  "request.open('GET','setvar?'+name+'='+value+nocache,true);\n"
+  "request.open('PUT','setvar?'+name+'='+value+nocache,true);\n"
   "request.send(null);\n"
 "}\n"
 "</script>\n";

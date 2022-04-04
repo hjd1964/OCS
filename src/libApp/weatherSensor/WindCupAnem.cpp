@@ -28,7 +28,7 @@ bool CupAnem::init() {
   if (index < 0 || index > 7) return false;
 
   VF("MSG: CupAnem, start monitor task (default rate priority 1)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 1, cupAnemTask, "cupAnem")) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 1, cupAnemTask, "weaCup")) {
     VLF("success");
     _windSpeedAssigned = true;
     strcpy(_windSpeedName, "Generic Cup Anemometer on Digital Input");

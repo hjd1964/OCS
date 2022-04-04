@@ -38,56 +38,102 @@
 #endif
 
 // Dome control
-#ifndef DOME_ENABLE_PIN
-#define DOME_ENABLE_PIN            OFF
+#ifndef AXIS1_ENABLE_PIN
+#define AXIS1_ENABLE_PIN            OFF
 #endif
-#ifndef DOME_M0_PIN
-#define DOME_M0_PIN                OFF
+#ifndef AXIS1_M0_PIN
+#define AXIS1_M0_PIN                OFF
 #endif
-#ifndef DOME_M1_PIN
-#define DOME_M1_PIN                OFF
+#ifndef AXIS1_M1_PIN
+#define AXIS1_M1_PIN                OFF
 #endif
-#ifndef DOME_M2_PIN
-#define DOME_M2_PIN                OFF
+#ifndef AXIS1_M2_PIN
+#define AXIS1_M2_PIN                OFF
 #endif
-#ifndef DOME_M3_PIN
-#define DOME_M3_PIN                OFF
+#ifndef AXIS1_M3_PIN
+#define AXIS1_M3_PIN                OFF
 #endif
-#ifndef DOME_STEP_PIN
-#define DOME_STEP_PIN              OFF
+#ifndef AXIS1_STEP_PIN
+#define AXIS1_STEP_PIN              OFF
 #endif
-#ifndef DOME_DIR_PIN
-#define DOME_DIR_PIN               OFF
+#ifndef AXIS1_DIR_PIN
+#define AXIS1_DIR_PIN               OFF
 #endif
-#ifndef DOME_DECAY_PIN
-#define DOME_DECAY_PIN             OFF
+#ifndef AXIS1_DECAY_PIN
+#define AXIS1_DECAY_PIN             OFF
 #endif
-#ifndef DOME_SERVO_PH1_PIN
-#define DOME_SERVO_PH1_PIN         OFF
+#ifndef AXIS1_SERVO_PH1_PIN
+#define AXIS1_SERVO_PH1_PIN         OFF
 #endif
-#ifndef DOME_SERVO_PH2_PIN
-#define DOME_SERVO_PH2_PIN         OFF
+#ifndef AXIS1_SERVO_PH2_PIN
+#define AXIS1_SERVO_PH2_PIN         OFF
 #endif
-#ifndef DOME_SERVO_ENC1_PIN
-#define DOME_SERVO_ENC1_PIN        OFF
+#ifndef AXIS1_SERVO_ENC1_PIN
+#define AXIS1_SERVO_ENC1_PIN        OFF
 #endif
-#ifndef DOME_SERVO_ENC2_PIN
-#define DOME_SERVO_ENC2_PIN        OFF
+#ifndef AXIS1_SERVO_ENC2_PIN
+#define AXIS1_SERVO_ENC2_PIN        OFF
 #endif
-#ifndef DOME_FAULT_PIN
-#define DOME_FAULT_PIN             OFF
+#ifndef AXIS1_FAULT_PIN
+#define AXIS1_FAULT_PIN             OFF
 #endif
-#ifndef DOME_SENSE_HOME_PIN
-#define DOME_SENSE_HOME_PIN        OFF
+#ifndef AXIS1_SENSE_HOME_PIN
+#define AXIS1_SENSE_HOME_PIN        OFF
 #endif
-#ifndef SENSE_LIMIT_PIN
-#define SENSE_LIMIT_PIN             OFF
+#ifndef AXIS1_SENSE_LIMIT_MIN_PIN
+#define AXIS1_SENSE_LIMIT_MIN_PIN   OFF
 #endif
-#ifndef DOME_SENSE_LIMIT_MIN_PIN
-#define DOME_SENSE_LIMIT_MIN_PIN SENSE_LIMIT_PIN
+#ifndef AXIS1_SENSE_LIMIT_MAX_PIN
+#define AXIS1_SENSE_LIMIT_MAX_PIN   OFF
 #endif
-#ifndef DOME_SENSE_LIMIT_MAX_PIN
-#define DOME_SENSE_LIMIT_MAX_PIN SENSE_LIMIT_PIN
+
+#ifndef AXIS2_ENABLE_PIN
+#define AXIS2_ENABLE_PIN            OFF
+#endif
+#ifndef AXIS2_M0_PIN
+#define AXIS2_M0_PIN                OFF
+#endif
+#ifndef AXIS2_M1_PIN
+#define AXIS2_M1_PIN                OFF
+#endif
+#ifndef AXIS2_M2_PIN
+#define AXIS2_M2_PIN                OFF
+#endif
+#ifndef AXIS2_M3_PIN
+#define AXIS2_M3_PIN                OFF
+#endif
+#ifndef AXIS2_STEP_PIN
+#define AXIS2_STEP_PIN              OFF
+#endif
+#ifndef AXIS2_DIR_PIN
+#define AXIS2_DIR_PIN               OFF
+#endif
+#ifndef AXIS2_DECAY_PIN
+#define AXIS2_DECAY_PIN             OFF
+#endif
+#ifndef AXIS2_SERVO_PH1_PIN
+#define AXIS2_SERVO_PH1_PIN         OFF
+#endif
+#ifndef AXIS2_SERVO_PH2_PIN
+#define AXIS2_SERVO_PH2_PIN         OFF
+#endif
+#ifndef AXIS2_SERVO_ENC1_PIN
+#define AXIS2_SERVO_ENC1_PIN        OFF
+#endif
+#ifndef AXIS2_SERVO_ENC2_PIN
+#define AXIS2_SERVO_ENC2_PIN        OFF
+#endif
+#ifndef AXIS2_FAULT_PIN
+#define AXIS2_FAULT_PIN             OFF
+#endif
+#ifndef AXIS2_SENSE_HOME_PIN
+#define AXIS2_SENSE_HOME_PIN        OFF
+#endif
+#ifndef AXIS2_SENSE_LIMIT_MIN_PIN
+#define AXIS2_SENSE_LIMIT_MIN_PIN   OFF
+#endif
+#ifndef AXIS2_SENSE_LIMIT_MAX_PIN
+#define AXIS2_SENSE_LIMIT_MAX_PIN   OFF
 #endif
 
 // Digital outputs for switching relays

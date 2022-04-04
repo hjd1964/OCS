@@ -12,9 +12,11 @@
 #include "ThermostatTile.h"
 #include "LightTile.h"
 #include "RoofTile.h"
+#include "DomeTile.h"
 
 #include "../libApp/relay/Relay.h"
 #include "../observatory/roof/Roof.h"
+#include "../observatory/dome/Dome.h"
 #include "../observatory/safety/Safety.h"
 #include "../observatory/thermostat/Thermostat.h"
 
@@ -73,6 +75,9 @@ void index() {
   #if ROOF == ON
     roofTile();
   #endif
+  #if DOME == ON
+    domeTile();
+  #endif
 
   {
     char temp[400] = "";
@@ -98,12 +103,12 @@ void index() {
 }
 
 void indexAjax() {
-  String a = www.arg("press");
-
+  String press = www.arg("press");
+  
   // lights
   #if LIGHT == ON
     #if LIGHT_OUTSIDE_RELAY != OFF
-      if (a.equals("light_exit")) { 
+      if (press.equals("light_exit")) { 
         relay.onDelayedOff(LIGHT_OUTSIDE_RELAY, 4*60); // turn off after about 4 minutes
       }
     #endif
@@ -111,37 +116,67 @@ void indexAjax() {
 
   // roof
   #if ROOF == ON
-    if (a.equals("roof_open")) roof.open();
-    if (a.equals("roof_close")) roof.close();
-    if (a.equals("roof_override")) roof.setSafetyOverride(true);
-    if (a.equals("roof_stop")) { roof.stop(); roof.clearStatus(); }
-    a = www.arg("auto_close");
-    if (a.equals("true")) safety.setRoofAutoClose(true);
-    if (a.equals("false")) safety.setRoofAutoClose(false);
+    if (press.equals("roof_open")) roof.open();
+    if (press.equals("roof_close")) roof.close();
+    if (press.equals("roof_override")) roof.setSafetyOverride(true);
+    if (press.equals("roof_stop")) { roof.stop(); roof.clearStatus(); }
+    String autoclose = www.arg("auto_close");
+    if (autoclose.equals("true")) safety.setRoofAutoClose(true);
+    if (autoclose.equals("false")) safety.setRoofAutoClose(false);
+  #endif
+
+  // dome
+  #if DOME == ON
+    String azm = www.arg("dome_azm");
+    if (!azm.equals(EmptyStr)) {
+      int z = azm.toInt();
+      if (z >= 0 && z <= 360) dome.setTargetAzimuth(z);
+    }
+
+    #if AXIS2_DRIVER_MODEL != OFF
+      String alt = www.arg("dome_alt");
+      if (!alt.equals(EmptyStr)) {
+        int a = alt.toInt();
+        if (a >= 0 && a <= 90) dome.setTargetAltitude(a);
+      }
+    #endif
+
+    if (press.equals("dome_goto")) {
+      dome.gotoAzimuthTarget();
+      #if AXIS2_DRIVER_MODEL != OFF
+        dome.gotoAltitudeTarget();
+      #endif
+    }
+    if (press.equals("dome_stop")) dome.stop();
+    if (press.equals("dome_home")) dome.findHome();
+    if (press.equals("dome_reset")) dome.reset();
+    if (press.equals("dome_park")) dome.park();
+    if (press.equals("dome_unpark")) dome.unpark();
+    if (press.equals("dome_setpark")) dome.setpark();
   #endif
 
   // thermostat
   #if THERMOSTAT == ON
     #if HEAT_RELAY != OFF
-      a = www.arg("thermostat_heat");
-      if (!a.equals(EmptyStr)) {
+      String heat = www.arg("thermostat_heat");
+      if (!heat.equals(EmptyStr)) {
         #if STAT_UNITS == IMPERIAL
           float f = 0;
-          if (a.toInt() != 0) f = (a.toInt() - 32.0)*(5.0/9.0);
+          if (heat.toInt() != 0) f = (heat.toInt() - 32.0)*(5.0/9.0);
         #else
-          float f = a.toFloat();
+          float f = heat.toFloat();
         #endif
       if (f >= 0.0 && f <= 37.0) thermostat.setHeatSetpoint(f);
     }
   #endif
     #if COOL_RELAY != OFF
-      a = www.arg("thermostat_cool");
-      if (!a.equals(EmptyStr)) {
+      String cool = www.arg("thermostat_cool");
+      if (!cool.equals(EmptyStr)) {
         #if STAT_UNITS == IMPERIAL
           float f = 0;
-          if (a.toInt() != 0) f = (a.toInt() - 32.0)*(5.0/9.0);
+          if (cool.toInt() != 0) f = (cool.toInt() - 32.0)*(5.0/9.0);
         #else
-          float f = atoi(a.c_str());
+          float f = atoi(cool.c_str());
         #endif
         if (f >= 0.0 && f <= 37.0) thermostat.setCoolSetpoint(f);
       }

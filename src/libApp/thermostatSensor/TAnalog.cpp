@@ -17,7 +17,7 @@ bool AnalogTemperaturet::init() {
   if (_inside_temperatureAssigned) return false;
 
   VF("MSG: Analogt, start monitor task (default rate priority 7)... ");
-  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, AnalogtWrapper)) {
+  if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, AnalogtWrapper, "thsAnlg")) {
     VLF("success");
     _inside_temperatureAssigned = true;
     active = true;

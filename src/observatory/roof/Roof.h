@@ -45,7 +45,6 @@ typedef struct RoofFault {
   uint16_t closeUnderTime: 1;
 } RoofFault;
 
-
 class Roof {
   public:
     // process commands associated with the ROOF

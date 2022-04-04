@@ -89,7 +89,7 @@ void setup() {
 
   // start input sense monitor task
   VF("MSG: Setup, start input sense monitor task (rate 1ms priority 7)... ");
-  if (tasks.add(1, 0, true, 7, sensesPoll, "Sensors")) { VLF("success"); } else { VLF("FAILED!"); }
+  if (tasks.add(2, 0, true, 7, sensesPoll, "Sensors")) { VLF("success"); } else { VLF("FAILED!"); }
 
   // start observatory instance
   observatory.init(FirmwareName, FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch, FirmwareVersionConfig);

@@ -10,7 +10,7 @@
 #include "../libApp/weatherSensor/WeatherSensor.h"
 
 void alpacaSetup() {
-  char temp[250] = "";
+  char temp[256] = "";
 
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
   apc.send(200, "text/html", String());
@@ -32,7 +32,7 @@ void alpacaSetup() {
 }
 
 void alpacaSetupSafetyMonitor() {
-  char temp[250] = "";
+  char temp[256] = "";
 
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
   apc.send(200, "text/html", String());
@@ -54,7 +54,7 @@ void alpacaSetupSafetyMonitor() {
 }
 
 void alpacaSetupObservingConditions() {
-  char temp[250] = "";
+  char temp[256] = "";
 
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
   apc.send(200, "text/html", String());
@@ -92,7 +92,7 @@ void alpacaSetupObservingConditions() {
 }
 
 void alpacaSetupSwitch() {
-  char temp[250] = "";
+  char temp[256] = "";
 
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
   apc.send(200, "text/html", String());
