@@ -204,39 +204,68 @@
 
 #define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option
 
+#define DOME_SHUTTER_LOCK             OFF //    OFF, ON to disable dome motion unless shutter is open.                        Option
+
 // Driver models (Step/Dir and Servo) see "~/OCS/Constants.h" for a complete list.
-// Usually this will be a GENERIC stepper driver or a servo SERVO_PD (pulse/direction) or SERVO_II (in/in.)
+// Usually this will be a GENERIC stepper driver or a servo SERVO_PD (Pulse/Direction) or SERVO_II (In/In.)
 
-#define DOME_DRIVER_MODEL             OFF //    OFF, Enter driver model (above) to activate the dome.                         Option
-#define DOME_DRIVER_STATUS            OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
+#define AXIS1_DRIVER_MODEL            OFF //    OFF, Enter driver model (above) to activate the dome Azimuth axis.            Option
+#define AXIS1_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
-#define DOME_DRIVER_MICROSTEPS        OFF //    OFF, n. Microstep mode when tracking.                                         Option
+#define AXIS1_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 
-#define DOME_STEPS_PER_DEGREE        64.0 //   64.0, n. Number of steps per degree for dome.                                  Adjust
-#define DOME_SLEW_RATE_DESIRED        1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
-#define DOME_REVERSE                  OFF //    OFF, ON Reverses movement direction, or reverse wiring instead to correct.    Option
+#define AXIS1_STEPS_PER_DEGREE       64.0 //   64.0, n. Number of steps per degree for dome.                                  Adjust
+#define AXIS1_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
+#define AXIS1_REVERSE                 OFF //    OFF, ON Reverses movement direction, or reverse wiring instead to correct.    Option
 
 // for SERVO_II and SERVO_SD driver models, PID and encoder settings:
-#define DOME_SERVO_P                  2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
-#define DOME_SERVO_I                  5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
-#define DOME_SERVO_D                  1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
-#define DOME_SERVO_ENCODER         ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
+#define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
+#define AXIS1_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
+#define AXIS1_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
+#define AXIS1_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
 
-#define DOME_POWER_DOWN               OFF //    OFF, ON Powers off 30sec after movement stops or 10min after last<=1x guide.  Option
+#define AXIS1_POWER_DOWN              OFF //    OFF, ON Powers off 30sec after movement stops or 10min after last<=1x guide.  Option
 
-#define DOME_WRAP                     OFF //    OFF, ON Allows unlimited Azm range and ignores min/max limits.                Option
+#define AXIS1_WRAP                    OFF //    OFF, ON Allows unlimited Azm range and ignores min/max limits.                Option
 
-#define DOME_LIMIT_MIN               -180 //   -180, n. Where n= -90..-360 (degrees.) Minimum Azimuth.                        Adjust
-#define DOME_LIMIT_MAX                180 //    180, n. Where n=  90.. 360 (degrees.) Maximum Azimuth.                        Adjust
+#define AXIS1_LIMIT_MIN              -180 //   -180, n. Where n= 0..-360 (degrees.) Minimum Azimuth.                          Adjust
+#define AXIS1_LIMIT_MAX               180 //    180, n. Where n= 0.. 360 (degrees.) Maximum Azimuth.                          Adjust
 
-#define DOME_SENSE_HOME               OFF //    OFF, HIGH or LOW enables & state clockwise home position, as seen from front. Option
-#define DOME_SENSE_LIMIT_MIN          OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
-#define DOME_SENSE_LIMIT_MAX          OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
+#define AXIS1_SENSE_HOME              OFF //    OFF, HIGH or LOW enables & state clockwise home position, as seen from front. Option
+#define AXIS1_SENSE_LIMIT_MIN         OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
+#define AXIS1_SENSE_LIMIT_MAX         OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
                                           //         Digital, optionally add: |HYST(n) Where n=0..1023 stability time in ms.
                                           //         Analog capable sense inputs also allow adding:
                                           //         |THLD(n) Where n=1..1023 (ADU) for Analog threshold.
                                           //         |HYST(n) Where n=0..1023 (ADU) for +/- Hystersis range.
 
-// ---------------------------------------------------------------------------------------------------------------------------------
+#define AXIS2_DRIVER_MODEL            OFF //    OFF, Enter driver model to activate the (optional) dome Altitude axis.        Option
+#define AXIS2_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
+
+#define AXIS2_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
+
+#define AXIS2_STEPS_PER_DEGREE       16.0 //   64.0, n. Number of steps per degree for dome.                                  Adjust
+#define AXIS2_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
+#define AXIS2_REVERSE                 OFF //    OFF, ON Reverses movement direction, or reverse wiring instead to correct.    Option
+
+// for SERVO_II and SERVO_SD driver models, PID and encoder settings:
+#define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
+#define AXIS2_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
+#define AXIS2_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
+#define AXIS2_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
+
+#define AXIS2_POWER_DOWN              OFF //    OFF, ON Powers off 30sec after movement stops or 10min after last<=1x guide.  Option
+
+#define AXIS2_LIMIT_MIN                 0 //      0, n. Where n=  0..90 (degrees.) Minimum Altitude.                          Adjust
+#define AXIS2_LIMIT_MAX                90 //     90, n. Where n=  0..90 (degrees.) Maximum Altitude.                          Adjust
+
+#define AXIS2_SENSE_HOME              OFF //    OFF, HIGH or LOW enables & state clockwise home position, as seen from front. Option
+#define AXIS2_SENSE_LIMIT_MIN         OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
+#define AXIS2_SENSE_LIMIT_MAX         OFF //    OFF, HIGH or LOW state on limit sense switch stops movement.                  Option
+                                          //         Digital, optionally add: |HYST(n) Where n=0..1023 stability time in ms.
+                                          //         Analog capable sense inputs also allow adding:
+                                          //         |THLD(n) Where n=1..1023 (ADU) for Analog threshold.
+                                          //         |HYST(n) Where n=0..1023 (ADU) for +/- Hystersis range.
+
 #define FileVersionConfig 2
 #include "Extended.config.h"
