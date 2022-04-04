@@ -79,6 +79,15 @@
 #define POWER_DEVICE6_MEMORY          OFF //    OFF, ON to enable memory (across power cycles) for this relay state.          Option
 #define POWER_DEVICE6_NAME ""
 
+// LIGHTING PANEL ------------------------------------------------------------------------------------------------------------------
+#define LIGHT                         OFF //    OFF, ON to enable the OCS website lighting panel display.                     Option
+#define LIGHT_WRW_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Warm room white lights.                    Option
+#define LIGHT_WRR_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Warm room red lights.                      Option
+#define LIGHT_ORW_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Observing room white lights.               Option
+#define LIGHT_ORR_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Observing room red lights.                 Option
+#define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) for Outside flood.                             Option
+#define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn WRW lights on/off.           Option
+
 // WEATHER PANEL -------------------------------------------------------------------------------------------------------------------
 // Weather and Sky Conditions web page charts use "Chart.js" http://www.chartjs.org/. Specifically, version 2.5 of "Chart.min.js" 
 //   renamed to "Chart.js" and placed in the Micro SD card root directory (Fat32 formatted) and inserted into the W5100 Ethernet
@@ -163,15 +172,6 @@
 #define THERMOSTAT_SENSOR_T_ANALOG    OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
 // Conversion factor, analog (x ranges from 0 to 1.0) to Deg. C; example TMP36 0.1V (-40°C) to 2.0V (150°C) w/3.3V MCU
 #define THERMOSTAT_SENSOR_T_ANALOG2DEGC(x) (((x*3.3)-0.1)*100.0-40.0)
-
-// LIGHTING PANEL ------------------------------------------------------------------------------------------------------------------
-#define LIGHT                         OFF //    OFF, ON to enable the OCS website lighting panel display.                     Option
-#define LIGHT_WRW_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Warm room white lights.                    Option
-#define LIGHT_WRR_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Warm room red lights.                      Option
-#define LIGHT_ORW_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Observing room white lights.               Option
-#define LIGHT_ORR_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Observing room red lights.                 Option
-#define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) for Outside flood.                             Option
-#define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn WRW lights on/off.           Option
 
 // ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
 #define ROOF_USER_SAFETY_OVERRIDE     OFF //    OFF, ON displays safety override button.                                      Option
