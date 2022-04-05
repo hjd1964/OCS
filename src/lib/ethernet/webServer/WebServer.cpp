@@ -16,7 +16,7 @@
     #include <SD.h>
   #endif
 
-  void WebServer::begin(long port) {
+  void WebServer::begin(long port, long timeToClose, bool autoReset) {
     if (webServer == NULL) {
       #if defined(SDCARD_CS_PIN)
         static bool SDinit = false;
@@ -39,14 +39,21 @@
 
       ethernetManager.init();
 
+      this->port = port;
+      this->timeToClose = timeToClose;
+      this->autoReset = autoReset;
+
       webServer = new EthernetServer(port);
       webServer->begin();
+      Ethernet.setRetransmissionCount(4);
+      Ethernet.setRetransmissionTimeout(25);
       VF("MSG: Ethernet started web server on port "); VL(port);
     }
   }
 
   void WebServer::handleClient() {
     client = webServer->available();
+
     if (client) {
       WL("MSG: Webserver new client");
 
@@ -85,6 +92,7 @@
                 line = line.substring(index + 4);
                 handler_number = getHandler(&line);
                 if (handler_number >= 0) processGet(&line);
+                break;
               } else {
                 index = line.indexOf("POST ");
                 if (index >= 0) {
@@ -111,7 +119,7 @@
           }
 
           line = "";
-        } else break;
+        }
         Y;
       }
 
@@ -163,12 +171,18 @@
         (*notFoundHandler)();
       }
 
-      // give the web browser time to receive the data
-      tasks.yield(50);
-  
+      // port timeout to close
+      tasks.yield(timeToClose);
+
+      // make sure everything is sent
+      client.flush();
+
       // close the connection:
       client.stop();
-  
+
+      // reset the webserver if requested
+      if (autoReset) webServer->begin();
+
       #if SD_CARD == ON
         modifiedSinceFound = false;
       #endif

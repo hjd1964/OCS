@@ -288,16 +288,16 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   apc.onNotFound(alpacaNotFoundError);
 
-  www.begin();
-  apc.begin(ALPACA_PORT);
+  www.begin(80, 250, true);
+  apc.begin(ALPACA_PORT, 500, true);
 
   #if TIME_LOCATION_SOURCE != OFF
     tls.init();
   #endif
 
   // start observatory monitor task
-  VF("MSG: Observatory, start monitor task (rate 1ms priority 4)... ");
-  if (tasks.add(1, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
+  VF("MSG: Observatory, start monitor task (rate 10ms priority 4)... ");
+  if (tasks.add(100, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 void Observatory::connectionCheck() {

@@ -27,7 +27,7 @@
   #endif
 
   // misc.
-  #define WEB_SOCKET_TIMEOUT     10000
+  #define WEB_SOCKET_TIMEOUT     200
   #define HANDLER_COUNT_MAX      200
   #define PARAMETER_COUNT_MAX    8
   #define CONTENT_LENGTH_UNKNOWN -1
@@ -58,7 +58,7 @@
   
   class WebServer {
     public:
-      void begin(long port = 80);
+      void begin(long port = 80, long timeToClose = 100, bool autoReset = false);
 
       void handleClient();
 
@@ -105,6 +105,9 @@
       String parameters[PARAMETER_COUNT_MAX];
       String values[PARAMETER_COUNT_MAX];
       int parameter_count;
+      int port = -1;
+      bool autoReset = false;
+      long timeToClose = 100;
 
       long length;
       String header;

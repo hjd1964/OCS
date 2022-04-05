@@ -36,7 +36,10 @@
 
   const char htmlDomeGoto[] PROGMEM =
   "<input type='button' onclick='SetVar(\"press\",\"dome_goto\")' value='Goto'>&nbsp;&nbsp;"
-  "<input type='button' onclick='SetVar(\"press\",\"dome_stop\")' value='Stop'><br/><br/>";
+  "<input type='button' onclick='SetVar(\"press\",\"dome_sync\")' value='Sync'><br/>";
+
+  const char htmlDomeStop[] PROGMEM =
+  "<input type='button' style='margin: 10px' onclick='SetVar(\"press\",\"dome_stop\")' value='Stop!'><br/>";
 
   const char htmlDomeHome[] PROGMEM =
   "<input type='button'  onclick='SetVar(\"press\",\"dome_home\")' value='Find Home'>&nbsp;&nbsp;"

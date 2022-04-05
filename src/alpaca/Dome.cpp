@@ -163,7 +163,7 @@ void alpacaDomeShutterStatus() {
   #if ROOF == ON
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     int status = SHUTTER_STATUS_ERROR;
-    if (roof.isOpening()) status = SHUTTER_STATUS_OPEN; else
+    if (roof.isOpening()) status = SHUTTER_STATUS_OPENING; else
     if (roof.isClosing()) status = SHUTTER_STATUS_CLOSING; else
     if (roof.isOpen()) status = SHUTTER_STATUS_OPEN; else
     if (roof.isClosed()) status = SHUTTER_STATUS_CLOSED;
@@ -305,9 +305,10 @@ void alpacaDomeSlewToAzimuth() {
     String v = apc.argLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
-      if (azimuth < 0.0F || azimuth > 360.0F) {
+      if (azimuth < 0.0F || azimuth >= 360.0F) {
         alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; 
       }
+      if (dome.isParked()) dome.unpark();
       dome.setTargetAzimuth(azimuth);
       if (dome.gotoAzimuthTarget() != CE_NONE) {
         alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
@@ -327,14 +328,12 @@ void alpacaDomeSyncToAzimuth() {
     String v = apc.argLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
-      if (azimuth < 0.0F || azimuth > 360.0F) {
+      if (azimuth < 0.0F || azimuth >= 360.0F) {
         alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; 
       }
-      V("Sync set azimuth to: "); VL(azimuth);
+      if (dome.isParked()) dome.unpark();
       dome.setTargetAzimuth(azimuth);
-      V("Sync return code = ");
       CommandError e = dome.syncAzimuthTarget();
-      VL(e);
       if (e != CE_NONE) {
         alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
       }

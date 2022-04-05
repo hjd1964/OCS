@@ -24,6 +24,8 @@
     #endif
     strcpy_P(temp, htmlDomeGoto); www.sendContent(temp);
 
+    strcpy_P(temp, htmlDomeStop); www.sendContent(temp);
+
     strcpy_P(temp, htmlDomeHome); www.sendContent(temp);
 
     strcpy_P(temp, htmlDomePark1); www.sendContent(temp);

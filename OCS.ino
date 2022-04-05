@@ -89,14 +89,14 @@ void setup() {
 
   // start input sense monitor task
   VF("MSG: Setup, start input sense monitor task (rate 1ms priority 7)... ");
-  if (tasks.add(2, 0, true, 7, sensesPoll, "Sensors")) { VLF("success"); } else { VLF("FAILED!"); }
+  if (tasks.add(10, 0, true, 7, sensesPoll, "Sensors")) { VLF("success"); } else { VLF("FAILED!"); }
 
   // start observatory instance
   observatory.init(FirmwareName, FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch, FirmwareVersionConfig);
 
   // start the command channels
   SERIAL_SIP.begin(9999, 2L*1000L);
-  SERIAL_PIP1.begin(9998, 120L*1000L, true);
+//  SERIAL_PIP1.begin(9998, 120L*1000L, true);
 
   // start command channel tasks
   commandChannelInit();
