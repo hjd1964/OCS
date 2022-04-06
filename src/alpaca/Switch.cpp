@@ -1,9 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca Switch
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../libApp/relay/Relay.h"
 
@@ -205,3 +207,5 @@ void alpacaSwitchSwitchStep() {
   alpacaJsonDoc["Value"] = 1.0;
   alpacaJsonFinish(NoException, "");
 }
+
+#endif

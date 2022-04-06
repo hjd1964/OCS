@@ -17,6 +17,10 @@
 #define PINMAP                       OCS4 //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4.                            <-Req'd
                                           //         Other boards/more info. in ~/src/Constants.h
 
+// NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
+#define ASCOM_ALPACA_SERVER           OFF //    OFF, ON enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet.   Option
+                                          //         Note: this also disables the IP command servers on ports 9998 and 9999.
+
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON, ON_CC.  ON resets Mega2560 after 8 sec. if it hangs for any reason.  Option
                                           //         ON_CC as above and resets the Mega2560 if the connection check fails.

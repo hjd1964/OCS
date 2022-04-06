@@ -1,9 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca management
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 
@@ -55,3 +57,5 @@ void alpacaManagementConfiguredDevices() {
 
   alpacaJsonFinish(NoException, "");
 }
+
+#endif

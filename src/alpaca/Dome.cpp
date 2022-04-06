@@ -3,9 +3,12 @@
 
 #include <ArduinoJson.h>
 
+#include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
 #if DOME == ON || ROOF == ON 
 
-#include "../Common.h"
 #include "Alpaca.h"
 #include "../observatory/roof/Roof.h"
 #include "../observatory/dome/Dome.h"
@@ -345,5 +348,7 @@ void alpacaDomeSyncToAzimuth() {
     alpacaJsonFinish(NotImplementedException, "Not implemented"); return;
   #endif
 }
+
+#endif
 
 #endif

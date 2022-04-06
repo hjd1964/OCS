@@ -1,9 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca Observing Conditions
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../observatory/weather/Weather.h"
 #include "../libApp/weatherSensor/WeatherSensor.h"
@@ -366,3 +368,5 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     alpacaJsonFinish(InvalidValueException, "SensorName, Invalid value");
   }
 }
+
+#endif

@@ -6,6 +6,9 @@
 #include "../Constants.h"
 #include "../../Config.h"
 #include "../../Extended.config.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
 #include "../lib/ethernet/webServer/WebServer.h"
 
 extern WebServer apc;
@@ -122,3 +125,5 @@ extern void alpacaDomeSetPark();
 extern void alpacaDomeSlewToAltitude();
 extern void alpacaDomeSlewToAzimuth();
 extern void alpacaDomeSyncToAzimuth();
+
+#endif

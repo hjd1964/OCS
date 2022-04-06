@@ -18,9 +18,18 @@
 
 // enable IP functionality
 
-// optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
-// OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
-#define SERIAL_SERVER                 STANDARD
+#ifndef ASCOM_ALPACA_SERVER
+#define ASCOM_ALPACA_SERVER          OFF
+#endif
+
+#if ASCOM_ALPACA_SERVER == OFF
+  // optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
+  // OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
+  #define SERIAL_SERVER               BOTH
+#else
+  #define SERIAL_SERVER               OFF
+  #define HANDLER_COUNT_MAX           200        // for Ethernet webserver
+#endif
 
 // optional web-server
 #define WEB_SERVER                    ON         // for website at port 80

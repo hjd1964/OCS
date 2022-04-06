@@ -4,6 +4,9 @@
 #include <ArduinoJson.h>
 
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
 #include "Alpaca.h"
 
 StaticJsonDocument<1000> alpacaJsonDoc;
@@ -43,7 +46,7 @@ void alpacaDescription() {
 
 void alpacaDriverInfo() {
   alpacaJsonStart();
-  alpacaJsonDoc["Value"] = "OCS Alpaca Driver for Safety, Dome, Etc. version " ALPACA_DRIVER_VERSION;
+  alpacaJsonDoc["Value"] = "OCS Alpaca Driver for Dome, Observing Conditions, Safety, and Switch version " ALPACA_DRIVER_VERSION;
   alpacaJsonFinish(NoException, "");
 }
 
@@ -78,3 +81,5 @@ void alpacaDefaultSupportedActions() {
   alpacaJsonDoc.createNestedArray("Value");
   alpacaJsonFinish(NoException, "");
 }
+
+#endif

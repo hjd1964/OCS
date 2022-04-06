@@ -95,8 +95,11 @@ void setup() {
   observatory.init(FirmwareName, FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch, FirmwareVersionConfig);
 
   // start the command channels
-  SERIAL_SIP.begin(9999, 2L*1000L);
-//  SERIAL_PIP1.begin(9998, 120L*1000L, true);
+  #if SERIAL_SERVER == STANDARD || SERIAL_SERVER == BOTH
+    SERIAL_SIP.begin(9999, 2L*1000L);
+  #elif SERIAL_SERVER == PERSISTANT || SERIAL_SERVER == BOTH
+    SERIAL_PIP1.begin(9998, 120L*1000L, true);
+  #endif
 
   // start command channel tasks
   commandChannelInit();

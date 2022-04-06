@@ -1,9 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca Setup
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 #include "../pages/htmlHeaders.h"
@@ -165,3 +167,5 @@ void alpacaSetupSwitch() {
   apc.sendContent(F("</body></html>\r\n"));
   apc.sendContent("");
 }
+
+#endif

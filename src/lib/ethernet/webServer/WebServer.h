@@ -27,8 +27,10 @@
   #endif
 
   // misc.
-  #define WEB_SOCKET_TIMEOUT     200
-  #define HANDLER_COUNT_MAX      200
+  #define WEB_SOCKET_TIMEOUT     2000
+  #ifndef HANDLER_COUNT_MAX
+  #define HANDLER_COUNT_MAX      20
+  #endif
   #define PARAMETER_COUNT_MAX    8
   #define CONTENT_LENGTH_UNKNOWN -1
   #define CONTENT_LENGTH_NOT_SET -2

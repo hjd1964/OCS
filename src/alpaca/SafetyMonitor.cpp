@@ -1,9 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca Safety Monitor
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
+
+#if ASCOM_ALPACA_SERVER == ON
+
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 
@@ -34,3 +36,5 @@ void alpacaSafetyMonitorIsSafe() {
   if (safetyMonitorConnected > 0) alpacaJsonDoc["Value"] = safety.isSafe(); else alpacaJsonDoc["Value"] = false;
   alpacaJsonFinish(NoException, "");
 }
+
+#endif

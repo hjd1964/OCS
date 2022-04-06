@@ -55,7 +55,8 @@
     client = webServer->available();
 
     if (client) {
-      WL("MSG: Webserver new client");
+      WL("--------------------------------------------------");
+      W("MSG: Webserver new client, socket "); WL(client.getSocketNumber());
 
       parameter_count = 0;
       String line = "";
