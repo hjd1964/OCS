@@ -177,9 +177,9 @@
 // Conversion factor, analog (x ranges from 0 to 1.0) to Deg. C; example TMP36 0.1V (-40°C) to 2.0V (150°C) w/3.3V MCU
 #define THERMOSTAT_SENSOR_T_ANALOG2DEGC(x) (((x*3.3)-0.1)*100.0-40.0)
 
-// ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
+// ROOF/DOME SHUTTER CONTROL PANEL -------------------------------------------------------------------------------------------------
+#define ROOF                          OFF //    OFF, ON to enable the OCS website roof/dome shutter panel display.            Option
 #define ROOF_USER_SAFETY_OVERRIDE     OFF //    OFF, ON displays safety override button.                                      Option
-#define ROOF                          OFF //    OFF, ON to enable the OCS website roof/shutter panel display.                 Option
 
 #define ROOF_AUTOCLOSE_DAWN           OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
 #define ROOF_AUTOCLOSE_DAWN_DEFAULT   OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
