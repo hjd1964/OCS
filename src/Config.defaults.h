@@ -28,7 +28,7 @@
   #define SERIAL_SERVER               BOTH
 #else
   #define SERIAL_SERVER               OFF
-  #define HANDLER_COUNT_MAX           200        // for Ethernet webserver
+  #define WEB_HANDLER_COUNT_MAX       200        // for Ethernet webserver
 #endif
 
 // optional web-server

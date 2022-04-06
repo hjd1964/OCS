@@ -133,9 +133,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // ----------------------------------------------------------------------
   // initialize ethernet
 
-  // Note: Ethernet webserver has limitations
-  // HANDLER_COUNT_MAX     16
-  // PARAMETER_COUNT_MAX   8
+  // Note: Ethernet webserver has the following defaults
+  // WEB_HANDLER_COUNT_MAX  16 (changed to 200 for ASCOM Alpaca)
+  // PARAMETER_COUNT_MAX    8
 
   #if OPERATIONAL_MODE == WIFI
     wifiStart();
@@ -174,7 +174,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
   www.on("/", index);
   www.onNotFound(handleNotFound);
-  www.begin(80, 10, false);
+  www.begin(80, 50, false);
 
   #if ASCOM_ALPACA_SERVER == ON
     apc.on("setup", alpacaSetup);
@@ -289,7 +289,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoazimuth", alpacaDomeSlewToAzimuth);
     apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/synctoazimuth", alpacaDomeSyncToAzimuth);
     apc.onNotFound(alpacaNotFoundError);
-    apc.begin(ALPACA_PORT, 10, false);
+    apc.begin(ALPACA_PORT, 50, false);
   #endif
 
   #if TIME_LOCATION_SOURCE != OFF
@@ -297,7 +297,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
 
   // start observatory monitor task
-  VF("MSG: Observatory, start monitor task (rate 10ms priority 4)... ");
+  VF("MSG: Observatory, start monitor task (rate 100ms priority 4)... ");
   if (tasks.add(100, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 

@@ -27,9 +27,11 @@
   #endif
 
   // misc.
-  #define WEB_SOCKET_TIMEOUT     2000
-  #ifndef HANDLER_COUNT_MAX
-  #define HANDLER_COUNT_MAX      20
+  #ifndef WEB_SOCKET_TIMEOUT
+  #define WEB_SOCKET_TIMEOUT     250
+  #endif
+  #ifndef WEB_HANDLER_COUNT_MAX
+  #define WEB_HANDLER_COUNT_MAX  16
   #endif
   #define PARAMETER_COUNT_MAX    8
   #define CONTENT_LENGTH_UNKNOWN -1
@@ -100,8 +102,8 @@
       #endif
   
       webFunction notFoundHandler = NULL;
-      webFunction handlers[HANDLER_COUNT_MAX];
-      String handlers_fn[HANDLER_COUNT_MAX];
+      webFunction handlers[WEB_HANDLER_COUNT_MAX];
+      String handlers_fn[WEB_HANDLER_COUNT_MAX];
       int handler_count = 0;
       
       String parameters[PARAMETER_COUNT_MAX];
