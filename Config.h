@@ -19,7 +19,8 @@
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
 #define ASCOM_ALPACA_SERVER           OFF //    OFF, ON enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet.   Option
-                                          //         Note: this also disables the IP command servers on ports 9998 and 9999.
+                                          //         Note: this disables the IP command servers on ports 9998, 9999 and
+                                          //         works best w/my Ethernet library from: https://github.com/hjd1964/Ethernet
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for any reason.                   Option
