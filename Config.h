@@ -23,7 +23,7 @@
                                           //         works best w/my Ethernet library from: https://github.com/hjd1964/Ethernet
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
-#define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for any reason.                   Option
+#define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol w/IP address settings in Extended.config.h or      Adjust
