@@ -22,7 +22,7 @@
                                           //         Note: this also disables the IP command servers on ports 9998 and 9999.
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
-#define WATCHDOG                      OFF //    OFF, ON, ON_CC.  ON resets Mega2560 after 8 sec. if it hangs for any reason.  Option
+#define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for any reason.                   Option
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol w/IP address settings in Extended.config.h or      Adjust
