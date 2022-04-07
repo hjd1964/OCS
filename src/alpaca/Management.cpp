@@ -55,6 +55,15 @@ void alpacaManagementConfiguredDevices() {
   device["UniqueID"] = "688e6fe6-b754-4791-a462-63c5ab3b747d";
   devices.add(device);
 
+  #if defined(ROOF_PRESENT) || defined(DOME_PRESENT) 
+    device.clear();
+    device["DeviceName"] = "OCS Dome";
+    device["DeviceType"] = "Dome";
+    device["DeviceNumber"] = 0;
+    device["UniqueID"] = "ddcf4d81-9095-4a9e-9e88-15e049473124";
+    devices.add(device);
+  #endif
+
   alpacaJsonFinish(NoException, "");
 }
 

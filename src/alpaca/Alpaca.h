@@ -35,6 +35,7 @@ extern void alpacaSetup();
 extern void alpacaSetupSafetyMonitor();
 extern void alpacaSetupObservingConditions();
 extern void alpacaSetupSwitch();
+extern void alpacaSetupDome();
 
 // management
 extern void alpacaManagementApiVersions();

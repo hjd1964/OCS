@@ -181,6 +181,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     apc.on("setup/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSafetyMonitor);
     apc.on("setup/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupObservingConditions);
     apc.on("setup/v1/switch/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSwitch);
+      apc.on("setup/v1/dome/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupDome);
 
     apc.on("management/apiversions", alpacaManagementApiVersions);
     apc.on("management/v1/description", alpacaManagementDescription);

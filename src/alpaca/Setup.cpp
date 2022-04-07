@@ -167,5 +167,44 @@ void alpacaSetupSwitch() {
   apc.sendContent(F("</body></html>\r\n"));
   apc.sendContent("");
 }
+  void alpacaSetupDome() {
+    char temp[256] = "";
+
+    apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    apc.send(200, "text/html", String());
+
+    strcpy_P(temp, html_head1); apc.sendContent(temp);
+    apc.sendContent(F("</head>\r\n<body>\r\n"));
+
+    apc.sendContent(F("<big>Observatory Control System (OCS, Version "));
+    apc.sendContent(ocsVersion);
+    apc.sendContent(F(")<br/>ASCOM ALPACA Dome</big><br/><br/>\r\n"));
+
+    apc.sendContent(F("Device:<br/>\r\n"));
+
+    #if POWER_DEVICE1_RELAY != OFF
+      #ifdef ROOF_PRESENT
+        apc.sendContent(F("&nbsp;&nbsp;Roof/Dome Shutter: Present<br/>\r\n"));
+      #else
+        apc.sendContent(F("&nbsp;&nbsp;Roof/Dome Shutter: Not Present<br/>\r\n"));
+      #endif
+      #ifdef DOME_PRESENT
+        #if AXIS2_DRIVER_MODEL != OFF
+          apc.sendContent(F("&nbsp;&nbsp;Dome Azimuth and Altitude control: Present<br/>\r\n"));
+        #else
+          apc.sendContent(F("&nbsp;&nbsp;Dome Azimuth control: Present<br/>\r\n"));
+        #endif
+      #else
+        apc.sendContent(F("&nbsp;&nbsp;Dome: Not Present<br/>\r\n"));
+      #endif
+    #endif
+
+    apc.sendContent(F("<br/>&nbsp;&nbsp;No setup supported.<br/>\r\n"));
+
+    apc.sendContent(F("<br/><br/><a href=\"/setup\">OCS ASCOM ALPACA Setup</a>\r\n"));
+
+    apc.sendContent(F("</body></html>\r\n"));
+    apc.sendContent("");
+  }
 
 #endif
