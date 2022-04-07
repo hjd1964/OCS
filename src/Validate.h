@@ -91,6 +91,10 @@
   #error "Configuration (Config.h): WEATHER, OCS website weather panel display, must OFF or ON."
 #endif
 
+#if WEATHER == ON && !defined(WEATHER_PRESENT)
+  #error "Configuration (Config.h): WEATHER, OCS website weather panel display enabled but not setup."
+#endif
+
 #if WEATHER_CHARTS != OFF && WEATHER_CHARTS != ON
   #error "Configuration (Config.h): WEATHER_CHARTS, OCS website weather graphic charts, must OFF or ON."
 #endif
@@ -172,6 +176,10 @@
   #error "Configuration (Config.h): POWER, OCS website power panel display, must OFF or ON."
 #endif
 
+#if POWER == ON && !defined(POWER_PRESENT)
+  #error "Configuration (Config.h): POWER, OCS website power panel display enabled but not setup."
+#endif
+
 #if (POWER_DEVICE1_RELAY < 1 || POWER_DEVICE1_RELAY > 14) && POWER_DEVICE1_RELAY != OFF
   #error "Configuration (Config.h): POWER_DEVICE1_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
@@ -225,6 +233,10 @@
   #error "Configuration (Config.h): THERMOSTAT, OCS website thermostat panel display, must OFF or ON."
 #endif
 
+#if THERMOSTAT == ON && !defined(THERMOSTAT_PRESENT)
+  #error "Configuration (Config.h): THERMOSTAT, OCS website thermostat display enabled but not setup."
+#endif
+
 #if (HEAT_RELAY < 1 || HEAT_RELAY > 14) && HEAT_RELAY != OFF
   #error "Configuration (Config.h): HEAT_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
 #endif
@@ -240,6 +252,10 @@
 // Lighting
 #if LIGHT != OFF && LIGHT != ON
   #error "Configuration (Config.h): LIGHT, OCS website lighting panel display, must OFF or ON."
+#endif
+
+#if LIGHT == ON && !defined(LIGHT_PRESENT)
+  #error "Configuration (Config.h): LIGHT, OCS website light display enabled but not setup."
 #endif
 
 #if (LIGHT_WRW_RELAY < 1 || LIGHT_WRW_RELAY > 14) && LIGHT_WRW_RELAY != OFF
@@ -269,6 +285,10 @@
 // ROOF
 #if ROOF != OFF && ROOF != ON
   #error "Configuration (Config.h): ROOF, OCS website roll off roof control display, must OFF or ON."
+#endif
+
+#if ROOF == ON && !defined(ROOF_PRESENT)
+  #error "Configuration (Config.h): ROOF, OCS website roof/shutter control display enabled but not setup."
 #endif
 
 #if ROOF_USER_SAFETY_OVERRIDE != OFF && ROOF_USER_SAFETY_OVERRIDE != ON
@@ -355,14 +375,99 @@
   #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
-#if ROOF_TIME_AVG<30 || ROOF_TIME_AVG>1200
+#if ROOF_TIME_AVG < 30 || ROOF_TIME_AVG > 1200
   #error "Configuration (Config.h): ROOF_TIME_AVG must be a number between 30 and 1200 (seconds.)"
 #endif
 
-#if ROOF_TIME_TOL<0 || ROOF_TIME_TOL>120
+#if ROOF_TIME_TOL < 0 || ROOF_TIME_TOL > 120
   #error "Configuration (Config.h): ROOF_TIME_TOL must be a number between 0 and 120 (seconds.)"
 #endif
 
-#if ROOF_TIME_LIMIT_SENSE_FAIL<1 || ROOF_TIME_LIMIT_SENSE_FAIL>60
+#if ROOF_TIME_LIMIT_SENSE_FAIL < 1 || ROOF_TIME_LIMIT_SENSE_FAIL > 60
   #error "Configuration (Config.h): ROOF_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
+#endif
+
+#if DOME == ON && AXIS1_DRIVER_MODEL == OFF
+  #error "Configuration (Config.h): DOME ON requires an AXIS1_DRIVER_MODEL setting."
+#endif
+
+#if DOME == ON && !defined(DOME_PRESENT)
+  #error "Configuration (Config.h): DOME, OCS website dome control display enabled but not setup."
+#endif
+
+#if DOME_SHUTTER_LOCK != OFF && DOME_SHUTTER_LOCK != ON
+  #error "Configuration (Config.h): DOME_SHUTTER_LOCK must be either ON or OFF."
+#endif
+
+#if AXIS1_DRIVER_STATUS != OFF && AXIS1_DRIVER_STATUS != ON && AXIS1_DRIVER_STATUS != HIGH && AXIS1_DRIVER_STATUS != LOW
+  #error "Configuration (Config.h): AXIS1_DRIVER_STATUS must be either ON, OFF, HIGH or LOW."
+#endif
+
+#if AXIS1_REVERSE != OFF && AXIS1_REVERSE != ON
+  #error "Configuration (Config.h): AXIS1_REVERSE must be either ON or OFF."
+#endif
+
+#if AXIS1_SERVO_ENCODER != ENC_AB && AXIS1_SERVO_ENCODER != ENC_CW_CCW && \
+    AXIS1_SERVO_ENCODER != ENC_PULSE_DIR && AXIS1_SERVO_ENCODER != ENC_PULSE_ONLY
+  #error "Configuration (Config.h): AXIS1_SERVO_ENCODER must be either ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR or ENC_PULSE_ONLY."
+#endif
+
+#if AXIS1_DRIVER_MODEL == OFF && AXIS2_DRIVER_MODEL != OFF
+  #error "Configuration (Config.h): Enabling AXIS2_DRIVER_MODEL requires an AXIS1_DRIVER_MODEL setting."
+#endif
+
+#if AXIS1_POWER_DOWN != OFF && AXIS1_POWER_DOWN != ON
+  #error "Configuration (Config.h): AXIS1_POWER_DOWN must be either ON or OFF."
+#endif
+
+#if AXIS1_WRAP != OFF && AXIS1_WRAP != ON
+  #error "Configuration (Config.h): AXIS1_WRAP must be either ON or OFF."
+#endif
+
+#if AXIS1_LIMIT_MIN < -360 || AXIS1_LIMIT_MIN > 0
+  #error "Configuration (Config.h): AXIS1_LIMIT_MIN must be between -360 and 0."
+#endif
+
+#if AXIS1_LIMIT_MAX < 0 || AXIS1_LIMIT_MAX > 360
+  #error "Configuration (Config.h): AXIS1_LIMIT_MAX must be between 0 and 360."
+#endif
+
+#if AXIS1_SENSE_HOME != OFF && AXIS1_SENSE_HOME != HIGH && AXIS1_SENSE_HOME != LOW
+  #error "Configuration (Config.h): AXIS1_SENSE_HOME must be either OFF, HIGH or LOW."
+#endif
+
+#if AXIS1_SENSE_LIMIT_MIN != OFF && AXIS1_SENSE_LIMIT_MIN != HIGH && AXIS1_SENSE_LIMIT_MIN != LOW
+  #error "Configuration (Config.h): AXIS1_SENSE_LIMIT_MIN must be either OFF, HIGH or LOW."
+#endif
+
+#if AXIS1_SENSE_LIMIT_MAX != OFF && AXIS1_SENSE_LIMIT_MAX != HIGH && AXIS1_SENSE_LIMIT_MAX != LOW
+  #error "Configuration (Config.h): AXIS1_SENSE_LIMIT_MAX must be either OFF, HIGH or LOW."
+#endif
+
+#if AXIS2_POWER_DOWN != OFF && AXIS2_POWER_DOWN != ON
+  #error "Configuration (Config.h): AXIS2_POWER_DOWN must be either ON or OFF."
+#endif
+
+#if AXIS2_LIMIT_MIN < 0 || AXIS2_LIMIT_MIN > 90
+  #error "Configuration (Config.h): AXIS2_LIMIT_MIN must be between 0 and 90."
+#endif
+
+#if AXIS2_LIMIT_MAX < 0 || AXIS2_LIMIT_MAX > 90
+  #error "Configuration (Config.h): AXIS2_LIMIT_MAX must be between 0 and 90."
+#endif
+
+#if AXIS2_LIMIT_MIN >= AXIS2_LIMIT_MAX 
+  #error "Configuration (Config.h): AXIS2_LIMIT_MIN must be < AXIS2_LIMIT_MAX."
+#endif
+
+#if AXIS2_SENSE_HOME != OFF && AXIS2_SENSE_HOME != HIGH && AXIS2_SENSE_HOME != LOW
+  #error "Configuration (Config.h): AXIS2_SENSE_HOME must be either OFF, HIGH or LOW."
+#endif
+
+#if AXIS2_SENSE_LIMIT_MIN != OFF && AXIS2_SENSE_LIMIT_MIN != HIGH && AXIS2_SENSE_LIMIT_MIN != LOW
+  #error "Configuration (Config.h): AXIS2_SENSE_LIMIT_MIN must be either OFF, HIGH or LOW."
+#endif
+
+#if AXIS2_SENSE_LIMIT_MAX != OFF && AXIS2_SENSE_LIMIT_MAX != HIGH && AXIS2_SENSE_LIMIT_MAX != LOW
+  #error "Configuration (Config.h): AXIS2_SENSE_LIMIT_MAX must be either OFF, HIGH or LOW."
 #endif
