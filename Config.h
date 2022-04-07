@@ -23,16 +23,14 @@
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON, ON_CC.  ON resets Mega2560 after 8 sec. if it hangs for any reason.  Option
-                                          //         ON_CC as above and resets the Mega2560 if the connection check fails.
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol per IPAddress settings in Extended.config.h or use Adjust
-                                          //          DS3234_RTC on default SPI interface (CS=53.) Upload once w/DS3234_INIT to set date/time.
+                                          //         DS3234 on default SPI interface and default CS pin or DS3231 on I2C.
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd
 #define TIME_DISPLAY                  LST //    LST, Display Standard Time, DST Daylight Time, UTC Universal Time.            Adjust
 
 // STATUS PANEL FEATURES -----------------------------------------------------------------------------------------------------------
-// See Misc.ino for user voltage and current conversion functions.
 #define STAT_UNITS                 METRIC // METRIC, For metric units, or IMPERIAL for imperial units.                        Adjust
 
 #define STAT_MAINS_SENSE              OFF //    OFF, n. Where n=1..8 (Sense#) mains power good, OFF (power failure) is UNSAFE Option
