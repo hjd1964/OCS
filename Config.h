@@ -15,7 +15,7 @@
 
 // PINMAP --------------------------------------------------------------------------------------------------------------------------
 #define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4.                            <-Req'd
-                                          //         Other boards/more info. in ~/src/Constants.h
+                                          //         Other boards/more info. in /src/Constants.h
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
 #define ASCOM_ALPACA_SERVER           OFF //    OFF, ON enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet.   Option
