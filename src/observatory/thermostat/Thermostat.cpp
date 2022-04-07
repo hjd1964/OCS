@@ -3,7 +3,7 @@
 
 #include "Thermostat.h"
 
-#if THERMOSTAT == ON
+#ifdef THERMOSTAT_PRESENT
 
 #include "../../lib/tasks/OnTask.h"
 #include "../../libApp/thermostatSensor/ThermostatSensor.h"

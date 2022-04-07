@@ -3,7 +3,7 @@
 
 #include "Weather.h"
 
-#if WEATHER == ON
+#ifdef WEATHER_PRESENT
 
 #include "../../libApp/weatherSensor/WeatherSensor.h"
 
@@ -107,7 +107,7 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
   //         Returns: OK#, HIGH#, or N/A#
   //         
   if (command[1] == 'W' && parameter[0] == 0) {
-    #if WEATHER_WIND_SPD == ON && WEATHER == ON
+    #if WEATHER_WIND_SPD == ON
       if (weatherSensor.windspeed() > WEATHER_WIND_SPD_THRESHOLD) strcpy(reply, "HIGH"); else 
       if (isnan(weatherSensor.windspeed())) strcpy(reply, "Invalid"); else strcpy(reply, "OK");
     #else

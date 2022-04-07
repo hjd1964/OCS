@@ -100,7 +100,7 @@ void Relay::pwm() {
     }
   }
 
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     #if ROOF_POWER_PWM_FREQUENCY != OFF && ROOF_POWER_PWM_POWER != OFF
       if (roof.isMoving()) {
         count++;

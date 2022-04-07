@@ -27,10 +27,9 @@ bool Safety::isSafe() {
   #if STAT_MAINS_SENSE != OFF
     // check for mains power out
     if (!sense.isOn(STAT_MAINS_SENSE)) safe = false;
-    safetyDeviceCount++;
   #endif
 
-  #if WEATHER == ON
+  #ifdef WEATHER_PRESENT
     float f;
     #if WEATHER_RAIN == ON
       // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
@@ -58,7 +57,7 @@ bool Safety::isSafe() {
 }
 
 void Safety::poll() {
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     // auto close the roof at 8am if requested
     if (roofAutoClose && validTime()) {
       if (hour() == 8 && !roofAutoCloseInitiated) {

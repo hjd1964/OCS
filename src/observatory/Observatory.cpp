@@ -110,185 +110,203 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   if (SENSE7_PIN != OFF) sense.add(SENSE7_PIN, SENSE7_INIT_STATE, SENSE7_ON_STATE, true);
   if (SENSE8_PIN != OFF) sense.add(SENSE8_PIN, SENSE8_INIT_STATE, SENSE8_ON_STATE, true);
 
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     roof.init();
   #endif
 
-  safety.init();
+  #ifdef WEATHER_PRESENT
+    safety.init();
+  #endif
 
-  #if THERMOSTAT == ON
+  #ifdef THERMOSTAT_PRESENT
     thermostat.init();
   #endif
 
-  #if WEATHER == ON
+  #ifdef WEATHER_PRESENT
     weather.init();
   #endif
 
-  #if AXIS1_DRIVER_MODEL != OFF
+  #ifdef DOME_PRESENT
     dome.init();
   #endif
 
   WDT_ENABLE;
 
+  #if OPERATIONAL_MODE == WIFI
+    wifiStart();
+  #endif
+
   // ----------------------------------------------------------------------
-  // initialize ethernet
+  // initialize ethernet / wifi
 
   // Note: Ethernet webserver has the following defaults
   // WEB_HANDLER_COUNT_MAX  16 (changed to 200 for ASCOM Alpaca)
   // PARAMETER_COUNT_MAX    8
 
-  #if OPERATIONAL_MODE == WIFI
-    wifiStart();
-  #endif
-
-  www.on("index.htm", index);
-  #if FAV_ICON == ON
-    www.on("favicon.ico");
-  #endif
-  #if WEATHER == ON && WEATHER_CHARTS == ON
-    www.on("weatherpage.htm", weatherPage);
-    #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-      www.on("skypage.htm", skyPage);
+  #if WWW_SERVER == ON
+    www.on("index.htm", index);
+    #if FAV_ICON == ON
+      www.on("favicon.ico");
     #endif
-  #endif
-  www.on("setvar", indexAjax);
-  www.on("relay", relaysAjax);
-  www.on("miscstatus", statusContents);
-  #if WEATHER == ON
-    www.on("weather", weatherContents);
-  #endif
-  #if THERMOSTAT == ON
-    www.on("thermostatt", thermostatTemperatureContents);
-    #if THERMOSTAT_HUMIDITY == ON
-      www.on("thermostath", thermostatHumidityContents);
+    #if WEATHER == ON && WEATHER_CHARTS == ON
+      www.on("weatherpage.htm", weatherPage);
+      #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
+        www.on("skypage.htm", skyPage);
+      #endif
     #endif
+    www.on("setvar", indexAjax);
+    www.on("relay", relaysAjax);
+    #if STAT == ON
+      www.on("miscstatus", statusContents);
+    #endif
+    #if WEATHER == ON
+      www.on("weather", weatherContents);
+    #endif
+    #if THERMOSTAT == ON
+      www.on("thermostatt", thermostatTemperatureContents);
+      #if THERMOSTAT_HUMIDITY == ON
+        www.on("thermostath", thermostatHumidityContents);
+      #endif
+    #endif
+    #if ROOF == ON
+      www.on("roofstatus", roofContents);
+    #endif
+    #if DOME == ON
+      www.on("domestatus", domeContents);
+    #endif
+    #if WEATHER_CHARTS == ON
+      www.on("Chart.js", NULL);
+    #endif
+    www.on("/", index);
+    www.onNotFound(handleNotFound);
+    www.begin(80, 50, false);
   #endif
-  #if ROOF == ON
-    www.on("roofstatus", roofContents);
-  #endif
-  #if DOME == ON
-    www.on("domestatus", domeContents);
-  #endif
-  #if WEATHER_CHARTS == ON
-    www.on("Chart.js", NULL);
-  #endif
-  www.on("/", index);
-  www.onNotFound(handleNotFound);
-  www.begin(80, 50, false);
 
   #if ASCOM_ALPACA_SERVER == ON
     apc.on("setup", alpacaSetup);
-    apc.on("setup/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSafetyMonitor);
-    apc.on("setup/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupObservingConditions);
-    apc.on("setup/v1/switch/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSwitch);
+    #if defined(WEATHER_PRESENT)
+      apc.on("setup/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSafetyMonitor);
+      apc.on("setup/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupObservingConditions);
+    #endif
+    #if defined(LIGHT_PRESENT) || defined(POWER_PRESENT)
+      apc.on("setup/v1/switch/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupSwitch);
+    #endif
+    #if defined(ROOF_PRESENT) || defined(DOME_PRESENT) 
       apc.on("setup/v1/dome/" ALPACA_DEVICE_NUMBER "/setup", alpacaSetupDome);
+    #endif
 
     apc.on("management/apiversions", alpacaManagementApiVersions);
     apc.on("management/v1/description", alpacaManagementDescription);
     apc.on("management/v1/configureddevices", alpacaManagementConfiguredDevices);
 
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/connected", alpacaSafetyMonitorConnected);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
-    apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/issafe", alpacaSafetyMonitorIsSafe);
+    #if defined(WEATHER_PRESENT)
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/connected", alpacaSafetyMonitorConnected);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+      apc.on("api/v1/safetymonitor/" ALPACA_DEVICE_NUMBER "/issafe", alpacaSafetyMonitorIsSafe);
 
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/connected", alpacaObservingConditionsConnected);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/averageperiod", alpacaObservingConditionsAveragePeriod);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/cloudcover", alpacaObservingConditionsCloudCover);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/dewpoint", alpacaObservingConditionsDewPoint);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/humidity", alpacaObservingConditionsHumidity);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/pressure", alpacaObservingConditionsPressure);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/rainrate", alpacaObservingConditionsRainRate);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skybrightness", alpacaObservingConditionsSkyBrightness);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skyquality", alpacaObservingConditionsSkyQuality);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skytemperature", alpacaObservingConditionsSkyTemperature);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/starfwhm", alpacaObservingConditionsStarFwhm);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/temperature", alpacaObservingConditionsTemperature);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/winddirection", alpacaObservingConditionsWindDirection);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windgust", alpacaObservingConditionsWindGust);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windspeed", alpacaObservingConditionsWindSpeed);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/refresh", alpacaObservingConditionsRefresh);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/sensordescription", alpacaObservingConditionsSensorDescription);
-    apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/timesincelastupdate", alpacaObservingConditionsTimeSinceLastUpdate);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/connected", alpacaObservingConditionsConnected);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/averageperiod", alpacaObservingConditionsAveragePeriod);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/cloudcover", alpacaObservingConditionsCloudCover);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/dewpoint", alpacaObservingConditionsDewPoint);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/humidity", alpacaObservingConditionsHumidity);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/pressure", alpacaObservingConditionsPressure);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/rainrate", alpacaObservingConditionsRainRate);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skybrightness", alpacaObservingConditionsSkyBrightness);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skyquality", alpacaObservingConditionsSkyQuality);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/skytemperature", alpacaObservingConditionsSkyTemperature);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/starfwhm", alpacaObservingConditionsStarFwhm);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/temperature", alpacaObservingConditionsTemperature);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/winddirection", alpacaObservingConditionsWindDirection);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windgust", alpacaObservingConditionsWindGust);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/windspeed", alpacaObservingConditionsWindSpeed);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/refresh", alpacaObservingConditionsRefresh);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/sensordescription", alpacaObservingConditionsSensorDescription);
+      apc.on("api/v1/observingconditions/" ALPACA_DEVICE_NUMBER "/timesincelastupdate", alpacaObservingConditionsTimeSinceLastUpdate);
+    #endif
 
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/connected", alpacaSwitchConnected);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitch", alpacaSwitchMaxSwitch);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/canwrite", alpacaSwitchCanWrite);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitch", alpacaSwitchGetSwitch);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchdescription", alpacaSwitchGetSwitchDescription);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchname", alpacaSwitchGetSwitchName);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchvalue", alpacaSwitchGetSwitchValue);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitchvalue", alpacaSwitchMaxSwitchValue);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/minswitchvalue", alpacaSwitchMinSwitchValue);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitch", alpacaSwitchSetSwitch);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchname", alpacaSwitchSetSwitchName);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchvalue", alpacaSwitchSetSwitchValue);
-    apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/switchstep", alpacaSwitchSwitchStep);
+    #if defined(LIGHT_PRESENT) || defined(POWER_PRESENT)
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/connected", alpacaSwitchConnected);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitch", alpacaSwitchMaxSwitch);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/canwrite", alpacaSwitchCanWrite);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitch", alpacaSwitchGetSwitch);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchdescription", alpacaSwitchGetSwitchDescription);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchname", alpacaSwitchGetSwitchName);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/getswitchvalue", alpacaSwitchGetSwitchValue);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/maxswitchvalue", alpacaSwitchMaxSwitchValue);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/minswitchvalue", alpacaSwitchMinSwitchValue);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitch", alpacaSwitchSetSwitch);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchname", alpacaSwitchSetSwitchName);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/setswitchvalue", alpacaSwitchSetSwitchValue);
+      apc.on("api/v1/switch/" ALPACA_DEVICE_NUMBER "/switchstep", alpacaSwitchSwitchStep);
+    #endif
 
-    // ASCOM Dome methods
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/connected", alpacaDomeConnected);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/altitude", alpacaDomeAltitude);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/athome", alpacaDomeAtHome);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/atpark", alpacaDomeAtPark);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/azimuth", alpacaDomeAzimuth);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canfindhome", alpacaDomeCanFindHome);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canpark", alpacaDomeCanPark);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetaltitude", alpacaDomeCanSetAltitude);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetazimuth", alpacaDomeCanSetAzimuth);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetpark", alpacaDomeCanSetPark);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetshutter", alpacaDomeCanSetShutter);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canslave", alpacaDomeCanSlave);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansyncazimuth", alpacaDomeCanSyncAzimuth);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/shutterstatus", alpacaDomeShutterStatus);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slaved", alpacaDomeSlaved);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewing", alpacaDomeSlewing);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/abortslew", alpacaDomeAbortSlew);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/closeshutter", alpacaDomeCloseShutter);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/findhome", alpacaDomeFindHome);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/openshutter", alpacaDomeOpenShutter);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/park", alpacaDomePark);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/setpark", alpacaDomeSetPark);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoaltitude", alpacaDomeSlewToAltitude);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoazimuth", alpacaDomeSlewToAzimuth);
-    apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/synctoazimuth", alpacaDomeSyncToAzimuth);
+    #if defined(ROOF_PRESENT) || defined(DOME_PRESENT) 
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/action", alpacaDefaultAction);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandblind", alpacaMethodNotImplemented);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandbool", alpacaMethodNotImplemented);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/commandstring", alpacaMethodNotImplemented);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/connected", alpacaDomeConnected);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/description", alpacaDescription);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverinfo", alpacaDriverInfo);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/driverversion", alpacaDriverVersion);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/interfaceversion", alpacaInterfaceVersion);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/name", alpacaName);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/supportedactions", alpacaDefaultSupportedActions);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/altitude", alpacaDomeAltitude);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/athome", alpacaDomeAtHome);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/atpark", alpacaDomeAtPark);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/azimuth", alpacaDomeAzimuth);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canfindhome", alpacaDomeCanFindHome);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canpark", alpacaDomeCanPark);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetaltitude", alpacaDomeCanSetAltitude);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetazimuth", alpacaDomeCanSetAzimuth);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetpark", alpacaDomeCanSetPark);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansetshutter", alpacaDomeCanSetShutter);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/canslave", alpacaDomeCanSlave);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/cansyncazimuth", alpacaDomeCanSyncAzimuth);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/shutterstatus", alpacaDomeShutterStatus);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slaved", alpacaDomeSlaved);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewing", alpacaDomeSlewing);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/abortslew", alpacaDomeAbortSlew);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/closeshutter", alpacaDomeCloseShutter);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/findhome", alpacaDomeFindHome);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/openshutter", alpacaDomeOpenShutter);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/park", alpacaDomePark);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/setpark", alpacaDomeSetPark);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoaltitude", alpacaDomeSlewToAltitude);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/slewtoazimuth", alpacaDomeSlewToAzimuth);
+      apc.on("api/v1/dome/" ALPACA_DEVICE_NUMBER "/synctoazimuth", alpacaDomeSyncToAzimuth);
+    #endif
+
     apc.onNotFound(alpacaNotFoundError);
     apc.begin(ALPACA_PORT, 50, false);
   #endif

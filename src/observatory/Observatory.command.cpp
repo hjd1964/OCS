@@ -19,15 +19,15 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
 
   if (power.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
 
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     if (roof.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
-  #if THERMOSTAT == ON
+  #ifdef THERMOSTAT_PRESENT
     if (thermostat.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
-  #if WEATHER == ON
+  #ifdef WEATHER_PRESENT
     if (weather.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
@@ -97,14 +97,14 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     //  :SW#  Set the watchdog reset flag
     #if WATCHDOG != OFF
       if (command[1] == 'W' && parameter[0] == 0) {
-        #if ROOF == ON
+        #ifdef ROOF_PRESENT
         if (!roof.isMoving())
         #endif
         {
           strcpy(reply,"Rebooting in 8 seconds...");
           while (true) {};
         }
-        #if ROOF == ON
+        #ifdef ROOF_PRESENT
         else *commandError = CE_SLEW_IN_MOTION;
         #endif
       } else

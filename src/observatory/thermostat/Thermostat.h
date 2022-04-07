@@ -4,7 +4,7 @@
 
 #include "../../Common.h"
 
-#if THERMOSTAT == ON
+#ifdef THERMOSTAT_PRESENT
 
 #include "../../libApp/commands/ProcessCmds.h"
 

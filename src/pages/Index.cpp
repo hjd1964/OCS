@@ -59,7 +59,9 @@ void index() {
     strcpy_P(temp, html_pageHeader3); www.sendContent(temp);
   }
 
-  statusTile();
+  #if STAT == ON
+    statusTile();
+  #endif
   #if WEATHER == ON
     weatherTile();
   #endif

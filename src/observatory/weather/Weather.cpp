@@ -2,7 +2,7 @@
 // Weather/Safety monitor and logging
 #include "Weather.h"
 
-#if WEATHER == ON
+#ifdef WEATHER_PRESENT
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 #if WEATHER_CHARTS == ON
@@ -205,7 +205,7 @@ float Weather::getAvgSkyDiffTemp() {
 // gets cloud cover in %
 float Weather::cloudCover() {
   float percent = NAN;
-  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
+  #if WEATHER_CLOUD_CVR == ON
     float delta = getAvgSkyDiffTemp();
     if (isnan(delta) || delta <= -200) percent = NAN; else
     if (delta <= WEATHER_VCLR_THRESHOLD) percent = 10; else
@@ -226,7 +226,7 @@ float Weather::cloudCover() {
 
 // get cloud cover text
 const char * Weather::cloudCoverDescription() {
-  #if WEATHER_CLOUD_CVR == ON && WEATHER == ON
+  #if WEATHER_CLOUD_CVR == ON
     return CloudDescription[getAvgSkyDiffTempIndex()];
   #else
     return "N/A";

@@ -3,7 +3,7 @@
 
 #include "Roof.h"
 
-#if ROOF == ON
+#ifdef ROOF_PRESENT
 
 #include "../../lib/tasks/OnTask.h"
 #include "../../libApp/relay/Relay.h"

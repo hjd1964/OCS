@@ -4,7 +4,7 @@
 
 #include "../../Common.h"
 
-#if ROOF == ON
+#ifdef ROOF_PRESENT
 
 typedef enum RoofError {
   RERR_NONE,

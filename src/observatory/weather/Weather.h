@@ -4,7 +4,7 @@
 
 #include "../../Common.h"
 
-#if WEATHER == ON
+#ifdef WEATHER_PRESENT
 
 #include "../../libApp/commands/ProcessCmds.h"
 

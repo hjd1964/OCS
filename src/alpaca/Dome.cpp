@@ -5,9 +5,7 @@
 
 #include "../Common.h"
 
-#if ASCOM_ALPACA_SERVER == ON
-
-#if DOME == ON || ROOF == ON 
+#if ASCOM_ALPACA_SERVER == ON && (defined(ROOF_PRESENT) || defined(DOME_PRESENT))
 
 #include "Alpaca.h"
 #include "../observatory/roof/Roof.h"
@@ -43,7 +41,7 @@ void alpacaDomeConnected() {
 
 void alpacaDomeAltitude() {
   alpacaJsonStart();
-  #if DOME == ON && AXIS2_DRIVER_MODEL != OFF
+  #if defined(DOME_PRESENT) && AXIS2_DRIVER_MODEL != OFF
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     alpacaJsonDoc["Value"] = dome.getAltitude();
     alpacaJsonFinish(NoException, "");
@@ -54,7 +52,7 @@ void alpacaDomeAltitude() {
 
 void alpacaDomeAtHome() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     alpacaJsonDoc["Value"] = (dome.getAzimuth() == 0.0F && dome.getAltitude() == 0.0F);
     alpacaJsonFinish(NoException, "");
@@ -65,7 +63,7 @@ void alpacaDomeAtHome() {
 
 void alpacaDomeAtPark() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     alpacaJsonDoc["Value"] = dome.isParked();
     alpacaJsonFinish(NoException, "");
@@ -76,7 +74,7 @@ void alpacaDomeAtPark() {
 
 void alpacaDomeAzimuth() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     alpacaJsonDoc["Value"] = dome.getAzimuth();
     alpacaJsonFinish(NoException, "");
@@ -87,7 +85,7 @@ void alpacaDomeAzimuth() {
 
 void alpacaDomeCanFindHome() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -97,7 +95,7 @@ void alpacaDomeCanFindHome() {
 
 void alpacaDomeCanPark() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -107,7 +105,7 @@ void alpacaDomeCanPark() {
 
 void alpacaDomeCanSetAltitude() {
   alpacaJsonStart();
-  #if DOME == ON && AXIS2_DRIVER_MODEL != OFF
+  #if defined(DOME_PRESENT) && AXIS2_DRIVER_MODEL != OFF
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -117,7 +115,7 @@ void alpacaDomeCanSetAltitude() {
 
 void alpacaDomeCanSetAzimuth() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -127,7 +125,7 @@ void alpacaDomeCanSetAzimuth() {
 
 void alpacaDomeCanSetPark() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -137,7 +135,7 @@ void alpacaDomeCanSetPark() {
 
 void alpacaDomeCanSetShutter() {
   alpacaJsonStart();
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     alpacaJsonDoc["Value"] = true;
   #else
     alpacaJsonDoc["Value"] = false;
@@ -147,7 +145,7 @@ void alpacaDomeCanSetShutter() {
 
 void alpacaDomeCanSlave() {
   alpacaJsonStart();
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     alpacaJsonDoc["Value"] = false;
   #endif
   alpacaJsonFinish(NoException, "");
@@ -155,7 +153,7 @@ void alpacaDomeCanSlave() {
 
 void alpacaDomeCanSyncAzimuth() {
   alpacaJsonStart();
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     alpacaJsonDoc["Value"] = true;
   #endif
   alpacaJsonFinish(NoException, "");
@@ -163,7 +161,7 @@ void alpacaDomeCanSyncAzimuth() {
 
 void alpacaDomeShutterStatus() {
   alpacaJsonStart();
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
     int status = SHUTTER_STATUS_ERROR;
     if (roof.isOpening()) status = SHUTTER_STATUS_OPENING; else
@@ -193,10 +191,10 @@ void alpacaDomeSlewing() {
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
   bool domeSlewing = false;
   bool roofMoving = false;
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     domeSlewing = dome.isSlewing();
   #endif
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     roofMoving = roof.isMoving();
   #endif
   alpacaJsonDoc["Value"] = domeSlewing || roofMoving;
@@ -206,10 +204,10 @@ void alpacaDomeSlewing() {
 void alpacaDomeAbortSlew() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     dome.stop();
   #endif
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     roof.stop();
   #endif
   alpacaJsonFinish(NoException, "");
@@ -218,7 +216,7 @@ void alpacaDomeAbortSlew() {
 void alpacaDomeCloseShutter() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     if (!roof.close()) {
       alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
     }
@@ -231,7 +229,7 @@ void alpacaDomeCloseShutter() {
 void alpacaDomeFindHome() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (dome.findHome() != CE_NONE) {
       alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
     }
@@ -244,7 +242,7 @@ void alpacaDomeFindHome() {
 void alpacaDomeOpenShutter() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if ROOF == ON
+  #ifdef ROOF_PRESENT
     if (!roof.open()) {
       alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
     }
@@ -257,7 +255,7 @@ void alpacaDomeOpenShutter() {
 void alpacaDomePark() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (dome.park() != CE_NONE) {
       alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
     }
@@ -270,7 +268,7 @@ void alpacaDomePark() {
 void alpacaDomeSetPark() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     if (dome.setpark() != CE_NONE) {
       alpacaJsonFinish(InvalidOperationException, "Invalid Operation"); return;
     }
@@ -282,7 +280,7 @@ void alpacaDomeSetPark() {
 
 void alpacaDomeSlewToAltitude() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     String v = apc.argLowerCase("altitude");
     if (!v.equals(EmptyStr)) {
       float altitude = atof(v.c_str());
@@ -304,7 +302,7 @@ void alpacaDomeSlewToAltitude() {
 
 void alpacaDomeSlewToAzimuth() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     String v = apc.argLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
@@ -327,7 +325,7 @@ void alpacaDomeSlewToAzimuth() {
 
 void alpacaDomeSyncToAzimuth() {
   alpacaJsonStart();
-  #if DOME == ON
+  #ifdef DOME_PRESENT
     String v = apc.argLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
@@ -348,7 +346,5 @@ void alpacaDomeSyncToAzimuth() {
     alpacaJsonFinish(NotImplementedException, "Not implemented"); return;
   #endif
 }
-
-#endif
 
 #endif

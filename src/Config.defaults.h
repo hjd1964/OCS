@@ -223,6 +223,12 @@
 
 // -----------------------------------------------------------------------------------
 // dome settings
+#ifndef DOME
+#define DOME                           OFF
+#endif
+#ifndef DOME_SHUTTER_LOCK
+#define DOME_SHUTTER_LOCK              OFF
+#endif
 #ifndef AXIS1_DRIVER_MODEL
 #define AXIS1_DRIVER_MODEL             OFF                         // specify a driver to enable
 #endif

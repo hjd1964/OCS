@@ -3,7 +3,7 @@
 
 #include "../Common.h"
 
-#if ASCOM_ALPACA_SERVER == ON
+#if ASCOM_ALPACA_SERVER == ON && defined(WEATHER_PRESENT)
 
 #include <ArduinoJson.h>
 #include "Alpaca.h"

@@ -3,7 +3,7 @@
 
 #include "../Common.h"
 
-#if ASCOM_ALPACA_SERVER == ON
+#if ASCOM_ALPACA_SERVER == ON && (defined(LIGHT_PRESENT) || defined(POWER_PRESENT))
 
 #include <ArduinoJson.h>
 #include "Alpaca.h"

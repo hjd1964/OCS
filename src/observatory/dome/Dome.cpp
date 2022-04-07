@@ -1,7 +1,7 @@
 // Dome control
 #include "Dome.h"
 
-#if AXIS1_DRIVER_MODEL != OFF
+#ifdef DOME_PRESENT
 
 #include "../../lib/tasks/OnTask.h"
 #include "../../observatory/Observatory.h"
@@ -90,7 +90,7 @@ void Dome::reset() {
 
 // dome goto azimuth
 CommandError Dome::gotoAzimuthTarget() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state >= PS_PARKED) return CE_PARKED;
@@ -111,7 +111,7 @@ CommandError Dome::gotoAzimuthTarget() {
 
 // dome sync azimuth
 CommandError Dome::syncAzimuthTarget() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state >= PS_PARKED) return CE_PARKED;
@@ -127,7 +127,7 @@ CommandError Dome::syncAzimuthTarget() {
 // dome goto altitude
 CommandError Dome::gotoAltitudeTarget() {
   #if AXIS2_DRIVER_MODEL != OFF
-    #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+    #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
       if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
     #endif
     if (settings.park.state >= PS_PARKED) return CE_PARKED;
@@ -151,7 +151,7 @@ CommandError Dome::gotoAltitudeTarget() {
 
 // move to the home position
 CommandError Dome::findHome() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state >= PS_PARKED) return CE_PARKED;
@@ -180,7 +180,7 @@ void Dome::stop() {
 
 // dome park
 CommandError Dome::park() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state == PS_PARKED)      return CE_NONE;
@@ -213,7 +213,7 @@ CommandError Dome::park() {
 
 // dome unpark
 CommandError Dome::unpark() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state == PS_PARKING)     return CE_PARK_FAILED;
@@ -250,7 +250,7 @@ CommandError Dome::unpark() {
 
 // dome set park
 CommandError Dome::setpark() {
-  #if ROOF == ON && DOME_SHUTTER_LOCK == ON
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
   if (settings.park.state == PS_PARKED)      return CE_NONE;

@@ -3,7 +3,7 @@
 
 #include "Thermostat.h"
 
-#if THERMOSTAT == ON
+#ifdef THERMOSTAT_PRESENT
 
 #include "../../libApp/weatherSensor/WeatherSensor.h"
 #include "../../libApp/relay/Relay.h"

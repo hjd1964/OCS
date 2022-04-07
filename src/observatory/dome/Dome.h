@@ -3,7 +3,8 @@
 
 #include "../../Common.h"
 
-#if AXIS1_DRIVER_MODEL != OFF
+#ifdef DOME_PRESENT
+
 #include "../../lib/axis/Axis.h"
 
 enum ParkState: uint8_t {PS_UNPARKED, PS_PARKING, PS_PARKED, PS_PARK_FAILED, PS_UNPARKING};

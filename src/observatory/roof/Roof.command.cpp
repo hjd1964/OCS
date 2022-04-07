@@ -3,7 +3,7 @@
 
 #include "Roof.h"
 
-#if ROOF == ON
+#ifdef ROOF_PRESENT
 
 bool Roof::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
