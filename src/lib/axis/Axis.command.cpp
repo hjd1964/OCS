@@ -181,11 +181,11 @@ bool Axis::validateAxisSettings(int axisNum, AxisSettings a) {
 
   if (unitsStr[0] == 'u') {
     minLimitL = 0;
-    minLimitH = 500;
+    minLimitH = 500000;
     maxLimitL = 0;
-    maxLimitH = 500;
-    stepsLimitL = 5.0;
-    stepsLimitH = 100000.0;
+    maxLimitH = 500000;
+    stepsLimitL = 0.001;
+    stepsLimitH = 1000.0;
   } else {
     minLimitL = -360;
     minLimitH = 360;
