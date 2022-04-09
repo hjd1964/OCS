@@ -353,8 +353,9 @@ CommandError Axis::autoSlewHome(unsigned long timeout) {
       if (unitsRadians) V(radToDeg(slewFreq)); else V(slewFreq);
       V(unitsStr); VF("/s, accel ");
       if (unitsRadians) SERIAL_DEBUG.print(radToDeg(slewMpspfs)*FRACTIONAL_SEC, 3); else SERIAL_DEBUG.print(slewMpspfs*FRACTIONAL_SEC, 3);
-      V(unitsStr); VLF("/s/s");
+      V(unitsStr); VF("/s/s, timeout ");
     #endif
+    VL(timeout);
     homeTimeoutTime = millis() + timeout;
   }
   return CE_NONE;
@@ -479,7 +480,7 @@ void Axis::poll() {
           float f = fabs(slewFreq)/6.0F;
           if (f < 0.0003F) f = 0.0003F;
           setFrequencySlew(f);
-          autoSlewHome(30000);
+          autoSlewHome(SLEW_HOME_REFINE_TIME_LIMIT * 1000);
         } else {
           V(axisPrefix); VLF("slew stopped");
         }

@@ -244,8 +244,8 @@
 #ifndef AXIS1_ENABLE_STATE
 #define AXIS1_ENABLE_STATE             LOW
 #endif
-#ifndef AXIS1_SLEW_RATE_DESIRED
-#define AXIS1_SLEW_RATE_DESIRED        5.0                         // in degrees/sec
+#ifndef AXIS1_SLEW_RATE
+#define AXIS1_SLEW_RATE                5.0                         // in degrees/sec
 #endif
 #ifndef AXIS1_ACCELERATION_TIME
 #define AXIS1_ACCELERATION_TIME        5                           // in seconds, to selected rate
@@ -254,7 +254,7 @@
 #define AXIS1_RAPID_STOP_TIME          3                           // in seconds, to stop
 #endif
 #ifndef AXIS1_BACKLASH_RATE
-#define AXIS1_BACKLASH_RATE            (AXIS1_SLEW_RATE_DESIRED/4) // in degrees/sec
+#define AXIS1_BACKLASH_RATE            (AXIS1_SLEW_RATE/4)         // in degrees/sec
 #endif
 #ifndef AXIS1_LIMIT_MIN
 #define AXIS1_LIMIT_MIN                -180                        // in degrees
@@ -267,6 +267,9 @@
 #endif
 #ifndef AXIS1_SENSE_HOME_INIT
 #define AXIS1_SENSE_HOME_INIT          INPUT_PULLUP
+#endif
+#ifndef AXIS1_SENSE_HOME_DIST_LIMIT
+#define AXIS1_SENSE_HOME_DIST_LIMIT    180.0                       // max distance in degrees
 #endif
 #ifndef AXIS1_SENSE_LIMIT_MIN
 #define AXIS1_SENSE_LIMIT_MIN          OFF
@@ -374,8 +377,8 @@
 #ifndef AXIS2_ENABLE_STATE
 #define AXIS2_ENABLE_STATE             LOW
 #endif
-#ifndef AXIS2_SLEW_RATE_DESIRED
-#define AXIS2_SLEW_RATE_DESIRED        5.0                         // in degrees/sec
+#ifndef AXIS2_SLEW_RATE
+#define AXIS2_SLEW_RATE                5.0                         // in degrees/sec
 #endif
 #ifndef AXIS2_ACCELERATION_TIME
 #define AXIS2_ACCELERATION_TIME        5                           // in seconds, to selected rate
@@ -384,7 +387,7 @@
 #define AXIS2_RAPID_STOP_TIME          3                           // in seconds, to stop
 #endif
 #ifndef AXIS2_BACKLASH_RATE
-#define AXIS2_BACKLASH_RATE            (AXIS2_SLEW_RATE_DESIRED/4) // in degrees/sec
+#define AXIS2_BACKLASH_RATE            (AXIS2_SLEW_RATE/4)         // in degrees/sec
 #endif
 #ifndef AXIS2_LIMIT_MIN
 #define AXIS2_LIMIT_MIN                0                           // in degrees
@@ -397,6 +400,9 @@
 #endif
 #ifndef AXIS2_SENSE_HOME_INIT
 #define AXIS2_SENSE_HOME_INIT          INPUT_PULLUP
+#endif
+#ifndef AXIS2_SENSE_HOME_DIST_LIMIT
+#define AXIS2_SENSE_HOME_DIST_LIMIT    90.0                        // max distance in degrees
 #endif
 #ifndef AXIS2_SENSE_LIMIT_MIN
 #define AXIS2_SENSE_LIMIT_MIN          OFF
