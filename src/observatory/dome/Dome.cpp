@@ -160,12 +160,10 @@ CommandError Dome::findHome() {
   targetAlt = 0.0F;
 
   CommandError e = CE_NONE;
-  unsigned long guideTimeMs;
 
   #if AXIS1_SENSE_HOME == ON
-    guideTimeMs = (degToRad(AXIS1_SENSE_HOME_DIST_LIMIT + SLEW_ACCELERATION_DIST/2.0F)/AXIS1_SLEW_RATE)*1000.0F;
     axis1.setFrequencySlew(goTo.rate);
-    axis1.autoSlewHome(guideTimeMs);
+    axis1.autoSlewHome();
   #else
     e = gotoAzimuthTarget();
   #endif
@@ -173,9 +171,8 @@ CommandError Dome::findHome() {
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       #if AXIS2_SENSE_HOME == ON
-        guideTimeMs = (degToRad(AXIS2_SENSE_HOME_DIST_LIMIT + SLEW_ACCELERATION_DIST/2.0F)/AXIS2_SLEW)*1000.0F;
         axis2.setFrequencySlew(goTo.rate);
-        axis2.autoSlewHome(guideTimeMs);
+        axis2.autoSlewHome();
       #else
         e = gotoAltitudeTarget();
       #endif
