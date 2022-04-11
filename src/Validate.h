@@ -180,48 +180,48 @@
   #error "Configuration (Config.h): POWER, OCS website power panel display enabled but not setup."
 #endif
 
-#if (POWER_DEVICE1_RELAY < 1 || POWER_DEVICE1_RELAY > 14) && POWER_DEVICE1_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE1_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE1_RELAY < 1 || POWER_DEVICE1_RELAY > 18) && POWER_DEVICE1_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE1_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE1_MEMORY != OFF && POWER_DEVICE1_MEMORY != ON
   #error "Configuration (Config.h): POWER_DEVICE1_MEMORY must OFF or ON."
 #endif
 
-#if (POWER_DEVICE2_RELAY < 1 || POWER_DEVICE2_RELAY > 14) && POWER_DEVICE2_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE2_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE2_RELAY < 1 || POWER_DEVICE2_RELAY > 18) && POWER_DEVICE2_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE2_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE2_MEMORY != OFF && POWER_DEVICE2_MEMORY != ON
   #error "Configuration (Config.h): POWER_DEVICE2_MEMORY must OFF or ON."
 #endif
 
-#if (POWER_DEVICE3_RELAY < 1 || POWER_DEVICE3_RELAY > 14) && POWER_DEVICE3_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE3_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE3_RELAY < 1 || POWER_DEVICE3_RELAY > 18) && POWER_DEVICE3_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE3_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE3_MEMORY != OFF && POWER_DEVICE3_MEMORY != ON
   #error "Configuration (Config.h): POWER_DEVICE3_MEMORY must OFF or ON."
 #endif
 
-#if (POWER_DEVICE4_RELAY < 1 || POWER_DEVICE4_RELAY > 14) && POWER_DEVICE4_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE4_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE4_RELAY < 1 || POWER_DEVICE4_RELAY > 18) && POWER_DEVICE4_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE4_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE4_MEMORY != OFF && POWER_DEVICE4_MEMORY != ON
   #error "Configuration (Config.h): POWER_DEVICE4_MEMORY must OFF or ON."
 #endif
 
-#if (POWER_DEVICE5_RELAY < 1 || POWER_DEVICE5_RELAY > 14) && POWER_DEVICE5_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE5_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE5_RELAY < 1 || POWER_DEVICE5_RELAY > 18) && POWER_DEVICE5_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE5_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE5_MEMORY != OFF && POWER_DEVICE5_MEMORY != ON
   #error "Configuration (Config.h): POWER_DEVICE5_MEMORY must OFF or ON."
 #endif
 
-#if (POWER_DEVICE6_RELAY < 1 || POWER_DEVICE6_RELAY > 14) && POWER_DEVICE6_RELAY != OFF
-  #error "Configuration (Config.h): POWER_DEVICE6_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (POWER_DEVICE6_RELAY < 1 || POWER_DEVICE6_RELAY > 18) && POWER_DEVICE6_RELAY != OFF
+  #error "Configuration (Config.h): POWER_DEVICE6_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if POWER_DEVICE6_MEMORY != OFF && POWER_DEVICE6_MEMORY != ON
@@ -237,12 +237,12 @@
   #error "Configuration (Config.h): THERMOSTAT, OCS website thermostat display enabled but not setup."
 #endif
 
-#if (HEAT_RELAY < 1 || HEAT_RELAY > 14) && HEAT_RELAY != OFF
-  #error "Configuration (Config.h): HEAT_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (HEAT_RELAY < 1 || HEAT_RELAY > 18) && HEAT_RELAY != OFF
+  #error "Configuration (Config.h): HEAT_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (COOL_RELAY < 1 || COOL_RELAY > 14) && COOL_RELAY != OFF
-  #error "Configuration (Config.h): COOL_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (COOL_RELAY < 1 || COOL_RELAY > 18) && COOL_RELAY != OFF
+  #error "Configuration (Config.h): COOL_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if THERMOSTAT_HUMIDITY != OFF && THERMOSTAT_HUMIDITY != ON
@@ -258,24 +258,24 @@
   #error "Configuration (Config.h): LIGHT, OCS website light display enabled but not setup."
 #endif
 
-#if (LIGHT_WRW_RELAY < 1 || LIGHT_WRW_RELAY > 14) && LIGHT_WRW_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_WRW_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (LIGHT_WRW_RELAY < 1 || LIGHT_WRW_RELAY > 18) && LIGHT_WRW_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_WRW_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (LIGHT_WRR_RELAY < 1 || LIGHT_WRR_RELAY > 14) && LIGHT_WRR_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_WRR_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (LIGHT_WRR_RELAY < 1 || LIGHT_WRR_RELAY > 18) && LIGHT_WRR_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_WRR_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (LIGHT_ORW_RELAY < 1 || LIGHT_ORW_RELAY > 14) && LIGHT_ORW_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_ORW_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (LIGHT_ORW_RELAY < 1 || LIGHT_ORW_RELAY > 18) && LIGHT_ORW_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_ORW_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (LIGHT_ORR_RELAY < 1 || LIGHT_ORR_RELAY > 14) && LIGHT_ORR_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_ORR_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (LIGHT_ORR_RELAY < 1 || LIGHT_ORR_RELAY > 18) && LIGHT_ORR_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_ORR_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (LIGHT_OUTSIDE_RELAY < 1 || LIGHT_OUTSIDE_RELAY > 14) && LIGHT_OUTSIDE_RELAY != OFF
-  #error "Configuration (Config.h): LIGHT_OUTSIDE_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (LIGHT_OUTSIDE_RELAY < 1 || LIGHT_OUTSIDE_RELAY > 18) && LIGHT_OUTSIDE_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_OUTSIDE_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if (LIGHT_SW_SENSE < 1 || LIGHT_SW_SENSE > 8) && LIGHT_SW_SENSE != OFF
@@ -307,12 +307,12 @@
   #error "Configuration (Config.h): ROOF_AUTOCLOSE_SAFETY, OCS website ROOF automatic close safety, must OFF or ON."
 #endif
 
-#if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 14) && ROOF_MOTOR_OPEN_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 18) && ROOF_MOTOR_OPEN_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (ROOF_MOTOR_CLOSE_RELAY < 1 || ROOF_MOTOR_CLOSE_RELAY > 14) && ROOF_MOTOR_CLOSE_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (ROOF_MOTOR_CLOSE_RELAY < 1 || ROOF_MOTOR_CLOSE_RELAY > 18) && ROOF_MOTOR_CLOSE_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_MOTOR_CLOSE_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_OPEN_RELAY == ROOF_MOTOR_CLOSE_RELAY
@@ -329,8 +329,8 @@
   #error "Configuration (Config.h): Roof operation requires both ROOF_MOTOR_OPEN_RELAY and ROOF_MOTOR_CLOSE_RELAY (even if both are on the same RELAY.)"
 #endif
 
-#if (ROOF_POWER_RELAY < 1 || ROOF_POWER_RELAY > 14) && ROOF_POWER_RELAY != OFF
-  #error "Configuration (Config.h): ROOF_POWER_RELAY must OFF or a number between 1 and 14 (RELAY#.)"
+#if (ROOF_POWER_RELAY < 1 || ROOF_POWER_RELAY > 18) && ROOF_POWER_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_POWER_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if (ROOF_POWER_PWM_FREQUENCY<1 || ROOF_POWER_PWM_FREQUENCY>100) && ROOF_POWER_PWM_FREQUENCY != OFF

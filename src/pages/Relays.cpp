@@ -6,7 +6,7 @@
 #include "../lib/nv/NV.h"
 
 void relaysAjax() {
-  for (int i = 1; i <= 14; i++) {
+  for (int i = 1; i <= 18; i++) {
     String s = "r" + String(i);
     String a = www.arg(s);
 
