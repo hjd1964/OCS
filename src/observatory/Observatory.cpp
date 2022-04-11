@@ -75,6 +75,17 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     if (!nv.isKeyValid(INIT_NV_KEY)) { DLF("ERR: NV, failed to read back key!"); } else { VLF("MSG: NV, reset complete"); }
   }
 
+  // senses are added in order and "forced" so all are present even if
+  // the pin is OFF; this means the sense handle is the sense number
+  if (SENSE1_PIN != OFF) sense.add(SENSE1_PIN, SENSE1_INIT_STATE, SENSE1_ON_STATE, true);
+  if (SENSE2_PIN != OFF) sense.add(SENSE2_PIN, SENSE2_INIT_STATE, SENSE2_ON_STATE, true);
+  if (SENSE3_PIN != OFF) sense.add(SENSE3_PIN, SENSE3_INIT_STATE, SENSE3_ON_STATE, true);
+  if (SENSE4_PIN != OFF) sense.add(SENSE4_PIN, SENSE4_INIT_STATE, SENSE4_ON_STATE, true);
+  if (SENSE5_PIN != OFF) sense.add(SENSE5_PIN, SENSE5_INIT_STATE, SENSE5_ON_STATE, true);
+  if (SENSE6_PIN != OFF) sense.add(SENSE6_PIN, SENSE6_INIT_STATE, SENSE6_ON_STATE, true);
+  if (SENSE7_PIN != OFF) sense.add(SENSE7_PIN, SENSE7_INIT_STATE, SENSE7_ON_STATE, true);
+  if (SENSE8_PIN != OFF) sense.add(SENSE8_PIN, SENSE8_INIT_STATE, SENSE8_ON_STATE, true);
+
   relay.init();
 
   // Restore relay state
@@ -96,17 +107,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
     if (nv.readC(NV_POWER_DEVICE6)) relay.on(POWER_DEVICE6_RELAY);
   #endif
-
-  // senses are added in order and "forced" so all are present even if
-  // the pin is OFF; this means the sense handle is the sense number
-  if (SENSE1_PIN != OFF) sense.add(SENSE1_PIN, SENSE1_INIT_STATE, SENSE1_ON_STATE, true);
-  if (SENSE2_PIN != OFF) sense.add(SENSE2_PIN, SENSE2_INIT_STATE, SENSE2_ON_STATE, true);
-  if (SENSE3_PIN != OFF) sense.add(SENSE3_PIN, SENSE3_INIT_STATE, SENSE3_ON_STATE, true);
-  if (SENSE4_PIN != OFF) sense.add(SENSE4_PIN, SENSE4_INIT_STATE, SENSE4_ON_STATE, true);
-  if (SENSE5_PIN != OFF) sense.add(SENSE5_PIN, SENSE5_INIT_STATE, SENSE5_ON_STATE, true);
-  if (SENSE6_PIN != OFF) sense.add(SENSE6_PIN, SENSE6_INIT_STATE, SENSE6_ON_STATE, true);
-  if (SENSE7_PIN != OFF) sense.add(SENSE7_PIN, SENSE7_INIT_STATE, SENSE7_ON_STATE, true);
-  if (SENSE8_PIN != OFF) sense.add(SENSE8_PIN, SENSE8_INIT_STATE, SENSE8_ON_STATE, true);
 
   #ifdef ROOF_PRESENT
     roof.init();
