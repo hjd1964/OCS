@@ -52,6 +52,9 @@ class Dome {
   public:
     void init();
 
+    // process commands associated with the ROOF
+    bool command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError);
+
     // reset dome at the home position
     void reset();
 
