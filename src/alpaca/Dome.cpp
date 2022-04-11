@@ -54,7 +54,13 @@ void alpacaDomeAtHome() {
   alpacaJsonStart();
   #ifdef DOME_PRESENT
     if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, "Not connected"); return;  }
-    alpacaJsonDoc["Value"] = (dome.getAzimuth() == 0.0F && dome.getAltitude() == 0.0F);
+
+    #if AXIS2_DRIVER_MODEL != OFF
+      alpacaJsonDoc["Value"] = (dome.getAzimuth() == 0.0F && dome.getAltitude() == 0.0F);
+    #else
+      alpacaJsonDoc["Value"] = (dome.getAzimuth() == 0.0F);
+    #endif
+
     alpacaJsonFinish(NoException, "");
   #else
     alpacaJsonFinish(NotImplementedException, "Not implemented"); return; 
