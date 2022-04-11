@@ -11,17 +11,14 @@
 #include "Observatory.h"
 #include "safety/Safety.h"
 #include "power/Power.h"
-#include "roof/Roof.h"
 #include "thermostat/Thermostat.h"
 #include "weather/Weather.h"
+#include "roof/Roof.h"
+#include "dome/Dome.h"
 
 bool Observatory::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
   if (power.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
-
-  #ifdef ROOF_PRESENT
-    if (roof.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
-  #endif
 
   #ifdef THERMOSTAT_PRESENT
     if (thermostat.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
@@ -29,6 +26,14 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
 
   #ifdef WEATHER_PRESENT
     if (weather.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
+  #endif
+
+  #ifdef ROOF_PRESENT
+    if (roof.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
+  #endif
+
+  #ifdef DOME_PRESENT
+    if (dome.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
   #endif
 
   if (command[0] == 'G') {
