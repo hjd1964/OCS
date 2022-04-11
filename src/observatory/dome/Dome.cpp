@@ -145,7 +145,7 @@ CommandError Dome::gotoAltitudeTarget() {
     if (e == CE_NONE) gotoAxis2 = true;
     return e;
   #else
-    return CE_GOTO_FAIL
+    return CE_GOTO_FAIL;
   #endif
 }
 

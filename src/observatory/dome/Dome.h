@@ -55,24 +55,25 @@ class Dome {
     // reset dome at the home position
     void reset();
 
+    // get dome azimuth (0 to 360 degrees)
     inline float getTargetAzimuth() { 
       float z = targetAzm;
       if (z < 0.0F) z += 360.0F;
       return z;
     }
 
+    // get dome altitude (0 to 90 degrees)
     inline float getTargetAltitude() { return targetAlt; }
 
+    // set dome goto target altitude (0 to 90 degrees)
     inline void setTargetAltitude(float alt) {
       if (alt < 0.0F || alt > 90.0F) return;
       targetAlt = alt;
     }
 
-    inline float dist(float z1, float z2) {
-      return abs(z1 - z2);
-    }
+    inline float dist(float z1, float z2) { return abs(z1 - z2); }
 
-    // dome azimuth (0 to 360 degrees)
+    // set dome goto target azimuth (0 to 360 degrees)
     inline void setTargetAzimuth(float azm) {
       float z1 = azm - 360.0F; // -360 to 0
       float z2 = azm;          // 0 to 360
@@ -90,19 +91,21 @@ class Dome {
       } else return;
     }
 
-    // dome azimuth (0 to 360 degrees)
+    // get dome azimuth (0 to 360 degrees)
     inline float getAzimuth() {
       float z = axis1.getInstrumentCoordinate();
       if (z < 0.0F) z += 360.0F;
       return z;
     }
 
-    #if AXIS2_DRIVER_MODEL != OFF
-      // dome altitude (0 to 90 degrees, or NAN if inactive)
-      inline float getAltitude() {
+    // dome altitude (0 to 90 degrees, or NAN if inactive)
+    inline float getAltitude() {
+      #if AXIS2_DRIVER_MODEL != OFF
         return axis2.getInstrumentCoordinate();
-      }
-    #endif
+      #else
+       return NAN;
+      #endif
+    }
 
     // dome goto azimuth
     CommandError gotoAzimuthTarget();
@@ -110,8 +113,10 @@ class Dome {
     CommandError syncAzimuthTarget();
     // dome goto altitude
     CommandError gotoAltitudeTarget();
+
     // move to the home position
     CommandError findHome();
+
     // stop slew
     void stop();
 
