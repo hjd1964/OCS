@@ -47,10 +47,23 @@
 #define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
 #define CHECK_IP_ADDR    {100,24,172,113} //              default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
 
-#define STA_DHCP_ENABLED            false //       false, Ethernet DHCP Enabled.                                              Adjust
-#define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Ethernet IP Address.                                                Adjust
-#define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Ethernet GATEWAY Address.                                           Adjust
-#define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Ethernet SUBNET Mask.                                               Adjust
+// These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
+// NV is wiped, these settings (where applicable) can be changed at runtime however.
+#define AP_ENABLED                  false //       false, Wifi Access Point Enabled.                                          Adjust
+#define AP_SSID                     "OCS" //       "OCS", Wifi Access Point SSID.                                             Adjust
+#define AP_PASSWORD            "password" //  "password", Wifi Access Point password.                                         Adjust
+#define AP_CHANNEL                      7 //           7, Wifi Access Point channel.                                          Adjust
+#define AP_IP_ADDR          {192,168,1,1} // ..,168,1,1}, Wifi Access Point IP Address.                                       Adjust
+#define AP_GW_ADDR          {192,168,1,1} // ..,168,1,1}, Wifi Access Point GATEWAY Address.                                  Adjust
+#define AP_SN_MASK        {255,255,255,0} // ..55,255,0}, Wifi Access Point SUBNET Mask.                                      Adjust
+
+#define STA_ENABLED                  true //        true, Wifi Station Enabled.                                               Adjust
+#define STA_DHCP_ENABLED            false //       false, Wifi Station/Ethernet DHCP Enabled.                                 Adjust
+#define STA_SSID                   "Home" //      "Home", Wifi Station SSID to connnect to.                                   Adjust
+#define STA_PASSWORD           "password" //  "password", Wifi Station mode password.                                         Adjust
+#define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Wifi Station/Ethernet IP Address.                                   Adjust
+#define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Wifi Station/Ethernet GATEWAY Address.                              Adjust
+#define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Wifi Station/Ethernet SUBNET Mask.                                  Adjust
 
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS  OFF // ON reverses the xaxis of weather charts so new data is to the left
