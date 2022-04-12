@@ -99,7 +99,6 @@ CommandError Dome::gotoAzimuthTarget() {
   VLF("MSG: Dome, starting goto");
 
   axis1.enable(true);
-  axis1.setFrequencyBase(0.0F);
   axis1.setTargetCoordinate(targetAzm);
 
   if (axis1.isSlewing()) return CE_NONE;
@@ -136,7 +135,6 @@ CommandError Dome::gotoAltitudeTarget() {
     VLF("MSG: Dome, starting goto");
 
     axis2.enable(true);
-    axis2.setFrequencyBase(0.0F);
     axis2.setTargetCoordinate(targetAlt);
 
     if (axis2.isSlewing()) return CE_NONE;
