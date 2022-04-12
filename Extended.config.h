@@ -40,10 +40,8 @@
 #define CONNECTION_FAIL_WATCHDOG      OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 
 // IP ADDRESS SETTINGS -------------------------------------------------------------------------------------------------------------
-// These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
-// NV is wiped, these settings (where applicable) can be changed at runtime however.
 
-// The unique MAC address for your OCS
+// The unique (Ethernet) MAC address for your OCS
 #define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF}
 
 #define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
