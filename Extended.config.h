@@ -36,14 +36,6 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
-#define OPERATIONAL_MODE   ETHERNET_W5100 // ..5100, Default ETHERNET_W5100 or ETHERNET_W5500.                               <-Req'd
-
-#define RESPONSE_INTERVAL            1000 //   1000, n. Where n=500..10000 (ms.) Default for LAN latency, Internet use 5000.  Option
-
-#define ETHERNET_RESET_PIN            OFF //    OFF, n. Where n is an unused pin, activates feature and allows the OCS to     Option
-                                          //         force a reset of the Ethernet adapter using this pin.  For a W5100 be
-                                          //         sure its reset pin is only connected to the pin specified here!
-
 #define CONNECTION_CHECK_HOURS        OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
 #define CONNECTION_FAIL_WATCHDOG      OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 

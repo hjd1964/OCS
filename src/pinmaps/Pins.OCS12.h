@@ -4,6 +4,12 @@
 
 #if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)
 
+#define OPERATIONAL_MODE       ETHERNET_W5100
+
+// Activates feature and allows the OCS to force a reset of the Ethernet adapter
+// using this pin.  For a W5100 be sure its reset pin is only connected to the pin specified here!
+#define ETHERNET_RESET_PIN     OFF
+
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial0: RX Pin 0, TX Pin 1 (to USB serial adapter)
 // Serial1: RX1 Pin 19, TX1 Pin 17
