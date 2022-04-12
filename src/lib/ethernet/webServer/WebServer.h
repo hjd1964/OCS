@@ -62,7 +62,7 @@
   
   class WebServer {
     public:
-      void begin(long port = 80, long timeToClose = 100, bool autoReset = false);
+      void begin(long port = 80, long timeToClose = 50, bool autoReset = false);
 
       void handleClient();
 
@@ -72,9 +72,17 @@
       #endif
       void onNotFound(webFunction handler);
 
+      // get argument value by identifier
       String arg(String id);
-      String argLowerCase(String id);
-  
+      // get argument value by index
+      String arg(int i);
+      // get argument name by index
+      String argName(int i);
+      // get arguments count
+      int args();                     
+      // check if argument exists
+      bool hasArg(String id);
+
       void setContentLength(long length);
       void setResponseHeader(const char *str);
       void sendHeader(const char* key, const char* val, bool first = false);

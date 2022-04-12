@@ -25,10 +25,10 @@ void alpacaDomeConnected() {
   String exceptionValue = "";
 
   alpacaJsonStart();
-  String connected = apc.argLowerCase("connected");
+  String connected = alpacaArgLowerCase("connected");
   if (!connected.equals(EmptyStr)) {
-    if (connected.toLowerCase().equals("true")) domeConnected++; else
-    if (connected.toLowerCase().equals("false")) domeConnected--; else {
+    if (connected.equals("true")) domeConnected++; else
+    if (connected.equals("false")) domeConnected--; else {
       exceptionCode = InvalidValueException;
       exceptionValue = "Invalid value";
     }
@@ -183,7 +183,7 @@ void alpacaDomeShutterStatus() {
 
 void alpacaDomeSlaved() {
   alpacaJsonStart();
-  String slaved = apc.argLowerCase("slaved");
+  String slaved = alpacaArgLowerCase("slaved");
   if (slaved.equals(EmptyStr)) {
     alpacaJsonDoc["Value"] = false;
     alpacaJsonFinish(NoException, "");
@@ -286,8 +286,8 @@ void alpacaDomeSetPark() {
 
 void alpacaDomeSlewToAltitude() {
   alpacaJsonStart();
-  #ifdef DOME_PRESENT
-    String v = apc.argLowerCase("altitude");
+  #if defined(DOME_PRESENT) && AXIS2_DRIVER_MODEL != OFF
+    String v = alpacaArgLowerCase("altitude");
     if (!v.equals(EmptyStr)) {
       float altitude = atof(v.c_str());
       if (altitude < 0.0F || altitude > 90.0F) {
@@ -309,7 +309,7 @@ void alpacaDomeSlewToAltitude() {
 void alpacaDomeSlewToAzimuth() {
   alpacaJsonStart();
   #ifdef DOME_PRESENT
-    String v = apc.argLowerCase("azimuth");
+    String v = alpacaArgLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
       if (azimuth < 0.0F || azimuth >= 360.0F) {
@@ -332,7 +332,7 @@ void alpacaDomeSlewToAzimuth() {
 void alpacaDomeSyncToAzimuth() {
   alpacaJsonStart();
   #ifdef DOME_PRESENT
-    String v = apc.argLowerCase("azimuth");
+    String v = alpacaArgLowerCase("azimuth");
     if (!v.equals(EmptyStr)) {
       float azimuth = atof(v.c_str());
       if (azimuth < 0.0F || azimuth >= 360.0F) {

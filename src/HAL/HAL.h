@@ -16,7 +16,11 @@
  */
 #pragma once
 
-#if defined(__AVR_ATmega2560__)
+#if defined(ESP32)
+  #define MCU_STR "ESP32"
+  #include "HAL_ESP32.h"
+
+#elif defined(__AVR_ATmega2560__)
   #define MCU_STR "Mega2560"
   #include "HAL_Mega2560.h"
 

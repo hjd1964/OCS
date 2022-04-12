@@ -5,7 +5,14 @@
 #if WEATHER == ON && WEATHER_CHARTS == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-  #include <SD.h>
+  #ifdef ESP32
+    #include <FS.h>
+    #include <SPIFFS.h>
+    #define FS SPIFFS
+  #else
+    #include <SD.h>
+    #define FS SD
+  #endif
 
   #include "htmlHeaders.h"
   #include "htmlScripts.h"
@@ -212,7 +219,7 @@
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    File dataFile = SD.open(fn.c_str(), O_READ);
+    File dataFile = FS.open(fn.c_str(), FILE_READ);
     if (dataFile) {
       for (long i = 0; i < 120; i++) {
         if (((rec + i*hours) - k) >= 2880L) {
@@ -223,7 +230,7 @@
           y -= 2000;
           sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
           fn = "L" + String(temp) + ".TXT";
-          dataFile = SD.open(fn.c_str(), O_READ);
+          dataFile = FS.open(fn.c_str(), FILE_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
@@ -233,7 +240,8 @@
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
-        dataFile.read(ws1, 80); ws1[abs(logColumn) + colWidth] = 0;
+        dataFile.read((unsigned char*)ws1, 80);
+        ws1[abs(logColumn) + colWidth] = 0;
         int j = abs(logColumn);
         while (ws1[j] == ' ' && ws1[j] != 0) j++;
         strcpy(ws2, (char*)&(ws1[j]));
@@ -302,7 +310,7 @@
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    File dataFile = SD.open(fn.c_str(), O_READ);
+    File dataFile = FS.open(fn.c_str(), FILE_READ);
     if (dataFile) {
       for (long i = 0; i < 120; i++) {
         startRecord += hours;
@@ -315,7 +323,7 @@
           y -= 2000;
           sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
           fn = "L" + String(temp) + ".TXT";
-          dataFile = SD.open(fn.c_str(), O_READ);
+          dataFile = FS.open(fn.c_str(), FILE_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
@@ -325,7 +333,8 @@
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
-        dataFile.read(ws1, 80); ws1[abs(logColumn) + colWidth] = 0;
+        dataFile.read((unsigned char*)ws1, 80);
+        ws1[abs(logColumn) + colWidth] = 0;
         int j = abs(logColumn);
         while (ws1[j] == ' ' && ws1[j] != 0) j++;
         strcpy(ws2, (char*)&(ws1[j]));

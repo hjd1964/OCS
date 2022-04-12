@@ -10,6 +10,7 @@
 #if ASCOM_ALPACA_SERVER == ON
 
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/webServer/WebServer.h"
 
 extern WebServer apc;
 extern uint32_t alpacaServerTransactionID;
@@ -43,6 +44,9 @@ extern void alpacaManagementDescription();
 extern void alpacaManagementConfiguredDevices();
 
 // common
+
+// looks up lower case get argument from webserver and returns lower case value string 
+extern String alpacaArgLowerCase(String id);
 extern void alpacaJsonStart();
 extern void alpacaJsonFinish(int errorNumber, String errorMessage);
 extern void alpacaMethodNotImplemented();

@@ -200,7 +200,7 @@
     // isolate the content
     *line = line->substring(0, url_end);
     int url_start = 0;
-    if (line->startsWith('/')) *line = line->substring(1);
+    if (line->startsWith("/")) *line = line->substring(1);
     int url_end2 = line->lastIndexOf('?');
     if (url_end2 > 0) url_end = url_end2;
     String requestedHandler = line->substring(url_start, url_end);
@@ -237,7 +237,8 @@
       if (thisArg != "") {
         if (++parameter_count > PARAMETER_COUNT_MAX) parameter_count = PARAMETER_COUNT_MAX;
         parameters[parameter_count - 1] = thisArg;
-        values[parameter_count - 1] = thisVal.trim();
+        thisVal.trim();
+        values[parameter_count - 1] = thisVal;
       }
       if ((int)line->length() > j1) *line = line->substring(j1); else *line = "";
 
@@ -263,12 +264,13 @@
       int j1 = line->indexOf('&');
       if (j1 == -1) j1 = line->length() + 1;
       String thisArg = line->substring(0, j);
-      if (thisArg.startsWith('?')) thisArg = thisArg.substring(1);
+      if (thisArg.startsWith("?")) thisArg = thisArg.substring(1);
       String thisVal = line->substring(j + 1, j1);
       if (thisArg != "") {
         if (++parameter_count > PARAMETER_COUNT_MAX) parameter_count = PARAMETER_COUNT_MAX;
         parameters[parameter_count - 1] = thisArg;
-        values[parameter_count - 1] = thisVal.trim();
+        thisVal.trim();
+        values[parameter_count - 1] = thisVal;
       }
       if ((int)line->length() > j1) *line = line->substring(j1); else *line = "";
 
@@ -316,18 +318,39 @@
     notFoundHandler = handler;
   }
   
+  // get argument value by identifier
   String WebServer::arg(String id) {
     for (int i = 0; i < parameter_count; i++) {
       if (id == parameters[i]) return values[i];
     }
     return EmptyStr;
   }
+
+  // get argument value by index
+  String WebServer::arg(int i) {
+    if (i >= 0 && i < parameter_count) {
+      return values[i];
+    } else return "";
+  }
   
-  String WebServer::argLowerCase(String id) {
+  // get argument identifier by index
+  String WebServer::argName(int i) {
+    if (i >= 0 && i < parameter_count) {
+      return parameters[i];
+    } else return EmptyStr;
+  }
+  
+  // get arguments count
+  int WebServer::args() {
+    return parameter_count;
+  }
+  
+  // check if argument exists
+  bool WebServer::hasArg(String id) {
     for (int i = 0; i < parameter_count; i++) {
-      if (id == parameters[i].toLowerCase()) return values[i];
+      if (id == parameters[i]) return true;
     }
-    return EmptyStr;
+    return false;
   }
   
   void WebServer::setContentLength(long length) {

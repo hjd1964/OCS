@@ -14,6 +14,21 @@ uint32_t alpacaServerTransactionID = 0;
 
 // common
 
+// looks up lower case get argument from webserver and returns lower case value string 
+String alpacaArgLowerCase(String id) {
+  int j = apc.args();
+  for (int i = 0; i < j; i++) {
+    String name = apc.argName(i);
+    name.toLowerCase();
+    if (id == name) {
+      String value = apc.arg(i);
+      value.toLowerCase();
+      return value;
+    }
+  }
+  return EmptyStr;
+}
+
 // Start for html Json frame
 void alpacaJsonStart() {
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
@@ -24,11 +39,13 @@ void alpacaJsonStart() {
 // End of html Json frame
 void alpacaJsonFinish(int errorNumber, String errorMessage) {
   alpacaJsonDoc["ServerTransactionID"] = alpacaServerTransactionID++;
-  String v = apc.argLowerCase("ClientTransactionID");
+  String v = alpacaArgLowerCase("ClientTransactionID");
   if (!v.equals(EmptyStr)) { alpacaJsonDoc["ClientTransactionID"] = v.toInt(); }
   alpacaJsonDoc["ErrorNumber"] = errorNumber;
   alpacaJsonDoc["ErrorMessage"] = errorMessage;
-  serializeJson(alpacaJsonDoc, apc.client);
+  String result;
+  serializeJson(alpacaJsonDoc, result);
+  apc.sendContent(result);
   apc.sendContent("");
 }
 

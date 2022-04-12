@@ -13,7 +13,9 @@
 // Teensy3.5/3.6/4.1 based:
 #define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ opt eBay 8CH) + 6 DIN + 6 AIN)
 #define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
-#define PINMAP_LAST                 3
+// ESP32 based:
+#define OCSESP1                     4      // OCSESP V1 board (3 SSR + 1 MOSFET + 4 MECH RELAY + 3 DIN + 3 AIN)
+#define PINMAP_LAST                 4
 
 // TIME LOCATION SOURCE devices supported
 #define TLS_FIRST                   1
@@ -51,6 +53,12 @@
 #define STEP_WAVE_FORM_LAST         2
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
+
+// we don't use BT in the OCS
+#define SERIAL_BT_MODE          OFF
+
+// IP modes are directly selected in the OCS pinmaps
+#define SERIAL_IP_MODE          OFF
 
 // use timeLib for internal clock
 #define TLS_TIMELIB

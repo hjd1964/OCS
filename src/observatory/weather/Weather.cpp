@@ -5,12 +5,21 @@
 #ifdef WEATHER_PRESENT
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
+
 #if WEATHER_CHARTS == ON
-  #include <SD.h>
+  #ifdef ESP32
+    #include <FS.h>
+    #include <SPIFFS.h>
+    #define FS SPIFFS
+  #else
+    #include <SD.h>
+    #define FS SD
+  #endif
 #endif
 
 #include "../../lib/tasks/OnTask.h"
 #include "../../lib/ethernet/webServer/WebServer.h"
+#include "../../lib/wifi/webServer/WebServer.h"
 #include "../../libApp/weatherSensor/WeatherSensor.h"
 
 void weatherWrapper() { weather.poll(); }
@@ -88,8 +97,14 @@ void Weather::poll(void) {
 
       File dataFile;
 
-      // only log if the time is set and we have an SD card
-      if (timeStatus() != timeNotSet && www.SDfound) {
+      // check for mass storage
+      bool massStorageFound = true;
+      #ifndef ESP32
+        massStorageFound = www.SDfound;
+      #endif
+
+      // only log if the time is set and we have mass storage
+      if (timeStatus() != timeNotSet && massStorageFound) {
         char temp[512] = "";
 
         time_t t = now();
@@ -102,18 +117,18 @@ void Weather::poll(void) {
           VF("MSG: Weather, log "); VL(fn);
         #endif
 
-        if (!SD.exists(fn.c_str())) {
+        if (!FS.exists(fn.c_str())) {
           #if DEBUG_SD == ON
             VLF("MSG: Weather, log doesn't exist...");
           #endif
-            dataFile = SD.open(fn.c_str(), O_WRITE | O_CREAT);
+          dataFile = FS.open(fn.c_str(), FILE_WRITE);
           dataFile.close();
 
           // fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
           // size=250400/day
           
-          dataFile = SD.open(fn.c_str(), O_WRITE);
+          dataFile = FS.open(fn.c_str(), FILE_WRITE);
           if (dataFile) {
             #if DEBUG_SD == ON
               VLF("MSG: Weather, log create file...");
@@ -126,7 +141,7 @@ void Weather::poll(void) {
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
               //              01234567890123456789012345678901234567890123456789
               //              0         1         2         3         4
-              dataFile.write("                                                                              \r\n");
+              dataFile.print("                                                                              \r\n");
             }
             dataFile.close();
           } else { 
@@ -141,7 +156,7 @@ void Weather::poll(void) {
         #endif
 
         // write to the sdcard file
-        dataFile = SD.open(fn.c_str(), O_READ | O_WRITE);
+        dataFile = FS.open(fn.c_str(), FILE_WRITE);
         if (dataFile) {
 
           #if DEBUG_SD == ON
@@ -150,16 +165,16 @@ void Weather::poll(void) {
 
           dataFile.seek(logRecordLocation(t)*80L);
           sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
-          dataFile.write(temp); dataFile.write(":");                                     //00, 8 (time)
-          dtostrf2(sa,5,1,-99.9,999.9,temp);  dataFile.write(" "); dataFile.write(temp); //07, 6 (short term average ambient temperature)
-          dtostrf2(sad,5,1,-99.9,999.9,temp); dataFile.write(" "); dataFile.write(temp); //13, 6 (short term average dif (sky) temperature)
-          dtostrf2(lad,5,1,-99.9,999.9,temp); dataFile.write(" "); dataFile.write(temp); //19, 6 (long term average dif (sky) temperature)
-          dtostrf2(p,6,1,-999.9,9999.9,temp); dataFile.write(" "); dataFile.write(temp); //25, 7 (pressure)
-          dtostrf2(h,5,1,-99.9,999.9,temp);   dataFile.write(" "); dataFile.write(temp); //32, 6 (humidity)
-          dtostrf2(wa,5,1,-99.9,999.9,temp);  dataFile.write(" "); dataFile.write(temp); //38, 6 (short term average windspeed)
-          dtostrf2(q,5,2,-9.99,99.99,temp);   dataFile.write(" "); dataFile.write(temp); //44, 6 (sky quality)
-          for (int i = 0; i < 29; i++) dataFile.write(" ");                              //  ,29
-          dataFile.write("\r\n");                                                        //  , 2
+          dataFile.print(temp); dataFile.print(":");                                     //00, 8 (time)
+          dtostrf2(sa,5,1,-99.9,999.9,temp);  dataFile.print(" "); dataFile.print(temp); //07, 6 (short term average ambient temperature)
+          dtostrf2(sad,5,1,-99.9,999.9,temp); dataFile.print(" "); dataFile.print(temp); //13, 6 (short term average dif (sky) temperature)
+          dtostrf2(lad,5,1,-99.9,999.9,temp); dataFile.print(" "); dataFile.print(temp); //19, 6 (long term average dif (sky) temperature)
+          dtostrf2(p,6,1,-999.9,9999.9,temp); dataFile.print(" "); dataFile.print(temp); //25, 7 (pressure)
+          dtostrf2(h,5,1,-99.9,999.9,temp);   dataFile.print(" "); dataFile.print(temp); //32, 6 (humidity)
+          dtostrf2(wa,5,1,-99.9,999.9,temp);  dataFile.print(" "); dataFile.print(temp); //38, 6 (short term average windspeed)
+          dtostrf2(q,5,2,-9.99,99.99,temp);   dataFile.print(" "); dataFile.print(temp); //44, 6 (sky quality)
+          for (int i = 0; i < 29; i++) dataFile.print(" ");                              //  ,29
+          dataFile.print("\r\n");                                                        //  , 2
 
           #if DEBUG_SD == ON
             VLF("MSG: Weather, log close file");
@@ -171,7 +186,7 @@ void Weather::poll(void) {
         #if DEBUG_SD == ON
           VLF("MSG: Weather, log debug output opening...");
           int n;
-          dataFile = SD.open(fn.c_str(), O_READ);
+          dataFile = FS.open(fn.c_str(), FILE_READ);
           if (dataFile) {
             dataFile.seek(logRecordLocation(t)*80L);
             n = dataFile.read(temp, 80);

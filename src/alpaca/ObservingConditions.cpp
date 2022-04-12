@@ -18,10 +18,10 @@ void alpacaObservingConditionsConnected() {
   String exceptionValue = "";
 
   alpacaJsonStart();
-  String connected = apc.argLowerCase("connected");
+  String connected = alpacaArgLowerCase("connected");
   if (!connected.equals(EmptyStr)) {
-    if (connected.toLowerCase().equals("true")) observingConditionsConnected++; else
-    if (connected.toLowerCase().equals("false")) observingConditionsConnected--; else {
+    if (connected.equals("true")) observingConditionsConnected++; else
+    if (connected.equals("false")) observingConditionsConnected--; else {
       exceptionCode = InvalidValueException;
       exceptionValue = "Connected: Invalid value";
     }
@@ -34,7 +34,7 @@ void alpacaObservingConditionsConnected() {
 
 void alpacaObservingConditionsAveragePeriod() {
   alpacaJsonStart();
-  String v = apc.argLowerCase("averageperiod");
+  String v = alpacaArgLowerCase("averageperiod");
   if (!v.equals(EmptyStr)) {
     float averagePeriod = atof(v.c_str());
     if (abs(averagePeriod) > 0.0000001) { alpacaJsonFinish(InvalidValueException, "Invalid value, use 0.0 for instantaneous"); return; }
@@ -147,8 +147,7 @@ void alpacaObservingConditionsSensorDescription() {
   alpacaJsonStart();
   if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
 
-  String sensorName = apc.argLowerCase("sensorname").toLowerCase();
-
+  String sensorName = alpacaArgLowerCase("sensorname");
   if (sensorName.equals("cloudcover")) {
     if (!isnan(weatherSensor.skyTemperature()) && !isnan(weatherSensor.temperature())) {
       char temp[128] = "";
@@ -272,8 +271,7 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
   alpacaJsonStart();
   if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
 
-  String sensorName = apc.argLowerCase("sensorname").toLowerCase();
-
+  String sensorName = alpacaArgLowerCase("sensorname");
   alpacaJsonDoc["Value"] = 0;
 
   if (sensorName.length() == 0) {

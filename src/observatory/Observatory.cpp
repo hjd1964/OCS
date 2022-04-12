@@ -130,8 +130,13 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   WDT_ENABLE;
 
+  // bring network servers up
   #if OPERATIONAL_MODE == WIFI
-    wifiStart();
+    VLF("MSG: Init WiFi");
+    wifiManager.init();
+  #else
+    VLF("MSG: Init Ethernet");
+    ethernetManager.init();
   #endif
 
   // ----------------------------------------------------------------------
@@ -142,7 +147,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // PARAMETER_COUNT_MAX    8
 
   #if WWW_SERVER == ON
-    www.on("index.htm", index);
+    www.on("index.htm", indexPage);
     #if FAV_ICON == ON
       www.on("favicon.ico");
     #endif
@@ -175,9 +180,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     #if WEATHER_CHARTS == ON
       www.on("Chart.js", NULL);
     #endif
-    www.on("/", index);
+    www.on("/", indexPage);
     www.onNotFound(handleNotFound);
-    www.begin(80, 50, false);
+    www.begin();
   #endif
 
   #if ASCOM_ALPACA_SERVER == ON
@@ -306,7 +311,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     #endif
 
     apc.onNotFound(alpacaNotFoundError);
-    apc.begin(ALPACA_PORT, 50, false);
+    apc.begin(ALPACA_PORT);
   #endif
 
   #if TIME_LOCATION_SOURCE != OFF
@@ -392,11 +397,13 @@ void Observatory::poll() {
   // ------------------------------------------------------------------------------------------
   // Handle comms
 
-  // serve web-pages
-  www.handleClient();
+  #if WWW_SERVER == ON
+    www.handleClient();
+  #endif
 
-  // serve ASCOM Alpaca
-  apc.handleClient();
+  #if ASCOM_ALPACA_SERVER == ON
+    apc.handleClient();
+  #endif
 
   // a wall switch can control lights
   #if LIGHT_SW_SENSE != OFF && LIGHT_WRW_RELAY != OFF
@@ -406,7 +413,9 @@ void Observatory::poll() {
   #endif
 
   // keep DHCP alive if used
-  if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
+  #if OPERATIONAL_MODE != WIFI
+    if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
+  #endif
 }
 
 Observatory observatory;

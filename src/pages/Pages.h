@@ -12,7 +12,7 @@
 extern void check(char *ss, const char *rs);
 extern void erase(char *ss, const char *rs);
 
-extern void index();
+extern void indexPage();
 extern void indexAjax();
 
 extern void lightContents();

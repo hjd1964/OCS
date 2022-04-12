@@ -2,6 +2,7 @@
 
 #include "../Common.h"
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/webServer/WebServer.h"
 
 // common web site framework
 const char html_head1[] PROGMEM =

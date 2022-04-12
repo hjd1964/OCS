@@ -2,6 +2,7 @@
 #include "Relays.h"
 
 #include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/webServer/WebServer.h"
 #include "../libApp/relay/Relay.h"
 #include "../lib/nv/NV.h"
 

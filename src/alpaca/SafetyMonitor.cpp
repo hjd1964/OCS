@@ -17,10 +17,10 @@ void alpacaSafetyMonitorConnected() {
   String exceptionValue = "";
 
   alpacaJsonStart();
-  String connected = apc.argLowerCase("connected");
+  String connected = alpacaArgLowerCase("connected");
   if (!connected.equals(EmptyStr)) {
-    if (connected.toLowerCase().equals("true")) safetyMonitorConnected++; else
-    if (connected.toLowerCase().equals("false")) safetyMonitorConnected--; else {
+    if (connected.equals("true")) safetyMonitorConnected++; else
+    if (connected.equals("false")) safetyMonitorConnected--; else {
       exceptionCode = InvalidValueException;
       exceptionValue = "Invalid value";
     }

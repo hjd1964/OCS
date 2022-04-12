@@ -34,12 +34,12 @@ bool Roof::open() {
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeAvg);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)0);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)0);
   }
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)0);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)0);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeAvg);
   }
   timeLeftToOpenAtStart = nv.readL(NV_ROOF_TIME_TO_OPEN);
   timeLeftToCloseAtStart = nv.readL(NV_ROOF_TIME_TO_CLOSE);
@@ -110,12 +110,12 @@ bool Roof::close() {
   // Figure out where the roof is right now best as we can tell...
   // Check for limit switch and reset times
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeAvg);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)0);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)0);
   }
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)0);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)0);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeAvg);
   }
   timeLeftToOpenAtStart = nv.readL(NV_ROOF_TIME_TO_OPEN);
   timeLeftToCloseAtStart = nv.readL(NV_ROOF_TIME_TO_CLOSE);
@@ -333,8 +333,8 @@ void Roof::continueOpening() {
   long secondsOfTravel = round(msOfTravel/5000)*5000;
   if (lastSecondsOfTravel != secondsOfTravel) {
     lastSecondsOfTravel = secondsOfTravel;
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeLeftToOpenNow);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeLeftToCloseNow);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeLeftToOpenNow);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeLeftToCloseNow);
   }
 
   // Or a stuck limit switch
@@ -369,8 +369,8 @@ void Roof::continueOpening() {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
     if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
     // reset position timers
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)0);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)0);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeAvg);
     // Go idle
     state = 'i';
   }
@@ -410,8 +410,8 @@ void Roof::continueClosing() {
   long secondsOfTravel = round(msOfTravel/5000)*5000;
   if (lastSecondsOfTravel != secondsOfTravel) {
     lastSecondsOfTravel = secondsOfTravel;
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeLeftToOpenNow);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)timeLeftToCloseNow);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeLeftToOpenNow);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeLeftToCloseNow);
   }
 
   // On a stuck limit switch
@@ -446,8 +446,8 @@ void Roof::continueClosing() {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
     if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
     // reset position timers
-    nv.write(NV_ROOF_TIME_TO_OPEN, (long)timeAvg);
-    nv.write(NV_ROOF_TIME_TO_CLOSE, (long)0);
+    nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeAvg);
+    nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)0);
     // Go idle
     state = 'i';
   }
