@@ -26,7 +26,7 @@ bool WindRevP::init() {
   if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, windRevPWrapper, "weaRevP")) {
     VLF("success");
     _windSpeedAssigned = true;
-    strcpy(_windSpeedName, "Modern Devices Rev.P Hot Wire Anemometer on Analog Input");
+    strcpy(_windSpeedName, "Modern Devices Rev.P Anemometer on AIN");
     active = true;
   } else { VLF("FAILED!"); }
 
