@@ -64,6 +64,8 @@ void sensesPoll() {
   sense.poll();
 }
 
+bool hasFileSystem = false;
+
 void setup() {
   sprintf(ocsVersion, "%d.%02d%s", FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch);
   
@@ -80,6 +82,31 @@ void setup() {
   HAL_INIT();
   HAL_NV_INIT();
   delay(2000);
+
+  // start any file system
+  #ifdef BUILTIN_SDCARD
+    #if defined(SDCARD_CS_PIN) && SDCARD_CS_PIN == OFF
+      #undef SDCARD_CS_PIN
+    #endif
+    #define SDCARD_CS_PIN BUILTIN_SDCARD
+  #endif
+
+  VF("MSG: Setup, start filesystem ");
+  #if WEATHER_CHARTS == ON
+    #ifdef ESP32
+      hasFileSystem = FS.begin();
+    #else
+      #if defined(SDCARD_CS_PIN) && SDCARD_CS_PIN != OFF
+        #if SD_CARD == ON
+          hasFileSystem = FS.begin(SDCARD_CS_PIN);
+        #else
+          pinMode(SDCARD_CS_PIN, OUTPUT);
+          digitalWrite(SDCARD_CS_PIN, HIGH);
+        #endif
+      #endif
+    #endif
+  #endif
+  if (hasFileSystem) { VLF("success"); } else { VLF("FAILED!"); }
 
   // start system service task
   VF("MSG: Setup, start system service task (rate 10ms priority 7)... ");

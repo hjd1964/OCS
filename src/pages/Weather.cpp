@@ -5,15 +5,6 @@
 #if WEATHER == ON && WEATHER_CHARTS == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-  #ifdef ESP32
-    #include <FS.h>
-    #include <SPIFFS.h>
-    #define FS SPIFFS
-  #else
-    #include <SD.h>
-    #define FS SD
-  #endif
-
   #include "htmlHeaders.h"
   #include "htmlScripts.h"
   #include "htmlTabs.h"

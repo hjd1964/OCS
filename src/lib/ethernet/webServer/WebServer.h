@@ -67,9 +67,6 @@
       void handleClient();
 
       void on(String fn, webFunction handler);
-      #if SD_CARD == ON
-        void on(String fn);
-      #endif
       void onNotFound(webFunction handler);
 
       // get argument value by identifier
@@ -83,6 +80,12 @@
       // check if argument exists
       bool hasArg(String id);
 
+      // return uniform resource identifier
+      String uri() { return requestedHandler; }
+
+      // return modified since state
+      bool modifiedSince() { return modifiedSinceFound; }
+
       void setContentLength(long length);
       void setResponseHeader(const char *str);
       void sendHeader(const char* key, const char* val, bool first = false);
@@ -90,9 +93,7 @@
       void sendContent(String s);
       void sendContent(const char * s);
 
-      bool SDfound = false;
-
-      EthernetServer *webServer;
+      EthernetServer *webServer = NULL;
       EthernetClient client;
     private:
       int  getHandler(String* line);
@@ -100,20 +101,15 @@
       void processPut(String* line);
       void processPost(String* line);
  
-      #if SD_CARD == ON
-        void sdPage(String fn, EthernetClient* client);
-      #endif
-  
       char responseHeader[200] = "";
-      #if SD_CARD == ON
-        bool modifiedSinceFound = false;
-      #endif
+      bool modifiedSinceFound = false;
   
       webFunction notFoundHandler = NULL;
       webFunction handlers[WEB_HANDLER_COUNT_MAX];
       String handlers_fn[WEB_HANDLER_COUNT_MAX];
       int handler_count = 0;
       
+      String requestedHandler;
       String parameters[PARAMETER_COUNT_MAX];
       String values[PARAMETER_COUNT_MAX];
       int parameter_count;

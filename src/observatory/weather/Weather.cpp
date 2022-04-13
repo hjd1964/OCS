@@ -6,17 +6,6 @@
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-#if WEATHER_CHARTS == ON
-  #ifdef ESP32
-    #include <FS.h>
-    #include <SPIFFS.h>
-    #define FS SPIFFS
-  #else
-    #include <SD.h>
-    #define FS SD
-  #endif
-#endif
-
 #include "../../lib/tasks/OnTask.h"
 #include "../../lib/ethernet/webServer/WebServer.h"
 #include "../../lib/wifi/webServer/WebServer.h"
@@ -97,14 +86,8 @@ void Weather::poll(void) {
 
       File dataFile;
 
-      // check for mass storage
-      bool massStorageFound = true;
-      #ifndef ESP32
-        massStorageFound = www.SDfound;
-      #endif
-
       // only log if the time is set and we have mass storage
-      if (timeStatus() != timeNotSet && massStorageFound) {
+      if (timeStatus() != timeNotSet && hasFileSystem) {
         char temp[512] = "";
 
         time_t t = now();

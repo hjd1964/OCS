@@ -132,10 +132,8 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   // bring network servers up
   #if OPERATIONAL_MODE == WIFI
-    VLF("MSG: Init WiFi");
     wifiManager.init();
   #else
-    VLF("MSG: Init Ethernet");
     ethernetManager.init();
   #endif
 

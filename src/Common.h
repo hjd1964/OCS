@@ -16,6 +16,19 @@ extern NVS nv;
 
 #include "lib/convert/Convert.h"
 
+#if WEATHER_CHARTS == ON
+  #ifdef ESP32
+    #include <FS.h>
+    #include <SPIFFS.h>
+    #define FS SPIFFS
+  #else
+    #include <SD.h>
+    #define FS SD
+  #endif
+#endif
+
+extern bool hasFileSystem;
+
 extern char ocsVersion[10];
 
 #if STAT != OFF || POWER != OFF || LIGHT != OFF || WEATHER != OFF || THERMOSTAT != OFF || ROOF != OFF || DOME != OFF
