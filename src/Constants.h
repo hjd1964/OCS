@@ -66,10 +66,13 @@
 // task manager
 #define TASKS_MAX                   32     // up to 32 tasks
 #define TASKS_SKIP_MISSED
-#define TASKS_HWTIMER1_ENABLE
-#ifdef TEENSYDUINO
-  #define TASKS_HWTIMER2_ENABLE
-  #define TASKS_HWTIMER3_ENABLE
+
+#ifndef ESP32
+  #define TASKS_HWTIMER1_ENABLE
+  #ifdef TEENSYDUINO
+    #define TASKS_HWTIMER2_ENABLE
+    #define TASKS_HWTIMER3_ENABLE
+  #endif
 #endif
 
 #ifndef RESPONSE_INTERVAL

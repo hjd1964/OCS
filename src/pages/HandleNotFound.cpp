@@ -14,7 +14,11 @@ void handleNotFound() {
     char contentType[32] = "";
 
     if (www.uri().endsWith(".js")) {
-      if (www.modifiedSince()) statusCode = 304; else statusCode = 200;
+      #ifndef ESP32
+        if (www.modifiedSince()) statusCode = 304; else statusCode = 200;
+      #else
+        statusCode = 200;
+      #endif
       strcpy(contentType, "application/javascript");
     } else
     if (www.uri().endsWith(".txt")) {
@@ -45,7 +49,7 @@ void handleNotFound() {
           n = dataFile.available();
           if (n > 256) n = 256;
           if (n > 0) {
-            dataFile.read(temp, n);
+            dataFile.read((unsigned char*)temp, n);
             temp[n] = 0;
             www.sendContent(temp);
           }
