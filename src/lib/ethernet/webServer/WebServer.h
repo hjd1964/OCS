@@ -37,25 +37,6 @@
   #define CONTENT_LENGTH_UNKNOWN -1
   #define CONTENT_LENGTH_NOT_SET -2
 
-  const char http_defaultHeader[] PROGMEM =
-  "HTTP/1.1 200 OK\r\n" "Content-Type: text/html\r\n" "Connection: close\r\n" "\r\n";
-
-  const char http_textHeader[] PROGMEM =
-  "HTTP/1.1 200 OK\r\n" "Content-Type: text/plain\r\n" "Connection: close\r\n" "\r\n";
-
-  const char http_jsonHeader[] PROGMEM =
-  "HTTP/1.1 200 OK\r\n" "Content-Type: application/json\r\n" "Connection: close\r\n" "\r\n";
-
-  const char http_js304Header[] PROGMEM =
-  "HTTP/1.1 304 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
-
-  const char http_jsHeader[] PROGMEM =
-  "HTTP/1.1 200 OK\r\n" "Content-Type: application/javascript\r\n" "Etag: \"3457807a63ac7bdabf8999b98245d0fe\"\r\n" "Last-Modified: Mon, 13 Apr 2015 15:35:56 GMT\r\n" "Connection: close\r\n" "\r\n";
-
-  // macros to help with sending webpage data
-//  #define sendHtmlStart() setResponseHeader(http_defaultHeader);
-//  #define sendTextStart() setResponseHeader(http_textHeader);
-//  #define sendJsonStart() setResponseHeader(http_jsonHeader);
   #define sendContentAndClear(x) sendContent(x); x = "";
 
   typedef void (* webFunction) ();
