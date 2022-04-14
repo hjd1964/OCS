@@ -85,7 +85,9 @@ void Axis::init(Motor *motor, void (*callback)()) {
   homeSenseHandle = sense.add(pins->home, pins->axisSense.homeInit, pins->axisSense.homeTrigger);
   minSenseHandle = sense.add(pins->min, pins->axisSense.minMaxInit, pins->axisSense.minTrigger);
   maxSenseHandle = sense.add(pins->max, pins->axisSense.minMaxInit, pins->axisSense.maxTrigger);
-  commonMinMaxSense = pins->min != OFF && pins->min == pins->max;
+  #if LIMIT_SENSE_STRICT != ON
+    commonMinMaxSense = pins->min != OFF && pins->min == pins->max;
+  #endif
 }
 
 // enables or disables the associated step/dir driver
@@ -419,14 +421,14 @@ void Axis::poll() {
 
     if (autoRate != AR_RATE_BY_TIME_ABORT) {
       if (motionError(motor->getDirection())) {
-        V(axisPrefix); VLF("motionError slew aborting");
+        V(axisPrefix); VLF("motionError");
         autoSlewAbort();
         return;
       }
     }
     if (autoRate == AR_RATE_BY_DISTANCE) {
       if (commonMinMaxSensed) {
-        V(axisPrefix); VLF("commonMinMaxSensed slew aborting");
+        V(axisPrefix); VLF("commonMinMaxSensed");
         autoSlewAbort();
         return;
       }
@@ -462,7 +464,7 @@ void Axis::poll() {
     } else
     if (autoRate == AR_RATE_BY_TIME_END) {
       if (commonMinMaxSensed) {
-        V(axisPrefix); VLF("commonMinMaxSensed slew aborting");
+        V(axisPrefix); VLF("commonMinMaxSensed");
         autoSlewAbort();
         return;
       }

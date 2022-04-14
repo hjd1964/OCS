@@ -25,6 +25,11 @@
 #define SLEW_HOME_REFINE_TIME_LIMIT 30
 #endif
 
+// ON blocks all motion when min/max are on the same pin, applies to all axes (mount/rotator/focusers)
+#ifndef LIMIT_SENSE_STRICT
+#define LIMIT_SENSE_STRICT          OFF
+#endif
+
 #include "../../libApp/commands/ProcessCmds.h"
 #include "motor/Motor.h"
 #include "motor/stepDir/StepDir.h"
@@ -276,6 +281,8 @@ class Axis {
 
     AxisSettings settings;
 
+    bool commonMinMaxSense = false;
+
   private:
     // set frequency in "measures" (degrees, microns, etc.) per second (0 stops motion)
     void setFrequency(float frequency);
@@ -305,7 +312,6 @@ class Axis {
     
     AxisErrors errors;
     bool lastErrorResult = false;
-    bool commonMinMaxSense = false;
 
     uint8_t axisNumber = 0;
     char axisPrefix[13] = "MSG: Axis_, ";
