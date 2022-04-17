@@ -13,9 +13,9 @@
 // Teensy3.5/3.6/4.1 based:
 #define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ opt eBay 8CH) + 6 DIN + 6 AIN)
 #define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
-// ESP32 based:
-#define OCSESP1                     4      // OCSESP V1 board (3 SSR + 1 MOSFET + 4 MECH RELAY + 3 DIN + 3 AIN)
-#define PINMAP_LAST                 4
+// ESP32 S2 based:
+#define OCS_ES2                     5      // OCS_ES2 V1 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
+#define PINMAP_LAST                 5
 
 // TIME LOCATION SOURCE devices supported
 #define TLS_FIRST                   1
@@ -67,13 +67,9 @@
 #define TASKS_MAX                   32     // up to 32 tasks
 #define TASKS_SKIP_MISSED
 
-#ifndef ESP32
-  #define TASKS_HWTIMER1_ENABLE
-  #ifdef TEENSYDUINO
-    #define TASKS_HWTIMER2_ENABLE
-    #define TASKS_HWTIMER3_ENABLE
-  #endif
-#endif
+#define TASKS_HWTIMER1_ENABLE
+#define TASKS_HWTIMER2_ENABLE
+#define TASKS_HWTIMER3_ENABLE
 
 #ifndef RESPONSE_INTERVAL
   #define RESPONSE_INTERVAL 1000
