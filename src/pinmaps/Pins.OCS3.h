@@ -4,11 +4,11 @@
 
 #if defined(ARDUINO_TEENSY41) || defined(__MK66FX1M0__) || defined(__MK64FX512__)
 
-#define OPERATIONAL_MODE       ETHERNET_W5500
+#define OPERATIONAL_MODE        ETHERNET_W5500
 
 // Activates feature and allows the OCS to force a reset of the Ethernet adapter
 // using this pin.  Required for the W5500 we use on this board.
-#define ETHERNET_RESET_PIN     6
+#define ETHERNET_RESET_PIN      6
 
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial1: RX1 Pin 0, TX1 Pin 1
