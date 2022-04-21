@@ -55,10 +55,10 @@
 // Misc ----------------------------------------------------------------------------------------------------------------------------
 
 // we don't use BT in the OCS
-#define SERIAL_BT_MODE          OFF
+#define SERIAL_BT_MODE              OFF
 
 // IP modes are directly selected in the OCS pinmaps
-#define SERIAL_IP_MODE          OFF
+#define SERIAL_IP_MODE              OFF
 
 // use timeLib for internal clock
 #define TLS_TIMELIB
@@ -72,7 +72,7 @@
 #define TASKS_HWTIMER3_ENABLE
 
 #ifndef RESPONSE_INTERVAL
-  #define RESPONSE_INTERVAL 1000
+  #define RESPONSE_INTERVAL         1000
 #endif
 
 #define PROD_ABV "OCS"
