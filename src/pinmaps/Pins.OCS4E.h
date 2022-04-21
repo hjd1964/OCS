@@ -1,10 +1,10 @@
 // -------------------------------------------------------------------------------------------------
-// Pin map for OCS_ES2 hardware version 1 for the ESP32S2 SAOLA
+// Pin map for OCS4E hardware version 1 for the ESP32S2 SAOLA
 #pragma once
 
 #if defined(ESP32)
 
-#define OPERATIONAL_MODE       WIFI
+#define OPERATIONAL_MODE        WIFI
 
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial0: RX Pin GPIO44, TX Pin GPIO43 (to USB serial adapter)

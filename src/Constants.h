@@ -13,8 +13,8 @@
 // Teensy3.5/3.6/4.1 based:
 #define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ opt eBay 8CH) + 6 DIN + 6 AIN)
 #define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
-// ESP32 S2 based:
-#define OCS_ES2                     5      // OCS_ES2 V1 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
+// ESP32-S2 based:
+#define OCS4E                       5      // OCS V4 board for ESP32-S2 (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
 #define PINMAP_LAST                 5
 
 // TIME LOCATION SOURCE devices supported
