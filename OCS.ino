@@ -2,7 +2,7 @@
  * Title       Observatory-Control-System
  * by          Howard Dutton
  *
- * Copyright (C) 2012 to 2021 Howard Dutton
+ * Copyright (C) 2012 to 2022 Howard Dutton
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
