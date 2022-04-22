@@ -9,7 +9,7 @@
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 
-extern StaticJsonDocument<200> alpacaJsonDoc;
+extern StaticJsonDocument<1000> alpacaJsonDoc;
 
 void alpacaManagementApiVersions() {
   alpacaJsonStart();
@@ -32,7 +32,7 @@ void alpacaManagementConfiguredDevices() {
   alpacaJsonStart();
 
   JsonArray devices = alpacaJsonDoc.createNestedArray("Value");
-  StaticJsonDocument<200> device;
+  StaticJsonDocument<1000> device;
 
   #if defined(WEATHER_PRESENT)
     device.clear();

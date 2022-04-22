@@ -36,16 +36,14 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
-#define CONNECTION_CHECK_HOURS        OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
-#define CONNECTION_FAIL_WATCHDOG      OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
+#define CONNECT_RECHECK_TIME           60 // in seconds
+#define CONNECT_RESET_TRIES             5 // connection attempts before Ethernet shield is reset (if available,) must be >= 1
+#define CONNECT_REBOOT_TRIES           10 // connection attempts before Watchdog reboot is forced, must be > CONNECT_RESET_TRIES
 
 // IP ADDRESS SETTINGS -------------------------------------------------------------------------------------------------------------
 
 // The unique (Ethernet) MAC address for your OCS
 #define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF}
-
-#define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
-#define CHECK_IP_ADDR    {100,24,172,113} //              default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
 
 // These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
 // NV is wiped, these settings (where applicable) can be changed at runtime however.
@@ -68,11 +66,6 @@
 // Visual --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS  OFF // ON reverses the xaxis of weather charts so new data is to the left
 #define FAV_ICON                      OFF // ON enables website icon in browsers, place favicon.ico file SD card root directory
-
-// Connectivity check --------------------------------------------------------------------------------------------------------------
-#define CONNECT_RECHECK_TIME           60 // in seconds
-#define CONNECT_RESET_TRIES             5 // connection attempts before Ethernet shield is reset (if available,) must be >= 1
-#define CONNECT_REBOOT_TRIES           10 // connection attempts before Watchdog reboot is forced, must be > CONNECT_RESET_TRIES
 
 // Watchdog ------------------------------------------------------------------------------------------------------------------------
 #define WATCHDOG_DURING_SD            OFF // ON keeps watchdog enabled at all times

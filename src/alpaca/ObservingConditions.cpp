@@ -10,7 +10,7 @@
 #include "../observatory/weather/Weather.h"
 #include "../libApp/weatherSensor/WeatherSensor.h"
 
-extern StaticJsonDocument<200> alpacaJsonDoc;
+extern StaticJsonDocument<1000> alpacaJsonDoc;
 int32_t observingConditionsConnected = 0;
 
 void alpacaObservingConditionsConnected() {
@@ -46,106 +46,106 @@ void alpacaObservingConditionsAveragePeriod() {
 
 void alpacaObservingConditionsCloudCover() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weather.cloudCover())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weather.cloudCover())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weather.cloudCover();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsDewPoint() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.temperature()) || isnan(weatherSensor.humidity())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.temperature()) || isnan(weatherSensor.humidity())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.temperature() - (100.0 - weatherSensor.humidity())/5.0;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsHumidity() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.humidity())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.humidity())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.humidity();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsPressure() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.pressure())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.pressure())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.pressure();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsRainRate() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsSkyBrightness() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsSkyQuality() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.skyQuality())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.skyQuality())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.skyQuality();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsSkyTemperature() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.skyTemperature())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.skyTemperature())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.skyTemperature();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsStarFwhm() {
   alpacaJsonStart();
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsTemperature() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.temperature())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.temperature())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.temperature();
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsWindDirection() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsWindGust() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsWindSpeed() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  if (isnan(weatherSensor.windspeed())) { alpacaJsonFinish(NotImplementedException, "Not implemented"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  if (isnan(weatherSensor.windspeed())) { alpacaJsonFinish(NotImplementedException, NotImplementedMessage); return; }
   alpacaJsonDoc["Value"] = weatherSensor.windspeed()/3.6;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaObservingConditionsRefresh() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaObservingConditionsSensorDescription() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
 
   String sensorName = alpacaArgLowerCase("sensorname");
   if (sensorName.equals("cloudcover")) {
@@ -158,7 +158,7 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -172,7 +172,7 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -182,7 +182,7 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -192,18 +192,18 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("rainrate")) {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skybrightness")) {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skyquality")) {
@@ -212,13 +212,13 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("starfwhm")) {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skytemperature")) {
@@ -227,7 +227,7 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -237,18 +237,18 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("winddirection")) {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("windgust")) {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("windspeed")) {
@@ -257,19 +257,19 @@ void alpacaObservingConditionsSensorDescription() {
       alpacaJsonFinish(NoException, "");
     } else {
       alpacaJsonDoc["Value"] = "";
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
   
   {
     alpacaJsonDoc["Value"] = "";
-    alpacaJsonFinish(InvalidValueException, "SensorName, Invalid value");
+    alpacaJsonFinish(InvalidValueException, InvalidValueMessage);
   }
 }
 
 void alpacaObservingConditionsTimeSinceLastUpdate() {
   alpacaJsonStart();
-  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!observingConditionsConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
 
   String sensorName = alpacaArgLowerCase("sensorname");
   alpacaJsonDoc["Value"] = 0;
@@ -282,7 +282,7 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     if (!isnan(weatherSensor.skyTemperature()) && !isnan(weatherSensor.temperature())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -290,7 +290,7 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     if (!isnan(weatherSensor.temperature()) && !isnan(weatherSensor.humidity())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -298,7 +298,7 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     if (!isnan(weatherSensor.humidity())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -306,35 +306,35 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     if (!isnan(weatherSensor.pressure())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("rainrate")) {
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skybrightness")) {
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skyquality")) {
     if (!isnan(weatherSensor.skyQuality())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("starfwhm")) {
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("skytemperature")) {
     if (!isnan(weatherSensor.skyTemperature())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
@@ -342,23 +342,23 @@ void alpacaObservingConditionsTimeSinceLastUpdate() {
     if (!isnan(weatherSensor.temperature())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
 
   if (sensorName.equals("winddirection")) {
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("windgust")) {
-    alpacaJsonFinish(NotImplementedException, "Not implemented");
+    alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
   } else
 
   if (sensorName.equals("windspeed")) {
     if (!isnan(weatherSensor.windspeed())) {
       alpacaJsonFinish(NoException, "");
     } else {
-      alpacaJsonFinish(NotImplementedException, "Not implemented");
+      alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
     }
   } else
   

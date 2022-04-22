@@ -31,9 +31,9 @@
 #define DEFAULT_AJAX_SHED_TIME      "15"   // time before return to normal update rate
 
 // Time
-#define LST                         1
+#define STD                         1
 #define DST                         2
-#define UTC                         3
+#define UT1                         3
 
 // Units
 #define METRIC                      1
@@ -53,6 +53,16 @@
 #define STEP_WAVE_FORM_LAST         2
 
 // Misc ----------------------------------------------------------------------------------------------------------------------------
+
+// for weather logging
+#ifdef ESP32
+  #define LogSecondsBetweenEntries  120L
+#else
+  #define LogSecondsBetweenEntries  30L
+#endif
+#define LogRecordsPerHour           (3600L/LogSecondsBetweenEntries)
+#define LogRecordsPerDay            (86400L/LogSecondsBetweenEntries)
+#define logRecordLocation(t)        (round(hour(t)*3600L+minute(t)*60L+second(t))/LogSecondsBetweenEntries)
 
 // we don't use BT in the OCS
 #define SERIAL_BT_MODE              OFF
@@ -76,8 +86,6 @@
 #endif
 
 #define PROD_ABV "OCS"
-
-#define logRecordLocation(t) (round(hour(t)*3600L+minute(t)*60L+second(t))/30L)
 
 // NV addresses
 #define INIT_NV_KEY                 3062703968UL

@@ -6,10 +6,6 @@
 
 #define OPERATIONAL_MODE       ETHERNET_W5100
 
-// Activates feature and allows the OCS to force a reset of the Ethernet adapter
-// using this pin.  For a W5100 be sure its reset pin is only connected to the pin specified here!
-#define ETHERNET_RESET_PIN     OFF
-
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial0: RX Pin 0, TX Pin 1 (to USB serial adapter)
 // Serial1: RX1 Pin 19, TX1 Pin 17
@@ -22,23 +18,24 @@
   #define SERIAL_C             Serial2
 #endif
 
-// Hardware SPI interface pins 50, 51, 52
-#ifndef SDCARD_CS_PIN
-  #define SDCARD_CS_PIN        4
+// Activates feature and allows the OCS to force a reset of the Ethernet adapter
+// using this pin.  For a W5100 be sure its reset pin is only connected to the pin specified here!
+#ifndef ETHERNET_RESET_PIN
+  #define ETHERNET_RESET_PIN   OFF
 #endif
+
+// Hardware SPI interface pins 50, 51, 52
 #ifndef ETHERNET_CS_PIN
   #define ETHERNET_CS_PIN      10
+#endif
+#ifndef SDCARD_CS_PIN
+  #define SDCARD_CS_PIN        4
 #endif
 #ifndef DS3234_CS_PIN
   #define DS3234_CS_PIN        53               // Default CS Pin for DS3234 on SPI
 #endif
 #ifndef BMx280_CS_PIN
   #define BMx280_CS_PIN        49               // Default CS Pin for BME280 or BMP280 on SPI
-#endif
-
-// Ethernet Adapter reset pin
-#ifndef ETHERNET_RESET_PIN
-  #define ETHERNET_RESET_PIN   OFF         
 #endif
 
 // Digital outputs for switching relays

@@ -17,19 +17,23 @@
 #define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCS4E.                     <-Req'd
                                           //         Other boards/more info. in /src/Constants.h
 
+// WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
+#define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
+
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
 #define ASCOM_ALPACA_SERVER           OFF //    OFF, ON enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet.   Option
                                           //         Note: this disables the IP command servers on ports 9998, 9999 and
                                           //         works best w/my Ethernet library from: https://github.com/hjd1964/Ethernet
-
-// WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
-#define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
+#define CONNECT_CHECK_HOURS           OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
+#define CONNECT_IP_ADDR  {100,24,172,113} //         Default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
+#define CONNECT_FAIL_WATCHDOG         OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
 #define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol w/IP address settings in Extended.config.h or      Adjust
                                           //         DS3234 on default SPI interface and default CS pin or DS3231 on I2C.
+#define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd
-#define TIME_DISPLAY                  LST //    LST, Display Standard Time, DST Daylight Time, UTC Universal Time.            Adjust
+#define TIME_DISPLAY                  STD //    STD, Display Standard Time, UT1 to display Universal Time.                    Adjust
 
 // STATUS PANEL FEATURES -----------------------------------------------------------------------------------------------------------
 #define STAT                          OFF //    OFF, ON to enable the OCS website status panel display.                       Option

@@ -42,19 +42,19 @@ void Weather::poll(void) {
     if (isnan(sa))
       sa = ambientTemp;
     else
-      sa = ((sa*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + ambientTemp)/((double)SecondsBetweenLogEntries/2.0);
+      sa = ((sa*((double)LogSecondsBetweenEntries/2.0 - 1.0)) + ambientTemp)/((double)LogSecondsBetweenEntries/2.0);
     
     // short-term sky temp
     if (isnan(ss))
       ss = skyTemp;
     else
-      ss = ((ss*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyTemp)/((double)SecondsBetweenLogEntries/2.0);
+      ss = ((ss*((double)LogSecondsBetweenEntries/2.0 - 1.0)) + skyTemp)/((double)LogSecondsBetweenEntries/2.0);
     
     // short-term average diff temp
     if (isnan(sad))
       sad = skyDiffTemp;
     else
-      sad = ((sad*((double)SecondsBetweenLogEntries/2.0 - 1.0)) + skyDiffTemp)/((float)SecondsBetweenLogEntries/2.0);
+      sad = ((sad*((double)LogSecondsBetweenEntries/2.0 - 1.0)) + skyDiffTemp)/((float)LogSecondsBetweenEntries/2.0);
 
     // long-term average diff temp
     lad = avgSkyDiffTemp;
@@ -70,7 +70,7 @@ void Weather::poll(void) {
     if (isnan(wa))
       wa = w;
     else
-      wa = ((wa*((float)SecondsBetweenLogEntries/2.0 - 1.0)) + w)/((float)SecondsBetweenLogEntries/2.0);
+      wa = ((wa*((float)LogSecondsBetweenEntries/2.0 - 1.0)) + w)/((float)LogSecondsBetweenEntries/2.0);
 
     // Sky quality -------------------------------------------------------------
     float q = weatherSensor.skyQuality();
@@ -78,45 +78,62 @@ void Weather::poll(void) {
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
 
     // Logging ------------------------------------------------------------------
-    // two minutes between writing values
-    // the log is perpetual with 80 chars written twice a minute (about 82MB a year)
+    // log with 80 chars written once a minute (about 41MB a year)
+    // on the ESP32 old log files are automatically deleted to stay within 3MB flash
     TimeSeconds += 2;
-    if (TimeSeconds >= SecondsBetweenLogEntries) {
+    if (TimeSeconds >= LogSecondsBetweenEntries) {
       TimeSeconds = 0;
 
       File dataFile;
 
       // only log if the time is set and we have mass storage
       if (timeStatus() != timeNotSet && hasFileSystem) {
-        char temp[512] = "";
+        char fileName[32];
 
         time_t t = now();
-        int y = year(t);
-        y -= 2000;
-        sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
-        String fn = "L" + String(temp) + ".TXT";
+        sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
         #if DEBUG_SD == ON
           VF("MSG: Weather, log "); VL(fn);
         #endif
 
-        if (!FS.exists(fn.c_str())) {
+        if (!FS.exists(fileName)) {
+          #ifdef ESP32
+            // erase log file from 31 days ago (to stay within 2MB spiff)
+            time_t t1 = t - 20L*24L*60L*60L;
+            char oldFileName[32];
+            sprintf(oldFileName, "L%02d%02d%02d.TXT", year(t1) - 2000, month(t1), day(t1));
+            if (FS.exists(oldFileName)) {
+              #if DEBUG_SD == ON
+                VF("MSG: Weather, remove old log file: ");
+              #endif
+              FS.remove(oldFileName);
+              #if DEBUG_SD == ON
+                if (!FS.exists(oldFileName)) { VLF("success."); } else { VLF("failed."); }
+              #endif
+            } else {
+              #if DEBUG_SD == ON
+                VF("MSG: Weather, no old log file to remove.");
+              #endif
+            }
+          #endif
+
           #if DEBUG_SD == ON
             VLF("MSG: Weather, log doesn't exist...");
           #endif
-          dataFile = FS.open(fn.c_str(), FILE_WRITE);
+          dataFile = FS.open(fileName, FILE_WRITE);
           dataFile.close();
 
-          // fill the datafile 2 per minute * 60 * 24 = 2880 records per day
+          // for example: fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
-          // size=250400/day
+          // size = 250400/day
           
-          dataFile = FS.open(fn.c_str(), FILE_WRITE);
+          dataFile = FS.open(fileName, FILE_WRITE);
           if (dataFile) {
             #if DEBUG_SD == ON
               VLF("MSG: Weather, log create file...");
             #endif
-            for (int i = 0; i < 2880; i++) {
+            for (int i = 0; i < LogRecordsPerDay; i++) {
               #if DEBUG_SD == ON
                 VF("MSG: Weather, log create writing record#"); VL(i);
               #endif
@@ -139,7 +156,7 @@ void Weather::poll(void) {
         #endif
 
         // write to the sdcard file
-        dataFile = FS.open(fn.c_str(), FILE_WRITE);
+        dataFile = FS.open(fileName, FILE_WRITE);
         if (dataFile) {
 
           #if DEBUG_SD == ON
@@ -147,7 +164,8 @@ void Weather::poll(void) {
           #endif
 
           dataFile.seek(logRecordLocation(t)*80L);
-          sprintf(temp,"%02d%02d%02d",hour(t),minute(t),second(t));
+          char temp[32];
+          sprintf(temp, "%02d%02d%02d", hour(t), minute(t), second(t));
           dataFile.print(temp); dataFile.print(":");                                     //00, 8 (time)
           dtostrf2(sa,5,1,-99.9,999.9,temp);  dataFile.print(" "); dataFile.print(temp); //07, 6 (short term average ambient temperature)
           dtostrf2(sad,5,1,-99.9,999.9,temp); dataFile.print(" "); dataFile.print(temp); //13, 6 (short term average dif (sky) temperature)
@@ -169,7 +187,7 @@ void Weather::poll(void) {
         #if DEBUG_SD == ON
           VLF("MSG: Weather, log debug output opening...");
           int n;
-          dataFile = FS.open(fn.c_str(), FILE_READ);
+          dataFile = FS.open(fileName, FILE_READ);
           if (dataFile) {
             dataFile.seek(logRecordLocation(t)*80L);
             n = dataFile.read(temp, 80);

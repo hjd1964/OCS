@@ -8,8 +8,6 @@
 
 #include "../../libApp/commands/ProcessCmds.h"
 
-#define SecondsBetweenLogEntries 30
-
 // this is the response time required to cover approximately 2/3 of a change in cloud temperature
 // adjust higher for less sensitivity to passing clouds/changing conditions, lower for more sensitivity
 #define AvgTimeSeconds 600.0

@@ -33,8 +33,8 @@ void handleNotFound() {
     if (statusCode) {
       File dataFile = FS.open(www.uri().c_str(), FILE_READ);
       if (dataFile) {
-        char temp[256] = "";
-        int n;
+        char temp[260];
+        long n;
 
         VF("MSG: OCS Server found file "); VL(www.uri());
 
@@ -55,17 +55,32 @@ void handleNotFound() {
           }
           Y;
         } while (n > 0);
-        VL("done");
+        dataFile.close();
 
+        VL("done");
         www.sendContent("");
 
-        dataFile.close();
         return;
       }
     }
   #endif
   
-  String message = "<big>OCS Server, Error 404:</big>\r\n\r\nResource not found.\r\n";
-  www.send(404, "text/plain", message);
-  VLF("MSG: OCS Server, Error 404: Resource not found.");
+  String message = "<body>";
+
+  message.concat("<big>OCS Server, Error 404 File Not Found<br /><br />\n");
+  message.concat("URI: " + www.uri() + "<br />\n");
+
+  message.concat("Method: ");
+  if (www.method() == HTTP_GET) message.concat("GET<br />\n"); else
+  if (www.method() == HTTP_PUT) message.concat("PUT<br />\n"); else
+  if (www.method() == HTTP_POST) message.concat("POST<br />\n"); else message.concat("Unknown<br />\n");
+
+  message.concat("\nArguments: " + String(www.args()) + "<br />\n");
+  for (uint8_t i = 0; i < www.args(); i++){
+    message.concat(" " + www.argName(i) + ": " + www.arg(i) + "<br />\n");
+  }
+
+  message.concat("</body>");
+
+  www.send(404, "text/html", message);
 }

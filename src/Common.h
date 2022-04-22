@@ -19,8 +19,8 @@ extern NVS nv;
 #if WEATHER_CHARTS == ON
   #ifdef ESP32
     #include <FS.h>
-    #include <SPIFFS.h>
-    #define FS SPIFFS
+    #include <LittleFS.h>
+    #define FS LittleFS
   #else
     #include <SD.h>
     #define FS SD

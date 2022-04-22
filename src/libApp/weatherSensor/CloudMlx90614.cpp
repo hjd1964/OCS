@@ -5,7 +5,7 @@
 
 #if defined(WEATHER_SENSOR_CLOUD_MLX90614) && WEATHER_SENSOR_CLOUD_MLX90614 != OFF
 
-#include <Adafruit_MLX90614.h>
+#include <Adafruit_MLX90614.h> // https://github.com/adafruit/Adafruit-MLX90614-Library
 Adafruit_MLX90614 mlxSensor = Adafruit_MLX90614();  // I2C address 0x5A
 
 #include "../../lib/tasks/OnTask.h"

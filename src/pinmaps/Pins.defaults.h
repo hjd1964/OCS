@@ -2,18 +2,16 @@
 // Null pin map, assigns OFF to all values not already assigned
 #pragma once
 
-// SerialA is manidatory
+// SerialA command channel is manidatory
 #ifndef SERIAL_A
 #define SERIAL_A                    Serial
 #endif
 
+// SerialB, SerialC command channels don't exist by default
+
 // Hardware SPI interface pins
 #ifndef SDCARD_CS_PIN
   #define SDCARD_CS_PIN             OFF
-#endif
-
-#ifndef ETHERNET_CS_PIN
-  #define ETHERNET_CS_PIN           OFF
 #endif
 
 #if WEATHER_CHARTS == ON && SDCARD_CS_PIN != OFF
@@ -32,7 +30,10 @@
   #define BMx280_CS_PIN             AUX_CS_PIN
 #endif
 
-// Ethernet Adapter reset pin
+#ifndef ETHERNET_CS_PIN
+  #define ETHERNET_CS_PIN           OFF
+#endif
+
 #ifndef ETHERNET_RESET_PIN
   #define ETHERNET_RESET_PIN       OFF
 #endif

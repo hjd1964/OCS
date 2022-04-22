@@ -28,7 +28,7 @@
 int timeZone = TIME_ZONE;
 time_t startupTime = 0;
 
-#if CONNECTION_CHECK_HOURS != OFF
+#if CONNECT_CHECK_HOURS != OFF
   EthernetClient connectionCheckClient;
 #endif
 
@@ -316,9 +316,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 }
 
 void Observatory::connectionCheck() {
-  #if CONNECTION_CHECK_HOURS != OFF
+  #if CONNECT_CHECK_HOURS != OFF
     static int connectionCheckTry = 0;
-    static unsigned long nextConnectionCheck = 1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST);
+    static unsigned long nextConnectionCheck = 1000UL*3600UL*(CONNECT_CHECK_HOURS/CHECK_FAST);
     if ((long)(millis() - nextConnectionCheck) > 0) {
       connectionCheckTry++;
 
@@ -328,14 +328,21 @@ void Observatory::connectionCheck() {
         VLF("MSG: Connection Check Success");
         connectionCheckClient.stop();
         connectionCheckTry = 0;
-        nextConnectionCheck = millis() + (1000UL*3600UL*(CONNECTION_CHECK_HOURS/CHECK_FAST));
+        nextConnectionCheck = millis() + (1000UL*3600UL*(CONNECT_CHECK_HOURS/CHECK_FAST));
       } else {
         VLF("MSG: Connection Check FAILED!");
         nextConnectionCheck = millis() + (1000UL*CONNECT_RECHECK_TIME);
       }
 
-    #if WATCHDOG == ON_CC
-      if (!success && !roof.isMoving() && connectionCheckTry >= CONNECT_REBOOT_TRIES) {
+    #if WATCHDOG == ON && CONNECT_FAIL_WATCHDOG == ON
+      if (!success &&
+        #ifdef ROOF_PRESENT
+          !roof.isMoving() &&
+        #endif
+        #ifdef DOME_PRESENT
+          !dome.isMoving() &&
+        #endif
+        connectionCheckTry >= CONNECT_REBOOT_TRIES) {
         VLF("MSG: Forcing Watchdog Reboot");
         while (true) {};
       }
@@ -363,7 +370,7 @@ void Observatory::connectionCheck() {
           tls.restart();
         #endif
 
-        #if CONNECTION_FAIL_WATCHDOG == OFF
+        #if CONNECT_FAIL_WATCHDOG == OFF
           connectionCheckTry = 0;
         #endif
       }

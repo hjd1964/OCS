@@ -41,7 +41,7 @@ class Observatory {
   private:
     Firmware firmware;
     bool fastNTPSync = false;
-    IPAddress connectCheckIP = IPAddress CHECK_IP_ADDR;
+    IPAddress connectCheckIP = IPAddress CONNECT_IP_ADDR;
 };
 
 extern Observatory observatory;

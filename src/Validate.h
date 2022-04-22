@@ -20,16 +20,16 @@
   #error "Configuration (Config.h): WATCHDOG must be either ON or OFF."
 #endif
 
-#if (CONNECTION_CHECK_HOURS < 1 || CONNECTION_CHECK_HOURS > 48) && CONNECTION_CHECK_HOURS != OFF && DEBUG_CONNECT_CHECK == OFF
-  #error "Configuration (Config.h): CONNECTION_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
+#if (CONNECT_CHECK_HOURS < 1 || CONNECT_CHECK_HOURS > 48) && CONNECT_CHECK_HOURS != OFF && DEBUG_CONNECT_CHECK == OFF
+  #error "Configuration (Config.h): CONNECT_CHECK_HOURS must OFF or a number between 1 and 48 (Hours.)"
 #endif
 
-#if CONNECTION_FAIL_WATCHDOG != OFF && CONNECTION_FAIL_WATCHDOG != ON
-  #error "Configuration (Config.h): CONNECTION_FAIL_WATCHDOG must be either ON or OFF."
+#if CONNECT_FAIL_WATCHDOG != OFF && CONNECT_FAIL_WATCHDOG != ON
+  #error "Configuration (Config.h): CONNECT_FAIL_WATCHDOG must be either ON or OFF."
 #endif
 
-#if CONNECTION_FAIL_WATCHDOG == ON && WATCHDOG != ON
-  #error "Configuration (Config.h): CONNECTION_FAIL_WATCHDOG ON requires WATCHDOG ON."
+#if CONNECT_FAIL_WATCHDOG == ON && WATCHDOG != ON
+  #error "Configuration (Config.h): CONNECT_FAIL_WATCHDOG ON requires WATCHDOG ON."
 #endif
 
 // Time setup
@@ -37,8 +37,8 @@
   #error "Configuration (Config.h): TIME_ZONE must be a number between -12 and 13 (hours.)"
 #endif
 
-#if (TIME_DISPLAY != LST) && (TIME_DISPLAY != UTC) && (TIME_DISPLAY != DST)
-  #error "Configuration (Config.h): TIME_DISPLAY must be either LST, UTC, or DST"
+#if (TIME_DISPLAY != STD) && (TIME_DISPLAY != UT1) && (TIME_DISPLAY != DST)
+  #error "Configuration (Config.h): TIME_DISPLAY must be either STD, UT1, or DST"
 #endif
 
 // Status

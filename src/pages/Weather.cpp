@@ -183,6 +183,7 @@
   // \param rangeStep: the step size on the chart
   // \param hours: the number of hours of data to display
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
+    char fileName[32];
     char temp[256] = "";
     char ws1[90] = "";
     char ws2[90] = "";
@@ -199,35 +200,29 @@
 
     time_t t = now();
 
-    rec = logRecordLocation(t) - 120L*hours;
-    while (rec < 0) { rec += 2880; t -= 24L*60L*60L; }
-    int y = year(t);
-    y -= 2000;
-    sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
-    String fn = "L" + String(temp) + ".TXT";
+    rec = logRecordLocation(t) - LogRecordsPerHour*hours;
+    while (rec < 0) { rec += LogRecordsPerDay; t -= 24L*60L*60L; }
+    sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     //Serial.print("Primary log="); Serial.println(fn);
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    File dataFile = FS.open(fn.c_str(), FILE_READ);
+    File dataFile = FS.open(fileName, FILE_READ);
     if (dataFile) {
-      for (long i = 0; i < 120; i++) {
-        if (((rec + i*hours) - k) >= 2880L) {
+      for (long i = 0; i < LogRecordsPerHour; i++) {
+        if (((rec + i*hours) - k) >= LogRecordsPerDay) {
           dataFile.close();
           k = rec + i*hours;
           t += 24L*60L*60L;
-          y = year(t);
-          y -= 2000;
-          sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
-          fn = "L" + String(temp) + ".TXT";
-          dataFile = FS.open(fn.c_str(), FILE_READ);
+          sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
+          dataFile = FS.open(fileName, FILE_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);
           //Serial.print("Reading "); Serial.print(120-i); Serial.print(" records from rec#"); Serial.println(0);
         }
-        dataFile.seek(((rec+i*hours)-k)*80L);
+        dataFile.seek(((rec + i*hours) - k)*80L);
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
@@ -238,10 +233,10 @@
         strcpy(ws2, (char*)&(ws1[j]));
         if (ws2[0] != 0) {
           float f = atof(ws2);
-          if (logColumn == -8)  f = f*(9.0/5.0)+32.0; // temperature C to F
-          if (logColumn == -39) f = f*0.621371;       // wind kph to mph
-          if (logColumn == -26) f = f*0.02953;        // pressure in inches
-          if (isnan(f))         f = rangeMax;         // handle bad/no data
+          if (logColumn == -8)  f = f*(9.0/5.0) + 32.0; // temperature C to F
+          if (logColumn == -39) f = f*0.621371;         // wind kph to mph
+          if (logColumn == -26) f = f*0.02953;          // pressure in inches
+          if (isnan(f))         f = rangeMax;           // handle bad/no data
           if (logColumn == -26) dtostrf(f, 1, 3, ws2); else dtostrf(f, 1, 1, ws2);
           #if REVERSE_WEATHER_CHART_X_AXIS == ON
             if (hours == 1)  dtostrf(-(120-i)/2.0, 1, 1, ws1);
@@ -274,6 +269,7 @@
   // \param rangeStep: the step size on the chart
   // \param hours: the number of hours of data to display
   void makeChartJs2(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
+    char fileName[32];
     char temp[256] = "";
     char ws1[90] = "";
     char ws2[90] = "";
@@ -288,33 +284,28 @@
     strcpy_P(temp, ChartJs3);
     www.sendContent(temp);
 
-    long spanInHours = 120L*hours;
+    long spanInHours = LogRecordsPerHour*hours;
 
     time_t t = now();
     startRecord = logRecordLocation(t) - spanInHours;
-    while (startRecord < 0) { startRecord += 2880; t -= 24L*60L*60L; }
-    int y = year(t);
-    sprintf(temp, "%02d%02d%02d", y - 2000, month(t), day(t));
-    String fn = "L" + String(temp) + ".TXT";
+    while (startRecord < 0) { startRecord += LogRecordsPerDay; t -= 24L*60L*60L; }
+    sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     //Serial.print("Primary log="); Serial.println(fn);
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
-    File dataFile = FS.open(fn.c_str(), FILE_READ);
+    File dataFile = FS.open(fileName, FILE_READ);
     if (dataFile) {
-      for (long i = 0; i < 120; i++) {
+      for (long i = 0; i < LogRecordsPerHour; i++) {
         startRecord += hours;
 
-        if (((startRecord + i*hours) - k) >= 2880L) {
+        if (((startRecord + i*hours) - k) >= LogRecordsPerDay) {
           dataFile.close();
           k = startRecord + i*hours;
           t += 24L*60L*60L;
-          y = year(t);
-          y -= 2000;
-          sprintf(temp, "%02d%02d%02d", y, month(t), day(t));
-          fn = "L" + String(temp) + ".TXT";
-          dataFile = FS.open(fn.c_str(), FILE_READ);
+          sprintf(fileName, "%02d%02d%02d", year(t) - 2000, month(t), day(t));
+          dataFile = FS.open(fileName, FILE_READ);
           if (!dataFile) break;
 
           //Serial.print("Secondary log="); Serial.println(fn);

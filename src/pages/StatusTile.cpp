@@ -38,11 +38,11 @@
     www.sendContent(temp);
 
     time_t t = now();
-    t -= timeZone*SECS_PER_HOUR;  // convert to UTC
+    t -= timeZone*SECS_PER_HOUR;  // convert to UT1
 
     strcpy(ws2, "Std");
-    #if TIME_DISPLAY == UTC
-      strcpy(ws2, "UTC");
+    #if TIME_DISPLAY == UT1
+      strcpy(ws2, "UT1");
     #elif TIME_DISPLAY == DST
       if (isDst(year(t),month(t),day(t),hour(t),TIME_ZONE)) {
         t = now() + SECS_PER_HOUR;  // +1 hour, Daylight Time

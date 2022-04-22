@@ -9,7 +9,7 @@
 #include "Alpaca.h"
 #include "../libApp/relay/Relay.h"
 
-extern StaticJsonDocument<200> alpacaJsonDoc;
+extern StaticJsonDocument<1000> alpacaJsonDoc;
 int32_t switchConnected = 0;
 int32_t maxSwitch = 0;
 int32_t switchRelay[10];
@@ -102,108 +102,108 @@ void alpacaSwitchConnected() {
 
 void alpacaSwitchMaxSwitch() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   alpacaJsonDoc["Value"] = maxSwitch;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchCanWrite() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = "true";
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchGetSwitch() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = relay.isOn(switchRelay[id]) ? "true" : "false";
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchGetSwitchDescription() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = switchDescription[id];
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchGetSwitchName() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = switchName[id];
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchGetSwitchValue() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = relay.isOn(switchRelay[id]) ? 1.0 : 0.0;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchMaxSwitchValue() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = 1.0;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchMinSwitchValue() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = 0.0;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchSetSwitch() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   String state = alpacaArgLowerCase("state");
   if (state.equals("true")) relay.on(switchRelay[id]); else
     if (state.equals("false")) relay.off(switchRelay[id]); else
-      { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+      { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchSetSwitchName() {
   alpacaJsonStart();
-  alpacaJsonFinish(NotImplementedException, "Not implemented");
+  alpacaJsonFinish(NotImplementedException, NotImplementedMessage);
 }
 
 void alpacaSwitchSetSwitchValue() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   int32_t value = round(atof(alpacaArgLowerCase("value").c_str()));
   if (value == 1) relay.on(switchRelay[id]); else
     if (value == 0) relay.off(switchRelay[id]); else
-      { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+      { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaSwitchSwitchStep() {
   alpacaJsonStart();
-  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, "Not connected"); return; }
+  if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
-  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, "Invalid Value"); return; }
+  if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   alpacaJsonDoc["Value"] = 1.0;
   alpacaJsonFinish(NoException, "");
 }

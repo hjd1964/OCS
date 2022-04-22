@@ -6,10 +6,6 @@
 
 #define OPERATIONAL_MODE        ETHERNET_W5500
 
-// Activates feature and allows the OCS to force a reset of the Ethernet adapter
-// using this pin.  Required for the W5500 we use on this board.
-#define ETHERNET_RESET_PIN     6
-
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial1: RX1 Pin 0, TX1 Pin 1
 // Serial2: RX2 Pin 7, TX2 Pin 8 (Teensy3.5/3.6)
@@ -34,23 +30,24 @@
   #define SERIAL_E_BAUD_DEFAULT 9600
 #endif
 
-// Hardware SPI interface is on pins 11, 12, 13
-#ifndef SDCARD_CS_PIN
-  #define SDCARD_CS_PIN         OFF
+// Activates feature and allows the OCS to force a reset of the Ethernet adapter
+// using this pin.  Required for the W5500 we use on this board.
+#ifndef ETHERNET_RESET_PIN
+  #define ETHERNET_RESET_PIN    6
 #endif
+
+// Hardware SPI interface is on pins 11, 12, 13
 #ifndef ETHERNET_CS_PIN
   #define ETHERNET_CS_PIN       10
+#endif
+#ifndef SDCARD_CS_PIN
+  #define SDCARD_CS_PIN         OFF
 #endif
 #ifndef DS3234_CS_PIN
   #define DS3234_CS_PIN         9   // Default CS Pin for DS3234 on SPI
 #endif
 #ifndef BMx280_CS_PIN
   #define BMx280_CS_PIN         9   // Default CS Pin for BME280 or BMP280 on SPI
-#endif
-
-// Ethernet Adapter reset pin
-#ifndef ETHERNET_RESET_PIN
-  #define ETHERNET_RESET_PIN    OFF         
 #endif
 
 // Digital outputs for switching relays
@@ -69,8 +66,8 @@
 #define RELAY12_PIN             35  // RE12, mechanical relay (110/220VAC 16A)
 #define RELAY13_PIN             36  // RE13, optional 4-channel ebay relay board
 #define RELAY14_PIN             37  // RE14, optional 4-channel ebay relay board
-#define RELAY15_PIN             38  // RE15, optional 4-channel ebay relay board
-#define RELAY16_PIN             39  // RE16, optional 4-channel ebay relay board
+#define RELAY15_PIN             3  // RE15, optional 4-channel ebay relay board
+#define RELAY16_PIN             4  // RE16, optional 4-channel ebay relay board
 
 // Digital inputs for sensing events
 #define SENSE1_PIN              2   // DIN1 (ESD proteted, current limited, with pullup to 3.3V)

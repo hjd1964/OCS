@@ -31,6 +31,11 @@ extern uint32_t alpacaServerTransactionID;
 #define SlavedException               0x409
 #define ValueNotSetException          0x402
 
+const char InvalidOperationMessage[] = "Invalid Operation";
+const char InvalidValueMessage[] = "Invalid Value";
+const char NotConnectedMessage[] = "Not connected";
+const char NotImplementedMessage[] = "Not implemented";
+
 // setup
 extern void alpacaSetup();
 extern void alpacaSetupSafetyMonitor();
