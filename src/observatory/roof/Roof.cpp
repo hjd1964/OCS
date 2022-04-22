@@ -81,7 +81,7 @@ bool Roof::open() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_MOMENTARY_BUTTON_PRESS_TIME);
+    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_BUTTON_PRESS_TIME);
   } else {
     relay.off(ROOF_MOTOR_CLOSE_RELAY);
     relay.on(ROOF_MOTOR_OPEN_RELAY);
@@ -157,7 +157,7 @@ bool Roof::close() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_MOMENTARY_BUTTON_PRESS_TIME);
+    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_BUTTON_PRESS_TIME);
   } else {
     relay.off(ROOF_MOTOR_OPEN_RELAY);
     relay.on(ROOF_MOTOR_CLOSE_RELAY);
@@ -194,7 +194,7 @@ void Roof::stop() {
   // And press the stop button if this roof has one
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY != OFF) {
     // make sure any 2 second button press is finished before pressing again
-    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_MOMENTARY_BUTTON_PRESS_TIME);
+    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_BUTTON_PRESS_TIME);
   }
 }
 
