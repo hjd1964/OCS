@@ -71,6 +71,6 @@
 #define WATCHDOG_DURING_SD            OFF // ON keeps watchdog enabled at all times
 
 // Roof ----------------------------------------------------------------------------------------------------------------------------
-#define ROOF_MOMENTARY_BUTTON_PRESS_TIME 1.0  // in seconds, this blocks the main-loop so <= ~2 seconds!
-#define ROOF_PRE_MOTION_TIME          1.5 // as above
-#define ROOF_POST_MOTION_TIME         2.0 // as above
+#define ROOF_BUTTON_PRESS_TIME        1.0 // In seconds, this blocks the main-loop so <= ~2 seconds, for garage door openers.
+#define ROOF_PRE_MOTION_TIME          1.5 // In seconds.
+#define ROOF_POST_MOTION_TIME         2.0 // In seconds.
