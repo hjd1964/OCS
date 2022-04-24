@@ -393,9 +393,7 @@ void Observatory::poll() {
     }
   #endif
 
-  // ------------------------------------------------------------------------------------------
-  // Handle comms
-
+  // handle WiFi/Ethernet servers
   #if WWW_SERVER == ON
     www.handleClient();
   #endif
