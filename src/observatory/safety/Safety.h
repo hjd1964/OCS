@@ -9,12 +9,12 @@ class Safety {
     void init();
 
     bool isSafe();
-    inline void setRoofAutoClose(bool value) { roofAutoClose = value; }
 
     void poll();
 
+    bool roofAutoClose = ROOF_AUTOCLOSE_DAWN_DEFAULT == ON;
+
   private:
-    bool roofAutoClose = false;
     bool roofAutoCloseInitiated = false;
 };
 

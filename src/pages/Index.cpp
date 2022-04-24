@@ -123,8 +123,8 @@ void indexAjax() {
     if (press.equals("roof_override")) roof.setSafetyOverride(true);
     if (press.equals("roof_stop")) { roof.stop(); roof.clearStatus(); }
     String autoclose = www.arg("auto_close");
-    if (autoclose.equals("true")) safety.setRoofAutoClose(true);
-    if (autoclose.equals("false")) safety.setRoofAutoClose(false);
+    if (autoclose.equals("true")) safety.roofAutoClose = true;
+    if (autoclose.equals("false")) safety.roofAutoClose = false;
   #endif
 
   // dome

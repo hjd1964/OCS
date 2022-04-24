@@ -104,16 +104,12 @@ class Roof {
     // for soft start etc, pwm power level (required)
     int powerLevel();
 
-    bool autoClose = ROOF_AUTOCLOSE_DAWN_DEFAULT == ON;
-
   private:
     // called repeatedly to open the roof
     void continueOpening();
 
     // called repeatedly to close the roof
     void continueClosing();
-
-    bool autoCloseInitiated = false;
 
     // roof status and errors
     volatile char state = 'i';

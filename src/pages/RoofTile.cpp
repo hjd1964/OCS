@@ -6,6 +6,7 @@
   #include "htmlScripts.h"
   #include "htmlTabs.h"
 
+  #include "../observatory/safety/Safety.h"
   #include "../observatory/roof/Roof.h"
 
   void roofTile() {
@@ -24,7 +25,7 @@
 
       strcpy_P(temp, htmlRoof3);
       #if ROOF_AUTOCLOSE_DAWN == ON
-        if (roof.autoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
+        if (safety.roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
       #endif
       www.sendContent(temp);
     }
