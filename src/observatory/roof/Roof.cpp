@@ -72,7 +72,7 @@ bool Roof::open() {
   state = 'o';
   clearStatus(false);
 
-  delay(ROOF_PRE_MOTION_TIME*1000);
+  delay(ROOF_TIME_PRE_MOTION*1000);
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_OPEN_SAFETY_INTERLOCK;
@@ -81,7 +81,7 @@ bool Roof::open() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_BUTTON_PRESS_TIME);
+    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_TIME_BUTTON_PRESS);
   } else {
     relay.off(ROOF_MOTOR_CLOSE_RELAY);
     relay.on(ROOF_MOTOR_OPEN_RELAY);
@@ -148,7 +148,7 @@ bool Roof::close() {
   state = 'c';
   clearStatus(false);
 
-  delay(ROOF_PRE_MOTION_TIME*1000);
+  delay(ROOF_TIME_PRE_MOTION*1000);
   if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_CLOSE_SAFETY_INTERLOCK;
@@ -157,7 +157,7 @@ bool Roof::close() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_BUTTON_PRESS_TIME);
+    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_TIME_BUTTON_PRESS);
   } else {
     relay.off(ROOF_MOTOR_OPEN_RELAY);
     relay.on(ROOF_MOTOR_CLOSE_RELAY);
@@ -185,7 +185,7 @@ void Roof::stop() {
     wasActive = true;
     delay(100);
   }
-  if (wasActive) delay(ROOF_POST_MOTION_TIME*1000);
+  if (wasActive) delay(ROOF_TIME_POST_MOTION*1000);
 
   // Stop any DC motor
   relay.off(ROOF_MOTOR_OPEN_RELAY);
@@ -193,8 +193,8 @@ void Roof::stop() {
 
   // And press the stop button if this roof has one
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY != OFF) {
-    // make sure any 2 second button press is finished before pressing again
-    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_BUTTON_PRESS_TIME);
+    // make sure any button press is finished before pressing again
+    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_TIME_BUTTON_PRESS);
   }
 }
 
@@ -367,7 +367,7 @@ void Roof::continueOpening() {
   // Detect that the roof has finished opening
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_TIME_POST_MOTION*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)0);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeAvg);
@@ -444,7 +444,7 @@ void Roof::continueClosing() {
   // Detect that the roof has finished closing
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_POST_MOTION_TIME*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_TIME_POST_MOTION*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeAvg);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)0);

@@ -39,12 +39,6 @@
 #define METRIC                      1
 #define IMPERIAL                    2
 
-// Roof
-#define ROOF_PRE_MOTION_TIME        1.5    // as above
-#define ROOF_POST_MOTION_TIME       2.0    // as above
-// in seconds, this blocks the main-loop so <= ~2 seconds!
-#define ROOF_BUTTON_PRESS_TIME 1.0
-
 // DOME
 // STEP WAVE FORM
 #define STEP_WAVE_FORM_FIRST        1
