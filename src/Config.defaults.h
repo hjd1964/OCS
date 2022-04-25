@@ -52,110 +52,110 @@
 #ifndef RELAY1_DEFAULT_STATE
 #define RELAY1_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY1_ACTIVE_STATE
-#define RELAY1_ACTIVE_STATE           HIGH
+#ifndef RELAY1_ON_STATE
+#define RELAY1_ON_STATE               HIGH
 #endif
 #ifndef RELAY2_DEFAULT_STATE
 #define RELAY2_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY2_ACTIVE_STATE
-#define RELAY2_ACTIVE_STATE           HIGH
+#ifndef RELAY2_ON_STATE
+#define RELAY2_ON_STATE               HIGH
 #endif
 #ifndef RELAY3_DEFAULT_STATE
 #define RELAY3_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY3_ACTIVE_STATE
-#define RELAY3_ACTIVE_STATE           HIGH
+#ifndef RELAY3_ON_STATE
+#define RELAY3_ON_STATE               HIGH
 #endif
 #ifndef RELAY4_DEFAULT_STATE
 #define RELAY4_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY4_ACTIVE_STATE
-#define RELAY4_ACTIVE_STATE           HIGH
+#ifndef RELAY4_ON_STATE
+#define RELAY4_ON_STATE               HIGH
 #endif
 #ifndef RELAY5_DEFAULT_STATE
 #define RELAY5_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY5_ACTIVE_STATE
-#define RELAY5_ACTIVE_STATE           HIGH
+#ifndef RELAY5_ON_STATE
+#define RELAY5_ON_STATE               HIGH
 #endif
 #ifndef RELAY6_DEFAULT_STATE
 #define RELAY6_DEFAULT_STATE          HIGH
 #endif
-#ifndef RELAY6_ACTIVE_STATE
-#define RELAY6_ACTIVE_STATE           HIGH
+#ifndef RELAY6_ON_STATE
+#define RELAY6_ON_STATE               HIGH
 #endif
 #ifndef RELAY7_DEFAULT_STATE
 #define RELAY7_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY7_ACTIVE_STATE
-#define RELAY7_ACTIVE_STATE           HIGH
+#ifndef RELAY7_ON_STATE
+#define RELAY7_ON_STATE               HIGH
 #endif
 #ifndef RELAY8_DEFAULT_STATE
 #define RELAY8_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY8_ACTIVE_STATE
-#define RELAY8_ACTIVE_STATE           HIGH
+#ifndef RELAY8_ON_STATE
+#define RELAY8_ON_STATE               HIGH
 #endif
 #ifndef RELAY9_DEFAULT_STATE
 #define RELAY9_DEFAULT_STATE          OFF
 #endif
-#ifndef RELAY9_ACTIVE_STATE
-#define RELAY9_ACTIVE_STATE           HIGH
+#ifndef RELAY9_ON_STATE
+#define RELAY9_ON_STATE               HIGH
 #endif
 #ifndef RELAY10_DEFAULT_STATE
 #define RELAY10_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY10_ACTIVE_STATE
-#define RELAY10_ACTIVE_STATE          HIGH
+#ifndef RELAY10_ON_STATE
+#define RELAY10_ON_STATE              HIGH
 #endif
 #ifndef RELAY11_DEFAULT_STATE
 #define RELAY11_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY11_ACTIVE_STATE
-#define RELAY11_ACTIVE_STATE          HIGH
+#ifndef RELAY11_ON_STATE
+#define RELAY11_ON_STATE              HIGH
 #endif
 #ifndef RELAY12_DEFAULT_STATE
 #define RELAY12_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY12_ACTIVE_STATE
-#define RELAY12_ACTIVE_STATE          HIGH
+#ifndef RELAY12_ON_STATE
+#define RELAY12_ON_STATE              HIGH
 #endif
 #ifndef RELAY13_DEFAULT_STATE
 #define RELAY13_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY13_ACTIVE_STATE
-#define RELAY13_ACTIVE_STATE          HIGH
+#ifndef RELAY13_ON_STATE
+#define RELAY13_ON_STATE              HIGH
 #endif
 #ifndef RELAY14_DEFAULT_STATE
 #define RELAY14_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY14_ACTIVE_STATE
-#define RELAY14_ACTIVE_STATE          HIGH
+#ifndef RELAY14_ON_STATE
+#define RELAY14_ON_STATE              HIGH
 #endif
 #ifndef RELAY15_DEFAULT_STATE
 #define RELAY15_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY15_ACTIVE_STATE
-#define RELAY15_ACTIVE_STATE          HIGH
+#ifndef RELAY15_ON_STATE
+#define RELAY15_ON_STATE              HIGH
 #endif
 #ifndef RELAY16_DEFAULT_STATE
 #define RELAY16_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY16_ACTIVE_STATE
-#define RELAY16_ACTIVE_STATE          HIGH
+#ifndef RELAY16_ON_STATE
+#define RELAY16_ON_STATE              HIGH
 #endif
 #ifndef RELAY17_DEFAULT_STATE
 #define RELAY17_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY17_ACTIVE_STATE
-#define RELAY17_ACTIVE_STATE          HIGH
+#ifndef RELAY17_ON_STATE
+#define RELAY17_ON_STATE              HIGH
 #endif
 #ifndef RELAY18_DEFAULT_STATE
 #define RELAY18_DEFAULT_STATE         OFF
 #endif
-#ifndef RELAY18_ACTIVE_STATE
-#define RELAY18_ACTIVE_STATE          HIGH
+#ifndef RELAY18_ON_STATE
+#define RELAY18_ON_STATE              HIGH
 #endif
 
 #if ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_OPEN_RELAY != ROOF_MOTOR_CLOSE_RELAY
@@ -175,50 +175,50 @@
 #ifndef SENSE1_ON_STATE
 #define SENSE1_ON_STATE               LOW
 #endif
-#ifndef SENSE1_INIT_STATE
-#define SENSE1_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE1_INIT
+#define SENSE1_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE2_ON_STATE
 #define SENSE2_ON_STATE               LOW
 #endif
-#ifndef SENSE2_INIT_STATE
-#define SENSE2_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE2_INIT
+#define SENSE2_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE3_ON_STATE
 #define SENSE3_ON_STATE               LOW
 #endif
-#ifndef SENSE3_INIT_STATE
-#define SENSE3_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE3_INIT
+#define SENSE3_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE4_ON_STATE
 #define SENSE4_ON_STATE               LOW
 #endif
-#ifndef SENSE4_INIT_STATE
-#define SENSE4_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE4_INIT
+#define SENSE4_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE5_ON_STATE
 #define SENSE5_ON_STATE               LOW
 #endif
-#ifndef SENSE5_INIT_STATE
-#define SENSE5_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE5_INIT
+#define SENSE5_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE6_ON_STATE
 #define SENSE6_ON_STATE               LOW
 #endif
-#ifndef SENSE6_INIT_STATE
-#define SENSE6_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE6_INIT
+#define SENSE6_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE7_ON_STATE
 #define SENSE7_ON_STATE               LOW
 #endif
-#ifndef SENSE7_INIT_STATE
-#define SENSE7_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE7_INIT
+#define SENSE7_INIT                   INPUT_PULLUP
 #endif
 #ifndef SENSE8_ON_STATE
 #define SENSE8_ON_STATE               LOW
 #endif
-#ifndef SENSE8_INIT_STATE
-#define SENSE8_INIT_STATE             INPUT_PULLUP
+#ifndef SENSE8_INIT
+#define SENSE8_INIT                   INPUT_PULLUP
 #endif
 
 // -----------------------------------------------------------------------------------
