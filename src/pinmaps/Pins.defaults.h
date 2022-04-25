@@ -40,7 +40,7 @@
 
 // Dome control
 #ifndef AXIS1_ENABLE_PIN
-#define AXIS1_ENABLE_PIN            OFF
+#define AXIS1_ENABLE_PIN            RELAY17_PIN
 #endif
 #ifndef AXIS1_M0_PIN
 #define AXIS1_M0_PIN                OFF
@@ -55,41 +55,41 @@
 #define AXIS1_M3_PIN                OFF
 #endif
 #ifndef AXIS1_STEP_PIN
-#define AXIS1_STEP_PIN              OFF
+#define AXIS1_STEP_PIN              RELAY13_PIN
 #endif
 #ifndef AXIS1_DIR_PIN
-#define AXIS1_DIR_PIN               OFF
+#define AXIS1_DIR_PIN               RELAY14_PIN
 #endif
 #ifndef AXIS1_DECAY_PIN
 #define AXIS1_DECAY_PIN             OFF
 #endif
 #ifndef AXIS1_SERVO_PH1_PIN
-#define AXIS1_SERVO_PH1_PIN         OFF
+#define AXIS1_SERVO_PH1_PIN         AXIS1_STEP_PIN
 #endif
 #ifndef AXIS1_SERVO_PH2_PIN
-#define AXIS1_SERVO_PH2_PIN         OFF
+#define AXIS1_SERVO_PH2_PIN         AXIS1_DIR_PIN
 #endif
 #ifndef AXIS1_SERVO_ENC1_PIN
-#define AXIS1_SERVO_ENC1_PIN        OFF
+#define AXIS1_SERVO_ENC1_PIN        SENSE5_PIN
 #endif
 #ifndef AXIS1_SERVO_ENC2_PIN
-#define AXIS1_SERVO_ENC2_PIN        OFF
+#define AXIS1_SERVO_ENC2_PIN        SENSE6_PIN
 #endif
 #ifndef AXIS1_FAULT_PIN
-#define AXIS1_FAULT_PIN             OFF
+#define AXIS1_FAULT_PIN             SENSE3_PIN
 #endif
 #ifndef AXIS1_SENSE_HOME_PIN
-#define AXIS1_SENSE_HOME_PIN        OFF
+#define AXIS1_SENSE_HOME_PIN        ASENSE3_PIN
 #endif
 #ifndef AXIS1_SENSE_LIMIT_MIN_PIN
-#define AXIS1_SENSE_LIMIT_MIN_PIN   OFF
+#define AXIS1_SENSE_LIMIT_MIN_PIN   ASENSE3_PIN
 #endif
 #ifndef AXIS1_SENSE_LIMIT_MAX_PIN
-#define AXIS1_SENSE_LIMIT_MAX_PIN   OFF
+#define AXIS1_SENSE_LIMIT_MAX_PIN   ASENSE3_PIN
 #endif
 
 #ifndef AXIS2_ENABLE_PIN
-#define AXIS2_ENABLE_PIN            OFF
+#define AXIS2_ENABLE_PIN            RELAY18_PIN
 #endif
 #ifndef AXIS2_M0_PIN
 #define AXIS2_M0_PIN                OFF
@@ -104,37 +104,37 @@
 #define AXIS2_M3_PIN                OFF
 #endif
 #ifndef AXIS2_STEP_PIN
-#define AXIS2_STEP_PIN              OFF
+#define AXIS2_STEP_PIN              RELAY15_PIN
 #endif
 #ifndef AXIS2_DIR_PIN
-#define AXIS2_DIR_PIN               OFF
+#define AXIS2_DIR_PIN               RELAY16_PIN
 #endif
 #ifndef AXIS2_DECAY_PIN
 #define AXIS2_DECAY_PIN             OFF
 #endif
 #ifndef AXIS2_SERVO_PH1_PIN
-#define AXIS2_SERVO_PH1_PIN         OFF
+#define AXIS2_SERVO_PH1_PIN         AXIS2_STEP_PIN
 #endif
 #ifndef AXIS2_SERVO_PH2_PIN
-#define AXIS2_SERVO_PH2_PIN         OFF
+#define AXIS2_SERVO_PH2_PIN         AXIS2_DIR_PIN
 #endif
 #ifndef AXIS2_SERVO_ENC1_PIN
-#define AXIS2_SERVO_ENC1_PIN        OFF
+#define AXIS2_SERVO_ENC1_PIN        SENSE7_PIN
 #endif
 #ifndef AXIS2_SERVO_ENC2_PIN
-#define AXIS2_SERVO_ENC2_PIN        OFF
+#define AXIS2_SERVO_ENC2_PIN        SENSE8_PIN
 #endif
 #ifndef AXIS2_FAULT_PIN
-#define AXIS2_FAULT_PIN             OFF
+#define AXIS2_FAULT_PIN             SENSE4_PIN
 #endif
 #ifndef AXIS2_SENSE_HOME_PIN
-#define AXIS2_SENSE_HOME_PIN        OFF
+#define AXIS2_SENSE_HOME_PIN        ASENSE4_PIN
 #endif
 #ifndef AXIS2_SENSE_LIMIT_MIN_PIN
-#define AXIS2_SENSE_LIMIT_MIN_PIN   OFF
+#define AXIS2_SENSE_LIMIT_MIN_PIN   ASENSE4_PIN
 #endif
 #ifndef AXIS2_SENSE_LIMIT_MAX_PIN
-#define AXIS2_SENSE_LIMIT_MAX_PIN   OFF
+#define AXIS2_SENSE_LIMIT_MAX_PIN   ASENSE4_PIN
 #endif
 
 // Digital outputs for switching relays
