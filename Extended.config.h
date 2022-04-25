@@ -24,11 +24,11 @@
 #define SERIAL_DEBUG_BAUD            9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // NON-VOLATILE STORAGE ------------------------------------------------------------------------------------------------------------
-#define NV_WIPE                       OFF //         OFF, Causes the defaults to be written back into NV (FLASH,EEPROM,etc.)  Infreq
-                                          //              ***     IMPORTANT: ENABLE THIS OPTION THEN UPLOAD, WAIT A MINUTE    ***
-// Warning --->                           //              ***     OR TWO THEN SET THIS OPTION TO OFF AND UPLOAD AGAIN.        ***
-                                          //              ***     LEAVING THIS OPTION ENABLED CAN CAUSE EXCESSIVE NV          ***
-                                          //              ***     WEAR AND DAMAGE THE MICROCONTROLLER NV SUBSYSTEM !!!        ***
+#define NV_WIPE                       OFF //    OFF, Causes the defaults to be written back into NV (FLASH,EEPROM,etc.)       Infreq
+                                          //         ***     IMPORTANT: ENABLE THIS OPTION THEN UPLOAD, WAIT A MINUTE  ***
+// Warning --->                           //         ***     OR TWO THEN SET THIS OPTION TO OFF AND UPLOAD AGAIN.      ***
+                                          //         ***     LEAVING THIS OPTION ENABLED CAN CAUSE EXCESSIVE NV        ***
+                                          //         ***     WEAR AND DAMAGE THE MICROCONTROLLER NV SUBSYSTEM !!!      ***
 
 // SERIAL PORT COMMAND CHANNELS ------------------------------------ see https://onstep.groups.io/g/main/wiki/6-Configuration#SERIAL
 #define SERIAL_A_BAUD_DEFAULT        9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Infreq
@@ -36,9 +36,9 @@
 #define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
-#define CONNECT_RECHECK_TIME           60 // in seconds
-#define CONNECT_RESET_TRIES             5 // connection attempts before Ethernet shield is reset (if available,) must be >= 1
-#define CONNECT_REBOOT_TRIES           10 // connection attempts before Watchdog reboot is forced, must be > CONNECT_RESET_TRIES
+#define CONNECT_RECHECK_TIME           60 //     60, n. Where n=1 to 60 seconds.                                              Infreq
+#define CONNECT_RESET_TRIES             5 //      5, n. Where n=1 to 60. Ethernet shield reset after connection attempts.     Infreq
+#define CONNECT_REBOOT_TRIES           10 //     10, n. Where n=CONNECT_RESET_TRIES to 60 before watchdog reboot is forced.   Infreq
 
 // IP ADDRESS SETTINGS -------------------------------------------------------------------------------------------------------------
 
@@ -56,21 +56,23 @@
 #define AP_SN_MASK        {255,255,255,0} // ..55,255,0}, Wifi Access Point SUBNET Mask.                                      Adjust
 
 #define STA_ENABLED                  true //        true, Wifi Station Enabled.                                               Adjust
-#define STA_DHCP_ENABLED            false //       false, Wifi Station/Ethernet DHCP Enabled.                                 Adjust
+#define STA_DHCP_ENABLED            false //       false, Ethernet/Wifi Station DHCP Enabled.                                 Adjust
 #define STA_SSID                   "Home" //      "Home", Wifi Station SSID to connnect to.                                   Adjust
 #define STA_PASSWORD           "password" //  "password", Wifi Station mode password.                                         Adjust
-#define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Wifi Station/Ethernet IP Address.                                   Adjust
-#define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Wifi Station/Ethernet GATEWAY Address.                              Adjust
-#define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Wifi Station/Ethernet SUBNET Mask.                                  Adjust
+#define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Ethernet/Wifi Station IP Address.                                   Adjust
+#define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Ethernet/Wifi Station GATEWAY Address.                              Adjust
+#define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Ethernet/Wifi Station SUBNET Mask.                                  Adjust
 
-// Visual --------------------------------------------------------------------------------------------------------------------------
-#define REVERSE_WEATHER_CHART_X_AXIS  OFF // ON reverses the xaxis of weather charts so new data is to the left
-#define FAV_ICON                      OFF // ON enables website icon in browsers, place favicon.ico file SD card root directory
+// VISUAL --------------------------------------------------------------------------------------------------------------------------
+#define REVERSE_WEATHER_CHART_X_AXIS  OFF //    OFF, ON reverses the weather charts x-axis so new data is to the left.        Adjust
+#define FAV_ICON                      OFF //    OFF, ON and place favicon.ico file SD card root directory for website icon.   Adjust 
 
-// Watchdog ------------------------------------------------------------------------------------------------------------------------
-#define WATCHDOG_DURING_SD            OFF // ON keeps watchdog enabled at all times
+// WATCHDOG ------------------------------------------------------------------------------------------------------------------------
+#define WATCHDOG_DURING_SD            OFF //    OFF, ON keeps the watchdog enabled at all times.                              Infreq
 
-// Roof ----------------------------------------------------------------------------------------------------------------------------
-#define ROOF_BUTTON_PRESS_TIME        1.0 // In seconds, this blocks the main-loop so <= ~2 seconds, for garage door openers.
-#define ROOF_PRE_MOTION_TIME          1.5 // In seconds.
-#define ROOF_POST_MOTION_TIME         2.0 // In seconds.
+// ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
+#define ROOF_TIME_LIMIT_SENSE_FAIL      6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Infreq
+#define ROOF_TIME_BUTTON_PRESS        1.0 //    1.0, n. Where n=1..10 (seconds) For garage door openers.                      Infreq
+#define ROOF_TIME_PRE_MOTION          1.5 //    1.5, n. Where n=1..10 (seconds) For roof open interlock sense.                Infreq
+#define ROOF_TIME_POST_MOTION         2.0 //    2.0, n. Where n=1..10 (seconds) For roof close interlock sense.               Infreq
+
