@@ -308,6 +308,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   #if TIME_LOCATION_SOURCE != OFF
     tls.init();
+    #if TIME_LOCATION_SOURCE != NTP
+      startupTime = now();
+    #endif
   #endif
 
   // start observatory monitor task

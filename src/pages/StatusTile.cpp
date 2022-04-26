@@ -38,7 +38,7 @@
     www.sendContent(temp);
 
     time_t t = now();
-    t -= timeZone*SECS_PER_HOUR;  // convert to UT1
+    t += timeZone*SECS_PER_HOUR;  // convert to UTC
 
     strcpy(ws2, "Std");
     #if TIME_DISPLAY == UT1

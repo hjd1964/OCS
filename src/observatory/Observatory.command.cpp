@@ -6,6 +6,7 @@
 
 #include "../lib/convert/Convert.h"
 #include "../lib/sense/Sense.h"
+#include "../lib/tls/Tls.h"
 #include "../libApp/analog/Analog.h"
 
 #include "Observatory.h"
@@ -99,6 +100,24 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
   } else
 
   if (command[0] == 'S') {
+    //  :SU[MM/DD/YYYY,HH:MM:SS]#
+    //            Set the UTC Date and Time
+    //            Return: 0 failure, 1 success
+    if (command[1] == 'U') {
+      DL(parameter);
+      if (strlen(parameter) == 19 && parameter[2] == '/' && parameter[5] == '/' && parameter[10] == ',' && parameter[13] == ':' && parameter[16] == ':') {
+        int m = atoi(&parameter[0]);
+        int d = atoi(&parameter[3]);
+        int y = atoi(&parameter[6]);
+        int h = atoi(&parameter[11]);
+        int n = atoi(&parameter[14]);
+        int s = atoi(&parameter[17]);
+        if (m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 2022 && y <= 3000 && h >= 0 && h <= 23 && n >= 0 && n <= 59 && s >= 0 && s <= 59) {
+          tls.set(y, m, d, h, n, s);
+        } else *commandError = CE_PARAM_RANGE;
+      } else *commandError = CE_PARAM_FORM;
+    } else
+
     //  :SW#  Set the watchdog reset flag
     #if WATCHDOG != OFF
       if (command[1] == 'W' && parameter[0] == 0) {
