@@ -220,8 +220,8 @@
 
 #define AXIS1_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 
-#define AXIS1_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
 #define AXIS1_STEPS_PER_DEGREE       60.0 //   60.0, n. Number of steps per degree for dome.                                  Adjust
+#define AXIS1_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
 #define AXIS1_REVERSE                 OFF //    OFF, ON Reverses movement direction, or reverse wiring instead to correct.    Option
 
 // for SERVO_II and SERVO_SD driver models, PID and encoder settings:
@@ -250,8 +250,8 @@
 
 #define AXIS2_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 
-#define AXIS2_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
 #define AXIS2_STEPS_PER_DEGREE       60.0 //   60.0, n. Number of steps per degree for dome.                                  Adjust
+#define AXIS2_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
 #define AXIS2_REVERSE                 OFF //    OFF, ON Reverses movement direction, or reverse wiring instead to correct.    Option
 
 // for SERVO_II and SERVO_SD driver models, PID and encoder settings:
