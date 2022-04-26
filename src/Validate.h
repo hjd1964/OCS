@@ -432,16 +432,16 @@
   #error "Configuration (Config.h): AXIS1_LIMIT_MAX must be between 0 and 360."
 #endif
 
-#if AXIS1_SENSE_HOME != OFF && AXIS1_SENSE_HOME != HIGH && AXIS1_SENSE_HOME != LOW
-  #error "Configuration (Config.h): AXIS1_SENSE_HOME must be either OFF, HIGH or LOW."
+#if (AXIS1_SENSE_HOME) != OFF && (AXIS1_SENSE_HOME) < 0
+  #error "Configuration (Config.h): Setting AXIS1_SENSE_HOME unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
-#if AXIS1_SENSE_LIMIT_MIN != OFF && AXIS1_SENSE_LIMIT_MIN != HIGH && AXIS1_SENSE_LIMIT_MIN != LOW
-  #error "Configuration (Config.h): AXIS1_SENSE_LIMIT_MIN must be either OFF, HIGH or LOW."
+#if (AXIS1_SENSE_LIMIT_MIN) != OFF && (AXIS1_SENSE_LIMIT_MIN) < 0
+  #error "Configuration (Config.h): Setting AXIS1_SENSE_LIMIT_MIN unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
-#if AXIS1_SENSE_LIMIT_MAX != OFF && AXIS1_SENSE_LIMIT_MAX != HIGH && AXIS1_SENSE_LIMIT_MAX != LOW
-  #error "Configuration (Config.h): AXIS1_SENSE_LIMIT_MAX must be either OFF, HIGH or LOW."
+#if (AXIS1_SENSE_LIMIT_MAX) != OFF && (AXIS1_SENSE_LIMIT_MAX) < 0
+  #error "Configuration (Config.h): Setting AXIS1_SENSE_LIMIT_MAX unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
 #if AXIS2_POWER_DOWN != OFF && AXIS2_POWER_DOWN != ON
@@ -460,14 +460,14 @@
   #error "Configuration (Config.h): AXIS2_LIMIT_MIN must be < AXIS2_LIMIT_MAX."
 #endif
 
-#if AXIS2_SENSE_HOME != OFF && AXIS2_SENSE_HOME != HIGH && AXIS2_SENSE_HOME != LOW
-  #error "Configuration (Config.h): AXIS2_SENSE_HOME must be either OFF, HIGH or LOW."
+#if (AXIS2_SENSE_HOME) != OFF && (AXIS2_SENSE_HOME) < 0
+  #error "Configuration (Config.h): Setting AXIS2_SENSE_HOME unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
-#if AXIS2_SENSE_LIMIT_MIN != OFF && AXIS2_SENSE_LIMIT_MIN != HIGH && AXIS2_SENSE_LIMIT_MIN != LOW
-  #error "Configuration (Config.h): AXIS2_SENSE_LIMIT_MIN must be either OFF, HIGH or LOW."
+#if (AXIS2_SENSE_LIMIT_MIN) != OFF && (AXIS2_SENSE_LIMIT_MIN) < 0
+  #error "Configuration (Config.h): Setting AXIS2_SENSE_LIMIT_MIN unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
-#if AXIS2_SENSE_LIMIT_MAX != OFF && AXIS2_SENSE_LIMIT_MAX != HIGH && AXIS2_SENSE_LIMIT_MAX != LOW
-  #error "Configuration (Config.h): AXIS2_SENSE_LIMIT_MAX must be either OFF, HIGH or LOW."
+#if (AXIS2_SENSE_LIMIT_MAX) != OFF && (AXIS2_SENSE_LIMIT_MAX) < 0
+  #error "Configuration (Config.h): Setting AXIS2_SENSE_LIMIT_MAX unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
