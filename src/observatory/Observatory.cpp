@@ -340,7 +340,7 @@ void Observatory::connectionCheck() {
           !roof.isMoving() &&
         #endif
         #ifdef DOME_PRESENT
-          !dome.isMoving() &&
+          !dome.isSlewing() &&
         #endif
         connectionCheckTry >= CONNECT_REBOOT_TRIES) {
         VLF("MSG: Forcing Watchdog Reboot");

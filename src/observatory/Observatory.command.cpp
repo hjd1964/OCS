@@ -106,7 +106,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
           if (roof.isMoving()) { *commandError = CE_SLEW_IN_MOTION; return true; }
         #endif
         #ifdef DOME_PRESENT
-          if (dome.isMoving()) { *commandError = CE_SLEW_IN_MOTION; return true; }
+          if (dome.isSlewing()) { *commandError = CE_SLEW_IN_MOTION; return true; }
         #endif
         strcpy(reply, "Rebooting in 8 seconds...");
         while (true) {};
