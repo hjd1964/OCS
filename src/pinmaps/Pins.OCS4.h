@@ -66,8 +66,15 @@
 #define RELAY12_PIN             35  // RE12, mechanical relay (110/220VAC 16A)
 #define RELAY13_PIN             36  // RE13, optional 4-channel ebay relay board
 #define RELAY14_PIN             37  // RE14, optional 4-channel ebay relay board
-#define RELAY15_PIN             3  // RE15, optional 4-channel ebay relay board
-#define RELAY16_PIN             4  // RE16, optional 4-channel ebay relay board
+#define RELAY15_PIN             38  // RE15, optional 4-channel ebay relay board
+#define RELAY16_PIN             39  // RE16, optional 4-channel ebay relay board
+#if defined(ARDUINO_TEENSY41)
+  #define RELAY17_PIN           40  // RE17, on aux header
+  #define RELAY18_PIN           41  // RE18, on aux header
+#else
+  #define RELAY17_PIN DAC_PIN(A21)  // RE17, on aux header
+  #define RELAY18_PIN DAC_PIN(A22)  // RE18, on aux header
+#endif
 
 // Digital inputs for sensing events
 #define SENSE1_PIN              2   // DIN1 (ESD proteted, current limited, with pullup to 3.3V)
