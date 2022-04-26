@@ -103,19 +103,18 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     #if WATCHDOG != OFF
       if (command[1] == 'W' && parameter[0] == 0) {
         #ifdef ROOF_PRESENT
-        if (!roof.isMoving())
+          if (roof.isMoving()) { *commandError = CE_SLEW_IN_MOTION; return true; }
         #endif
-        {
-          strcpy(reply,"Rebooting in 8 seconds...");
-          while (true) {};
-        }
-        #ifdef ROOF_PRESENT
-        else *commandError = CE_SLEW_IN_MOTION;
+        #ifdef DOME_PRESENT
+          if (dome.isMoving()) { *commandError = CE_SLEW_IN_MOTION; return true; }
         #endif
+        strcpy(reply, "Rebooting in 8 seconds...");
+        while (true) {};
       } else
     #endif
       return false;
-  } else return false;
+  } else
+    return false;
 
   return true;
 };
