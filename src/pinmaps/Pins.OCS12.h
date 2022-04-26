@@ -53,10 +53,6 @@
 #define RELAY12_PIN            45
 #define RELAY13_PIN            47
 #define RELAY14_PIN            49
-#define RELAY15_PIN            OFF
-#define RELAY16_PIN            OFF
-#define RELAY17_PIN            OFF
-#define RELAY18_PIN            OFF
 
 // Digital inputs for sensing events
 #define SENSE1_PIN             22
@@ -65,8 +61,8 @@
 #define SENSE4_PIN             28
 #define SENSE5_PIN             30
 #define SENSE6_PIN             32
-#define SENSE7_PIN             OFF
-#define SENSE8_PIN             OFF
+#define SENSE7_PIN             34
+#define SENSE8_PIN             36
 
 // Analog inputs
 #define ASENSE1_PIN            A0
