@@ -47,7 +47,7 @@
 // Converts the analog measure (range 0 to 1.0) to Amps
 #define STAT_MAINS_ANALOG_TO_CURRENT(x) (x*NAN)
 
-#define STAT_DC_VOLTAGE_ANALOG          1 //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply voltage.   Option
+#define STAT_DC_VOLTAGE_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply voltage.   Option
 #define STAT_DC_CURRENT_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply current.   Option
 
 #define STAT_BATTERY_VOLTAGE_ANALOG   OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12V roof battery voltage.     Option
