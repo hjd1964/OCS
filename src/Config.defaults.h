@@ -288,6 +288,9 @@
   #ifndef AXIS1_STEP_STATE
   #define AXIS1_STEP_STATE             HIGH
   #endif
+  #ifndef AXIS1_M2_ON_STATE
+  #define AXIS1_M2_ON_STATE            HIGH                        // default ON state for M2
+  #endif
   #ifndef AXIS1_DRIVER_MICROSTEPS
   #define AXIS1_DRIVER_MICROSTEPS      OFF
   #endif
@@ -420,6 +423,9 @@
   #endif
   #ifndef AXIS2_STEP_STATE
   #define AXIS2_STEP_STATE             HIGH
+  #endif
+  #ifndef AXIS2_M2_ON_STATE
+  #define AXIS2_M2_ON_STATE            HIGH
   #endif
   #ifndef AXIS2_DRIVER_MICROSTEPS
   #define AXIS2_DRIVER_MICROSTEPS      OFF

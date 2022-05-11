@@ -209,7 +209,6 @@
 #define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
 
 // DOME CONTROL PANEL --------------------------------------------------------------------------------------------------------------
-
 #define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option
 
 #define DOME_SHUTTER_LOCK             OFF //    OFF, ON to disable dome motion unless shutter is open.                        Option

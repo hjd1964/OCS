@@ -34,8 +34,7 @@ void Dome::init() {
   if (settings.park.altitude > AXIS2_LIMIT_MAX) { settings.park.altitude = 0.0F; initError.value = true; DLF("ERR, Dome.init(): bad NV park pos > AXIS2_LIMIT_MAX (set to 0.0)"); }
 
   VLF("MSG: Dome, init (Axis1)");
-  axis1.init(&motor1, pollAxis1);
-  if (!motor1.init(moveAxis1)) { DLF("ERR: Axis1, no motor exiting!"); return; }
+  if (!axis1.init(&motor1)) {  DLF("ERR: Axis1, no motion controller exiting!"); return;  }
   axis1.resetPositionSteps(0);
   axis1.setBacklash(settings.backlash.azimuth);
   axis1.setFrequencyMax(AXIS1_SLEW_RATE);
@@ -47,8 +46,7 @@ void Dome::init() {
 
   #if AXIS2_DRIVER_MODEL != OFF
     VLF("MSG: Dome, init (Axis2)");
-    axis2.init(&motor2, pollAxis2);
-    if (!motor2.init(moveAxis2)) { DLF("ERR: Axis2, no motor exiting!"); return; }
+    if (!axis2.init(&motor2)) {  DLF("ERR: Axis1, no motion controller exiting!"); return;  }
     axis2.resetPositionSteps(0);
     axis2.setBacklash(settings.backlash.altitude);
     axis2.setFrequencyMax(AXIS2_SLEW_RATE);
