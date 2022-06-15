@@ -218,7 +218,7 @@
 #define AXIS1_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 #define AXIS1_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
-// for SERVO_II and SERVO_SD driver models, PID and encoder settings:
+// for SERVO_II and SERVO_PE driver models, PID and encoder settings:
 #define AXIS1_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
 #define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
 #define AXIS1_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
@@ -247,7 +247,7 @@
 #define AXIS2_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 #define AXIS2_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
-// for SERVO_II and SERVO_SD driver models, PID and encoder settings:
+// for SERVO_II and SERVO_PE driver models, PID and encoder settings:
 #define AXIS2_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
 #define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
 #define AXIS2_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
