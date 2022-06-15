@@ -101,7 +101,7 @@ CommandError Dome::gotoAzimuthTarget() {
 
   if (axis1.isSlewing()) return CE_NONE;
 
-  CommandError e = axis1.autoSlewRateByDistance(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
   if (e == CE_NONE) gotoAxis1 = true;
   return e;
 }
@@ -137,7 +137,7 @@ CommandError Dome::gotoAltitudeTarget() {
 
     if (axis2.isSlewing()) return CE_NONE;
 
-    CommandError e = axis2.autoSlewRateByDistance(AXIS2_SLEW_RATE*AXIS2_ACCELERATION_TIME, AXIS2_SLEW_RATE);
+    CommandError e = axis2.autoGoto(AXIS2_SLEW_RATE*AXIS2_ACCELERATION_TIME, AXIS2_SLEW_RATE);
     if (e == CE_NONE) gotoAxis2 = true;
     return e;
   #else
@@ -205,14 +205,14 @@ CommandError Dome::park() {
   VLF("MSG: Dome, parking");
   axis1.setBacklash(0.0F);
   axis1.setTargetCoordinatePark(settings.park.azimuth);
-  CommandError e = axis1.autoSlewRateByDistance(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
   if (e == CE_NONE) gotoAxis1 = true;
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       axis2.setBacklash(0.0F);
       axis2.setTargetCoordinatePark(settings.park.altitude);
-      e = axis2.autoSlewRateByDistance(AXIS2_SLEW_RATE*AXIS2_ACCELERATION_TIME, AXIS2_SLEW_RATE);
+      e = axis2.autoGoto(AXIS2_SLEW_RATE*AXIS2_ACCELERATION_TIME, AXIS2_SLEW_RATE);
       if (e == CE_NONE) gotoAxis2 = true;
     }
   #endif
@@ -241,7 +241,7 @@ CommandError Dome::unpark() {
   axis1.setInstrumentCoordinatePark(settings.park.azimuth);
   axis1.setBacklash(settings.backlash.azimuth);
   axis1.setTargetCoordinate(settings.park.azimuth);
-  CommandError e = axis1.autoSlewRateByDistance(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS1_SLEW_RATE);
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
@@ -250,7 +250,7 @@ CommandError Dome::unpark() {
       axis2.setInstrumentCoordinatePark(settings.park.altitude);
       axis2.setBacklash(settings.backlash.altitude);
       axis2.setTargetCoordinate(settings.park.altitude);
-      e = axis2.autoSlewRateByDistance(AXIS2_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS2_SLEW_RATE);
+      e = axis2.autoGoto(AXIS2_SLEW_RATE*AXIS1_ACCELERATION_TIME, AXIS2_SLEW_RATE);
     }
   #endif
 
