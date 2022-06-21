@@ -84,3 +84,6 @@
   #define WDT_RESET
   #define WDT_DISABLE
 #endif
+
+// stand-in for delayNanoseconds()
+#define delayNanoseconds(ns) delayMicroseconds(ceilf(ns/1000.0F))
