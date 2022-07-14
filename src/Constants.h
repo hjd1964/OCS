@@ -75,6 +75,9 @@
 #define TASKS_HWTIMER2_ENABLE
 #define TASKS_HWTIMER3_ENABLE
 
+// default start of axis class hardware timers
+#define AXIS_HARDWARE_TIMER_BASE    3      // in the OCS timer#1 is the watchdog and timer#2 is for relays
+
 #ifndef RESPONSE_INTERVAL
   #define RESPONSE_INTERVAL         1000
 #endif
