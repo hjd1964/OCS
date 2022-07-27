@@ -16,7 +16,7 @@ extern NVS nv;
 
 #include "lib/convert/Convert.h"
 
-#if WEATHER_CHARTS == ON
+#if SD_CARD == ON
   #ifdef ESP32
     #include <FS.h>
     #include <LittleFS.h>
