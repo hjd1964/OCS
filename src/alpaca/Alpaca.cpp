@@ -1,12 +1,11 @@
 // -----------------------------------------------------------------------------------
 // Alpaca generic functions
 
-#include <ArduinoJson.h>
-
 #include "../Common.h"
 
 #if ASCOM_ALPACA_SERVER == ON
 
+#include <ArduinoJson.h>
 #include "Alpaca.h"
 
 StaticJsonDocument<1000> alpacaJsonDoc;
