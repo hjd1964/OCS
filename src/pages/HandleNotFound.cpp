@@ -2,6 +2,9 @@
 // Handle webpage not found
 
 #include "../Common.h"
+
+#if WEB_SERVER == ON
+
 #include "../lib/ethernet/webServer/WebServer.h"
 #include "../lib/wifi/webServer/WebServer.h"
 #include "../lib/tasks/OnTask.h"
@@ -84,3 +87,5 @@ void handleNotFound() {
 
   www.send(404, "text/html", message);
 }
+
+#endif

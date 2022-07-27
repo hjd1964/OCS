@@ -2,6 +2,8 @@
 // Web server, Index page
 #include "Index.h"
 
+#if WEB_SERVER == ON
+
 #include "htmlHeaders.h"
 #include "htmlScripts.h"
 #include "htmlTabs.h"
@@ -191,3 +193,5 @@ void indexAjax() {
     #endif
   #endif
 }
+
+#endif

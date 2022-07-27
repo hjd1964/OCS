@@ -1,6 +1,8 @@
 // relays -------------------------------------------------------------------------------------------
 #include "Relays.h"
 
+#if WEB_SERVER == ON
+
 #include "../lib/ethernet/webServer/WebServer.h"
 #include "../lib/wifi/webServer/WebServer.h"
 #include "../libApp/relay/Relay.h"
@@ -54,3 +56,5 @@ void relaysAjax() {
     }
   }
 }
+
+#endif
