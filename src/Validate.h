@@ -407,9 +407,8 @@
   #error "Configuration (Config.h): AXIS1_REVERSE must be either ON or OFF."
 #endif
 
-#if AXIS1_SERVO_ENCODER != ENC_AB && AXIS1_SERVO_ENCODER != ENC_CW_CCW && \
-    AXIS1_SERVO_ENCODER != ENC_PULSE_DIR && AXIS1_SERVO_ENCODER != ENC_PULSE_ONLY
-  #error "Configuration (Config.h): AXIS1_SERVO_ENCODER must be either ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR or ENC_PULSE_ONLY."
+#if AXIS1_ENCODER < ENC_FIRST || AXIS1_ENCODER > ENC_LAST
+  #error "Configuration (Config.h): AXIS1_ENCODER unknown encoder type."
 #endif
 
 #if AXIS1_DRIVER_MODEL == OFF && AXIS2_DRIVER_MODEL != OFF
@@ -442,6 +441,10 @@
 
 #if (AXIS1_SENSE_LIMIT_MAX) != OFF && (AXIS1_SENSE_LIMIT_MAX) < 0
   #error "Configuration (Config.h): Setting AXIS1_SENSE_LIMIT_MAX unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
+#endif
+
+#if AXIS2_ENCODER < ENC_FIRST || AXIS2_ENCODER > ENC_LAST
+  #error "Configuration (Config.h): AXIS2_ENCODER unknown encoder type."
 #endif
 
 #if AXIS2_POWER_DOWN != OFF && AXIS2_POWER_DOWN != ON

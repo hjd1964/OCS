@@ -229,6 +229,9 @@
 #ifndef DOME_SHUTTER_LOCK
 #define DOME_SHUTTER_LOCK              OFF
 #endif
+#ifndef DEFAULT_POWER_DOWN_TIME
+#define DEFAULT_POWER_DOWN_TIME        30000                       // motor power down time, in milliseconds
+#endif
 #ifndef AXIS1_DRIVER_MODEL
 #define AXIS1_DRIVER_MODEL             OFF                         // specify a driver to enable
 #endif
@@ -280,11 +283,14 @@
 #ifndef AXIS1_SENSE_LIMIT_INIT
 #define AXIS1_SENSE_LIMIT_INIT         INPUT_PULLUP
 #endif
-#if AXIS1_DRIVER_MODEL >= DRIVER_FIRST && AXIS1_DRIVER_MODEL <= DRIVER_LAST
+#if AXIS1_DRIVER_MODEL >= STEP_DIR_DRIVER_FIRST && AXIS1_DRIVER_MODEL <= STEP_DIR_DRIVER_LAST
   #define AXIS1_DRIVER_PRESENT
-  #if AXIS1_DRIVER_MODEL == TMC2130 || AXIS1_DRIVER_MODEL == TMC5160
-  #define AXIS1_DRIVER_TMC_SPI
+  #if AXIS1_DRIVER_MODEL >= TMC_DRIVER_FIRST
+    #error "Config.h: TMC Drivers are not supported!"
+  #else
+    #define AXIS1_STEP_DIR_LEGACY
   #endif
+
   #ifndef AXIS1_STEP_STATE
   #define AXIS1_STEP_STATE             HIGH
   #endif
@@ -324,6 +330,22 @@
 #endif
 #if AXIS1_DRIVER_MODEL >= SERVO_DRIVER_FIRST
   #define AXIS1_SERVO_PRESENT
+  #if AXIS1_DRIVER_MODEL == SERVO_TMC2209
+    #error "Config.h: TMC Drivers are not supported!"
+  #else
+    #define AXIS1_SERVO_DC
+  #endif
+
+  #ifndef AXIS1_SERVO_MAX_VELOCITY
+  #define AXIS1_SERVO_MAX_VELOCITY      100                       // max velocity, in % for DC, in steps/s for SERVO_TMC2209
+  #endif
+  #ifndef AXIS1_SERVO_ACCELERATION
+  #define AXIS1_SERVO_ACCELERATION      20                        // acceleration, in %/s/s for DC, in steps/s/s for SERVO_TMC2209
+  #endif
+  #ifndef AXIS1_SERVO_SYNC_THRESHOLD
+  #define AXIS1_SERVO_SYNC_THRESHOLD    OFF                       // sync threshold in counts or OFF (for absolute encoders)
+  #endif
+
   #ifndef AXIS1_SERVO_P
   #define AXIS1_SERVO_P                2.0
   #endif
@@ -342,11 +364,8 @@
   #ifndef AXIS1_SERVO_D_GOTO
   #define AXIS1_SERVO_D_GOTO           AXIS1_SERVO_D
   #endif
-  #ifndef AXIS1_SERVO_ENCODER
-  #define AXIS1_SERVO_ENCODER          ENC_AB
-  #endif
-  #ifndef AXIS1_SERVO_ENCODER_TRIGGER
-  #define AXIS1_SERVO_ENCODER_TRIGGER  CHANGE
+  #ifndef AXIS1_ENCODER
+  #define AXIS1_ENCODER                AB
   #endif
   #ifndef AXIS1_SERVO_FEEDBACK
   #define AXIS1_SERVO_FEEDBACK         FB_PID
@@ -416,11 +435,14 @@
 #ifndef AXIS2_SENSE_LIMIT_INIT
 #define AXIS2_SENSE_LIMIT_INIT         INPUT_PULLUP
 #endif
-#if AXIS2_DRIVER_MODEL >= DRIVER_FIRST && AXIS2_DRIVER_MODEL <= DRIVER_LAST
+#if AXIS2_DRIVER_MODEL >= STEP_DIR_DRIVER_FIRST && AXIS2_DRIVER_MODEL <= STEP_DIR_DRIVER_LAST
   #define AXIS2_DRIVER_PRESENT
-  #if AXIS2_DRIVER_MODEL == TMC2130 || AXIS2_DRIVER_MODEL == TMC5160
-  #define AXIS2_DRIVER_TMC_SPI
+  #if AXIS2_DRIVER_MODEL >= TMC_DRIVER_FIRST
+    #error "Config.h: TMC Drivers are not supported!"
+  #else
+    #define AXIS2_STEP_DIR_LEGACY
   #endif
+
   #ifndef AXIS2_STEP_STATE
   #define AXIS2_STEP_STATE             HIGH
   #endif
@@ -460,6 +482,22 @@
 #endif
 #if AXIS2_DRIVER_MODEL >= SERVO_DRIVER_FIRST
   #define AXIS2_SERVO_PRESENT
+  #if AXIS1_DRIVER_MODEL == SERVO_TMC2209
+    #error "Config.h: TMC Drivers are not supported!"
+  #else
+    #define AXIS1_SERVO_DC
+  #endif
+
+  #ifndef AXIS2_SERVO_MAX_VELOCITY
+  #define AXIS2_SERVO_MAX_VELOCITY      100
+  #endif
+  #ifndef AXIS2_SERVO_ACCELERATION
+  #define AXIS2_SERVO_ACCELERATION      20
+  #endif
+  #ifndef AXIS2_SERVO_SYNC_THRESHOLD
+  #define AXIS2_SERVO_SYNC_THRESHOLD    OFF
+  #endif
+
   #ifndef AXIS2_SERVO_P
   #define AXIS2_SERVO_P                2.0
   #endif
@@ -478,11 +516,8 @@
   #ifndef AXIS2_SERVO_D_GOTO
   #define AXIS2_SERVO_D_GOTO           AXIS2_SERVO_D
   #endif
-  #ifndef AXIS2_SERVO_ENCODER
-  #define AXIS2_SERVO_ENCODER          ENC_AB
-  #endif
-  #ifndef AXIS2_SERVO_ENCODER_TRIGGER
-  #define AXIS2_SERVO_ENCODER_TRIGGER  CHANGE
+  #ifndef AXIS2_ENCODER
+  #define AXIS2_ENCODER                AB
   #endif
   #ifndef AXIS2_SERVO_FEEDBACK
   #define AXIS2_SERVO_FEEDBACK         FB_PID
@@ -501,18 +536,22 @@
   #define AXIS2_PARAMETER6             AXIS2_SERVO_D_GOTO
 #endif
 
-#if defined(AXIS1_DRIVER_PRESENT) || defined(AXIS2_DRIVER_PRESENT)
-  #define STEP_DIR_MOTOR_PRESENT
+#if defined(AXIS1_STEP_DIR_LEGACY) || defined(AXIS2_STEP_DIR_LEGACY)
+  #define STEP_DIR_LEGACY_PRESENT
 #endif
 
-#if defined(AXIS1_DRIVER_TMC_SPI) || defined(AXIS2_DRIVER_TMC_SPI)
-  #define TMC_DRIVER_PRESENT
+#if defined(STEP_DIR_LEGACY_PRESENT)
+  #define STEP_DIR_MOTOR_PRESENT
 #endif
 
 #if defined(AXIS1_SERVO_PRESENT) || defined(AXIS2_SERVO_PRESENT)
   #define SERVO_MOTOR_PRESENT
 #endif
 
-#if defined(SERVO_MOTOR_PRESENT) || defined(STEP_DIR_MOTOR_PRESENT)
+#if defined(AXIS1_SERVO_DC) || defined(AXIS2_SERVO_DC)
+  #define SERVO_DC_PRESENT
+#endif
+
+#if defined(STEP_DIR_MOTOR_PRESENT) || defined(SERVO_MOTOR_PRESENT)
   #define MOTOR_PRESENT
 #endif

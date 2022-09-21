@@ -213,14 +213,14 @@
 
 #define DOME_SHUTTER_LOCK             OFF //    OFF, ON to disable dome motion unless shutter is open.                        Option
 
-// Usually this will be a GENERIC stepper driver or a servo SERVO_PD (PWM/Direction) or SERVO_II (PWM/PWM)
-#define AXIS1_DRIVER_MODEL            OFF //    OFF, Enter driver model (above) to activate the dome Azimuth axis.            Option
+// Usually this will be a GENERIC stepper driver or a servo SERVO_PE (Phase/Enable) or SERVO_EE (Enable/Enable)
+#define AXIS1_DRIVER_MODEL        GENERIC //    OFF, Enter driver model (above) to activate the dome Azimuth axis.            Option
 #define AXIS1_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 #define AXIS1_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
-// for SERVO_II and SERVO_PE driver models, PID and encoder settings:
-#define AXIS1_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
-#define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
+// for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
+#define AXIS1_ENCODER                  AB //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
+#define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
 #define AXIS1_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
 #define AXIS1_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
 
@@ -247,9 +247,9 @@
 #define AXIS2_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 #define AXIS2_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
-// for SERVO_II and SERVO_PE driver models, PID and encoder settings:
-#define AXIS2_SERVO_ENCODER        ENC_AB // ..._AB, Encoder type, ENC_AB, ENC_CW_CCW, ENC_PULSE_DIR, ENC_PULSE_ONLY.         Adjust
-#define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust 
+// for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
+#define AXIS2_ENCODER                  AB //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
+#define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
 #define AXIS2_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
 #define AXIS2_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
 
