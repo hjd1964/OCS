@@ -26,7 +26,8 @@ void Relay::init() {
   uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
   if (handle) {
     VLF("success");
-    tasks.requestHardwareTimer(handle, 2, 0);
+    if (!tasks.requestHardwareTimer(handle, 0)) { DLF("WRN: Relay::init(), didn't get h/w timer (using s/w timer)"); }
+
   } else { VLF("FAILED!"); }
 }
 
