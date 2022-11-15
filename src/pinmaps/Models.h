@@ -17,9 +17,12 @@
 #elif PINMAP == OCS4
   #define PINMAP_STR "Hardware Version 4"
   #include "Pins.OCS4.h"
-#elif PINMAP == OCS4E
+#elif PINMAP == OCSE
+  #define PINMAP_STR "ESP32S General purpose"
+  #include "Pins.OCSE.h"
+#elif PINMAP == OCSES2
   #define PINMAP_STR "ESP32-S2 SAOLA Hardware Version 1"
-  #include "Pins.OCS4E.h"
+  #include "Pins.OCSES2.h"
 #else
   #define PINMAP_STR "Unknown"
 #endif
