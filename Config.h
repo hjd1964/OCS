@@ -98,7 +98,7 @@
 #define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn WRW lights on/off.           Option
 
 // WEATHER PANEL -------------------------------------------------------------------------------------------------------------------
-// Weather and Sky Conditions web page charts use "Chart.js" http://www.chartjs.org/. Specifically, version 2.5 of "Chart.min.js" 
+// Weather and Sky Conditions web page charts use "Chart.js" http://www.chartjs.org/. Specifically, version 2.5 of "Chart.min.js"
 //   renamed to "Chart.js" and placed in the Micro SD card root directory (Fat32 formatted) and inserted into the W5100 Ethernet
 //   adapter.  Downloaded from here https://github.com/chartjs/Chart.js/releases/tag/v2.5.0 (page bottom for download links.)
 #define WEATHER                       OFF //    OFF, ON to enable the OCS website weather panel display.                      Option
@@ -152,8 +152,8 @@
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 
 #define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
-#define WEATHER_SENSOR_RAIN_LOW      0.25 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
-#define WEATHER_SENSOR_RAIN_HIGH     0.75 //    OFF, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
+#define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
+#define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
 
 #define WEATHER_SENSOR_CLOUD_MLX90614 OFF //    OFF, 0x5A (I2C Address) to enable. Gets IR sky IR temp. for cloud detection.  Adjust
 
@@ -214,12 +214,12 @@
 #define DOME_SHUTTER_LOCK             OFF //    OFF, ON to disable dome motion unless shutter is open.                        Option
 
 // Usually this will be a GENERIC stepper driver or a servo SERVO_PE (Phase/Enable) or SERVO_EE (Enable/Enable)
-#define AXIS1_DRIVER_MODEL        GENERIC //    OFF, Enter driver model (above) to activate the dome Azimuth axis.            Option
+#define AXIS1_DRIVER_MODEL            OFF //    OFF, Enter driver model (above) to activate the dome Azimuth axis.            Option
 #define AXIS1_DRIVER_MICROSTEPS       OFF //    OFF, n. Microstep mode when tracking.                                         Option
 #define AXIS1_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
 // for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
-#define AXIS1_ENCODER                  AB //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
+#define AXIS1_ENCODER                 OFF //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
 #define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
 #define AXIS1_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
 #define AXIS1_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
@@ -248,7 +248,7 @@
 #define AXIS2_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
 // for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
-#define AXIS2_ENCODER                  AB //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
+#define AXIS2_ENCODER                 OFF //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
 #define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
 #define AXIS2_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
 #define AXIS2_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
