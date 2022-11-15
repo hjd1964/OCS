@@ -5,8 +5,6 @@
 
 #include "../Common.h"
 #include "../libApp/commands/ProcessCmds.h"
-#include "../lib/ethernet/EthernetManager.h"
-#include "../lib/wifi/WifiManager.h"
 
 typedef struct InitError {
   uint8_t nv:1;       // NV data size/structure error (disables writes to NV)

@@ -121,10 +121,10 @@ void setup() {
   // start observatory instance
   observatory.init(FirmwareName, FirmwareVersionMajor, FirmwareVersionMinor, FirmwareVersionPatch, FirmwareVersionConfig);
 
-  // start the command channels
-  #if SERIAL_SERVER == STANDARD || SERIAL_SERVER == BOTH
+  // start the IP command channels
+  #if OPERATIONAL_MODE != OFF && (SERIAL_SERVER == STANDARD || SERIAL_SERVER == BOTH)
     SERIAL_SIP.begin(9999, 2L*1000L);
-  #elif SERIAL_SERVER == PERSISTANT || SERIAL_SERVER == BOTH
+  #elif OPERATIONAL_MODE != OFF && (SERIAL_SERVER == PERSISTANT || SERIAL_SERVER == BOTH)
     SERIAL_PIP1.begin(9998, 120L*1000L, true);
   #endif
 

@@ -407,7 +407,7 @@
   #error "Configuration (Config.h): AXIS1_REVERSE must be either ON or OFF."
 #endif
 
-#if AXIS1_ENCODER < ENC_FIRST || AXIS1_ENCODER > ENC_LAST
+#if AXIS1_ENCODER != OFF && (AXIS1_ENCODER < ENC_FIRST || AXIS1_ENCODER > ENC_LAST)
   #error "Configuration (Config.h): AXIS1_ENCODER unknown encoder type."
 #endif
 
@@ -443,7 +443,7 @@
   #error "Configuration (Config.h): Setting AXIS1_SENSE_LIMIT_MAX unknown, use OFF or HIGH/LOW and HYST() and/or THLD() as described in comments."
 #endif
 
-#if AXIS2_ENCODER < ENC_FIRST || AXIS2_ENCODER > ENC_LAST
+#if AXIS2_ENCODER != OFF && (AXIS2_ENCODER < ENC_FIRST || AXIS2_ENCODER > ENC_LAST)
   #error "Configuration (Config.h): AXIS2_ENCODER unknown encoder type."
 #endif
 

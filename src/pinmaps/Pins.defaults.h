@@ -2,6 +2,10 @@
 // Null pin map, assigns OFF to all values not already assigned
 #pragma once
 
+#ifndef OPERATIONAL_MODE
+#define OPERATIONAL_MODE OFF
+#endif
+
 // SerialA command channel is manidatory
 #ifndef SERIAL_A
 #define SERIAL_A                    Serial

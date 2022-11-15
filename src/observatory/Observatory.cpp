@@ -133,7 +133,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // bring network servers up
   #if OPERATIONAL_MODE == WIFI
     wifiManager.init();
-  #else
+  #elif (OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500)
     ethernetManager.init();
   #endif
 
@@ -386,7 +386,7 @@ void Observatory::poll() {
 
   connectionCheck();
 
-  #if TIME_LOCATION_SOURCE == NTP
+  #if OPERATIONAL_MODE != OFF && TIME_LOCATION_SOURCE == NTP
     // double check time if it looks like it's not set go back and ask for it again every 10 minutes
     if (now() < 365L*24L*60L*60L) {
       if (!fastNTPSync) { setSyncInterval(10L*60L); fastNTPSync = true; }
@@ -413,7 +413,7 @@ void Observatory::poll() {
   #endif
 
   // keep DHCP alive if used
-  #if OPERATIONAL_MODE != WIFI
+  #if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
     if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
   #endif
 }

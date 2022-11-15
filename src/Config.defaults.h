@@ -31,10 +31,6 @@
   #define WEB_HANDLER_COUNT_MAX       200        // for Ethernet webserver
 #endif
 
-// optional (but expected to be present) web-server
-#define WEB_SERVER                    ON         // for website at port 80
-#define SD_CARD                       ON         // enable the webserver SD_CARD support
-
 // VIRTUAL SERIAL IP COMMAND CHANNELS
 
 // in milliseconds

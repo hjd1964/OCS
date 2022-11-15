@@ -16,6 +16,15 @@ extern NVS nv;
 
 #include "lib/convert/Convert.h"
 
+#if OPERATIONAL_MODE != OFF
+  // optional (but expected to be present) web-server
+  #define WEB_SERVER                    ON         // for website at port 80
+  #define SD_CARD                       ON         // enable the webserver SD_CARD support
+#endif
+
+#include "lib/ethernet/EthernetManager.h"
+#include "lib/wifi/WifiManager.h"
+
 #if SD_CARD == ON
   #ifdef ESP32
     #include <FS.h>
