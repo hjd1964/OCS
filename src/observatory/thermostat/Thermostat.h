@@ -21,6 +21,9 @@ class Thermostat {
     void setCoolSetpoint(float value);
     float getCoolSetpoint();
 
+    float getTemperature();
+    float getHumidity();
+
   private:
     float averageTemperature = NAN;
     float t1 = NAN;

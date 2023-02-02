@@ -59,6 +59,14 @@ float Thermostat::getCoolSetpoint() {
   return nv.readF(NV_COOL_SETPOINT);
 }
 
+float Thermostat::getTemperature() {
+  return t1;
+}
+
+float Thermostat::getHumidity() {
+  return thermostatSensor.humidity();
+}
+
 Thermostat thermostat;
 
 #endif
