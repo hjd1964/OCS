@@ -37,6 +37,15 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
         *numericReply = false;
       } else
     #endif
+    //  :GT#  Get Thermostat status
+    //         Example: :GT#
+    //         Returns: 22.3,58.7, temperature in deg. C, humidity in %
+    if (command[1] == 'T' && parameter[0] == 0) {
+      float t = getTemperature();
+      float h = getHumidity();
+      sprintf(reply, "%.1f,%.1f", t, h);
+      *numericReply = false;
+    } else
       return false;
   } else
 
