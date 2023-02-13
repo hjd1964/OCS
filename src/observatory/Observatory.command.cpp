@@ -96,6 +96,13 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
       strcpy(reply, firmware.name);
       *numericReply = false;
     } else
+
+    //  :IT#  get Timeout #defines
+    //         Returns: 1.5,2.0#, ROOF_TIME_PRE_MOTION,ROOF_TIME_POST_MOTION
+    if (command[1] == 'T' && parameter[0] == 0) {
+      sprintf(reply, "%.1f,%.1f", ROOF_TIME_PRE_MOTION, ROOF_TIME_POST_MOTION);
+      *numericReply = false;
+    } else
       *commandError = CE_CMD_UNKNOWN;
   } else
 
