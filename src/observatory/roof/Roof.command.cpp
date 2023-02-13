@@ -50,7 +50,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
       if (roof.isOpen()) strcpy(ws, "OPEN"); else strcpy(ws, roof.getStatus());
       ws[47] = 0; // never longer than 47 chars
       if (roof.isClosing()) sprintf(reply, "c,%s", ws); else
-      if (roof.isOpen()) sprintf(reply, "o,%s", ws); else sprintf(reply, "i,%s", ws);
+      if (roof.isOpening()) sprintf(reply, "o,%s", ws); else sprintf(reply, "i,%s", ws);
       *numericReply = false;
     } else
 
