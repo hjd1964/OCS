@@ -6,7 +6,7 @@
   #include "htmlScripts.h"
   #include "htmlTabs.h"
 
-  #include "weather.h"
+  #include "Weather.h"
   #include "../libApp/thermostatSensor/ThermostatSensor.h"
   #include "../libApp/relay/Relay.h"
   #include "../observatory/thermostat/Thermostat.h"

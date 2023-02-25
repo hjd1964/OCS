@@ -7,7 +7,7 @@
 
 #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
 
-#include "../tasks/OnTask.h"
+#include "../../lib/tasks/OnTask.h"
 #include "../analog/Analog.h"
 
 extern float _rainSense;
