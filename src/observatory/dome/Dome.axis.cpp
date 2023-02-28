@@ -29,7 +29,7 @@
       const ServoDcSettings ServoSettingsAxis1 = {AXIS1_DRIVER_MODEL, AXIS1_DRIVER_STATUS, AXIS1_SERVO_MAX_VELOCITY, AXIS1_SERVO_ACCELERATION};
       ServoDc driver1(1, &ServoPinsAxis1, &ServoSettingsAxis1);
     #endif
-    ServoMotor motor1(1, ((ServoDriver*)&driver1), &encAxis1, &pidAxis1, &servoControlAxis1, AXIS1_SERVO_SYNC_THRESHOLD);
+    ServoMotor motor1(1, ((ServoDriver*)&driver1), &encAxis1, AXIS1_ENCODER_ORIGIN, AXIS1_ENCODER_REVERSE == ON, &pidAxis1, &servoControlAxis1, AXIS1_SERVO_SYNC_THRESHOLD);
   #endif
 
   #ifdef AXIS1_DRIVER_PRESENT
@@ -73,7 +73,7 @@
         const ServoDcSettings ServoSettingsAxis2 = {AXIS2_DRIVER_MODEL, AXIS2_DRIVER_STATUS, AXIS2_SERVO_MAX_VELOCITY, AXIS2_SERVO_ACCELERATION};
         ServoDc driver2(2, &ServoPinsAxis2, &ServoSettingsAxis2);
       #endif
-      ServoMotor motor2(2, ((ServoDriver*)&driver2), &encAxis2, &pidAxis2, &servoControlAxis2, AXIS2_SERVO_SYNC_THRESHOLD);
+      ServoMotor motor2(2, ((ServoDriver*)&driver2), &encAxis2, AXIS2_ENCODER_ORIGIN, AXIS2_ENCODER_REVERSE == ON, &pidAxis2, &servoControlAxis2, AXIS2_SERVO_SYNC_THRESHOLD);
     #endif
 
     #ifdef AXIS2_DRIVER_PRESENT
