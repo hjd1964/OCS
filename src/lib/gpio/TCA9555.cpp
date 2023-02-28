@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------------
 // I2C TCA9555 GPIO support
 
-#include "TCA9555.h"
+#include "Tca9555.h"
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == X9555
 
