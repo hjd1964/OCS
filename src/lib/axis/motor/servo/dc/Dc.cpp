@@ -125,4 +125,9 @@ void ServoDc::updateStatus() {
   ServoDriver::updateStatus();
 }
 
+// empty calibrate function
+void ServoDc::calibrate() {
+  // do nothing
+}
+
 #endif

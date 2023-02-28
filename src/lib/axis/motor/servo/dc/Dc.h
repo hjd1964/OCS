@@ -46,6 +46,8 @@ class ServoDc : public ServoDriver {
 
     const ServoDcSettings *Settings;
 
+    void calibrate();
+
   private:
     // motor control update
     void pwmUpdate(float power);
