@@ -38,7 +38,7 @@ const char html_main_css10[] PROGMEM =
 ".obsControl { position: relative; font-size: 14px; width: 260px; height: 190px; float:left; padding: 10px; margin: 10px; "
 "background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red; }";
 const char html_main_css11[] PROGMEM =
-".aStatus { color: #505090; width: 60px; height: 2px; float: right; padding: 0px; margin: 2px; background-color: #CCCCCC;}"
+".aStatus { color: #505090; width: 80px; height: 2px; float: right; padding: 0px; margin: 2px; background-color: #CCCCCC;}"
 "</STYLE>\r\n";
 
 const char html_head3[] PROGMEM =
