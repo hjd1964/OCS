@@ -363,6 +363,12 @@
   #ifndef AXIS1_ENCODER
   #define AXIS1_ENCODER                AB
   #endif
+  #ifndef AXIS1_ENCODER_ORIGIN
+  #define AXIS1_ENCODER_ORIGIN         0
+  #endif
+  #ifndef AXIS1_ENCODER_REVERSE
+  #define AXIS1_ENCODER_REVERSE        OFF
+  #endif
   #ifndef AXIS1_SERVO_FEEDBACK
   #define AXIS1_SERVO_FEEDBACK         FB_PID
   #endif
@@ -514,6 +520,12 @@
   #endif
   #ifndef AXIS2_ENCODER
   #define AXIS2_ENCODER                AB
+  #endif
+  #ifndef AXIS2_ENCODER_ORIGIN
+  #define AXIS2_ENCODER_ORIGIN         0
+  #endif
+  #ifndef AXIS2_ENCODER_REVERSE
+  #define AXIS2_ENCODER_REVERSE        OFF
   #endif
   #ifndef AXIS2_SERVO_FEEDBACK
   #define AXIS2_SERVO_FEEDBACK         FB_PID
