@@ -47,6 +47,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     } else return false;
   } else
 
+  #if LIGHT != OFF || POWER != OFF
   if (command[0] == 'I') {
     #if LIGHT != OFF
       //  :IL#  get Light relay #defines
@@ -56,10 +57,11 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
         sprintf(reply, "%i,%i,%i,%i,%i", LIGHT_WRW_RELAY, LIGHT_WRR_RELAY,
                                          LIGHT_ORW_RELAY, LIGHT_ORR_RELAY, LIGHT_OUTSIDE_RELAY);
         *numericReply = false;
-      } else
+      }
     #endif
 
     #if POWER != OFF
+      else
       //  :Ip#  get Power relay #defines
       //        Returns: 1,2,3,-1,5,6#, POWER_DEVICE1_RELAY,POWER_DEVICE2_RELAY,POWER_DEVICE3_RELAY,
       //                                POWER_DEVICE4_RELAY,POWER_DEVICE5_RELAY,POWER_DEVICE6_RELAY
@@ -93,7 +95,8 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
         } else *commandError = CE_PARAM_RANGE;
         } else return false;
     #endif
-  } else
+  } else return false;
+  #endif
   return false;
 
   return true;
