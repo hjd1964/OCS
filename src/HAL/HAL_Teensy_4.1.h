@@ -66,7 +66,7 @@
 
 // Watchdog control macros --------------------------------------------------------------------------
 #if WATCHDOG != OFF
-  #define WDT_ENABLE watchdog.enable(8);
+  #define WDT_ENABLE watchdog.enable(14);
   #define WDT_RESET watchdog.reset();
   #define WDT_DISABLE watchdog.disable();
 #else
