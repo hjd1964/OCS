@@ -1,5 +1,6 @@
 // Platform setup ------------------------------------------------------------------------------------
 #pragma once
+extern float tempmonGetTemp(void);
 
 // We define a more generic symbol, in case more Teensy boards based on different lines are supported
 #define __TEENSYDUINO__
@@ -62,7 +63,7 @@
 
 //--------------------------------------------------------------------------------------------------
 // Internal MCU temperature (in degrees C)
-#define HAL_TEMP() ( NAN )
+#define HAL_TEMP() ( tempmonGetTemp() )
 
 // Watchdog control macros --------------------------------------------------------------------------
 #if WATCHDOG != OFF
