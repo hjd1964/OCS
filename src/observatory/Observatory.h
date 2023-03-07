@@ -35,6 +35,7 @@ class Observatory {
 
     void connectionCheck();
     void poll();
+    inline static void lockup() { while (true) {};}
 
   private:
     Firmware firmware;

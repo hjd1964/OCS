@@ -134,8 +134,9 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
         #ifdef DOME_PRESENT
           if (dome.isSlewing()) { *commandError = CE_SLEW_IN_MOTION; return true; }
         #endif
-        strcpy(reply, "Rebooting in 8 seconds...");
-        while (true) {};
+        strcpy(reply, "Rebooting in a few seconds...");
+        *numericReply = false;
+        tasks.add(1000, 0, false, 7, lockup, "lockup");
       } else
     #endif
       return false;
