@@ -45,11 +45,11 @@ void Thermostat::poll() {
   #endif
 
   #if HUMIDITY_RELAY != OFF
-    if (!isnan(humidity) && humidity > getHumiditySetpoint() && getHumiditySetpoint() != 0) {
+    if (!isnan(humidity) && (humidity > getHumiditySetpoint()) && getHumiditySetpoint() != 0) {
       relay.on(HUMIDITY_RELAY);
-    } else if (!isnan(humidity) && humidity < (getHumiditySetpoint() - 5) && getHumiditySetpoint() != 0) {
+    } else if (!isnan(humidity) && (humidity < (getHumiditySetpoint() - 5))) {
       relay.off(HUMIDITY_RELAY);
-    } else if (isnan(humidity)) {
+    } else {
       relay.off(HUMIDITY_RELAY);
     }
   #endif

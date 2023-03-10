@@ -195,7 +195,7 @@ void indexAjax() {
       String humidity = www.arg("thermostat_humidity");
       if (!humidity.equals(EmptyStr)) {
         float f = atoi(humidity.c_str());
-        if (f >= 30.0 && f <= 75.0) thermostat.setHumiditySetpoint(f);
+        if (f >= 0.0 && f <= 75.0) thermostat.setHumiditySetpoint(f);
       }
     #endif
   #endif

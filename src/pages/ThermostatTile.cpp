@@ -165,10 +165,10 @@
       } else {
         sprintF(temp, "%5.1f % ", h);
       }
-      www.sendContent(temp);
       #if HUMIDITY_RELAY != OFF
         if (relay.isOn(HUMIDITY_RELAY)) strcat(temp, "ˇ"); else strcat(temp, "-");
       #endif
+      www.sendContent(temp);
     }
   #endif
 
