@@ -34,12 +34,21 @@
 
   const char htmlThermostatCool1[] PROGMEM =
   "<div>"
-  "&nbsp;&nbsp;&nbsp;Cool/Venting"
+  "&nbsp;&nbsp;&nbsp;Cool/Vent"
   "<select style=\"float:right; margin-right:20px\" onchange='SetVar(\"thermostat_cool\",value)' >";
 
-  const char htmlThermostatCool2[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div>";
+  const char htmlThermostatCool2[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div><br />";
+
+  const char htmlThermostatHumidity3[] PROGMEM =
+  "<div>"
+  "&nbsp;&nbsp;&nbsp;Relative Humidity (Inside)"
+  "<select style=\"float:right; margin-right:20px\" onchange='SetVar(\"thermostat_humidity\",value)' >";
+
+  const char htmlThermostatHumidity4[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div>";
+
 
   const char htmlThermostatEnd[] PROGMEM = "</form></div>\r\n";
   const char htmlThermostatOption[] PROGMEM = "<option value=\"%d\" %s>%d&deg;%c</option>";
   const char htmlThermostatOptionZero[] PROGMEM = "<option value=\"0\" %s>OFF</option>";
+  const char htmlThermostatHumidityOption[] PROGMEM = "<option value=\"%d\" %s>%d%c</option>";
 #endif

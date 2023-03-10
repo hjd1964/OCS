@@ -98,3 +98,4 @@
 #define NV_POWER_DEVICE5            24     // bytes: 1   , addr:  24.. 24
 #define NV_POWER_DEVICE6            25     // bytes: 1   , addr:  25.. 25
 #define NV_DOME_SETTINGS_BASE       26     // bytes: 21  , addr:  26.. 46
+#define NV_HUMIDITY_SETPOINT        47     // bytes: 4   , addr:  47.. 47

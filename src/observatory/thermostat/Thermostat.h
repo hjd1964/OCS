@@ -24,10 +24,14 @@ class Thermostat {
     float getTemperature();
     float getHumidity();
 
+    void setHumiditySetpoint(float value);
+    float getHumiditySetpoint();
+
   private:
     float averageTemperature = NAN;
     float t1 = NAN;
     float t2 = NAN;
+    float humidity = NAN;
 };
 
 extern Thermostat thermostat;

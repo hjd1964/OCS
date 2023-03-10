@@ -55,7 +55,7 @@ extern char ocsVersion[10];
   #define POWER_PRESENT
 #endif
 
-#if HEAT_RELAY != OFF || COOL_RELAY != OFF
+#if HEAT_RELAY != OFF || COOL_RELAY != OFF || HUMIDITY_RELAY != OFF
   #define THERMOSTAT_PRESENT
 #endif
 
