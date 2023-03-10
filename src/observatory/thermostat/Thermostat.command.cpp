@@ -106,7 +106,7 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
           setHumiditySetpoint(0);
           relay.off(HUMIDITY_RELAY);
         } else
-        if (i >= 1 && i <= 40) {
+        if (i >= 1 && i <= 80) {
           setHumiditySetpoint(i);
         } else *commandError = CE_PARAM_RANGE;
       } else
