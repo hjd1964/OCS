@@ -249,6 +249,10 @@
   #error "Configuration (Config.h): THERMOSTAT_HUMIDITY, OCS website thermostat humidity display, must OFF or ON."
 #endif
 
+#if (HUMIDITY_RELAY < 1 || HUMIDITY_RELAY > 18) && HUMIDITY_RELAY != OFF
+  #error "Configuration (Config.h): HUMIDITY_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
+#endif
+
 // Lighting
 #if LIGHT != OFF && LIGHT != ON
   #error "Configuration (Config.h): LIGHT, OCS website lighting panel display, must OFF or ON."

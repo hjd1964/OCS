@@ -178,7 +178,7 @@ void indexAjax() {
         #endif
       if (f >= 0.0 && f <= 37.0) thermostat.setHeatSetpoint(f);
     }
-  #endif
+    #endif
     #if COOL_RELAY != OFF
       String cool = www.arg("thermostat_cool");
       if (!cool.equals(EmptyStr)) {
@@ -189,6 +189,13 @@ void indexAjax() {
           float f = atoi(cool.c_str());
         #endif
         if (f >= 0.0 && f <= 37.0) thermostat.setCoolSetpoint(f);
+      }
+    #endif
+    #if HUMIDITY_RELAY != OFF
+      String humidity = www.arg("thermostat_humidity");
+      if (!humidity.equals(EmptyStr)) {
+        float f = atoi(humidity.c_str());
+        if (f >= 0.0 && f <= 75.0) thermostat.setHumiditySetpoint(f);
       }
     #endif
   #endif

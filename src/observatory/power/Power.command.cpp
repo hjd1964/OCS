@@ -12,7 +12,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     //  :GRn#  Get Relay n state
     //         Example: :GR1#
     //         Returns: ON#, OFF#, n# (pwm 0-9)
-    if (command[1] == 'R' && parameter[1] == 0) {
+    if (command[1] == 'R' && (parameter[1] == 0 || parameter[2] == 0)) {
       int r = atoi(parameter);
       if (r >= 1 && r <= RELAYS_MAX) {
         if (!relay.isOn(r)) strcpy(reply, "OFF"); else
@@ -27,11 +27,14 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     //  :SRn,[state]#  Set Relay n [state] = ON, OFF, DELAY, n (pwm 0 to 10)
     //         Example: :SR1,ON#
     //         Returns: 1 on success
-    if (command[1] == 'R' && parameter[1] == ',') {
+    if (command[1] == 'R' && (parameter[1] == ',' || parameter[2] == ',')) {
+      int separator = 0;
+      if (parameter[1] == ',') {separator = 2;}
+      else if (parameter[2] == ',') {separator = 3;}
       int r = atoi(parameter);
       if (r >= 1 && r <= RELAYS_MAX) {
         String ws = String(parameter);
-        ws = ws.substring(2);
+        ws = ws.substring(separator);
         if (ws.equals("DELAY")) relay.onDelayedOff(r, 30); else
         if (ws.equals("ON"))    relay.on(r); else
         if (ws.equals("OFF"))   relay.off(r); else
@@ -60,8 +63,10 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
       }
     #endif
 
-    #if POWER != OFF
+    #if POWER != OFF && LIGHT != OFF
       else
+    #endif
+    #if POWER != OFF
       //  :Ip#  get Power relay #defines
       //        Returns: 1,2,3,-1,5,6#, POWER_DEVICE1_RELAY,POWER_DEVICE2_RELAY,POWER_DEVICE3_RELAY,
       //                                POWER_DEVICE4_RELAY,POWER_DEVICE5_RELAY,POWER_DEVICE6_RELAY

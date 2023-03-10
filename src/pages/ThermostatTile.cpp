@@ -10,6 +10,7 @@
   #include "../libApp/thermostatSensor/ThermostatSensor.h"
   #include "../libApp/relay/Relay.h"
   #include "../observatory/thermostat/Thermostat.h"
+  #include "Pages.h"
 
   void thermostatTile() {
     char temp[256] = "";
@@ -103,6 +104,28 @@
     }
     #endif
 
+    #if HUMIDITY_RELAY != OFF
+    {
+      strcpy_P(temp, htmlThermostatHumidity3);
+      www.sendContent(temp);
+      char ws1[20] = "";
+      int c = round(thermostat.getHumiditySetpoint());
+      if (c == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
+      sprintf_P(temp, htmlThermostatOptionZero, ws1);
+      www.sendContent(temp);
+      char unitHumidity = '%';
+      int cs[11] = {30,35,40,45,50,55,60,65,70,75,80};
+
+      for (int i = 0; i < 10; i++) {
+        if (c == cs[i]) strcpy(ws1, "selected"); else strcpy(ws1, "");
+        sprintf_P(temp, htmlThermostatHumidityOption, cs[i], ws1, cs[i], unitHumidity);
+        www.sendContent(temp);
+      }
+      strcpy_P(temp, htmlThermostatHumidity4);
+      www.sendContent(temp);
+    }
+    #endif
+
     strcpy_P(temp, htmlThermostatEnd);
     www.sendContent(temp);
   }
@@ -125,7 +148,7 @@
         if (relay.isOn(HEAT_RELAY)) strcat(temp, "^"); else
       #endif
       #if COOL_RELAY != OFF
-        if (relay.isOn(COOL_RELAY)) strcpy(temp, "*"); else 
+        if (relay.isOn(COOL_RELAY)) strcat(temp, "*"); else 
       #endif
         strcat(temp, "-");
     }
@@ -140,9 +163,11 @@
       if (isnan(h)) {
         strcpy(temp, "Invalid");
       } else {
-        sprintF(temp, "%5.1f ", h);
-        strcat(temp, "%");
+        sprintF(temp, "%5.1f % ", h);
       }
+      #if HUMIDITY_RELAY != OFF
+        if (relay.isOn(HUMIDITY_RELAY)) strcat(temp, "ˇ"); else strcat(temp, "-");
+      #endif
       www.sendContent(temp);
     }
   #endif
