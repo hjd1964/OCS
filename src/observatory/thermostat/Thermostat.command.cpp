@@ -120,7 +120,9 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
     if (command[1] == 't' && parameter[0] == 0) {
       sprintf(reply, "%i,%i,%i", HEAT_RELAY, COOL_RELAY, HUMIDITY_RELAY);
       *numericReply = false;
-  } else 
+    } else 
+      return false;
+  } else
     return false;
 
   return true;
