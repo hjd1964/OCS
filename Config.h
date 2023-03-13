@@ -165,7 +165,7 @@
 #define HEAT_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for indoor heat.                               Option
 #define COOL_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for cooling/venting.                           Option
 #define THERMOSTAT_HUMIDITY           OFF //    OFF, ON displays indoor humidity.                                             Option
-#define CONTROL_WITH_ROOF_OPEN        OFF //    OFF, ON Heat/cool/dehumidify control whilst roof is open                       Option
+#define CONTROL_WITH_ROOF_OPEN        OFF //    OFF, ON Heat/cool/dehumidify control whilst roof is open                      Option
 
 // THERMOSTAT SENSORS -------------------
 #define THERMOSTAT_SENSOR_TPH_BME280  OFF //    OFF, 0x76 or 0x77 (I2C Address) to enable. Temperature, pressure, humidity.   Option
