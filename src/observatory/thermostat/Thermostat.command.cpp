@@ -113,6 +113,16 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
     #endif
       return false;
   } else
+
+  if (command[0] == 'I') {
+    //  :It#  get Thermostat relay #defines
+    //         Returns: 8,9,-1#, HEAT_RELAY, COOL_RELAY, HUMIDITY_RELAY, -1 for undefined relay
+    if (command[1] == 't' && parameter[0] == 0) {
+      sprintf(reply, "%i,%i,%i", HEAT_RELAY, COOL_RELAY, HUMIDITY_RELAY);
+      *numericReply = false;
+    } else 
+      return false;
+  } else
     return false;
 
   return true;
