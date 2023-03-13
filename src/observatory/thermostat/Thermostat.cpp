@@ -12,7 +12,7 @@
 
 // by default heat/cool/humidity control are turned off when the roof is open
 // uncomment the line below to enable control with roof open
-#define ALLOW_COOL_WITH_ROOF_OPEN true
+//#define ALLOW_COOL_WITH_ROOF_OPEN true
 
 void thermostatWrapper() { thermostat.poll(); }
 
