@@ -14,7 +14,7 @@
 // <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
 
 // PINMAP --------------------------------------------------------------------------------------------------------------------------
-#define PINMAP                       OCSE //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCSE, OCSES2.              <-Req'd
+#define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCSE, OCSES2.              <-Req'd
                                           //         Other boards/more info. in /src/Constants.h
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
