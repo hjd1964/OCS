@@ -10,10 +10,6 @@
 #include "../../libApp/relay/Relay.h"
 #include "../roof/Roof.h"
 
-// by default heat/cool/humidity control are turned off when the roof is open
-// uncomment the line below to enable control with roof open
-//#define ALLOW_COOL_WITH_ROOF_OPEN true
-
 void thermostatWrapper() { thermostat.poll(); }
 
 // this gets called once on startup to initialize any thermostat sensors
@@ -34,7 +30,11 @@ void Thermostat::poll() {
   humidity = thermostatSensor.humidity();
 
   #if HEAT_RELAY != OFF
-    if (!isnan(averageTemperature) && averageTemperature < getHeatSetpoint() && getHeatSetpoint() != 0 && roof.isClosed()) {
+    if (!isnan(averageTemperature) && averageTemperature < getHeatSetpoint() && getHeatSetpoint() != 0
+     #if CONTROL_WITH_ROOF_OPEN != ON
+        && roof.isClosed()
+      #endif
+      ) {
       relay.on(HEAT_RELAY);
     } else {
       relay.off(HEAT_RELAY);
@@ -43,7 +43,7 @@ void Thermostat::poll() {
 
   #if COOL_RELAY != OFF
     if (!isnan(averageTemperature) && averageTemperature > getCoolSetpoint() && getCoolSetpoint() != 0
-      #ifndef ALLOW_COOL_WITH_ROOF_OPEN
+      #if CONTROL_WITH_ROOF_OPEN != ON
         && roof.isClosed()
       #endif
     ) {
@@ -54,7 +54,11 @@ void Thermostat::poll() {
   #endif
 
   #if HUMIDITY_RELAY != OFF
-    if (!isnan(humidity) && (humidity > getHumiditySetpoint()) && getHumiditySetpoint() != 0 && roof.isClosed()) {
+    if (!isnan(humidity) && (humidity > getHumiditySetpoint()) && getHumiditySetpoint() != 0
+      #if CONTROL_WITH_ROOF_OPEN != ON
+        && roof.isClosed()
+      #endif
+      ) {
       relay.on(HUMIDITY_RELAY);
     } else if (!isnan(humidity) && (humidity < (getHumiditySetpoint() - 5))) {
       relay.off(HUMIDITY_RELAY);

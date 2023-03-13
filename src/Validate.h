@@ -253,6 +253,10 @@
   #error "Configuration (Config.h): HUMIDITY_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
+#if CONTROL_WITH_ROOF_OPEN != OFF && CONTROL_WITH_ROOF_OPEN != ON
+  #error "Configuration (Config.h): CONTROL_WITH_ROOF_OPEN, Heat/cool/dehumidify control whilst roof is open, must OFF or ON."
+#endif
+
 // Lighting
 #if LIGHT != OFF && LIGHT != ON
   #error "Configuration (Config.h): LIGHT, OCS website lighting panel display, must OFF or ON."
