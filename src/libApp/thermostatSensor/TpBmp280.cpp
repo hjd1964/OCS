@@ -48,10 +48,10 @@ bool Bmp280t::init() {
 // update
 void Bmp280t::poll() {
   if (!active) return;
-  bme280SensorT.takeForcedMeasurement();
   _inside_temperature = bmp280SensorT.readTemperature();
   tasks.yield(1000);
   _inside_pressure = bmp280SensorT.readPressure()/100.0;
+  bme280SensorT.takeForcedMeasurement();
 }
 
 Bmp280t bmp280t;

@@ -52,12 +52,12 @@ bool Bme280t::init() {
 // update
 void Bme280t::poll() {
   if (!active) return;
-  bme280SensorT.takeForcedMeasurement();
   _inside_temperature = bme280SensorT.readTemperature();
   tasks.yield(1000);
   _inside_pressure = bme280SensorT.readPressure()/100.0;
   tasks.yield(1000);
   _inside_humidity = bme280SensorT.readHumidity();
+  bme280SensorT.takeForcedMeasurement();
 }
 
 Bme280t bme280t;
