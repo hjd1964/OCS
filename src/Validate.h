@@ -319,7 +319,7 @@
   #error "Configuration (Config.h): ROOF_CLOSE_PARKS_MOUNT must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if (ROOF_CLOSE_PARKS_MOUNT < 1 || ROOF_CLOSE_PARKS_MOUNT > 18) && ROOF_INTERLOCK_SENSE == OFF
+#if (ROOF_CLOSE_PARKS_MOUNT > 0 && ROOF_CLOSE_PARKS_MOUNT < 19) && ROOF_INTERLOCK_SENSE == OFF
   #error "Configuration (Config.h): ROOF_INTERLOCK_SENSE must be a number between 1 and 8 (SENSE#) if ROOF_CLOSE_PARKS_MOUNT is used."
 #endif
 

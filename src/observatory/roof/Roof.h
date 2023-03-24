@@ -106,15 +106,15 @@ class Roof {
     // for soft start etc, pwm power level (required)
     int powerLevel();
 
+    // called repeatedly to check if mount is parked
+    bool checkMountParked();
+
   private:
     // called repeatedly to open the roof
     void continueOpening();
 
     // called repeatedly to close the roof
     void continueClosing();
-
-    // called repeatedly to check if mount is parked
-    bool checkMountParked();
 
     // roof status and errors
     volatile char state = 'i';
