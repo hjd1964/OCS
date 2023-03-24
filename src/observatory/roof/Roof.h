@@ -27,7 +27,8 @@ typedef enum RoofError {
   RERR_OPEN_EXCEPT_CLOSED_LIMIT_SW_ON,
   RERR_OPEN_EXCEPT_OPENED,
   RERR_OPEN_LOCATION_UNKNOWN,
-  RERR_OPEN_EXCEPT_IN_MOTION
+  RERR_OPEN_EXCEPT_IN_MOTION,
+  RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED
 } RoofError;
 
 #include "../../libApp/commands/ProcessCmds.h"
@@ -43,6 +44,7 @@ typedef struct RoofFault {
   uint16_t closeLimitSW: 1;
   uint16_t closeOverTime: 1;
   uint16_t closeUnderTime: 1;
+  uint16_t closeNotParked: 1;
 } RoofFault;
 
 class Roof {
@@ -111,10 +113,14 @@ class Roof {
     // called repeatedly to close the roof
     void continueClosing();
 
+    // called repeatedly to check if mount is parked
+    bool checkMountParked();
+
     // roof status and errors
     volatile char state = 'i';
     RoofFault fault = {false, false, false, false, false, false, false, false, false, false};
     RoofError lastError = RERR_NONE;
+    int waitingForPark = 0;
 
     // roof power and safety
     volatile bool safetyOverride = false;
@@ -128,7 +134,7 @@ class Roof {
     long travel = 0;
     unsigned long openStartTime, closeStartTime;
 
-    const char * ErrorMessage[21] = {
+    const char * ErrorMessage[22] = {
       "",                                    // 0
       "Error: Open safety interlock",        // 1
       "Error: Close safety interlock",       // 2
@@ -150,6 +156,7 @@ class Roof {
       "Warning: Already open",               // 18
       "Error: Open location unknown",        // 19
       "Error: Open already in motion"        // 20
+      "Error: Close mount not parked"        // 21
     };
 };
 

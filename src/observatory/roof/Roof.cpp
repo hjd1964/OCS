@@ -96,6 +96,19 @@ bool Roof::open() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
+  // If mount must be parked for roof to close, issue a park signal and park timer
+  if (ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
+    VF("MSG: Start park monitor task (rate 1000ms priority 7)... ");
+    if (tasks.add(1000, 0, true, 7, parkedPoll, "pkPoll")) { VLF("success"); active = true; } else { VLF("FAILED!"); }
+    relay.onDelayedOff(ROOF_CLOSE_PARKS_MOUNT, 1.0);
+    return true;
+  }
+
+  // Park request has been issued, waiting for interlock to clear or timeout error
+  if (waitingForPark > 0) {
+    return true;
+  }
+
   if (state != 'i' || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
     lastError = RERR_CLOSE_EXCEPT_IN_MOTION;
     return false;
@@ -210,6 +223,7 @@ void Roof::clearStatus(bool last) {
   fault.openOverTime = false;
   fault.openUnderTime = false;
   fault.openUnknown = false;
+  fault.closeNotParked = false;
   if (last) lastError = RERR_NONE;
 }
 
@@ -237,7 +251,8 @@ const char * Roof::getLastError() {
   if (fault.closeUnknown)   err = RERR_CLOSE_UNKNOWN; else
   if (fault.closeLimitSW)   err = RERR_CLOSE_LIMIT_SW; else
   if (fault.closeOverTime)  err = RERR_CLOSE_MAX_TIME; else
-  if (fault.closeUnderTime) err = RERR_CLOSE_MIN_TIME;
+  if (fault.closeUnderTime) err = RERR_CLOSE_MIN_TIME; else
+  if (fault.closeNotParked) err = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED;
   if (err == RERR_NONE) {
     if (state == 'i') {
       if (lastError == RERR_NONE) {
@@ -460,6 +475,29 @@ void Roof::continueClosing() {
     safetyOverride = false;
     // Reset roof power to normal level
     maxPower = false;
+  }
+}
+
+// Check if the mount is parked
+void parkedPoll() {
+  if (roof.checkMountParked()) {
+    roof.close();
+  }
+}
+
+bool Roof::checkMountParked() {
+  if (sense.isOn(ROOF_INTERLOCK_SENSE)) {
+    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    waitingForPark = 0;
+    return true;
+  } else if (waitingForPark >= MOUNT_PARK_TIMEOUT) {
+    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    waitingForPark = 0;
+    lastError = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED;
+    return false;
+  } else {
+    waitingForPark ++;
+    return false;
   }
 }
 

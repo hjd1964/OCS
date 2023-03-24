@@ -191,6 +191,7 @@
 #define ROOF_AUTOCLOSE_DAWN           OFF //    OFF, ON displays option to automatically close roof at dawn.                  Option
 #define ROOF_AUTOCLOSE_DAWN_DEFAULT   OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
 #define ROOF_AUTOCLOSE_SAFETY         OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
+#define ROOF_CLOSE_PARKS_MOUNT        OFF //    OFF, n. Where n=1..18 (Relay#) momentarily engages this relay to park mount.  Option
 
 #define ROOF_MOTOR_OPEN_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to open roof.               Option
 #define ROOF_MOTOR_CLOSE_RELAY        OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to close roof.              Option
@@ -209,6 +210,7 @@
 
 #define ROOF_TIME_AVG                 300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
 #define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
+#define MOUNT_PARK_TIMEOUT             30 //     30, n. Where n=20..240 (seconds) Maximum time to park mount before error.    Adjust
 
 // DOME CONTROL PANEL --------------------------------------------------------------------------------------------------------------
 #define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option
