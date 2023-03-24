@@ -221,7 +221,6 @@
 #define AXIS1_DRIVER_STATUS           OFF //    OFF, ON, HIGH, or LOW.  For driver status info/fault detection.               Option
 
 // for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
-#define AXIS1_ENCODER                 OFF //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
 #define AXIS1_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
 #define AXIS1_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
 #define AXIS1_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
@@ -251,9 +250,9 @@
 
 // for SERVO_PE and SERVO_EE driver models, encoder and PID settings:
 #define AXIS2_ENCODER                 OFF //    OFF, AB, CW_CCW, PULSE_DIR, PULSE_ONLY, SERIAL_BRIDGE.                        Option
-#define AXIS2_SERVO_P                 2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
-#define AXIS2_SERVO_I                 5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
-#define AXIS2_SERVO_D                 1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
+#define AXIS2_PID_P                   2.0 //    2.0, Proportional; scale of immediate response to position error.             Adjust
+#define AXIS2_PID_I                   5.0 //    5.0, Integral; rate of increasing response to position error over time.       Adjust
+#define AXIS2_PID_D                   1.0 //    1.0, Derivative; overshoot supression.                                        Adjust
 
 #define AXIS2_SLEW_RATE_DESIRED       1.0 //    1.0, n, (degrees/second) Maximum speed depends on processor.                  Adjust
 

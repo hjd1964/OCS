@@ -342,23 +342,23 @@
   #define AXIS1_SERVO_SYNC_THRESHOLD    OFF                       // sync threshold in counts or OFF (for absolute encoders)
   #endif
 
-  #ifndef AXIS1_SERVO_P
-  #define AXIS1_SERVO_P                2.0
+  #ifndef AXIS1_PID_P
+  #define AXIS1_PID_P                  2.0
   #endif
-  #ifndef AXIS1_SERVO_I
-  #define AXIS1_SERVO_I                5.0
+  #ifndef AXIS1_PID_I
+  #define AXIS1_PID_I                  5.0
   #endif
-  #ifndef AXIS1_SERVO_D
-  #define AXIS1_SERVO_D                1.0
+  #ifndef AXIS1_PID_D
+  #define AXIS1_PID_D                  1.0
   #endif
-  #ifndef AXIS1_SERVO_P_GOTO
-  #define AXIS1_SERVO_P_GOTO           AXIS1_SERVO_P
+  #ifndef AXIS1_PID_P_GOTO
+  #define AXIS1_PID_P_GOTO             AXIS1_PID_P
   #endif
-  #ifndef AXIS1_SERVO_I_GOTO
-  #define AXIS1_SERVO_I_GOTO           AXIS1_SERVO_I
+  #ifndef AXIS1_PID_I_GOTO
+  #define AXIS1_PID_I_GOTO             AXIS1_PID_I
   #endif
-  #ifndef AXIS1_SERVO_D_GOTO
-  #define AXIS1_SERVO_D_GOTO           AXIS1_SERVO_D
+  #ifndef AXIS1_PID_D_GOTO
+  #define AXIS1_PID_D_GOTO             AXIS1_PID_D
   #endif
   #ifndef AXIS1_ENCODER
   #define AXIS1_ENCODER                AB
