@@ -118,7 +118,7 @@ class Roof {
 
     // roof status and errors
     volatile char state = 'i';
-    RoofFault fault = {false, false, false, false, false, false, false, false, false, false};
+    RoofFault fault = {false, false, false, false, false, false, false, false, false, false, false};
     RoofError lastError = RERR_NONE;
     int waitingForPark = 0;
 
@@ -155,7 +155,7 @@ class Roof {
       "Error: Opened/closed limit sw on",    // 17
       "Warning: Already open",               // 18
       "Error: Open location unknown",        // 19
-      "Error: Open already in motion"        // 20
+      "Error: Open already in motion",       // 20
       "Error: Close mount not parked"        // 21
     };
 };

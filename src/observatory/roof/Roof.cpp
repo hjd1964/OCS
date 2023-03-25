@@ -104,10 +104,10 @@ void parkedPoll() {
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
   // If mount must be parked for roof to close, issue a park signal and park timer
-  if (ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
+  if (!safetyOverride && ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
     VF("MSG: Start park monitor task (rate 1000ms priority 7)... ");
-    if (tasks.add(1000, 0, true, 7, parkedPoll, "pkPoll")) { VLF("success"); } else { VLF("FAILED!"); }
-    relay.onDelayedOff(ROOF_CLOSE_PARKS_MOUNT, 1.0);
+    if (tasks.add(1000, 0, true, 7, parkedPoll, "pkPoll")) { VLF("success"); waitingForPark ++;} else { VLF("FAILED!"); }
+    relay.onDelayedOff(ROOF_CLOSE_PARKS_MOUNT, 2.0);
     return true;
   }
 
@@ -216,6 +216,12 @@ void Roof::stop() {
     // make sure any button press is finished before pressing again
     relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_TIME_BUTTON_PRESS);
   }
+
+  // If there is a close waiting for mount to park, cancel it
+  if (tasks.getHandleByName("pkPoll")) {
+    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    waitingForPark = 0;
+  }
 }
 
 // clear errors (required)
@@ -242,7 +248,9 @@ const char * Roof::getStatus() {
     sprintf(travelMessage, "Travel: %ld%%", travel);
     return travelMessage;
   }
-  if (strlen(strErr) == 0) return "No Error";
+  if (strlen(strErr) == 0 && waitingForPark > 0) {
+    return "Waiting for mount to park";
+  } else if (strlen(strErr) == 0) return "No Error";
   return strErr;
 }
 
@@ -368,7 +376,7 @@ void Roof::continueOpening() {
   }
 
   // Or interlock was triggered
-  if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
+  if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
     fault.openInterlock = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
@@ -445,7 +453,7 @@ void Roof::continueClosing() {
   }
 
   // Or interlock was triggered
-  if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
+  if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
     fault.closeInterlock = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
@@ -488,11 +496,15 @@ void Roof::continueClosing() {
 // Check if the mount is parked, 
 bool Roof::checkMountParked() {
   if (sense.isOn(ROOF_INTERLOCK_SENSE)) {
-    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    if (tasks.getHandleByName("pkPoll")) {
+      tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    }
     waitingForPark = 0;
     return true;
   } else if (waitingForPark >= MOUNT_PARK_TIMEOUT) {
-    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    if (tasks.getHandleByName("pkPoll")) {
+      tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+    }
     waitingForPark = 0;
     lastError = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED;
     return false;
