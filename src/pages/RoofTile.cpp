@@ -44,7 +44,7 @@
     if (roof.isClosing()) strcpy(ws1, "Closing");
 
     const char *statusStr = roof.getStatus();
-    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") || strstr(statusStr, "Waiting for mount to park") 
+    if (strstr(statusStr, "No Error") || strstr(statusStr, "Travel: ") || strstr(statusStr, "Waiting for mount to park")) 
       strcpy(ws2, "#505090");
     else 
       strcpy(ws2, "red");

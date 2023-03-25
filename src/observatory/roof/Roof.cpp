@@ -73,7 +73,7 @@ bool Roof::open() {
   clearStatus(false);
 
   delay(ROOF_TIME_PRE_MOTION*1000);
-  if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
+  if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_OPEN_SAFETY_INTERLOCK;
     return false;
@@ -103,7 +103,7 @@ void parkedPoll() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
-  // If mount must be parked for roof to close, issue a park signal and park timer
+  // If mount must be parked for roof to close, issue a park signal and start park timer
   if (!safetyOverride && ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
     VF("MSG: Start park monitor task (rate 1000ms priority 7)... ");
     if (tasks.add(1000, 0, true, 7, parkedPoll, "pkPoll")) { VLF("success"); waitingForPark ++;} else { VLF("FAILED!"); }
@@ -169,7 +169,7 @@ bool Roof::close() {
   clearStatus(false);
 
   delay(ROOF_TIME_PRE_MOTION*1000);
-  if (ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
+  if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_CLOSE_SAFETY_INTERLOCK;
     return false;
