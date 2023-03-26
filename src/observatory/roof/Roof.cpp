@@ -103,6 +103,12 @@ void parkedPoll() {
 
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
+  // Check to see if the roof is already closed
+  if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && !sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
+    lastError = RERR_CLOSE_EXCEPT_CLOSED;
+    return false;
+  }
+
   // If mount must be parked for roof to close, issue a park signal and start park timer
   if (!safetyOverride && ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
     VF("MSG: Start park monitor task (rate 1000ms priority 7)... ");
@@ -146,13 +152,7 @@ bool Roof::close() {
     return false;
   }
 
-  // Check to see if the roof is already closed
-  if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && !sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
-    lastError = RERR_CLOSE_EXCEPT_CLOSED;
-    return false;
-  }
-
-  // Just one last sanity check before we start moving the roof
+    // Just one last sanity check before we start moving the roof
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     lastError = RERR_CLOSE_EXCEPT_OPENED_LIMIT_SW_ON;
     return false;
