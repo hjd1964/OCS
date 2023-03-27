@@ -101,6 +101,15 @@ void parkedPoll() {
   }
 }
 
+// Cancle a waiting for park sequence
+void stopWaitingForPark() {
+  if (tasks.getHandleByName("pkPoll")) {
+      tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
+  }
+  relay.off(ROOF_CLOSE_PARKS_MOUNT);
+  roof.waitingForPark = 0;
+}
+
 // Start closing the roof, returns true if successful or false otherwise (required)
 bool Roof::close() {
   // Check to see if the roof is already closed
@@ -113,7 +122,7 @@ bool Roof::close() {
   if (!safetyOverride && ROOF_CLOSE_PARKS_MOUNT != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE) && waitingForPark == 0) {
     VF("MSG: Start park monitor task (rate 1000ms priority 7)... ");
     if (tasks.add(1000, 0, true, 7, parkedPoll, "pkPoll")) { VLF("success"); waitingForPark ++;} else { VLF("FAILED!"); }
-    relay.onDelayedOff(ROOF_CLOSE_PARKS_MOUNT, 2.0);
+    relay.on(ROOF_CLOSE_PARKS_MOUNT);
     return true;
   }
 
@@ -218,10 +227,7 @@ void Roof::stop() {
   }
 
   // If there is a close waiting for mount to park, cancel it
-  if (tasks.getHandleByName("pkPoll")) {
-    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
-    waitingForPark = 0;
-  }
+  stopWaitingForPark();
 }
 
 // clear errors (required)
@@ -496,16 +502,10 @@ void Roof::continueClosing() {
 // Check if the mount is parked, 
 bool Roof::checkMountParked() {
   if (sense.isOn(ROOF_INTERLOCK_SENSE)) {
-    if (tasks.getHandleByName("pkPoll")) {
-      tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
-    }
-    waitingForPark = 0;
+    stopWaitingForPark();
     return true;
   } else if (waitingForPark >= MOUNT_PARK_TIMEOUT) {
-    if (tasks.getHandleByName("pkPoll")) {
-      tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
-    }
-    waitingForPark = 0;
+    stopWaitingForPark();
     lastError = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED;
     return false;
   } else {

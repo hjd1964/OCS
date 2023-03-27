@@ -108,6 +108,9 @@ class Roof {
 
     // called repeatedly to check if mount is parked
     bool checkMountParked();
+    
+    // counter for waiting period
+    int waitingForPark = 0;
 
   private:
     // called repeatedly to open the roof
@@ -120,8 +123,7 @@ class Roof {
     volatile char state = 'i';
     RoofFault fault = {false, false, false, false, false, false, false, false, false, false, false};
     RoofError lastError = RERR_NONE;
-    int waitingForPark = 0;
-
+    
     // roof power and safety
     volatile bool safetyOverride = false;
     volatile bool maxPower = false;

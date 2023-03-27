@@ -210,7 +210,7 @@
 
 #define ROOF_TIME_AVG                 300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
 #define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
-#define MOUNT_PARK_TIMEOUT             30 //     30, n. Where n=20..240 (seconds) Maximum time to park mount before error.    Adjust
+#define MOUNT_PARK_TIMEOUT             30 //     30, n. Where n=20..480 (seconds) Maximum time to park mount before error.    Adjust
 
 // DOME CONTROL PANEL --------------------------------------------------------------------------------------------------------------
 #define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option

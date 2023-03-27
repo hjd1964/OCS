@@ -403,8 +403,8 @@
   #error "Configuration (Config.h): ROOF_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
 #endif
 
-#if MOUNT_PARK_TIMEOUT < 20 || MOUNT_PARK_TIMEOUT > 240
-  #error "Configuration (Config.h): MOUNT_PARK_TIMEOUT must be a number between 20 and 240 (seconds.)"
+#if MOUNT_PARK_TIMEOUT < 20 || MOUNT_PARK_TIMEOUT > 480
+  #error "Configuration (Config.h): MOUNT_PARK_TIMEOUT must be a number between 20 and 480 (seconds.)"
 #endif
 
 #if DOME == ON && AXIS1_DRIVER_MODEL == OFF
