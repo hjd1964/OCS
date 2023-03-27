@@ -315,6 +315,14 @@
   #error "Configuration (Config.h): ROOF_AUTOCLOSE_SAFETY, OCS website ROOF automatic close safety, must OFF or ON."
 #endif
 
+#if (ROOF_CLOSE_PARKS_MOUNT < 1 || ROOF_CLOSE_PARKS_MOUNT > 18) && ROOF_CLOSE_PARKS_MOUNT != OFF
+  #error "Configuration (Config.h): ROOF_CLOSE_PARKS_MOUNT must OFF or a number between 1 and 18 (RELAY#.)"
+#endif
+
+#if (ROOF_CLOSE_PARKS_MOUNT > 0 && ROOF_CLOSE_PARKS_MOUNT < 19) && ROOF_INTERLOCK_SENSE == OFF
+  #error "Configuration (Config.h): ROOF_INTERLOCK_SENSE must be a number between 1 and 8 (SENSE#) if ROOF_CLOSE_PARKS_MOUNT is used."
+#endif
+
 #if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 18) && ROOF_MOTOR_OPEN_RELAY != OFF
   #error "Configuration (Config.h): ROOF_MOTOR_OPEN_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
@@ -393,6 +401,10 @@
 
 #if ROOF_TIME_LIMIT_SENSE_FAIL < 1 || ROOF_TIME_LIMIT_SENSE_FAIL > 60
   #error "Configuration (Config.h): ROOF_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
+#endif
+
+#if MOUNT_PARK_TIMEOUT < 20 || MOUNT_PARK_TIMEOUT > 480
+  #error "Configuration (Config.h): MOUNT_PARK_TIMEOUT must be a number between 20 and 480 (seconds.)"
 #endif
 
 #if DOME == ON && AXIS1_DRIVER_MODEL == OFF
