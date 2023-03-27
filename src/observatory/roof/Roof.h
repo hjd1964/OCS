@@ -103,14 +103,11 @@ class Roof {
     // for soft start etc, pwm power level
     int powerLevel();
 
-    // called repeatedly to check if mount is parked
-    bool checkMountParked();
-    
-    // counter for waiting period
-    int waitingForPark = 0;
     // called repeatedly to control roof movement
     void poll();
 
+    // called repeatedly to check if the mount is parked to trigger roof close
+    bool parkCheckPoll();
 
   private:
     // called repeatedly to open the roof
@@ -135,6 +132,7 @@ class Roof {
     long lastSecondsOfTravel, timeLeftToOpenAtStart, timeLeftToCloseAtStart;
     long travel = 0;
     unsigned long openStartTime, closeStartTime;
+    int waitingForPark = 0;                  // counter for waiting period
 
     const char * ErrorMessage[22] = {
       "",                                    // 0
