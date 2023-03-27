@@ -11,14 +11,14 @@
 
 void roofWrapper() { roof.poll(); }
 
-// this gets called once on startup to initialize roof operation (required)
+// this gets called once on startup to initialize roof operation
 void Roof::init() {
   // start polling task
   VF("MSG: Roof, start monitor task (rate 10ms priority 0)... ");
   if (tasks.add(10, 0, true, 0, roofWrapper, "Roof")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
-// Start opening the roof, returns true if successful or false otherwise (required)
+// Start opening the roof, returns true if successful or false otherwise
 bool Roof::open() {
   if (state != 'i' || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
     lastError = RERR_OPEN_EXCEPT_IN_MOTION;
@@ -199,7 +199,7 @@ bool Roof::close() {
   return true;
 }
 
-// stop the roof, this must be ISR safe! (required)
+// stop the roof, this must be ISR safe!
 void Roof::stop() {
   // Reset possible override of roof timer
   safetyOverride = false;
@@ -230,7 +230,7 @@ void Roof::stop() {
   stopWaitingForPark();
 }
 
-// clear errors (required)
+// clear errors
 void Roof::clearStatus(bool last) {
   fault.closeInterlock = false;
   fault.closeLimitSW = false;
@@ -246,7 +246,7 @@ void Roof::clearStatus(bool last) {
   if (last) lastError = RERR_NONE;
 }
 
-// returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error" (required)
+// returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error"
 const char * Roof::getStatus() {
   const char *strErr = getLastError();
   if (strlen(strErr) == 0 && isMoving()) {
@@ -260,7 +260,7 @@ const char * Roof::getStatus() {
   return strErr;
 }
 
-// returns an error description string if an error has occured, "" if no error (required)
+// returns an error description string if an error has occured, "" if no error
 const char * Roof::getLastError() {
   RoofError err = RERR_NONE;
   if (fault.openInterlock)  err = RERR_OPEN_SAFETY_INTERLOCK; else
@@ -284,32 +284,32 @@ const char * Roof::getLastError() {
   return ErrorMessage[err];
 }
 
-// true if the roof is closed (required)
+// true if the roof is closed
 bool Roof::isClosed() {
   return (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && !sense.isOn(ROOF_LIMIT_OPENED_SENSE));
 }
 
-// true if the roof is opened (required)
+// true if the roof is opened
 bool Roof::isOpen() {
   return (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE));
 }
 
-// true if the roof is moving (required)
+// true if the roof is moving
 bool Roof::isMoving() {
   return (state != 'i');
 }
 
-// true if the roof is moving (closing, required)
+// true if the roof is moving (closing)
 bool Roof::isClosing() {
   return (state == 'c');
 }
 
-// true if the roof is moving (opening, required)
+// true if the roof is moving (opening)
 bool Roof::isOpening() {
   return (state == 'o');
 }
 
-// safety override, ignores stuck limit switch and timeout (required)
+// safety override, ignores stuck limit switch and timeout
 void Roof::setSafetyOverride() {
   safetyOverride = true;
 }
@@ -329,7 +329,7 @@ bool Roof::isMaxPower() {
   return maxPower;
 }
 
-// for soft start etc, pwm power level (required)
+// for soft start etc, pwm power level
 int Roof::powerLevel() {
   return currentPower;
 }

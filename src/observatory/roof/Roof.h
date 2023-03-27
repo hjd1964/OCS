@@ -52,46 +52,46 @@ class Roof {
     // process commands associated with the ROOF
     bool command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError);
 
-    // this gets called once on startup to initialize roof operation (required)
+    // this gets called once on startup to initialize roof operation
     void init();
 
     // called repeatedly if roof is moving (required)
     void poll();
 
-    // Start opening the roof, returns true if successful or false otherwise (required)
+    // Start opening the roof, returns true if successful or false otherwise
     bool open();
 
-    // Start closing the roof, returns true if successful or false otherwise (required)
+    // Start closing the roof, returns true if successful or false otherwise
     bool close();
 
-    // stop the roof, this must be ISR safe! (required)
+    // stop the roof, this must be ISR safe!
     void stop();
 
-    // clear errors (required)
+    // clear errors
     void clearStatus(bool last = true);
 
-    // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error" (required)
+    // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error"
     const char * getStatus();
 
-    // returns an error description string if an error has occured, "" if no error (required)
+    // returns an error description string if an error has occured, "" if no error
     const char * getLastError();
 
-    // true if the roof is closed (required)
+    // true if the roof is closed
     bool isClosed();
 
-    // true if the roof is opened (required)
+    // true if the roof is opened
     bool isOpen();
 
-    // true if the roof is moving (required)
+    // true if the roof is moving
     bool isMoving();
 
-    // true if the roof is moving (closing, required)
+    // true if the roof is moving (closing)
     bool isClosing();
 
-    // true if the roof is moving (opening, required)
+    // true if the roof is moving (opening)
     bool isOpening();
 
-    // safety override, ignores stuck limit switch and timeout (required)
+    // safety override, ignores stuck limit switch and timeout
     void setSafetyOverride();
 
     // required
@@ -103,7 +103,7 @@ class Roof {
     // required
     bool isMaxPower();
 
-    // for soft start etc, pwm power level (required)
+    // for soft start etc, pwm power level
     int powerLevel();
 
     // called repeatedly to check if mount is parked
