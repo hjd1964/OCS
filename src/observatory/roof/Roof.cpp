@@ -334,17 +334,6 @@ int Roof::powerLevel() {
   return currentPower;
 }
 
-// called repeatedly if roof is moving (required)
-void Roof::poll() {
-  if (!roof.isMoving()) return;
-
-  // Open the roof, keeping track of time limit and sensor status
-  if (isOpening()) continueOpening();
-
-  // Close the roof, keeping track of time limit and sensor status
-  if (isClosing()) continueClosing();
-}
-
 // called repeatedly to open the roof
 void Roof::continueOpening() {
   cli();
@@ -512,6 +501,17 @@ bool Roof::checkMountParked() {
     waitingForPark ++;
     return false;
   }
+// called repeatedly to control roof movement
+void Roof::poll() {
+  if (!roof.isMoving()) return;
+
+  // Open the roof, keeping track of time limit and sensor status
+  if (isOpening()) continueOpening();
+
+  // Close the roof, keeping track of time limit and sensor status
+  if (isClosing()) continueClosing();
+}
+
 }
 
 Roof roof;

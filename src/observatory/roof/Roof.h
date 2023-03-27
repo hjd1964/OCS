@@ -55,9 +55,6 @@ class Roof {
     // this gets called once on startup to initialize roof operation
     void init();
 
-    // called repeatedly if roof is moving (required)
-    void poll();
-
     // Start opening the roof, returns true if successful or false otherwise
     bool open();
 
@@ -111,6 +108,9 @@ class Roof {
     
     // counter for waiting period
     int waitingForPark = 0;
+    // called repeatedly to control roof movement
+    void poll();
+
 
   private:
     // called repeatedly to open the roof
