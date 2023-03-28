@@ -33,6 +33,7 @@
     char ws1[20];
     char ws2[4];
     float f;
+    UNUSED(f);
 
     strcpy_P(temp, htmlInnerStatus1);
     www.sendContent(temp);
