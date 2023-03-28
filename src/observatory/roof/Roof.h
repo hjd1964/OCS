@@ -106,11 +106,11 @@ class Roof {
     // cancel a waiting for park sequence
     void stopWaitingForPark();
 
-    // called repeatedly to control roof movement
-    void poll();
-
     // called repeatedly to check if the mount is parked to trigger roof close
     void parkCheckPoll();
+
+    // called repeatedly to control roof movement
+    void poll();
 
   private:
     // called repeatedly to open the roof

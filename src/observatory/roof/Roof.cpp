@@ -480,6 +480,14 @@ void Roof::stopWaitingForPark() {
   waitingForPark = 0;
 }
 
+// called repeatedly to check if the mount is parked to trigger roof close
+void Roof::parkCheckPoll() {
+  if (sense.isOn(ROOF_INTERLOCK_SENSE) || waitingForPark >= MOUNT_PARK_TIMEOUT) {
+    stopWaitingForPark();
+    if (waitingForPark >= MOUNT_PARK_TIMEOUT) lastError = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED; else close();
+  } else waitingForPark ++;
+}
+
 // called repeatedly to control roof movement
 void Roof::poll() {
   if (!roof.isMoving()) return;
@@ -489,14 +497,6 @@ void Roof::poll() {
 
   // Close the roof, keeping track of time limit and sensor status
   if (isClosing()) continueClosing();
-}
-
-// called repeatedly to check if the mount is parked to trigger roof close
-void Roof::parkCheckPoll() {
-  if (sense.isOn(ROOF_INTERLOCK_SENSE) || waitingForPark >= MOUNT_PARK_TIMEOUT) {
-    stopWaitingForPark();
-    if (waitingForPark >= MOUNT_PARK_TIMEOUT) lastError = RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED; else close();
-  } else waitingForPark ++;
 }
 
 Roof roof;
