@@ -140,7 +140,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
       } else
     #endif
       return false;
-  } else
+  } else return false;
 
   return true;
 };
