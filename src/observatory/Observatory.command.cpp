@@ -110,7 +110,6 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     //            Set the UTC Date and Time
     //            Return: 0 failure, 1 success
     if (command[1] == 'U') {
-      DL(parameter);
       if (strlen(parameter) == 19 && parameter[2] == '/' && parameter[5] == '/' && parameter[10] == ',' && parameter[13] == ':' && parameter[16] == ':') {
         int m = atoi(&parameter[0]);
         int d = atoi(&parameter[3]);
