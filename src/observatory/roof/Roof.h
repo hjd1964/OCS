@@ -103,11 +103,14 @@ class Roof {
     // for soft start etc, pwm power level
     int powerLevel();
 
+    // cancel a waiting for park sequence
+    void stopWaitingForPark();
+
     // called repeatedly to control roof movement
     void poll();
 
     // called repeatedly to check if the mount is parked to trigger roof close
-    bool parkCheckPoll();
+    void parkCheckPoll();
 
   private:
     // called repeatedly to open the roof
