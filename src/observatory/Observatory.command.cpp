@@ -79,7 +79,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     if (command[1] == 's' && parameter[0] == 0) {
       if (safety.isSafe()) strcpy(reply,"SAFE"); else strcpy(reply,"UNSAFE");
       *numericReply = false;
-    } else *commandError = CE_CMD_UNKNOWN;
+    } else return false;
   } else
 
   if (command[0] == 'I') {
@@ -102,8 +102,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     if (command[1] == 'T' && parameter[0] == 0) {
       sprintf(reply, "%.1f,%.1f", ROOF_TIME_PRE_MOTION, ROOF_TIME_POST_MOTION);
       *numericReply = false;
-    } else
-      *commandError = CE_CMD_UNKNOWN;
+    } else return false;
   } else
 
   if (command[0] == 'S') {
