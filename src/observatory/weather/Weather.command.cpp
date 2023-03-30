@@ -117,6 +117,23 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
       *numericReply = false;
     } else return false;
   } else
+
+  #if WEATHER_WIND_SPD != OFF || WEATHER_CLOUD_CVR != OFF
+  if (command[0] == 'I') {
+    //  :IW#  get Weather threshold #defines
+    //         Returns: 20,-14#, WEATHER_WIND_SPD_THRESHOLD,WEATHER_SAFE_THRESHOLD, N/A if sensor == OFF
+    if (command[1] == 'W' && parameter[0] == 0) {
+      char ws[20];
+      if (WEATHER_WIND_SPD != OFF) { sprintf(ws, "%d", WEATHER_WIND_SPD_THRESHOLD);
+      } else { sprintf(ws, "%s", "N/A"); }
+      char wt[20]      ;
+      if (WEATHER_CLOUD_CVR != OFF) { sprintf(wt, "%d", WEATHER_SAFE_THRESHOLD);
+      } else { sprintf(wt, "%s", "N/A"); }
+      sprintf(reply, "%s,%s", ws, wt);
+      *numericReply = false;
+    } else return false;
+  }
+  #endif
     return false;
 
   return true;
