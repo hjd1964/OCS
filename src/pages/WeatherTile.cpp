@@ -112,7 +112,7 @@
       www.sendContent(temp);
     #endif
 
-    #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON
+    #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON || WEATHER_WIND_SPD == ON
       if (safety.isSafe()) {
         strcpy_P(temp, htmlInnerWeatherSafe);
         www.sendContent(temp);
