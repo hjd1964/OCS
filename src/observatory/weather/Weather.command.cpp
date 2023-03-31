@@ -115,6 +115,19 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
         strcpy(reply,"N/A");
       #endif
       *numericReply = false;
+    } else
+
+    //  :Gw#  Get wind speed
+    //         Returns: n# kph, Invalid# or N/A#
+    //
+    if (command[1] == 'w' && parameter[0] == 0) {
+      #if WEATHER_WIND_SPD == ON
+        if (isnan(weatherSensor.windspeed())) strcpy(reply, "Invalid"); else
+        sprintf(reply, "%d", (int)lroundf(weatherSensor.windspeed()));
+      #else
+        strcpy(reply,"N/A");
+      #endif
+      *numericReply = false;
     } else return false;
   } else
 
