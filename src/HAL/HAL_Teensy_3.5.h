@@ -11,12 +11,18 @@
 // volatage for ADC conversions
 #define HAL_VCC 3.3F
 
-// This platform has 16 bit PWM
-#ifndef ANALOG_WRITE_PWM_BITS
-  #define ANALOG_WRITE_PWM_BITS 8
+// Analog read and write
+#ifndef ANALOG_READ_RANGE
+  #define ANALOG_READ_RANGE 1023
 #endif
-#ifndef ANALOG_WRITE_PWM_RANGE
-  #define ANALOG_WRITE_PWM_RANGE 255
+#ifndef ANALOG_WRITE_RANGE
+  #define ANALOG_WRITE_RANGE 4095
+#endif
+#ifndef ANALOG_WRITE_PWM_BITS
+  #define ANALOG_WRITE_PWM_BITS 12 // up to 16 bits
+#endif
+#ifndef ANALOG_WRITE_PWM_FREQUENCY
+  #define ANALOG_WRITE_PWM_FREQUENCY 14648.437
 #endif
 
 // Lower limit (fastest) step rate in uS for this platform (in SQW mode) and width of step pulse

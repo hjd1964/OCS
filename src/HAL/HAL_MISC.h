@@ -13,8 +13,8 @@
 #ifndef ANALOG_WRITE_PWM_BITS
   #define ANALOG_WRITE_PWM_BITS 8
 #endif
-#ifndef ANALOG_WRITE_PWM_RANGE
-  #define ANALOG_WRITE_PWM_RANGE 255
+#ifndef ANALOG_WRITE_RANGE
+  #define ANALOG_WRITE_RANGE 255
 #endif
 
 // Lower limit (fastest) step rate in uS for this platform (in SQW mode) and width of step pulse

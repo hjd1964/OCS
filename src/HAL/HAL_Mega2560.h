@@ -12,11 +12,14 @@
 #define HAL_VCC 5.0F
 
 // This platform has 8 bit PWM
+#ifndef ANALOG_READ_RANGE
+  #define ANALOG_READ_RANGE 1023
+#endif
+#ifndef ANALOG_WRITE_RANGE
+  #define ANALOG_WRITE_RANGE 255
+#endif
 #ifndef ANALOG_WRITE_PWM_BITS
   #define ANALOG_WRITE_PWM_BITS 8
-#endif
-#ifndef ANALOG_WRITE_PWM_RANGE
-  #define ANALOG_WRITE_PWM_RANGE 255
 #endif
 
 // This platform doesn't support true double precision math
