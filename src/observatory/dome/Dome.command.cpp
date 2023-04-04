@@ -124,15 +124,17 @@ bool Dome::command(char reply[], char command[], char parameter[], bool *supress
     } else
 
     //  :DU#  Get Dome Status
-    //         Returns: 'P' if parked, 'H' if at Home
+    //         Returns: 'P' if parked, 'S' if slewing, 'H' if at Home, 'I' if idle/stopped
     if (command[1] == 'U' && parameter[0] == 0) {
       if (dome.isParked()) reply[0] = 'P'; else
+      if (settings.park.state == PS_PARKING) reply[0] = 'K'; else
+      if (dome.isSlewing()) reply[0] = 'S'; else
       #if AXIS2_DRIVER_MODEL != OFF
         if (dome.getAzimuth() == 0.0F && dome.getAltitude() == 0.0F) reply[0] = 'H'; else
       #else
         if (dome.getAzimuth() == 0.0F) reply[0] = 'H'; else
       #endif
-      reply[0] = 0;
+      reply[0] = 'I';
       reply[1] = 0;
       *numericReply = false;
     } else *commandError = CE_CMD_UNKNOWN;
