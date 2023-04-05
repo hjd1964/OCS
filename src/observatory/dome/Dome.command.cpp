@@ -124,7 +124,7 @@ bool Dome::command(char reply[], char command[], char parameter[], bool *supress
     } else
 
     //  :DU#  Get Dome Status
-    //         Returns: 'P' if parked, 'S' if slewing, 'H' if at Home, 'I' if idle/stopped
+    //         Returns: 'P' if parked, 'K' if parking, 'S' if slewing, 'H' if at Home, 'I' if idle
     if (command[1] == 'U' && parameter[0] == 0) {
       if (dome.isParked()) reply[0] = 'P'; else
       if (settings.park.state == PS_PARKING) reply[0] = 'K'; else

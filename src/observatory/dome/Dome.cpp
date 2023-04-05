@@ -111,10 +111,10 @@ CommandError Dome::syncAzimuthTarget() {
   #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
     if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
   #endif
-  if (settings.park.state >= PS_PARKED) return CE_PARKED;
+  if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
   VF("MSG: Dome, sync azimuth target coordinate set ("); V(targetAzm); VL("°)");
-
+  reset();
   axis1.enable(true);
   axis1.setInstrumentCoordinate(targetAzm);
 
