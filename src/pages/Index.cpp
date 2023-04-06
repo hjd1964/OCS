@@ -152,10 +152,7 @@ void indexAjax() {
       #endif
     }
     if (press.equals("dome_sync")) {
-      dome.gotoAzimuthTarget();
-      #if AXIS2_DRIVER_MODEL != OFF
-        dome.gotoAltitudeTarget();
-      #endif
+      dome.syncAzimuthTarget();
     }
     if (press.equals("dome_stop")) dome.stop();
     if (press.equals("dome_home")) dome.findHome();

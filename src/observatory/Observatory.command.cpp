@@ -86,7 +86,7 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     //  :IN#  get version Number
     //         Returns: s#
     if (command[1] == 'N' && parameter[0] == 0) {
-      sprintf(reply, "%i.%i%s", (int)firmware.version.major, (int)firmware.version.minor, firmware.version.patch);
+      sprintf(reply, "%d.%02d%s", (int)firmware.version.major, (int)firmware.version.minor, firmware.version.patch);
       *numericReply = false;
     } else
 
