@@ -23,6 +23,7 @@ bool Mlx90614w::init() {
 
   if (_skyTemperatureAssigned) return false;
 
+  delay(10);
   if (mlxSensor.begin(WEATHER_SENSOR_CLOUD_MLX90614)) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
