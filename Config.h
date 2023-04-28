@@ -146,7 +146,7 @@
 #define WEATHER_SENSOR_T_ANALOG2DEGC(x) (((x*3.3)-0.1)*100.0-40.0)
 
 #define WEATHER_SENSOR_WIND_CUP       OFF //    OFF, n. Where n=1..8 (Sense#) to enable. Wind speed, cup anemometer.          Option
-// Conversion factor, pulses per minute (x) to wind speed in KPH                                                Adjust
+// Conversion factor, pulses per minute (x) to wind speed in KPH                                                              Adjust
 #define WEATHER_SENSOR_WIND_CUP2KPH(x) (x*0.087)
 #define WEATHER_SENSOR_WIND_EDGE  FALLING //     RISING or FALLING. Pulse edge to detect.                                     Adjust
 #define WEATHER_SENSOR_WIND_CUP_DB    OFF //    OFF, n. Where n=1..100 (ms) Wind Cup input debounce time.                     Option
