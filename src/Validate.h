@@ -131,6 +131,18 @@
   #error "Configuration (Config.h): WEATHER_WIND_SPD_THRESHOLD must be a number between 0 and 100 (kph.)"
 #endif
 
+#if WEATHER_SENSOR_WIND_CUP != OFF && (WEATHER_SENSOR_WIND_CUP<1 || WEATHER_SENSOR_WIND_CUP>8)
+  #error "Configuration (Config.h): WEATHER_SENSOR_WIND_CUP must OFF or a number between 1 and 8 (SENSE#.)"
+#endif
+
+#if WEATHER_SENSOR_WIND_CUP != OFF && WEATHER_SENSOR_WIND_EDGE != FALLING && WEATHER_SENSOR_WIND_EDGE != RISING
+  #error "Configuration (Config.h): WEATHER_SENSOR_WIND_EDGE must RISING or FALLING"
+#endif
+
+#if WEATHER_SENSOR_WIND_CUP_DB != OFF && (WEATHER_SENSOR_WIND_CUP_DB<1 || WEATHER_SENSOR_WIND_CUP_DB>100)
+  #error "Configuration (Config.h): WEATHER_SENSOR_WIND_CUP_DB must OFF or a number between 1 and 100 (ms.)"
+#endif
+
 #if WEATHER_SKY_QUAL != OFF && WEATHER_SKY_QUAL != ON
   #error "Configuration (Config.h): WEATHER_SKY_QUAL, OCS temperature input, must OFF or ON."
 #endif
