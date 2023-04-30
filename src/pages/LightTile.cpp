@@ -31,7 +31,7 @@
     #if LIGHT_WRR_RELAY != OFF
       if (relay.isOn(LIGHT_WRR_RELAY)) check(temp, "%___WRR"); else erase(temp, "%___WRR");
     #endif
-    www.sendContent(temp);
+    if (strlen(temp) > 0) www.sendContent(temp);
 
     strcpy_P(temp, htmlLighting2);
     #if LIGHT_ORW_RELAY != OFF
@@ -40,7 +40,7 @@
     #if LIGHT_ORR_RELAY != OFF
       if (relay.isOn(LIGHT_ORR_RELAY)) check(temp, "%___ORR"); else erase(temp, "%___ORR");
     #endif
-    www.sendContent(temp);
+    if (strlen(temp) > 0) www.sendContent(temp);
 
     strcpy_P(temp, htmlLighting3);
     www.sendContent(temp);
