@@ -14,7 +14,17 @@ extern bool _windSpeedAssigned;
 extern char _windSpeedName[40];
 
 volatile unsigned long _cupAnemometerPulseCount = 0;
-void cupAnemISR() { _cupAnemometerPulseCount++; }
+
+void cupAnemISR() {
+  bool pulse = true;
+  #if defined WEATHER_SENSOR_WIND_CUP_DB && WEATHER_SENSOR_WIND_CUP_DB != OFF
+    volatile static unsigned long lastPulseTime = 0;
+    long timePassed = (long)(millis() - lastPulseTime);
+    lastPulseTime = millis();
+    if (timePassed <= WEATHER_SENSOR_WIND_CUP_DB) pulse = false;
+  #endif
+  if (pulse)  _cupAnemometerPulseCount++;
+}
 
 void cupAnemWrapper() { cupAnem.poll(); }
 
@@ -32,7 +42,11 @@ bool CupAnem::init() {
     VLF("success");
     _windSpeedAssigned = true;
     strcpy(_windSpeedName, "Generic Cup Anemometer on Digital Input");
-    attachInterrupt(digitalPinToInterrupt(sensePin[index]), cupAnemISR, RISING);
+    if (WEATHER_SENSOR_WIND_EDGE == FALLING) {
+      attachInterrupt(digitalPinToInterrupt(sensePin[index]), cupAnemISR, FALLING);
+    } else if (WEATHER_SENSOR_WIND_EDGE == RISING) {
+      attachInterrupt(digitalPinToInterrupt(sensePin[index]), cupAnemISR, RISING);
+    }
     active = true;
   } else { VLF("FAILED!"); }
 
