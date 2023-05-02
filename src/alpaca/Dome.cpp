@@ -151,16 +151,16 @@ void alpacaDomeCanSetShutter() {
 
 void alpacaDomeCanSlave() {
   alpacaJsonStart();
-  #ifdef ROOF_PRESENT
-    alpacaJsonDoc["Value"] = false;
-  #endif
+  alpacaJsonDoc["Value"] = false;
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaDomeCanSyncAzimuth() {
   alpacaJsonStart();
-  #ifdef ROOF_PRESENT
+  #ifdef DOME_PRESENT
     alpacaJsonDoc["Value"] = true;
+  #else
+    alpacaJsonDoc["Value"] = false;
   #endif
   alpacaJsonFinish(NoException, "");
 }
