@@ -18,12 +18,11 @@
   const char htmlRoof2[] PROGMEM =
   "</div>"
   "<div style=\"text-align: center\">"
-  "<br />"
   #if !(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)
     #if ROOF_SINGLE_OPEN_CLOSE_STOP_RELAY == ON
-      "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Press!\" />&nbsp;&nbsp;&nbsp;"
+      "<input type=\"button\" style=\"width:6em;height:2.5em;border-color:#ff2222;margin-bottom:5px;margin-top:5px;\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Press!\" />&nbsp;&nbsp;&nbsp;"
     #else
-      "<input type=\"button\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />&nbsp;&nbsp;&nbsp;"
+      "<input type=\"button\" style=\"width:5em;height:2.5em;border-color:#ff2222;margin-bottom:5px;margin-top:5px;\" onclick='SetVar(\"press\",\"roof_stop\")' value=\"Stop!\" />&nbsp;&nbsp;&nbsp;"
     #endif
   #endif
   #if ROOF_USER_SAFETY_OVERRIDE == ON
