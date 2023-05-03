@@ -12,12 +12,12 @@ extern void indexAjax();
 
 extern void lightContents();
 extern void powerContents();
-extern void roofContents();
-extern void domeContents();
-extern void statusContents();
-extern void thermostatTemperatureContents();
-extern void thermostatHumidityContents();
-extern void weatherContents();
+extern void roofGet();
+extern void domeGet();
+extern void statusGet();
+extern void thermostatTemperatureGet();
+extern void thermostatHumidityGet();
+extern void weatherGet();
 
 extern void relaysAjax();
 

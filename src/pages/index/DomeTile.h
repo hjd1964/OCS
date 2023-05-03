@@ -4,8 +4,8 @@
 #include "../../Common.h"
 
 #if DOME == ON
-  extern void domeTile();
-  extern void domeContents();
+  void domeTile();
+  void domeContents();
 
   const char htmlDomeBegin[] PROGMEM = 
   "<div id=\"Dome\" class=\"obsControl\">"

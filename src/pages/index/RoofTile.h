@@ -7,8 +7,8 @@
 
   #include "../../pages/Pages.h"
 
-  extern void roofTile();
-  extern void roofContents();
+  void roofTile();
+  void roofContents();
 
   const char htmlRoof1[] PROGMEM =
   "<div id=\"Roof\" class=\"obsControl\">"

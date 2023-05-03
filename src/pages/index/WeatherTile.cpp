@@ -21,6 +21,16 @@
     www.sendContent(temp);
   }
 
+  void weatherGet() {
+    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    www.sendHeader("Cache-Control", "no-cache");
+    www.send(200, "text/plain", String());
+
+    weatherContents();
+
+    www.sendContent("");
+  }
+
   void weatherContents() {
     char temp[128] = "";
     char ws1[30] = "";

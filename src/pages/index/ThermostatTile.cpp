@@ -128,6 +128,16 @@
     www.sendContent(temp);
   }
 
+  void thermostatTemperatureGet() {
+    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    www.sendHeader("Cache-Control", "no-cache");
+    www.send(200, "text/plain", String());
+
+    thermostatTemperatureContents();
+
+    www.sendContent("");
+  }
+
   void thermostatTemperatureContents() {
     char temp[40] = "";
     
@@ -154,6 +164,17 @@
   }
 
   #if THERMOSTAT_HUMIDITY == ON
+
+    void thermostatHumidityGet() {
+      www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+      www.sendHeader("Cache-Control", "no-cache");
+      www.send(200, "text/plain", String());
+
+      thermostatHumidityContents();
+
+      www.sendContent("");
+    }
+
     void thermostatHumidityContents() {
       char temp[40] = "";
       

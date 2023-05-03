@@ -26,6 +26,16 @@
     www.sendContent(temp);
   }
 
+  void statusGet() {
+    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    www.sendHeader("Cache-Control", "no-cache");
+    www.send(200, "text/plain", String());
+
+    statusContents();
+
+    www.sendContent("");
+  }
+
   uint16_t getFreeSram();
 
   void statusContents() {

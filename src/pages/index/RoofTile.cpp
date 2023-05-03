@@ -31,6 +31,16 @@
     }
   }
 
+  void roofGet() {
+    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    www.sendHeader("Cache-Control", "no-cache");
+    www.send(200, "text/plain", String());
+
+    roofContents();
+
+    www.sendContent("");
+  }
+
   void roofContents() {
     char temp[250];
     char ws1[10] = "";

@@ -4,8 +4,8 @@
 #include "../../Common.h"
 
 #if POWER == ON
-  extern void powerTile();
-  extern void powerContents();
+  void powerTile();
+  void powerContents();
 
   const char htmlPowerBegin[] PROGMEM = "<div id=\"Power\" class=\"obsControl\" >";
   const char htmlPowerEnd[] PROGMEM = "</div>\r\n";

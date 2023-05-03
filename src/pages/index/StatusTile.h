@@ -4,8 +4,8 @@
 #include "../../Common.h"
 
 #if STAT == ON
-  extern void statusTile();
-  extern void statusContents();
+  void statusTile();
+  void statusContents();
 
   const char htmlStatus1[] PROGMEM = "<div id=\"MiscStatus\" class=\"obsControl\">";
 

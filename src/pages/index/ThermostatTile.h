@@ -4,9 +4,9 @@
 #include "../../Common.h"
 
 #if THERMOSTAT == ON
-  extern void thermostatTile();
-  extern void thermostatTemperatureContents();
-  extern void thermostatHumidityContents();
+  void thermostatTile();
+  void thermostatTemperatureContents();
+  void thermostatHumidityContents();
 
   const char htmlThermostatBegin[] PROGMEM =
   "<div class=\"obsControl\">"

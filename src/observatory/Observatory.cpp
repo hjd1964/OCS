@@ -155,22 +155,22 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     www.on("/setvar", indexAjax);
     www.on("/relay", relaysAjax);
     #if STAT == ON
-      www.on("/miscstatus", statusContents);
+      www.on("/miscstatus", statusGet);
     #endif
     #if WEATHER == ON
-      www.on("/weather", weatherContents);
+      www.on("/weather", weatherGet);
     #endif
     #if THERMOSTAT == ON
-      www.on("/thermostatt", thermostatTemperatureContents);
+      www.on("/thermostatt", thermostatTemperatureGet);
       #if THERMOSTAT_HUMIDITY == ON
-        www.on("/thermostath", thermostatHumidityContents);
+        www.on("/thermostath", thermostatHumidityGet);
       #endif
     #endif
     #if ROOF == ON
-      www.on("/roofstatus", roofContents);
+      www.on("/roofstatus", roofGet);
     #endif
     #if DOME == ON
-      www.on("/domestatus", domeContents);
+      www.on("/domestatus", domeGet);
     #endif
     www.on("/", indexPage);
     www.onNotFound(handleNotFound);

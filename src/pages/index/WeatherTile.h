@@ -5,8 +5,8 @@
 #include "../../Common.h"
 
 #if WEATHER == ON
-  extern void weatherTile();
-  extern void weatherContents();
+  void weatherTile();
+  void weatherContents();
 
   const char htmlWeather1[] PROGMEM = "<div id=\"Weather\" class=\"obsControl\" >";
   const char htmlWeather3[] PROGMEM = "</div>\r\n";

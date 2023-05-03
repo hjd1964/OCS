@@ -36,6 +36,16 @@
     www.sendContent(temp);
   }
 
+  void domeGet() {
+    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    www.sendHeader("Cache-Control", "no-cache");
+    www.send(200, "text/plain", String());
+
+    domeContents();
+
+    www.sendContent("");
+  }
+
   void domeContents() {
     char temp[512];
     if (dome.ready) {

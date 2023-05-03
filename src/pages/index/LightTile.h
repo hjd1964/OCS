@@ -4,8 +4,8 @@
 #include "../../Common.h"
 
 #if LIGHT == ON
-  extern void lightTile();
-  extern void lightContents();
+  void lightTile();
+  void lightContents();
 
   const char htmlLight1[] PROGMEM = "<div id=\"Light\" class=\"obsControl\" >";
   const char htmlLight3[] PROGMEM = "</div>\r\n";
