@@ -39,14 +39,14 @@
   "<input type='button' onclick='SetVar(\"press\",\"dome_sync\")' value='Sync'><br/>";
 
   const char htmlDomeStop[] PROGMEM =
-  "<input type='button' style='margin: 10px' onclick='SetVar(\"press\",\"dome_stop\")' value='Stop!'><br/>";
+  "<input type='button' class=\"stopBtn\" onclick='SetVar(\"press\",\"dome_stop\")' value='Stop!'><br/>";
 
   const char htmlDomeHome[] PROGMEM =
-  "<input type='button'  onclick='SetVar(\"press\",\"dome_home\")' value='Find Home'>&nbsp;&nbsp;"
+  "<input type='button' onclick='SetVar(\"press\",\"dome_home\")' value='Find Home'>&nbsp;&nbsp;"
   "<input type='button' onclick='SetVar(\"press\",\"dome_reset\")' value='Home (Reset)'><br/>";
 
   const char htmlDomePark1[] PROGMEM =
-  "<input type='button' onclick='SetVar(\"press\",\"dome_park\")' value='Park'>"
+  "<input type='button' style='margin-top:5px;' onclick='SetVar(\"press\",\"dome_park\")' value='Park'>"
   "<input type='button' onclick='SetVar(\"press\",\"dome_unpark\")' value='Un-Park'>";
   const char htmlDomePark2[] PROGMEM =
   "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' onclick='SetVar(\"press\",\"dome_setpark\")' value='Set-Park'><br/>";
