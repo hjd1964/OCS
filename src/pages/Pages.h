@@ -7,8 +7,6 @@
 #include "../../Config.h"
 #include "../../Extended.config.h"
 
-#include "htmlHeaders.h"
-
 extern void indexPage();
 extern void indexAjax();
 

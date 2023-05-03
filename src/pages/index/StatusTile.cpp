@@ -9,6 +9,7 @@
 
   #include "../../lib/sense/Sense.h"
   #include "../../libApp/analog/Analog.h"
+  #include "../../observatory/safety/Safety.h"
 
   extern int timeZone;
   extern time_t startupTime;
@@ -116,6 +117,12 @@
       sprintf_P(temp, htmlInnerStatusMemory, freeRam);
       www.sendContent(temp);
     #endif
+
+    #if WEATHER_RAIN != OFF || WEATHER_CLOUD_CVR != OFF || WEATHER_WIND_SPD != OFF || STAT_MAINS_SENSE != OFF
+      if (safety.isSafe()) strcpy_P(temp, htmlInnerSafe); else strcpy_P(temp, htmlInnerUnSafe);
+      www.sendContent(temp);
+    #endif
+
   }
 
   #if STAT_PROCESSOR_RAM != OFF

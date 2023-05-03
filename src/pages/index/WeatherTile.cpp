@@ -8,7 +8,6 @@
 
   #include "../../libApp/weatherSensor/WeatherSensor.h"
   #include "../../observatory/weather/Weather.h"
-  #include "../../observatory/safety/Safety.h"
 
   void weatherTile() {
     char temp[128] = "";
@@ -109,20 +108,6 @@
       strcpy(ws1, weather.cloudCoverDescription());
       sprintf_P(temp, htmlInnerWeatherCloud, ws1);
       www.sendContent(temp);
-    #endif
-
-    #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON || WEATHER_WIND_SPD == ON
-      if (safety.isSafe()) {
-        strcpy_P(temp, htmlInnerWeatherSafe);
-        www.sendContent(temp);
-        strcpy_P(temp, htmlInnerWeatherSafe1);
-        www.sendContent(temp);
-      } else {
-        strcpy_P(temp, htmlInnerWeatherUnSafe);
-        www.sendContent(temp);
-        strcpy_P(temp, htmlInnerWeatherUnSafe1);
-        www.sendContent(temp);
-      }
     #endif
 
   }

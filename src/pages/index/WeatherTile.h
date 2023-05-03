@@ -49,15 +49,4 @@
     "&nbsp;&nbsp;Sky Conditions<div class=\"aStatus\">%s</div><br />";
   #endif
 
-  #if WEATHER_RAIN == ON || WEATHER_CLOUD_CVR == ON || WEATHER_WIND_SPD == ON || STAT_MAINS_SENSE != OFF
-    const char htmlInnerWeatherSafe[] PROGMEM =
-    "<div style=\"position: absolute; bottom: 5px; left: 120px; text-align:center;\";><div style=\"display:inline-block; ";
-    const char htmlInnerWeatherSafe1[] PROGMEM =
-    "background-color: #bcccbc; color: green; border:1px solid green; padding: 4px 4px;\">SAFE</div></div><br />";
-    const char htmlInnerWeatherUnSafe[] PROGMEM =
-    "<div style=\"position: absolute; bottom: 5px; left: 110px; text-align:center;\";><div style=\"display:inline-block; ";
-    const char htmlInnerWeatherUnSafe1[] PROGMEM =
-    "background-color: #ccbcbc; color: red; border:1px solid red; padding: 4px 4px;\">UNSAFE</div></div><br />";
-  #endif
-
 #endif

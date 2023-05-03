@@ -61,4 +61,12 @@
   const char htmlInnerStatusMemory[] PROGMEM =
   "&nbsp;&nbsp;Free Memory (Bytes)<div class=\"aStatus\">%d</div><br />";
   #endif
+
+  #if WEATHER_RAIN != OFF || WEATHER_CLOUD_CVR != OFF || WEATHER_WIND_SPD != OFF || STAT_MAINS_SENSE != OFF
+    const char htmlInnerSafe[] PROGMEM =
+    "<br />&nbsp;&nbsp;Safety<div class=\"aStatus\">Safe</div><br />";
+    const char htmlInnerUnSafe[] PROGMEM =
+    "<br />&nbsp;&nbsp;Safety<div class=\"aStatus\" style=\"color:#ff0000;\">UNSAFE</div><br />";
+  #endif
+
 #endif
