@@ -4,12 +4,11 @@
 #if STAT == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
 
-  #include "../lib/sense/Sense.h"
-  #include "../libApp/analog/Analog.h"
+  #include "../../lib/sense/Sense.h"
+  #include "../../libApp/analog/Analog.h"
 
   extern int timeZone;
   extern time_t startupTime;

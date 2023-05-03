@@ -2,15 +2,11 @@
 // Weather charts
 #pragma once
 
-#include "../Common.h"
+#include "../../Common.h"
 
-#if WEATHER == ON && WEATHER_CHARTS == ON
-  extern void weatherPage();
+#if WEATHER == ON && WEATHER_CHARTS == ON && (WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON)
 
-  #define WEATHER_NOMINAL_PRESSURE_SEA_LEVEL 1013.25  // in mb
-
-  const char ChartOptions1a[] PROGMEM = 
-  "<form method=\"get\" action=\"/weatherpage.htm\">";
+  extern void skyPage();
 
   const char ChartOptions1b[] PROGMEM = 
   "<form method=\"get\" action=\"/skypage.htm\">";

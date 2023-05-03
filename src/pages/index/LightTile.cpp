@@ -2,12 +2,12 @@
 #include "LightTile.h"
 
 #if LIGHT == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
+  #include "../Pages.h"
 
-  #include "../libApp/relay/Relay.h"
-  #include "Pages.h"
+  #include "../../libApp/relay/Relay.h"
+  #include "../CheckHelp.h"
 
   void lightTile() {
     char temp[100];

@@ -1,7 +1,7 @@
 // thermostat ----------------------------------------------------------------------------------------------------------------
 #pragma once
 
-#include "../Common.h"
+#include "../../Common.h"
 
 #if THERMOSTAT == ON
   extern void thermostatTile();

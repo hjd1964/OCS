@@ -2,12 +2,12 @@
 #include "PowerTile.h"
 
 #if POWER == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
+  #include "../Pages.h"
 
-  #include "../libApp/relay/Relay.h"
-  #include "Pages.h"
+  #include "../../libApp/relay/Relay.h"
+  #include "../CheckHelp.h"
 
   void powerTile() {
     char temp[50];

@@ -2,15 +2,13 @@
 #include "ThermostatTile.h"
 
 #if THERMOSTAT == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
 
-  #include "Weather.h"
-  #include "../libApp/thermostatSensor/ThermostatSensor.h"
-  #include "../libApp/relay/Relay.h"
-  #include "../observatory/thermostat/Thermostat.h"
-  #include "Pages.h"
+  #include "../../libApp/thermostatSensor/ThermostatSensor.h"
+  #include "../../libApp/relay/Relay.h"
+  #include "../../observatory/thermostat/Thermostat.h"
+  #include "../Pages.h"
 
   void thermostatTile() {
     char temp[256] = "";

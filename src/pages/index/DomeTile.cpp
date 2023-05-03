@@ -2,11 +2,10 @@
 #include "DomeTile.h"
 
 #if DOME == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
 
-  #include "../observatory/dome/Dome.h"
+  #include "../../observatory/dome/Dome.h"
 
   void domeTile() {
     char temp[512] = "";

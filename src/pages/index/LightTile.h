@@ -1,7 +1,7 @@
 // light ---------------------------------------------------------------------------------------------------------------------
 #pragma once
 
-#include "../Common.h"
+#include "../../Common.h"
 
 #if LIGHT == ON
   extern void lightTile();

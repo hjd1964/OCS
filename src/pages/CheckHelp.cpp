@@ -1,7 +1,6 @@
-// -----------------------------------------------------------------------------------
-// Display and process data from webpages
-
-#include "Pages.h"
+// help for checking selections
+#include <Arduino.h>
+#include "CheckHelp.h"
 
 void check(char *ss, const char *rs) {
   char *w = strstr(ss,rs);

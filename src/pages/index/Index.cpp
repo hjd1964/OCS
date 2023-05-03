@@ -4,9 +4,9 @@
 
 #if WEB_SERVER == ON
 
-#include "htmlHeaders.h"
-#include "htmlScripts.h"
-#include "htmlTabs.h"
+#include "../htmlHeaders.h"
+#include "../htmlScripts.h"
+#include "../Page.h"
 
 #include "StatusTile.h"
 #include "WeatherTile.h"
@@ -16,11 +16,11 @@
 #include "RoofTile.h"
 #include "DomeTile.h"
 
-#include "../libApp/relay/Relay.h"
-#include "../observatory/roof/Roof.h"
-#include "../observatory/dome/Dome.h"
-#include "../observatory/safety/Safety.h"
-#include "../observatory/thermostat/Thermostat.h"
+#include "../../libApp/relay/Relay.h"
+#include "../../observatory/roof/Roof.h"
+#include "../../observatory/dome/Dome.h"
+#include "../../observatory/safety/Safety.h"
+#include "../../observatory/thermostat/Thermostat.h"
 
 extern unsigned int __bss_end;
 extern unsigned int __heap_start;
@@ -36,7 +36,7 @@ void indexPage() {
     www.send(200, "text/html", String());
 
     // send a standard http response header with some css
-    strcpy_P(temp, html_head1); www.sendContent(temp);
+    strcpy_P(temp, html_head_begin); www.sendContent(temp);
     strcpy_P(temp, html_main_css1); www.sendContent(temp);
     strcpy_P(temp, html_main_css2); www.sendContent(temp);
     strcpy_P(temp, html_main_css4); www.sendContent(temp);
@@ -45,20 +45,9 @@ void indexPage() {
     strcpy_P(temp, html_main_css8); www.sendContent(temp);
     strcpy_P(temp, html_main_css10); www.sendContent(temp);
     strcpy_P(temp, html_main_css11); www.sendContent(temp);
+    strcpy_P(temp, html_head_end); www.sendContent(temp);
 
-    strcpy_P(temp, html_head3); www.sendContent(temp);
-
-    strcpy_P(temp, html_pageHeader1); www.sendContent(temp);
-    sprintf(temp, PROD_ABV " %s</b>", ocsVersion); www.sendContent(temp);
-    strcpy_P(temp, html_pageHeader2); www.sendContent(temp);
-    strcpy_P(temp, html_links1s); www.sendContent(temp);
-    #if WEATHER == ON && WEATHER_CHARTS == ON
-      strcpy_P(temp, html_links2); www.sendContent(temp);
-      #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
-        strcpy_P(temp, html_links3); www.sendContent(temp);
-      #endif
-    #endif
-    strcpy_P(temp, html_pageHeader3); www.sendContent(temp);
+    pageHeader(PAGE_INDEX);
   }
 
   #if STAT == ON

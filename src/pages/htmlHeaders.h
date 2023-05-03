@@ -5,7 +5,7 @@
 #include "../lib/wifi/webServer/WebServer.h"
 
 // common web site framework
-const char html_head1[] PROGMEM =
+const char html_head_begin[] PROGMEM =
 "<!DOCTYPE HTML>\r\n"
 "<html>\r\n<head>\r\n"
 "<meta charset='utf-8'/>\r\n"
@@ -42,15 +42,5 @@ const char html_main_css11[] PROGMEM =
 ".aStatus { color: #505090; width: 80px; height: 2px; float: right; padding: 0px; margin: 2px; background-color: #CCCCCC;}"
 "</STYLE>\r\n";
 
-const char html_head3[] PROGMEM =
-"</head>\r\n<body bgcolor=\"#26262A\">\r\n";
-
-const char html_pageHeader1[] PROGMEM =
-"<div class=\"t\"><table width=\"100%\"><tr><td><b><font size=\"5\">Observatory Control System"
-"</font></b></td><td align=\"right\"><b>";
-
-const char html_pageHeader2[] PROGMEM =
-"</td></tr></table>";
-
-const char html_pageHeader3[] PROGMEM =
-"<br /></div><div class=\"b\">\r\n";
+const char html_head_end[] PROGMEM =
+"</head>\r\n";

@@ -3,13 +3,12 @@
 #include "WeatherTile.h"
 
 #if WEATHER == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
 
-  #include "../libApp/weatherSensor/WeatherSensor.h"
-  #include "../observatory/weather/Weather.h"
-  #include "../observatory/safety/Safety.h"
+  #include "../../libApp/weatherSensor/WeatherSensor.h"
+  #include "../../observatory/weather/Weather.h"
+  #include "../../observatory/safety/Safety.h"
 
   void weatherTile() {
     char temp[128] = "";

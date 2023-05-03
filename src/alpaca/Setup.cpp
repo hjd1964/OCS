@@ -17,7 +17,7 @@ void alpacaSetup() {
   apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
   apc.send(200, "text/html", String());
 
-  strcpy_P(temp, html_head1); apc.sendContent(temp);
+  strcpy_P(temp, html_head_begin); apc.sendContent(temp);
   apc.sendContent(F("</head>\r\n<body>\r\n"));
 
   apc.sendContent(F("<big>Observatory Control System (OCS, Version "));
@@ -47,7 +47,7 @@ void alpacaSetup() {
     apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
     apc.send(200, "text/html", String());
 
-    strcpy_P(temp, html_head1); apc.sendContent(temp);
+    strcpy_P(temp, html_head_begin); apc.sendContent(temp);
     apc.sendContent(F("</head>\r\n<body>\r\n"));
 
     apc.sendContent(F("<big>Observatory Control System (OCS, Version "));
@@ -69,7 +69,7 @@ void alpacaSetup() {
     apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
     apc.send(200, "text/html", String());
 
-    strcpy_P(temp, html_head1); apc.sendContent(temp);
+    strcpy_P(temp, html_head_begin); apc.sendContent(temp);
     apc.sendContent(F("</head>\r\n<body>\r\n"));
 
     apc.sendContent(F("<big>Observatory Control System (OCS, Version "));
@@ -107,7 +107,7 @@ void alpacaSetup() {
     apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
     apc.send(200, "text/html", String());
 
-    strcpy_P(temp, html_head1); apc.sendContent(temp);
+    strcpy_P(temp, html_head_begin); apc.sendContent(temp);
     apc.sendContent(F("</head>\r\n<body>\r\n"));
 
     apc.sendContent(F("<big>Observatory Control System (OCS, Version "));
@@ -184,7 +184,7 @@ void alpacaSetup() {
     apc.setContentLength(CONTENT_LENGTH_UNKNOWN);
     apc.send(200, "text/html", String());
 
-    strcpy_P(temp, html_head1); apc.sendContent(temp);
+    strcpy_P(temp, html_head_begin); apc.sendContent(temp);
     apc.sendContent(F("</head>\r\n<body>\r\n"));
 
     apc.sendContent(F("<big>Observatory Control System (OCS, Version "));

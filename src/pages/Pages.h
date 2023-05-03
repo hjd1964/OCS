@@ -9,9 +9,6 @@
 
 #include "htmlHeaders.h"
 
-extern void check(char *ss, const char *rs);
-extern void erase(char *ss, const char *rs);
-
 extern void indexPage();
 extern void indexAjax();
 

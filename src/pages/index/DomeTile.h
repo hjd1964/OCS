@@ -1,7 +1,7 @@
 // status --------------------------------------------------------------------------------------------------------------------
 #pragma once
 
-#include "../Common.h"
+#include "../../Common.h"
 
 #if DOME == ON
   extern void domeTile();

@@ -1,7 +1,7 @@
 // power ---------------------------------------------------------------------------------------------
 #pragma once
 
-#include "../Common.h"
+#include "../../Common.h"
 
 #if POWER == ON
   extern void powerTile();

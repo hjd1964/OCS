@@ -2,12 +2,12 @@
 #include "RoofTile.h"
 
 #if ROOF == ON
-  #include "htmlHeaders.h"
-  #include "htmlScripts.h"
-  #include "htmlTabs.h"
+  #include "../htmlHeaders.h"
+  #include "../htmlScripts.h"
 
-  #include "../observatory/safety/Safety.h"
-  #include "../observatory/roof/Roof.h"
+  #include "../../observatory/safety/Safety.h"
+  #include "../../observatory/roof/Roof.h"
+  #include "../CheckHelp.h"
 
   void roofTile() {
     {
