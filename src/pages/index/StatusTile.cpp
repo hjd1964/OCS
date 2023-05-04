@@ -46,7 +46,7 @@
     sprintf_P(temp, htmlInnerStatusDate, temp2, temp1);
     www.sendContent(temp);
 
-    sprintf(temp1, "%02d:%02d", hour(t), minute(t));
+    sprintf(temp1, "%02d:%02d:%02d", hour(t), minute(t), second(t));
     sprintf_P(temp, htmlInnerStatusTime, temp2, temp1);
     www.sendContent(temp);
 
