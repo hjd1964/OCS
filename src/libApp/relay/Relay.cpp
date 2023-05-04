@@ -13,7 +13,7 @@ void pwmWrapper() { relay.pwm(); }
 
 void Relay::init() {
   for (int r = 1; r <= RELAYS_MAX; r++) {
-    pinMode(settings[r - 1].pin, OUTPUT);
+    pinModeEx(settings[r - 1].pin, OUTPUT);
     if (settings[r - 1].defaultState == ON) on(r); else off(r);
   }
 

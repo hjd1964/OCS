@@ -77,3 +77,8 @@
 #define ROOF_TIME_PRE_MOTION          1.5 //    1.5, n. Where n=1..10 (seconds) For roof open interlock sense.                Infreq
 #define ROOF_TIME_POST_MOTION         2.0 //    2.0, n. Where n=1..10 (seconds) For roof close interlock sense.               Infreq
 
+// EXTERNAL GPIO SUPPORT -----------------------------------------------------------------------------------------------------------
+#define GPIO_DEVICE                   OFF //    OFF, MCP23008: for 8-ch I2C gpio.                                             Option
+                                          //         MCP23017, X9555, or X8575: for 16-ch I2C gpio.
+                                          //         SSR74HC595: for up to 32-ch gpio (serial shift register, output only.)
+                                          //         Works w/OCS sense and relays, channels assigned in order pin# 512 and up.
