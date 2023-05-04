@@ -25,6 +25,16 @@
   "</div>"
   "</div>\r\n";
 
+  const char htmlInnerRoofStat[] PROGMEM =
+  "&nbsp;&nbsp;Status <div id='roof_sta' class='aStatus'>%s</div><br />"
+  "<div id='roof_err' style='text-align:center'>%s</div>";
+
+  const char htmlRoofColorNormalStat[] PROGMEM =
+  "<span style='color: #505090;'>%s</span>";
+
+  const char htmlRoofColorRedStat[] PROGMEM =
+  "<span style='color: red;'>%s</span>";
+
   const char htmlRoofControl[] PROGMEM =
   "</div>"
   "<div style='text-align: center'>"
@@ -39,15 +49,5 @@
     "<input type='button' onclick='s(\"roof\",\"override\")' value='Safety Override' />"
   #endif
   "<br />";
-
-  const char htmlInnerRoofStat[] PROGMEM =
-  "&nbsp;&nbsp;Status <div id='roof_sta' class='aStatus'>%s</div><br />"
-  "<div id='roof_err' style='text-align:center'>%s</div>";
-
-  const char htmlRoofColorNormalStat[] PROGMEM =
-  "<span style='color: #505090;'>%s</span>";
-
-  const char htmlRoofColorRedStat[] PROGMEM =
-  "<span style='color: red;'>%s</span>";
 
 #endif
