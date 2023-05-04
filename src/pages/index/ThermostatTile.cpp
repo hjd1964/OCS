@@ -1,4 +1,4 @@
-// thermostat ----------------------------------------------------------------------------------------------------------------
+// thermostat -----------------------------------------------------------------
 #include "ThermostatTile.h"
 
 #if THERMOSTAT == ON
@@ -10,23 +10,36 @@
   #include "../../observatory/thermostat/Thermostat.h"
   #include "../Pages.h"
 
+  void getThermostatTemperatureStr(char *temp);
+  #if THERMOSTAT_HUMIDITY == ON
+    void getThermostatHumidityStr(char *temp);
+  #endif
+
   void thermostatTile() {
-    char temp[256] = "";
+    char temp[256];
+    char temp1[20];
+    UNUSED(temp1);
 
     strcpy_P(temp, htmlThermostatBegin);
     www.sendContent(temp);
 
-    strcpy_P(temp, htmlThermostatTemperature1);
+    strcpy_P(temp, htmlThermostatTemperatureBeg);
     www.sendContent(temp);
-    thermostatTemperatureContents();
-    strcpy_P(temp, htmlThermostatTemperature2);
+
+    getThermostatTemperatureStr(temp);
+    www.sendContent(temp);
+
+    strcpy_P(temp, htmlThermostatTemperatureEnd);
     www.sendContent(temp);
 
     #if THERMOSTAT_HUMIDITY == ON
-      strcpy_P(temp, htmlThermostatHumidity1);
+      strcpy_P(temp, htmlThermostatHumidityBeg);
       www.sendContent(temp);
-      thermostatHumidityContents();
-      strcpy_P(temp, htmlThermostatHumidity2);
+
+      getThermostatHumidityStr(temp);
+      www.sendContent(temp);
+
+      strcpy_P(temp, htmlThermostatHumidityEnd);
       www.sendContent(temp);
     #endif
 
@@ -34,7 +47,7 @@
 
     #if HEAT_RELAY != OFF
     {
-      strcpy_P(temp, htmlThermostatHeat1);
+      strcpy_P(temp, htmlThermostatHeatBeg);
       www.sendContent(temp);
 
       #if STAT_UNITS == IMPERIAL
@@ -44,9 +57,8 @@
         int h = round(thermostat.getHeatSetpoint());
       #endif
 
-      char ws1[20] = "";
-      if (h == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
-      sprintf_P(temp, htmlThermostatOptionZero, ws1);
+      if (h == 0) strcpy(temp1, "selected"); else strcpy(temp1, "");
+      sprintf_P(temp, htmlThermostatOptionZero, temp1);
       www.sendContent(temp);
 
       #if STAT_UNITS == IMPERIAL
@@ -58,18 +70,18 @@
       #endif
 
       for (int i = 0; i < 11; i++) {
-        if (h == hs[i]) strcpy(ws1, "selected"); else strcpy(ws1, "");
-        sprintf_P(temp, htmlThermostatOption, hs[i], ws1, hs[i], unitHeat);
+        if (h == hs[i]) strcpy(temp1, "selected"); else strcpy(temp1, "");
+        sprintf_P(temp, htmlThermostatOption, hs[i], temp1, hs[i], unitHeat);
         www.sendContent(temp);
       }
-      strcpy_P(temp,htmlThermostatHeat2);
+      strcpy_P(temp,htmlThermostatHeatEnd);
       www.sendContent(temp);
     }
     #endif
 
     #if COOL_RELAY != OFF
     {
-      strcpy_P(temp, htmlThermostatCool1);
+      strcpy_P(temp, htmlThermostatCoolBeg);
       www.sendContent(temp);
 
       #if STAT_UNITS == IMPERIAL
@@ -79,9 +91,8 @@
         int c = round(thermostat.getCoolSetpoint());
       #endif
 
-      char ws1[20] = "";
-      if (c == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
-      sprintf_P(temp, htmlThermostatOptionZero, ws1);
+      if (c == 0) strcpy(temp1, "selected"); else strcpy(temp1, "");
+      sprintf_P(temp, htmlThermostatOptionZero, temp1);
       www.sendContent(temp);
 
       #if STAT_UNITS == IMPERIAL
@@ -93,33 +104,32 @@
       #endif
 
       for (int i = 0; i < 10; i++) {
-        if (c == cs[i]) strcpy(ws1, "selected"); else strcpy(ws1, "");
-        sprintf_P(temp, htmlThermostatOption, cs[i], ws1, cs[i], unitCool);
+        if (c == cs[i]) strcpy(temp1, "selected"); else strcpy(temp1, "");
+        sprintf_P(temp, htmlThermostatOption, cs[i], temp1, cs[i], unitCool);
         www.sendContent(temp);
       }
-      strcpy_P(temp, htmlThermostatCool2);
+      strcpy_P(temp, htmlThermostatCoolEnd);
       www.sendContent(temp);
     }
     #endif
 
     #if HUMIDITY_RELAY != OFF
     {
-      strcpy_P(temp, htmlThermostatHumidity3);
+      strcpy_P(temp, htmlThermostatHumidityControlBeg);
       www.sendContent(temp);
-      char ws1[20] = "";
       int c = round(thermostat.getHumiditySetpoint());
-      if (c == 0) strcpy(ws1, "selected"); else strcpy(ws1, "");
-      sprintf_P(temp, htmlThermostatOptionZero, ws1);
+      if (c == 0) strcpy(temp1, "selected"); else strcpy(temp1, "");
+      sprintf_P(temp, htmlThermostatOptionZero, temp1);
       www.sendContent(temp);
       char unitHumidity = '%';
       int cs[11] = {30,35,40,45,50,55,60,65,70,75,80};
 
       for (int i = 0; i < 10; i++) {
-        if (c == cs[i]) strcpy(ws1, "selected"); else strcpy(ws1, "");
-        sprintf_P(temp, htmlThermostatHumidityOption, cs[i], ws1, cs[i], unitHumidity);
+        if (c == cs[i]) strcpy(temp1, "selected"); else strcpy(temp1, "");
+        sprintf_P(temp, htmlThermostatHumidityOption, cs[i], temp1, cs[i], unitHumidity);
         www.sendContent(temp);
       }
-      strcpy_P(temp, htmlThermostatHumidity4);
+      strcpy_P(temp, htmlThermostatHumidityControlEnd);
       www.sendContent(temp);
     }
     #endif
@@ -128,19 +138,54 @@
     www.sendContent(temp);
   }
 
-  void thermostatTemperatureGet() {
-    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    www.sendHeader("Cache-Control", "no-cache");
-    www.send(200, "text/plain", String());
+  void thermostatTileAjax() {
+    char temp[80];
+    getThermostatTemperatureStr(temp);
+    www.sendContent("tstat_T|"); www.sendContent(temp); www.sendContent("\n");
 
-    thermostatTemperatureContents();
-
-    www.sendContent("");
+    #if THERMOSTAT_HUMIDITY == ON
+      getThermostatHumidityStr(temp);
+      www.sendContent("tstat_H|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
   }
 
-  void thermostatTemperatureContents() {
-    char temp[40] = "";
-    
+  void thermostatTileGet() {
+    #if HEAT_RELAY != OFF
+      String heat = www.arg("tstat_heat");
+      if (!heat.equals(EmptyStr)) {
+        #if STAT_UNITS == IMPERIAL
+          float f = 0;
+          if (heat.toInt() != 0) f = (heat.toInt() - 32.0)*(5.0/9.0);
+        #else
+          float f = heat.toFloat();
+        #endif
+      if (f >= 0.0 && f <= 37.0) thermostat.setHeatSetpoint(f);
+    }
+    #endif
+
+    #if COOL_RELAY != OFF
+      String cool = www.arg("tstat_cool");
+      if (!cool.equals(EmptyStr)) {
+        #if STAT_UNITS == IMPERIAL
+          float f = 0;
+          if (cool.toInt() != 0) f = (cool.toInt() - 32.0)*(5.0/9.0);
+        #else
+          float f = atoi(cool.c_str());
+        #endif
+        if (f >= 0.0 && f <= 37.0) thermostat.setCoolSetpoint(f);
+      }
+    #endif
+
+    #if HUMIDITY_RELAY != OFF
+      String humidity = www.arg("tstat_humidity");
+      if (!humidity.equals(EmptyStr)) {
+        float f = atoi(humidity.c_str());
+        if (f >= 0.0 && f <= 75.0) thermostat.setHumiditySetpoint(f);
+      }
+    #endif
+  }
+
+  void getThermostatTemperatureStr(char *temp) {
     float t = thermostatSensor.temperature();
     if (isnan(t)) {
       strcpy(temp, "Invalid");
@@ -158,26 +203,12 @@
       #if COOL_RELAY != OFF
         if (relay.isOn(COOL_RELAY)) strcat(temp, "*"); else 
       #endif
-        strcat(temp, "-");
+      strcat(temp, "-");
     }
-    www.sendContent(temp);
   }
 
   #if THERMOSTAT_HUMIDITY == ON
-
-    void thermostatHumidityGet() {
-      www.setContentLength(CONTENT_LENGTH_UNKNOWN);
-      www.sendHeader("Cache-Control", "no-cache");
-      www.send(200, "text/plain", String());
-
-      thermostatHumidityContents();
-
-      www.sendContent("");
-    }
-
-    void thermostatHumidityContents() {
-      char temp[40] = "";
-      
+    void getThermostatHumidityStr(char *temp) {
       float h = thermostatSensor.humidity();
       if (isnan(h)) {
         strcpy(temp, "Invalid");
@@ -187,7 +218,6 @@
       #if HUMIDITY_RELAY != OFF
         if (relay.isOn(HUMIDITY_RELAY)) strcat(temp, "ˇ"); else strcat(temp, "-");
       #endif
-      www.sendContent(temp);
     }
   #endif
 

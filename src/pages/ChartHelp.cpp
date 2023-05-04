@@ -16,17 +16,17 @@
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
     char fileName[32];
     char temp[256] = "";
-    char ws1[90] = "";
-    char ws2[90] = "";
+    char temp1[90] = "";
+    char temp2[90] = "";
     long rec = 0;
     long k = 0;
 
-    sprintf_P(temp, ChartJs1, chartId, chartId, chartId);
+    sprintf_P(temp, html_script_chartJs_A, chartId, chartId, chartId);
     www.sendContent(temp);
 
     www.sendContent(chartName);
 
-    strcpy_P(temp, ChartJs3);
+    strcpy_P(temp, html_script_chartJs_B);
     www.sendContent(temp);
 
     time_t t = now();
@@ -57,28 +57,28 @@
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
-        dataFile.read((unsigned char*)ws1, 80);
-        ws1[abs(logColumn) + colWidth] = 0;
+        dataFile.read((unsigned char*)temp1, 80);
+        temp1[abs(logColumn) + colWidth] = 0;
         int j = abs(logColumn);
-        while (ws1[j] == ' ' && ws1[j] != 0) j++;
-        strcpy(ws2, (char*)&(ws1[j]));
-        if (ws2[0] != 0) {
-          float f = atof(ws2);
+        while (temp1[j] == ' ' && temp1[j] != 0) j++;
+        strcpy(temp2, (char*)&(temp1[j]));
+        if (temp2[0] != 0) {
+          float f = atof(temp2);
           if (logColumn == -8)  f = f*(9.0/5.0) + 32.0; // temperature C to F
           if (logColumn == -39) f = f*0.621371;         // wind kph to mph
           if (logColumn == -26) f = f*0.02953;          // pressure in inches
           if (isnan(f))         f = rangeMax;           // handle bad/no data
-          if (logColumn == -26) dtostrf(f, 1, 3, ws2); else dtostrf(f, 1, 1, ws2);
+          if (logColumn == -26) dtostrf(f, 1, 3, temp2); else dtostrf(f, 1, 1, temp2);
           #if REVERSE_WEATHER_CHART_X_AXIS == ON
-            if (hours == 1)  dtostrf(-(120-i)/2.0, 1, 1, ws1);
-            if (hours == 24) dtostrf(-(120-i)/5.0, 1, 1, ws1);
-            if (hours == 48) dtostrf(-(120-i)/2.5, 1, 1, ws1);
+            if (hours == 1)  dtostrf(-(120-i)/2.0, 1, 1, temp1);
+            if (hours == 24) dtostrf(-(120-i)/5.0, 1, 1, temp1);
+            if (hours == 48) dtostrf(-(120-i)/2.5, 1, 1, temp1);
           #else
-            if (hours == 1)  dtostrf((120-i)/2.0, 1, 1, ws1);
-            if (hours == 24) dtostrf((120-i)/5.0, 1, 1, ws1);
-            if (hours == 48) dtostrf((120-i)/2.5, 1, 1, ws1);
+            if (hours == 1)  dtostrf((120-i)/2.0, 1, 1, temp1);
+            if (hours == 24) dtostrf((120-i)/5.0, 1, 1, temp1);
+            if (hours == 48) dtostrf((120-i)/2.5, 1, 1, temp1);
           #endif
-          sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
+          sprintf(temp, "{x:%s,y:%s},", temp1, temp2);
           www.sendContent(temp);
         }
       }
@@ -86,7 +86,7 @@
     }
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
-    sprintf_P(temp, ChartJs4, rangeMax, rangeMin, rangeStep);
+    sprintf_P(temp, html_script_chartJs_C, rangeMax, rangeMin, rangeStep);
     www.sendContent(temp);
   }
 
@@ -102,17 +102,17 @@
   void makeChartJs2(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours) {
     char fileName[32];
     char temp[256] = "";
-    char ws1[90] = "";
-    char ws2[90] = "";
+    char temp1[90] = "";
+    char temp2[90] = "";
     long startRecord = 0;
     long k = 0;
 
-    sprintf_P(temp, ChartJs1, chartId, chartId, chartId);
+    sprintf_P(temp, html_script_chartJs_A, chartId, chartId, chartId);
     www.sendContent(temp);
 
     www.sendContent(chartName);
 
-    strcpy_P(temp, ChartJs3);
+    strcpy_P(temp, html_script_chartJs_B);
     www.sendContent(temp);
 
     long spanInHours = LogRecordsPerHour*hours;
@@ -146,28 +146,28 @@
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
-        dataFile.read((unsigned char*)ws1, 80);
-        ws1[abs(logColumn) + colWidth] = 0;
+        dataFile.read((unsigned char*)temp1, 80);
+        temp1[abs(logColumn) + colWidth] = 0;
         int j = abs(logColumn);
-        while (ws1[j] == ' ' && ws1[j] != 0) j++;
-        strcpy(ws2, (char*)&(ws1[j]));
-        if (ws2[0] != 0) {
-          float f = atof(ws2);
+        while (temp1[j] == ' ' && temp1[j] != 0) j++;
+        strcpy(temp2, (char*)&(temp1[j]));
+        if (temp2[0] != 0) {
+          float f = atof(temp2);
           if (logColumn == -8)  f = f*(9.0/5.0)+32.0; // temperature C to F
           if (logColumn == -39) f = f*0.621371;       // wind kph to mph
           if (logColumn == -26) f = f*0.02953;        // pressure in inches
           if (isnan(f))         f = rangeMax;         // handle bad/no data
-          if (logColumn == -26) dtostrf(f, 1, 3, ws2); else dtostrf(f, 1, 1, ws2);
+          if (logColumn == -26) dtostrf(f, 1, 3, temp2); else dtostrf(f, 1, 1, temp2);
           #if REVERSE_WEATHER_CHART_X_AXIS == ON
-            if (hours == 1)  dtostrf(-(120-i)/2.0, 1, 1, ws1);
-            if (hours == 24) dtostrf(-(120-i)/5.0, 1, 1, ws1);
-            if (hours == 48) dtostrf(-(120-i)/2.5, 1, 1, ws1);
+            if (hours == 1)  dtostrf(-(120-i)/2.0, 1, 1, temp1);
+            if (hours == 24) dtostrf(-(120-i)/5.0, 1, 1, temp1);
+            if (hours == 48) dtostrf(-(120-i)/2.5, 1, 1, temp1);
           #else
-            if (hours == 1)  dtostrf((120-i)/2.0, 1, 1, ws1);
-            if (hours == 24) dtostrf((120-i)/5.0, 1, 1, ws1);
-            if (hours == 48) dtostrf((120-i)/2.5, 1, 1, ws1);
+            if (hours == 1)  dtostrf((120-i)/2.0, 1, 1, temp1);
+            if (hours == 24) dtostrf((120-i)/5.0, 1, 1, temp1);
+            if (hours == 48) dtostrf((120-i)/2.5, 1, 1, temp1);
           #endif
-          sprintf(temp, "{x:%s,y:%s},", ws1, ws2);
+          sprintf(temp, "{x:%s,y:%s},", temp1, temp2);
           www.sendContent(temp);
         }
       }
@@ -175,7 +175,7 @@
     }
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
-    sprintf_P(temp, ChartJs4, rangeMax, rangeMin, rangeStep);
+    sprintf_P(temp, html_script_chartJs_C, rangeMax, rangeMin, rangeStep);
     www.sendContent(temp);
   }
 

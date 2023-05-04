@@ -1,4 +1,4 @@
-// status --------------------------------------------------------------------------------------------------------------------
+// status ---------------------------------------------------------------------
 #include "StatusTile.h"
 
 #if STAT == ON
@@ -14,111 +14,92 @@
   extern int timeZone;
   extern time_t startupTime;
 
-  void statusTile() {
-    char temp[100] = "";
-
-    strcpy_P(temp, htmlStatus1);
-    www.sendContent(temp);
-
-    statusContents();
-
-    strcpy_P(temp, htmlStatus3);
-    www.sendContent(temp);
-  }
-
-  void statusGet() {
-    www.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    www.sendHeader("Cache-Control", "no-cache");
-    www.send(200, "text/plain", String());
-
-    statusContents();
-
-    www.sendContent("");
-  }
-
   uint16_t getFreeSram();
 
-  void statusContents() {
+  void statusTile() {
     char temp[128];
-    char ws1[20];
-    char ws2[4];
+    char temp1[20];
+    char temp2[4];
     float f;
     UNUSED(f);
 
-    strcpy_P(temp, htmlInnerStatus1);
+    strcpy_P(temp, htmlStatusBeg);
+    www.sendContent(temp);
+
+    strcpy_P(temp, htmlInnerStatusTitle);
     www.sendContent(temp);
 
     time_t t = now();
     t += timeZone*SECS_PER_HOUR;  // convert to UTC
 
-    strcpy(ws2, "Std");
+    strcpy(temp2, "Std");
     #if TIME_DISPLAY == UT1
-      strcpy(ws2, "UT1");
+      strcpy(temp2, "UT1");
     #elif TIME_DISPLAY == DST
       if (isDst(year(t),month(t),day(t),hour(t),TIME_ZONE)) {
         t = now() + SECS_PER_HOUR;  // +1 hour, Daylight Time
-        strcpy(ws2,"Dst");
+        strcpy(temp2,"Dst");
       } else t = now();
     #endif
 
-    sprintf(ws1, "%02d/%02d/%04d", month(t), day(t), year(t));
-    sprintf_P(temp, htmlInnerStatus2, ws2, ws1);
+    sprintf(temp1, "%02d/%02d/%04d", month(t), day(t), year(t));
+    sprintf_P(temp, htmlInnerStatusDate, temp2, temp1);
     www.sendContent(temp);
 
-    sprintf(ws1, "%02d:%02d", hour(t), minute(t));
-    sprintf_P(temp, htmlInnerStatus3, ws2, ws1);
+    sprintf(temp1, "%02d:%02d", hour(t), minute(t));
+    sprintf_P(temp, htmlInnerStatusTime, temp2, temp1);
     www.sendContent(temp);
 
     t = (now() - startupTime);
-    sprintf(ws1, "%08lu", (unsigned long)(t/60UL));
-    sprintf_P(temp, htmlInnerStatus4, ws1);
+    sprintf(temp1, "%08lu", (unsigned long)(t/60UL));
+    sprintf_P(temp, htmlInnerStatusUpTime, temp1);
     www.sendContent(temp);
 
     #if STAT_MAINS_SENSE != OFF
-      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(ws1,"GOOD"); else strcpy(ws1,"OUT");
-      sprintf_P(temp, htmlInnerStatusMains, ws1);
+      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp1,"GOOD"); else strcpy(temp1,"OUT");
+      sprintf_P(temp, htmlInnerStatusMains, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_MAINS_CURRENT_ANALOG != OFF
       f = STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG));
-      if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-      sprintf_P(temp, htmlInnerStatusMainsA, ws1);
+      if (isnan(f)) strcpy(temp1, "Invalid"); else sprintF(temp1, "%6.1fA", f);
+      sprintf_P(temp, htmlInnerStatusMainsA, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
       f = STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG));
-      if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-      sprintf_P(temp, htmlInnerStatusMainsAA, ws1);
+      if (isnan(f)) strcpy(temp1, "Invalid"); else sprintF(temp1, "%6.1fA", f);
+      sprintf_P(temp, htmlInnerStatusAuxA, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_DC_VOLTAGE_ANALOG != OFF
       f = STAT_DC_ANALOG_TO_VOLTAGE(analog.read(STAT_DC_VOLTAGE_ANALOG));
-      if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
-      sprintf_P(temp, htmlInnerStatusDC, ws1);
+      if (isnan(f)) strcpy(temp1,"Invalid"); else sprintF(temp1, "%6.1fV", f);
+      sprintf_P(temp, htmlInnerStatusDC, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_DC_CURRENT_ANALOG != OFF
       f = STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_DC_CURRENT_ANALOG));
-      if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fA", f);
-      sprintf_P(temp, htmlInnerStatusDCA, ws1);
+      if (isnan(f)) strcpy(temp1,"Invalid"); else sprintF(temp1, "%6.1fA", f);
+      sprintf_P(temp, htmlInnerStatusDCA, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_BATTERY_VOLTAGE_ANALOG != OFF
       f = STAT_DC_ANALOG_TO_VOLTAGE(analog.read(STAT_BATTERY_VOLTAGE_ANALOG));
-      if (isnan(f)) strcpy(ws1,"Invalid"); else sprintF(ws1, "%6.1fV", f);
-      sprintf_P(temp, htmlInnerStatusBat, ws1);
+      if (isnan(f)) strcpy(temp1,"Invalid"); else sprintF(temp1, "%6.1fV", f);
+      sprintf_P(temp, htmlInnerStatusBat, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_BATTERY_CURRENT_ANALOG != OFF
       f = STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_BATTERY_CURRENT_ANALOG));
-      if (isnan(f)) strcpy(ws1, "Invalid"); else sprintF(ws1, "%6.1fA", f);
-      sprintf_P(temp, htmlInnerStatusBatA, ws1);
+      if (isnan(f)) strcpy(temp1, "Invalid"); else sprintF(temp1, "%6.1fA", f);
+      sprintf_P(temp, htmlInnerStatusBatA, temp1);
       www.sendContent(temp);
     #endif
 
@@ -133,6 +114,85 @@
       www.sendContent(temp);
     #endif
 
+    strcpy_P(temp, htmlStatusEnd);
+    www.sendContent(temp);
+  }
+
+  void statusTileAjax() {
+    char temp[64];
+    float f;
+    UNUSED(f);
+
+    time_t t = now();
+    t += timeZone*SECS_PER_HOUR;  // convert to UTC
+
+    #if TIME_DISPLAY == DST
+      if (isDst(year(t),month(t),day(t),hour(t),TIME_ZONE)) {
+        t = now() + SECS_PER_HOUR;  // +1 hour, Daylight Time
+      } else t = now();
+    #endif
+
+    sprintf(temp, "%02d/%02d/%04d", month(t), day(t), year(t));
+    www.sendContent("stat_date|"); www.sendContent(temp); www.sendContent("\n");
+
+    sprintf(temp, "%02d:%02d:%02d", hour(t), minute(t), second(t));
+    www.sendContent("stat_time|"); www.sendContent(temp); www.sendContent("\n");
+
+    t = (now() - startupTime);
+    sprintf(temp, "%08lu", (unsigned long)(t/60UL));
+    www.sendContent("stat_upTime|"); www.sendContent(temp); www.sendContent("\n");
+
+    #if STAT_MAINS_SENSE != OFF
+      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp,"GOOD"); else strcpy(temp,"OUT");
+      www.sendContent("stat_mains|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_MAINS_CURRENT_ANALOG != OFF
+      f = STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG));
+      if (isnan(f)) strcpy(temp, "Invalid"); else sprintF(temp, "%6.1fA", f);
+      www.sendContent("stat_mains_A|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
+      f = STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG));
+      if (isnan(f)) strcpy(temp, "Invalid"); else sprintF(temp, "%6.1fA", f);
+      www.sendContent("stat_aux_A|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_DC_VOLTAGE_ANALOG != OFF
+      f = STAT_DC_ANALOG_TO_VOLTAGE(analog.read(STAT_DC_VOLTAGE_ANALOG));
+      if (isnan(f)) strcpy(temp, "Invalid"); else sprintF(temp, "%6.1fV", f);
+      www.sendContent("stat_dc_V|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_DC_CURRENT_ANALOG != OFF
+      f = STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_DC_CURRENT_ANALOG));
+      if (isnan(f)) strcpy(temp,"Invalid"); else sprintF(temp, "%6.1fA", f);
+      www.sendContent("stat_dc_A|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_BATTERY_VOLTAGE_ANALOG != OFF
+      f = STAT_DC_ANALOG_TO_VOLTAGE(analog.read(STAT_BATTERY_VOLTAGE_ANALOG));
+      if (isnan(f)) strcpy(temp,"Invalid"); else sprintF(temp, "%6.1fV", f);
+      www.sendContent("stat_bat_V|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_BATTERY_CURRENT_ANALOG != OFF
+      f = STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_BATTERY_CURRENT_ANALOG));
+      if (isnan(f)) strcpy(temp, "Invalid"); else sprintF(temp, "%6.1fA", f);
+      www.sendContent("stat_bat_A|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if STAT_PROCESSOR_RAM != OFF
+      long freeRam = getFreeSram();
+      sprintf(temp, "%ld", freeRam);
+      www.sendContent("stat_mem|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    #if WEATHER_RAIN != OFF || WEATHER_CLOUD_CVR != OFF || WEATHER_WIND_SPD != OFF || STAT_MAINS_SENSE != OFF
+      if (safety.isSafe()) strcpy(temp, "Safe"); else strcpy(temp, "<span style='color:#ff0000;'>UNSAFE</span>");
+      www.sendContent("stat_mem|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
   }
 
   #if STAT_PROCESSOR_RAM != OFF

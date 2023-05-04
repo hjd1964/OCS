@@ -231,8 +231,18 @@ void Roof::clearStatus(bool last) {
   if (last) lastError = RERR_NONE;
 }
 
+// returns an description string of the roof state
+const char * Roof::statusMessage() {
+  if (!roof.isMoving()) {
+    if (roof.isClosed()) return "Closed"; else { if (roof.isOpen()) return "Open"; else return "Stopped"; }
+  } else {
+    if (roof.isOpening()) return "Opening"; else { if (roof.isClosing()) return "Closing"; }
+  }
+  return "Unknown";
+}
+
 // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error"
-const char * Roof::getStatus() {
+const char * Roof::errorMessage() {
   const char *strErr = getLastError();
   if (strlen(strErr) == 0 && isMoving()) {
     static char travelMessage[20];

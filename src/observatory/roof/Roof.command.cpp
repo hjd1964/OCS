@@ -47,7 +47,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
     if (command[1] == 'S' && parameter[0] == 0) {
       char ws[128];
       if (roof.isClosed()) strcpy(ws, "CLOSED"); else
-      if (roof.isOpen()) strcpy(ws, "OPEN"); else strcpy(ws, roof.getStatus());
+      if (roof.isOpen()) strcpy(ws, "OPEN"); else strcpy(ws, roof.errorMessage());
       ws[47] = 0; // never longer than 47 chars
       if (roof.isClosing()) sprintf(reply, "c,%s", ws); else
       if (roof.isOpening()) sprintf(reply, "o,%s", ws); else sprintf(reply, "i,%s", ws);

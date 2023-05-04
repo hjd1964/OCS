@@ -146,33 +146,18 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
 
   #if WWW_SERVER == ON
     www.on("/index.htm", indexPage);
+    www.on("/index-ajax-get.txt", indexAjaxGet);
+    www.on("/index.txt", indexAjax);
+
     #if WEATHER == ON && WEATHER_CHARTS == ON
       www.on("/weatherpage.htm", weatherPage);
       #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
         www.on("/skypage.htm", skyPage);
       #endif
     #endif
-    www.on("/setvar", indexAjax);
-    www.on("/relay", relaysAjax);
-    #if STAT == ON
-      www.on("/miscstatus", statusGet);
-    #endif
-    #if WEATHER == ON
-      www.on("/weather", weatherGet);
-    #endif
-    #if THERMOSTAT == ON
-      www.on("/thermostatt", thermostatTemperatureGet);
-      #if THERMOSTAT_HUMIDITY == ON
-        www.on("/thermostath", thermostatHumidityGet);
-      #endif
-    #endif
-    #if ROOF == ON
-      www.on("/roofstatus", roofGet);
-    #endif
-    #if DOME == ON
-      www.on("/domestatus", domeGet);
-    #endif
+
     www.on("/", indexPage);
+
     www.onNotFound(handleNotFound);
     www.begin();
   #endif

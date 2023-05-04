@@ -1,5 +1,4 @@
-// -----------------------------------------------------------------------------------
-// Web server, Index page
+// index ----------------------------------------------------------------------
 #include "Index.h"
 
 #if WEB_SERVER == ON
@@ -77,17 +76,27 @@ void indexPage() {
 
     www.sendContent(F("</div>\r\n"));
 
-    // javascript for ajax relay control
-    strcpy_P(temp, html_ajax_activeA);
+    www.sendContent(F("<script>var ajaxPage='index.txt';</script>\n"));
+
+    strcpy_P(temp, html_script_ajax_A);
     www.sendContent(temp);
 
-    strcpy_P(temp, html_ajax_activeB);
+    strcpy_P(temp, html_script_ajax_B);
     www.sendContent(temp);
 
-    strcpy_P(temp, html_ajax_setRelay);
+    strcpy_P(temp, html_script_ajax_C);
     www.sendContent(temp);
 
-    strcpy_P(temp, html_ajax_setVar);
+    strcpy_P(temp, html_script_ajax_D);
+    www.sendContent(temp);
+
+    strcpy_P(temp, html_script_ajax_E);
+    www.sendContent(temp);
+
+    strcpy_P(temp, html_script_ajax_F);
+    www.sendContent(temp);
+
+    sprintf_P(temp, html_script_ajax_get, "index-ajax-get.txt");
     www.sendContent(temp);
 
     www.sendContent(F("</body></html>\r\n"));
@@ -96,95 +105,57 @@ void indexPage() {
 }
 
 void indexAjax() {
-  String press = www.arg("press");
-  
-  // lights
-  #if LIGHT == ON
-    #if LIGHT_OUTSIDE_RELAY != OFF
-      if (press.equals("light_exit")) { 
-        relay.onDelayedOff(LIGHT_OUTSIDE_RELAY, 4*60); // turn off after about 4 minutes
-      }
-    #endif
+  www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  www.sendHeader("Cache-Control", "no-cache");
+  www.send(200, "text/plain", String());
+
+  #if STAT == ON
+    statusTileAjax();
   #endif
-
-  // roof
-  #if ROOF == ON
-    if (press.equals("roof_open")) roof.open();
-    if (press.equals("roof_close")) roof.close();
-    if (press.equals("roof_override")) roof.setSafetyOverride(true);
-    if (press.equals("roof_stop")) { roof.stop(); roof.clearStatus(); }
-    String autoclose = www.arg("auto_close");
-    if (autoclose.equals("true")) safety.roofAutoClose = true;
-    if (autoclose.equals("false")) safety.roofAutoClose = false;
+  #if WEATHER == ON
+    weatherTileAjax();
   #endif
-
-  // dome
-  #if DOME == ON
-    String azm = www.arg("dome_azm");
-    if (!azm.equals(EmptyStr)) {
-      int z = azm.toInt();
-      if (z >= 0 && z <= 360) dome.setTargetAzimuth(z);
-    }
-
-    #if AXIS2_DRIVER_MODEL != OFF
-      String alt = www.arg("dome_alt");
-      if (!alt.equals(EmptyStr)) {
-        int a = alt.toInt();
-        if (a >= 0 && a <= 90) dome.setTargetAltitude(a);
-      }
-    #endif
-
-    if (press.equals("dome_goto")) {
-      dome.gotoAzimuthTarget();
-      #if AXIS2_DRIVER_MODEL != OFF
-        dome.gotoAltitudeTarget();
-      #endif
-    }
-    if (press.equals("dome_sync")) {
-      dome.syncAzimuthTarget();
-    }
-    if (press.equals("dome_stop")) dome.stop();
-    if (press.equals("dome_home")) dome.findHome();
-    if (press.equals("dome_reset")) dome.reset();
-    if (press.equals("dome_park")) dome.park();
-    if (press.equals("dome_unpark")) dome.unpark();
-    if (press.equals("dome_setpark")) dome.setpark();
+  #if POWER == ON
+    powerTileAjax();
   #endif
-
-  // thermostat
   #if THERMOSTAT == ON
-    #if HEAT_RELAY != OFF
-      String heat = www.arg("thermostat_heat");
-      if (!heat.equals(EmptyStr)) {
-        #if STAT_UNITS == IMPERIAL
-          float f = 0;
-          if (heat.toInt() != 0) f = (heat.toInt() - 32.0)*(5.0/9.0);
-        #else
-          float f = heat.toFloat();
-        #endif
-      if (f >= 0.0 && f <= 37.0) thermostat.setHeatSetpoint(f);
-    }
-    #endif
-    #if COOL_RELAY != OFF
-      String cool = www.arg("thermostat_cool");
-      if (!cool.equals(EmptyStr)) {
-        #if STAT_UNITS == IMPERIAL
-          float f = 0;
-          if (cool.toInt() != 0) f = (cool.toInt() - 32.0)*(5.0/9.0);
-        #else
-          float f = atoi(cool.c_str());
-        #endif
-        if (f >= 0.0 && f <= 37.0) thermostat.setCoolSetpoint(f);
-      }
-    #endif
-    #if HUMIDITY_RELAY != OFF
-      String humidity = www.arg("thermostat_humidity");
-      if (!humidity.equals(EmptyStr)) {
-        float f = atoi(humidity.c_str());
-        if (f >= 0.0 && f <= 75.0) thermostat.setHumiditySetpoint(f);
-      }
-    #endif
+    thermostatTileAjax();
   #endif
+  #if LIGHT == ON
+    lightTileAjax();
+  #endif
+  #if ROOF == ON
+    roofTileAjax();
+  #endif
+  #if DOME == ON
+    domeTileAjax();
+  #endif
+
+  www.sendContent("");
+}
+
+void indexAjaxGet() {
+  www.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  www.sendHeader("Cache-Control", "no-cache");
+  www.send(200, "text/plain", String());
+
+  #if POWER == ON
+    powerTileGet();
+  #endif
+  #if THERMOSTAT == ON
+    thermostatTileGet();
+  #endif
+  #if LIGHT == ON
+    lightTileGet();
+  #endif
+  #if ROOF == ON
+    roofTileGet();
+  #endif
+  #if DOME == ON
+    domeTileGet();
+  #endif
+
+  www.sendContent("");
 }
 
 #endif

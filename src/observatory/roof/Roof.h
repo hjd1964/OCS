@@ -67,8 +67,11 @@ class Roof {
     // clear errors
     void clearStatus(bool last = true);
 
+    // returns an description string of the roof state
+    const char * statusMessage();
+
     // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error"
-    const char * getStatus();
+    const char * errorMessage();
 
     // returns an error description string if an error has occured, "" if no error
     const char * getLastError();
