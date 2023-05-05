@@ -4,6 +4,8 @@
 
 #include "Observatory.h"
 
+#include "../lib/ethernet/webServer/WebServer.h"
+#include "../lib/wifi/webServer/WebServer.h"
 #include "../lib/tasks/OnTask.h"
 #include "../libApp/weatherSensor/WeatherSensor.h"
 #include "../libApp/relay/Relay.h"
