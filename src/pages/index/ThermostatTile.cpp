@@ -188,7 +188,7 @@
   void getThermostatTemperatureStr(char *temp) {
     float t = thermostatSensor.temperature();
     if (isnan(t)) {
-      strcpy(temp, "Invalid");
+      strcpy_P(temp, htmlStringInvalid);
     } else {
       #if STAT_UNITS == IMPERIAL
         t = t*(9.0/5.0) + 32.0;
@@ -211,7 +211,7 @@
     void getThermostatHumidityStr(char *temp) {
       float h = thermostatSensor.humidity();
       if (isnan(h)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
         sprintF(temp, "%5.1f % ", h);
       }

@@ -128,7 +128,7 @@
     void getWeatherTemperatureStr(char *temp) {
       float f = weatherSensor.temperature();
       if (isnan(f)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
         #if STAT_UNITS == IMPERIAL
           sprintF(temp, "%5.1f &deg;F", f*1.8F + 32.0F);
@@ -143,7 +143,7 @@
     void getWeatherPressureStr(char *temp) {
       float f = weatherSensor.pressureSeaLevel();
       if (isnan(f)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
       #if STAT_UNITS == IMPERIAL
         sprintF(temp, "%6.2f in", f*0.02953);
@@ -158,7 +158,7 @@
     void getWeatherHumidityStr(char *temp) {
       float f = weatherSensor.humidity();
       if (isnan(f)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
         sprintF(temp, "%6.1f %", f);
       }
@@ -169,7 +169,7 @@
     void getWeatherWindSpeedStr(char *temp) {
       float f = weatherSensor.windspeed();
       if (isnan(f)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
         #if STAT_UNITS == IMPERIAL
           sprintF(temp, "%6.0f mph", f*0.621371);
@@ -193,7 +193,7 @@
     void getWeatherSkyQualityStr(char *temp) {
       float f = weatherSensor.skyQuality();
       if (isnan(f)) {
-        strcpy(temp, "Invalid");
+        strcpy_P(temp, htmlStringInvalid);
       } else {
         sprintF(temp, "%4.1fmpsas", f);
       }
