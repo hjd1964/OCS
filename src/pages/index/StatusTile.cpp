@@ -14,7 +14,9 @@
   extern int timeZone;
   extern time_t startupTime;
 
-  uint16_t getFreeSram();
+  #if STAT_PROCESSOR_RAM != OFF
+    uint16_t getFreeSram();
+  #endif
   time_t getStatusDateTimeAndUnitStr(char *temp);
   void getStatusVoltsStr(float f, char *temp);
   void getStatusAmpsStr(float f, char *temp);
