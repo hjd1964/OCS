@@ -23,8 +23,6 @@
     char temp[256];
     char temp1[32];
     char temp2[8];
-    float f;
-    UNUSED(f);
 
     strcpy_P(temp, htmlStatusBeg);
     www.sendContent(temp);

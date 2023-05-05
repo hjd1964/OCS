@@ -4,8 +4,6 @@
 #include "../../Common.h"
 
 #if STAT == ON
-  #define SECS_PER_HOUR 3600
-
   void statusTile();
   void statusTileAjax();
 
