@@ -54,14 +54,6 @@ void Tsl2591w::poll() {
 
   // safe-guard to invalidate stale readings after 30 seconds
   if ((long)((last_mag_per_sq_arcsec_time + 30000UL) - millis()) < 0) last_mag_per_sq_arcsec = NAN;
-  
-/*
-  // read data from TSL2591 (blocking)
-  uint32_t lum;
-  // this routine blocks for almost a full second in some cases, so fall back to last value if the roof is moving
-  if (roofIsMoving()) return last_mag_per_sq_arcsec;
-  lum = tlsSensor.getFullLuminosity();
-*/
 
   // read data from TSL2591 (non-blocking)
   uint32_t lum;
@@ -78,7 +70,7 @@ void Tsl2591w::poll() {
   uint16_t full = lum & 0xFFFF;
 
   // automatically adapt gain and integration time
-  if (!tlsSensor.autoscale(full, ir)) return last_mag_per_sq_arcsec;
+  if (!tlsSensor.autoscale(full, ir)) { _skyQuality = NAN; return; }
   
   // correct for sensor temperature sensitivity
   float t = _temperature;
