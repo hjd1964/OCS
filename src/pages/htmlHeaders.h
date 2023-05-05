@@ -44,3 +44,5 @@ const char html_main_css11[] PROGMEM =
 
 const char html_head_end[] PROGMEM =
 "</head>\r\n";
+
+const char htmlStringInvalid[] PROGMEM = "Invalid";

@@ -4,6 +4,8 @@
 #include "../../Common.h"
 
 #if STAT == ON
+  #define SECS_PER_HOUR 3600
+
   void statusTile();
   void statusTileAjax();
 
@@ -67,6 +69,8 @@
     "<br />&nbsp;&nbsp;Safety<div id='stat_safe' class='aStatus'>Safe</div><br />";
     const char htmlInnerUnSafe[] PROGMEM =
     "<br />&nbsp;&nbsp;Safety<div id='stat_safe' class='aStatus'><span style='color:#ff0000;'>UNSAFE</span></div><br />";
+    const char htmlStringUnSafe[] PROGMEM =
+    "<span style='color:#ff0000;'>UNSAFE</span>";
   #endif
 
 #endif
