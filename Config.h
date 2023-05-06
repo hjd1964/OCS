@@ -32,8 +32,8 @@
 #define CONNECT_FAIL_WATCHDOG         OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------
-#define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol w/IP address settings in Extended.config.h or      Adjust
-                                          //         DS3234 on default SPI interface and default CS pin or DS3231 on I2C.
+#define TIME_LOCATION_SOURCE          NTP //    NTP, Network Time Protocol w/IP address settings below, or DS3231 on I2C,     Adjust
+                                          //         or DS3234 on default SPI interface and default CS pin.
 #define TIME_IP_ADDR        {129,6,15,28} // ...6,15,28}, time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.  Option
 #define TIME_ZONE                      -5 //     -5, Time Zone (US Eastern Standard Time in this case.)                      <-Req'd
 #define TIME_DISPLAY                  STD //    STD, Display Standard Time, UT1 to display Universal Time.                    Adjust
