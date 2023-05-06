@@ -18,7 +18,7 @@
                                           //         Other boards/more info. in /src/Constants.h
 
 // DISPLAY -------------------------------------------------------------------------------------------------------------------------
-#define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL UNITS) two letter country code.        Adjust
+#define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL units) two letter country code.        Adjust
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
