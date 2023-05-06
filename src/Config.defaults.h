@@ -1,5 +1,48 @@
 #pragma once
 
+// pinmap
+#ifndef PINMAP
+#define PINMAP                         OFF  // specify the board you're using here
+#endif
+
+// display
+#ifndef DISPLAY_LANGUAGE
+#define DISPLAY_LANGUAGE              L_en  // currently english (en and us) are the only options
+#endif
+
+// watchdog
+#ifndef WATCHDOG
+#define WATCHDOG                      OFF   // ON resets if OCS hangs for >8 seconds
+#endif
+
+// network settings
+#ifndef ASCOM_ALPACA_SERVER
+#define ASCOM_ALPACA_SERVER           OFF   // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
+#endif
+#ifndef CONNECT_CHECK_HOURS
+#define CONNECT_CHECK_HOURS           OFF   // connection check time
+#endif
+#ifndef CONNECT_IP_ADDR
+#define CONNECT_IP_ADDR  {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
+#endif
+#ifndef CONNECT_FAIL_WATCHDOG
+#define CONNECT_FAIL_WATCHDOG         OFF   // ON to stop all processing and trigger the watchdog reset
+#endif
+
+// time settings
+#ifndef TIME_LOCATION_SOURCE
+#define TIME_LOCATION_SOURCE          NTP   // using Network Time Protocol is the default
+#endif
+#ifndef TIME_IP_ADDR
+#define TIME_IP_ADDR        {129,6,15,28}   // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
+#endif
+#ifndef TIME_ZONE
+#define TIME_ZONE                      -5   // Time Zone (US Eastern Standard Time in this case)
+#endif
+#ifndef TIME_DISPLAY
+#define TIME_DISPLAY                  STD   // display Standard Time, UT1 to display Universal Time
+#endif
+
 // use the HAL specified default NV driver
 #ifndef NV_DRIVER
 #define NV_DRIVER                     NV_DEFAULT
@@ -17,11 +60,6 @@
 #endif
 
 // enable IP functionality
-
-#ifndef ASCOM_ALPACA_SERVER
-#define ASCOM_ALPACA_SERVER          OFF
-#endif
-
 #if ASCOM_ALPACA_SERVER == OFF
   // optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
   // OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH

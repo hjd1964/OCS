@@ -3,10 +3,6 @@
 #include "Weather.h"
 
 #if WEATHER == ON && WEATHER_CHARTS == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-  #include "../Page.h"
-
   #include "../../lib/tasks/OnTask.h"
   #include "../ChartHelp.h"
 
@@ -46,7 +42,7 @@
     www.sendContent(F("<script>\r\n"));
     www.sendContent(F("window.onload = function(){\r\n"));
     #if WEATHER_TEMPERATURE == ON
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         // a negative column# means this is a temperature and needs conversion to degrees F
         makeChartJs("ambientT", "Outside Temperature F (last "+periodStr+")", -8, 5, -40, 120, 20, period);
       #else
@@ -54,14 +50,14 @@
       #endif
     #endif
     #if WEATHER_WIND_SPD == ON
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         makeChartJs("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period);
       #else
         makeChartJs("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period);
       #endif
     #endif
     #if WEATHER_PRESSURE == ON
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         makeChartJs("BP", "Barometric Pressure inches Hg (last "+periodStr+")", -26, 6, floor((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL - 50)*0.02953), ceil((WEATHER_NOMINAL_PRESSURE_SEA_LEVEL + 40)*0.02953), 1, period);
       #else
         makeChartJs("BP", "Barometric Pressure mb (last "+periodStr+")", 26, 6, WEATHER_NOMINAL_PRESSURE_SEA_LEVEL - 50, WEATHER_NOMINAL_PRESSURE_SEA_LEVEL + 40, 10, period);

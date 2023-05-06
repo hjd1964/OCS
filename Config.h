@@ -17,6 +17,9 @@
 #define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCSE, OCSES2.              <-Req'd
                                           //         Other boards/more info. in /src/Constants.h
 
+// DISPLAY -------------------------------------------------------------------------------------------------------------------------
+#define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL UNITS) two letter country code.        Adjust
+
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
 
@@ -37,8 +40,6 @@
 
 // STATUS PANEL FEATURES -----------------------------------------------------------------------------------------------------------
 #define STAT                          OFF //    OFF, ON to enable the OCS website status panel display.                       Option
-
-#define STAT_UNITS                 METRIC // METRIC, For metric units, or IMPERIAL for imperial units.                        Adjust
 
 #define STAT_MAINS_SENSE              OFF //    OFF, n. Where n=1..8 (Sense#) mains power good, OFF (power failure) is UNSAFE Option
 #define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=1..16 (Analog#) measure/display current mains.                Option

@@ -5,6 +5,7 @@
 #include "../../Common.h"
 
 #if WEATHER == ON && WEATHER_CHARTS == ON && (WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON)
+  #include "../Pages.common.h"
 
   extern void skyPage();
 

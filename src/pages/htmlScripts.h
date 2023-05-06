@@ -32,39 +32,44 @@ const char html_script_ajax_C[] PROGMEM =
   "if (auto1Tick%auto2Rate==0) {\n"
     "nocache='?nocache='+Math.random()*1000000;\n"
     "var request = new XMLHttpRequest();\n"
-    "request.onreadystatechange = pageReady(ajaxPage);\n";
+    "request.onreadystatechange = pageReady(ajaxPage);\n"
+    "request.open('GET',ajaxPage.toLowerCase()+nocache,true);\n";
 const char html_script_ajax_D[] PROGMEM =
-    "request.open('GET',ajaxPage.toLowerCase()+nocache,true); request.send(null);\n"
-  "}"
+    "request.send(null);\n"
+  "}\n"
 "}\n"
 "function pageReady(aPage) {\n"
   "return function() {\n"
     "if ((this.readyState==4)&&(this.status==200)) {\n"
       "lines=this.responseText.split('\\n');\n"
       "for (var i=0; i<lines.length; i++) {\n"
-        "j=lines[i].indexOf('|');m=0;\n"
+        "var j=lines[i].indexOf('|');\n"
+        "var m=0;\n"
         "if (j==-1) {j=lines[i].indexOf('&');m=1;}\n"
-        "v=lines[i].slice(j+1);\n"
-        "k=lines[i].slice(0,j);\n";
+        "var v=lines[i].slice(j+1);\n"
+        "var k=lines[i].slice(0,j);\n";
 const char html_script_ajax_E[] PROGMEM =
         "if (k=='call' && v=='update_date_time') {\n"
           "update_date_time();\n"
         "} else {\n"
-          "if (k!=''&&document.getElementById(k)!=null) {\n"
-          " if (m==1) document.getElementById(k).value=v; else "
-          " if (v=='selected') document.getElementById(k).style.background='#E02020'; else"
-          " if (v=='unselected') document.getElementById(k).style.background='#B02020'; else";
+          "if (k!='') {\n"
+            "var e=document.getElementById(k);\n"
+            "if (e!=null) {\n"
+              "if (m==1) e.value=v; else\n"
+              "if (v=='selected') e.style.background='#E02020'; else\n"
+              "if (v=='unselected') e.style.background='#B02020'; else\n";
 const char html_script_ajax_F[] PROGMEM =
-          " if (v=='disabled') document.getElementById(k).disabled=true; else"
-          " if (v=='enabled') document.getElementById(k).disabled=false; else"
-          " if (v=='checked') document.getElementById(k).checked=true; else"
-          " if (v=='unchecked') document.getElementById(k).checked=false; else"
-          " document.getElementById(k).innerHTML=v;"
+              "if (v=='disabled') e.disabled=true; else\n"
+              "if (v=='enabled') e.disabled=false; else\n"
+              "if (v=='checked') { e.disabled=true; e.checked=true; e.disabled=false; } else\n"
+              "if (v=='unchecked') { e.disabled=true; e.checked=false; e.disabled=false; } else\n"
+              "e.innerHTML=v;\n"
+            "}\n"
           "}\n"
         "}\n"
       "}\n"
-    "}"
-  "}"
+    "}\n"
+  "}\n"
 "}\n"
 "</script>\n";
 

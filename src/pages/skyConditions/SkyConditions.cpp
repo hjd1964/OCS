@@ -3,10 +3,6 @@
 #include "SkyConditions.h"
 
 #if WEATHER == ON && WEATHER_CHARTS == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-  #include "../Page.h"
-
   #include "../../lib/tasks/OnTask.h"
   #include "../ChartHelp.h"
 

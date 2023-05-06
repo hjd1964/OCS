@@ -42,10 +42,6 @@
 #endif
 
 // Status
-#if (STAT_UNITS != METRIC) && (STAT_UNITS != IMPERIAL)
-  #error "Configuration (Config.h): STAT_UNITS must be either METRIC or IMPERIAL"
-#endif
-
 #if (TIME_LOCATION_SOURCE != NTP) && (TIME_LOCATION_SOURCE != DS3231) && (TIME_LOCATION_SOURCE != DS3234) && (TIME_LOCATION_SOURCE != GPS)
   #error "Configuration (Config.h): TIME_LOCATION_SOURCE must be either NTP, GPS, DS3231, or DS3234"
 #endif

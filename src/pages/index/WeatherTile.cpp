@@ -2,9 +2,6 @@
 #include "WeatherTile.h"
 
 #if WEATHER == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-
   #include "../../libApp/weatherSensor/WeatherSensor.h"
   #include "../../observatory/weather/Weather.h"
 
@@ -29,9 +26,8 @@
 
   void weatherTile() {
     char temp[128];
-    char temp1[30];
+    char temp1[32];
     UNUSED(temp1);
-    float f;
 
     strcpy_P(temp, htmlWeatherBeg);
     www.sendContent(temp);
@@ -130,7 +126,7 @@
       if (isnan(f)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-        #if STAT_UNITS == IMPERIAL
+        #if DISPLAY_UNITS == IMPERIAL
           sprintF(temp, "%5.1f &deg;F", f*1.8F + 32.0F);
         #else
           sprintF(temp, "%5.1f &deg;C", f);
@@ -145,7 +141,7 @@
       if (isnan(f)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         sprintF(temp, "%6.2f in", f*0.02953);
       #else
         sprintF(temp, "%6.0f mb", f);
@@ -171,7 +167,7 @@
       if (isnan(f)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-        #if STAT_UNITS == IMPERIAL
+        #if DISPLAY_UNITS == IMPERIAL
           sprintF(temp, "%6.0f mph", f*0.621371);
         #else
           sprintF(temp, "%6.0f kph", f);
@@ -182,7 +178,7 @@
 
   #if WEATHER_RAIN == ON
     void getWeatherRainStr(char *temp) {
-      const char *rainSensorStr[4] = {"Invalid", "Rain", "Warn", "Dry"};
+      const char *rainSensorStr[4] = {L_INVALID, L_RAIN, L_WARN, L_DRY};
       int i = lroundf(weatherSensor.rain());
       if (i < 0 || i > 3) i = 0;
       temp = rainSensorStr[i];
@@ -201,4 +197,3 @@
   #endif
 
 #endif
-

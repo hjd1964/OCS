@@ -2,34 +2,36 @@
 #include "RoofTile.h"
 
 #if ROOF == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-
   #include "../../observatory/safety/Safety.h"
   #include "../../observatory/roof/Roof.h"
   #include "../CheckHelp.h"
 
+  void getRoofErrorStrColored(const char *errorStr, char *errorStrColored);
+
   void roofTile() {
-    char temp[400] = "";
+    char temp[256];
+    char temp1[64];
 
     strcpy_P(temp, htmlRoofBeg);
     www.sendContent(temp);
 
-    const char *statusStr = roof.statusMessage();
-    const char *errorStr = roof.errorMessage();
-    char errorStrColored[80];
-    if (strstr(errorStr, "No Error") || strstr(errorStr, "Travel: ") || strstr(errorStr, "Waiting for mount to park")) {
-      sprintf_P(errorStrColored, htmlRoofColorNormalStat, errorStr);
-    } else {
-      sprintf_P(errorStrColored, htmlRoofColorRedStat, errorStr);
-    }
-    sprintf_P(temp, htmlInnerRoofStat, statusStr, errorStrColored);
+    getRoofErrorStrColored(roof.errorMessage(), temp1);
+    sprintf_P(temp, htmlInnerRoofStat, roof.statusMessage(), temp1);
     www.sendContent(temp);
 
-    strcpy_P(temp, htmlRoofControl);
+    #if !(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)
+      strcpy_P(temp, htmlRoofControlStopPress);
+      www.sendContent(temp);
+    #endif
+
+    strcpy_P(temp, htmlRoofControlSafetyOverride);
+    www.sendContent(temp);
+
+    strcpy_P(temp, htmlRoofControlOpenClose);
     www.sendContent(temp);
 
     strcpy_P(temp, htmlRoofEnd);
+
     #if ROOF_AUTOCLOSE_DAWN == ON
       if (safety.roofAutoClose) check(temp, "%___ACL"); else erase(temp, "%___ACL");
     #endif
@@ -37,16 +39,13 @@
   }
 
   void roofTileAjax() {
+    char temp1[80];
+
     const char *statusStr = roof.statusMessage();
-    const char *errorStr = roof.errorMessage();
-    char errorStrColored[80];
-    if (strstr(errorStr, "No Error") || strstr(errorStr, "Travel: ") || strstr(errorStr, "Waiting for mount to park")) {
-      sprintf_P(errorStrColored, htmlRoofColorNormalStat, errorStr);
-    } else {
-      sprintf_P(errorStrColored, htmlRoofColorRedStat, errorStr);
-    }
     www.sendContent("roof_sta|"); www.sendContent(statusStr); www.sendContent("\n");
-    www.sendContent("roof_err|"); www.sendContent(errorStrColored); www.sendContent("\n");
+
+    getRoofErrorStrColored(roof.errorMessage(), temp1);
+    www.sendContent("roof_err|"); www.sendContent(temp1); www.sendContent("\n");
   }
 
   void roofTileGet() {
@@ -64,6 +63,14 @@
     if (!s.equals(EmptyStr)) {
       if (s.equals("true")) safety.roofAutoClose = true;
       if (s.equals("false")) safety.roofAutoClose = false;
+    }
+  }
+
+  void getRoofErrorStrColored(const char *errorStr, char *errorStrColored) {
+    if (strstr(errorStr, L_NO_ERROR) || strstr(errorStr, L_TRAVEL) || strstr(errorStr, L_WAIT_FOR_PARK)) {
+      sprintf_P(errorStrColored, htmlRoofColorNormalStat, errorStr);
+    } else {
+      sprintf_P(errorStrColored, htmlRoofColorRedStat, errorStr);
     }
   }
 

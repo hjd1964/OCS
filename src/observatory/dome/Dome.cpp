@@ -301,9 +301,9 @@ bool Dome::isParked() {
 
 // return dome status message
 const char* Dome::statusMessage() {
-  if (settings.park.state == PS_PARKED) strcpy(statusMsg, "Parked"); else
-  if (settings.park.state == PS_PARKING) strcpy(statusMsg, "Parking"); else
-  if (isSlewing()) strcpy(statusMsg, "Slewing"); else strcpy(statusMsg, "Stopped");
+  if (settings.park.state == PS_PARKED) strcpy(statusMsg, L_PARKED); else
+  if (settings.park.state == PS_PARKING) strcpy(statusMsg, L_PARKING); else
+  if (isSlewing()) strcpy(statusMsg, L_SLEWING); else strcpy(statusMsg, L_STOPPED);
   return statusMsg;
 }
 

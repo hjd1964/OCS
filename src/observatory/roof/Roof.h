@@ -5,6 +5,7 @@
 #include "../../Common.h"
 
 #ifdef ROOF_PRESENT
+#include "../../locales/Locale.h" 
 
 typedef enum RoofError {
   RERR_NONE,
@@ -138,32 +139,7 @@ class Roof {
     long lastSecondsOfTravel, timeLeftToOpenAtStart, timeLeftToCloseAtStart;
     long travel = 0;
     unsigned long openStartTime, closeStartTime;
-    int waitingForPark = 0;                  // counter for waiting period
-
-    const char * ErrorMessage[22] = {
-      "",                                    // 0
-      "Error: Open safety interlock",        // 1
-      "Error: Close safety interlock",       // 2
-      "Error: Open unknown error",           // 3
-      "Error: Open limit sw fail",           // 4
-      "Error: Open over time",               // 5
-      "Error: Open under time",              // 6
-      "Error: Close unknown error",          // 7
-      "Error: Close limit sw fail",          // 8
-      "Error: Close over time",              // 9
-      "Error: Close under time",             // 10
-      "Error: Limit switch malfunction",     // 11
-      "Error: Closed/opened limit sw on",    // 12
-      "Warning: Already closed",             // 13
-      "Error: Close location unknown",       // 14
-      "Error: Motion direction unknown",     // 15
-      "Error: Close already in motion",      // 16
-      "Error: Opened/closed limit sw on",    // 17
-      "Warning: Already open",               // 18
-      "Error: Open location unknown",        // 19
-      "Error: Open already in motion",       // 20
-      "Error: Close mount not parked"        // 21
-    };
+    int waitingForPark = 0; // counter for waiting period
 };
 
 extern Roof roof;

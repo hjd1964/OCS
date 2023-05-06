@@ -2,16 +2,12 @@
 #include "LightTile.h"
 
 #if LIGHT == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-  #include "../Pages.h"
-
   #include "../../libApp/relay/Relay.h"
   #include "../CheckHelp.h"
 
   void lightTile() {
-    char temp[400];
-    
+    char temp[288];
+
     strcpy_P(temp, htmlLightingBeg);
     www.sendContent(temp);
 
@@ -33,7 +29,7 @@
     #endif
     if (strlen(temp) > 0) www.sendContent(temp);
 
-    strcpy_P(temp, htmlLighting3);
+    strcpy_P(temp, htmlLightingExit);
     www.sendContent(temp);
 
     strcpy_P(temp,htmlLightingEnd);

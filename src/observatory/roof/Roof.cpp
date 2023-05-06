@@ -234,11 +234,11 @@ void Roof::clearStatus(bool last) {
 // returns an description string of the roof state
 const char * Roof::statusMessage() {
   if (!roof.isMoving()) {
-    if (roof.isClosed()) return "Closed"; else { if (roof.isOpen()) return "Open"; else return "Stopped"; }
+    if (roof.isClosed()) return L_CLOSED; else { if (roof.isOpen()) return L_OPEN; else return L_STOPPED; }
   } else {
-    if (roof.isOpening()) return "Opening"; else { if (roof.isClosing()) return "Closing"; }
+    if (roof.isOpening()) return L_OPENING; else { if (roof.isClosing()) return L_CLOSING; }
   }
-  return "Unknown";
+  return L_UNKNOWN;
 }
 
 // returns an error description string if an error has occured, otherwise must return "Travel: n%" or "No Error"
@@ -246,17 +246,41 @@ const char * Roof::errorMessage() {
   const char *strErr = getLastError();
   if (strlen(strErr) == 0 && isMoving()) {
     static char travelMessage[20];
-    sprintf(travelMessage, "Travel: %ld%%", travel);
+    sprintf(travelMessage, L_TRAVEL ": %ld%%", travel);
     return travelMessage;
   }
   if (strlen(strErr) == 0 && waitingForPark > 0) {
-    return "Waiting for mount to park";
-  } else if (strlen(strErr) == 0) return "No Error";
+    return L_WAIT_FOR_PARK;
+  } else if (strlen(strErr) == 0) return L_NO_ERROR;
   return strErr;
 }
 
+const char roofErrorMessage1[] PROGMEM = L_ROOF_ERR1;
+const char roofErrorMessage2[] PROGMEM = L_ROOF_ERR2;
+const char roofErrorMessage3[] PROGMEM = L_ROOF_ERR3;
+const char roofErrorMessage4[] PROGMEM = L_ROOF_ERR4;
+const char roofErrorMessage5[] PROGMEM = L_ROOF_ERR5;
+const char roofErrorMessage6[] PROGMEM = L_ROOF_ERR6;
+const char roofErrorMessage7[] PROGMEM = L_ROOF_ERR7;
+const char roofErrorMessage8[] PROGMEM = L_ROOF_ERR8;
+const char roofErrorMessage9[] PROGMEM = L_ROOF_ERR9;
+const char roofErrorMessage10[] PROGMEM = L_ROOF_ERR10;
+const char roofErrorMessage11[] PROGMEM = L_ROOF_ERR11;
+const char roofErrorMessage12[] PROGMEM = L_ROOF_ERR12;
+const char roofErrorMessage13[] PROGMEM = L_ROOF_ERR13;
+const char roofErrorMessage14[] PROGMEM = L_ROOF_ERR14;
+const char roofErrorMessage15[] PROGMEM = L_ROOF_ERR15;
+const char roofErrorMessage16[] PROGMEM = L_ROOF_ERR16;
+const char roofErrorMessage17[] PROGMEM = L_ROOF_ERR17;
+const char roofErrorMessage18[] PROGMEM = L_ROOF_ERR18;
+const char roofErrorMessage19[] PROGMEM = L_ROOF_ERR19;
+const char roofErrorMessage20[] PROGMEM = L_ROOF_ERR20;
+const char roofErrorMessage21[] PROGMEM = L_ROOF_ERR21;
+
 // returns an error description string if an error has occured, "" if no error
 const char * Roof::getLastError() {
+  static char errorMessage[36];
+
   RoofError err = RERR_NONE;
   if (fault.openInterlock)  err = RERR_OPEN_SAFETY_INTERLOCK; else
   if (fault.closeInterlock) err = RERR_CLOSE_SAFETY_INTERLOCK; else
@@ -276,7 +300,33 @@ const char * Roof::getLastError() {
       } else err = lastError;
     }
   }
-  return ErrorMessage[err];
+
+  switch (err) {
+    case 0: strcpy(errorMessage, ""); break;
+    case 1: strcpy_P(errorMessage, roofErrorMessage1); break;
+    case 2: strcpy_P(errorMessage, roofErrorMessage2); break;
+    case 3: strcpy_P(errorMessage, roofErrorMessage3); break;
+    case 4: strcpy_P(errorMessage, roofErrorMessage4); break;
+    case 5: strcpy_P(errorMessage, roofErrorMessage5); break;
+    case 6: strcpy_P(errorMessage, roofErrorMessage6); break;
+    case 7: strcpy_P(errorMessage, roofErrorMessage7); break;
+    case 8: strcpy_P(errorMessage, roofErrorMessage8); break;
+    case 9: strcpy_P(errorMessage, roofErrorMessage9); break;
+    case 10: strcpy_P(errorMessage, roofErrorMessage10); break;
+    case 11: strcpy_P(errorMessage, roofErrorMessage11); break;
+    case 12: strcpy_P(errorMessage, roofErrorMessage12); break;
+    case 13: strcpy_P(errorMessage, roofErrorMessage13); break;
+    case 14: strcpy_P(errorMessage, roofErrorMessage14); break;
+    case 15: strcpy_P(errorMessage, roofErrorMessage15); break;
+    case 16: strcpy_P(errorMessage, roofErrorMessage16); break;
+    case 17: strcpy_P(errorMessage, roofErrorMessage17); break;
+    case 18: strcpy_P(errorMessage, roofErrorMessage18); break;
+    case 19: strcpy_P(errorMessage, roofErrorMessage19); break;
+    case 20: strcpy_P(errorMessage, roofErrorMessage20); break;
+    case 21: strcpy_P(errorMessage, roofErrorMessage21); break;
+  }
+
+  return errorMessage;
 }
 
 // true if the roof is closed

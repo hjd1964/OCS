@@ -2,13 +2,9 @@
 #include "ThermostatTile.h"
 
 #if THERMOSTAT == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-
   #include "../../libApp/thermostatSensor/ThermostatSensor.h"
   #include "../../libApp/relay/Relay.h"
   #include "../../observatory/thermostat/Thermostat.h"
-  #include "../Pages.h"
 
   void getThermostatTemperatureStr(char *temp);
   #if THERMOSTAT_HUMIDITY == ON
@@ -17,7 +13,7 @@
 
   void thermostatTile() {
     char temp[256];
-    char temp1[20];
+    char temp1[32];
     UNUSED(temp1);
 
     strcpy_P(temp, htmlThermostatBegin);
@@ -50,7 +46,7 @@
       strcpy_P(temp, htmlThermostatHeatBeg);
       www.sendContent(temp);
 
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         int h = round(thermostat.getHeatSetpoint()*(9.0/5.0) + 32.0);
       if (thermostat.getHeatSetpoint() == 0) h = 0;
       #else
@@ -61,7 +57,7 @@
       sprintf_P(temp, htmlThermostatOptionZero, temp1);
       www.sendContent(temp);
 
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         char unitHeat = 'F';
         int hs[11] = {40,50,60,65,67,68,69,70,71,72,73};
       #else
@@ -84,7 +80,7 @@
       strcpy_P(temp, htmlThermostatCoolBeg);
       www.sendContent(temp);
 
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         int c = round(thermostat.getCoolSetpoint()*(9.0/5.0) + 32.0);
         if (thermostat.getCoolSetpoint() == 0) c = 0;
       #else
@@ -95,7 +91,7 @@
       sprintf_P(temp, htmlThermostatOptionZero, temp1);
       www.sendContent(temp);
 
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         char unitCool = 'F';
         int cs[10] = {68,69,70,71,72,73,75,80,90,99};
       #else
@@ -153,7 +149,7 @@
     #if HEAT_RELAY != OFF
       String heat = www.arg("tstat_heat");
       if (!heat.equals(EmptyStr)) {
-        #if STAT_UNITS == IMPERIAL
+        #if DISPLAY_UNITS == IMPERIAL
           float f = 0;
           if (heat.toInt() != 0) f = (heat.toInt() - 32.0)*(5.0/9.0);
         #else
@@ -166,7 +162,7 @@
     #if COOL_RELAY != OFF
       String cool = www.arg("tstat_cool");
       if (!cool.equals(EmptyStr)) {
-        #if STAT_UNITS == IMPERIAL
+        #if DISPLAY_UNITS == IMPERIAL
           float f = 0;
           if (cool.toInt() != 0) f = (cool.toInt() - 32.0)*(5.0/9.0);
         #else
@@ -190,7 +186,7 @@
     if (isnan(t)) {
       strcpy_P(temp, htmlStringInvalid);
     } else {
-      #if STAT_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL
         t = t*(9.0/5.0) + 32.0;
         sprintF(temp, "%6.1f &deg;F ", t);
       #else

@@ -4,9 +4,6 @@
 #if STAT == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-
   #include "../../lib/sense/Sense.h"
   #include "../../libApp/analog/Analog.h"
   #include "../../observatory/safety/Safety.h"
@@ -24,7 +21,7 @@
   void statusTile() {
     char temp[256];
     char temp1[32];
-    char temp2[8];
+    char temp2[32];
 
     strcpy_P(temp, htmlStatusBeg);
     www.sendContent(temp);
@@ -157,7 +154,7 @@
     #endif
 
     #if WEATHER_RAIN != OFF || WEATHER_CLOUD_CVR != OFF || WEATHER_WIND_SPD != OFF || STAT_MAINS_SENSE != OFF
-      if (safety.isSafe()) strcpy(temp, "Safe"); else strcpy_P(temp, htmlStringUnSafe);
+      if (safety.isSafe()) strcpy(temp, L_SAFE); else strcpy_P(temp, htmlStringUnSafe);
       www.sendContent("stat_safe|"); www.sendContent(temp); www.sendContent("\n");
     #endif
   }
@@ -182,13 +179,13 @@
     time_t t = now();
     t += timeZone*SECS_PER_HOUR;  // convert to UTC
 
-    strcpy(temp, "Std");
+    strcpy(temp, L_STD_TIME);
     #if TIME_DISPLAY == UT1
-      strcpy(temp, "UT1");
+      strcpy(temp, L_UT1_TIME);
     #elif TIME_DISPLAY == DST
       if (isDst(year(t),month(t),day(t),hour(t),TIME_ZONE)) {
         t = now() + SECS_PER_HOUR;  // +1 hour, Daylight Time
-        strcpy(temp,"Dst");
+        strcpy(temp,L_DST_TIME);
       } else t = now();
     #endif
     return t;

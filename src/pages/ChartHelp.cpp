@@ -4,6 +4,9 @@
 #if WEATHER == ON && WEATHER_CHARTS == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
+  #include "htmlHeaders.h"
+  #include "htmlScripts.h"
+
   // transmits an Chart.js chart to the html client
   // \param chartId: the html id tag for the chart to dispay
   // \param chartName: the name to display on the chart

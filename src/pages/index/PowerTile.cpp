@@ -2,45 +2,45 @@
 #include "PowerTile.h"
 
 #if POWER == ON
-  #include "../htmlHeaders.h"
-  #include "../htmlScripts.h"
-  #include "../Pages.h"
-
   #include "../../libApp/relay/Relay.h"
   #include "../CheckHelp.h"
 
   void powerTile() {
-    char temp[400];
+    char temp[256];
 
     strcpy_P(temp, htmlPowerBegin);
     www.sendContent(temp);
 
-    strcpy_P(temp, htmlPowerA);
     #if POWER_DEVICE1_RELAY != OFF
+      strcpy_P(temp, htmlPower1);
       if (relay.isOn(POWER_DEVICE1_RELAY)) check(temp, "%___PD1"); else erase(temp, "%___PD1");
+      www.sendContent(temp);
     #endif
     #if POWER_DEVICE2_RELAY != OFF
+      strcpy_P(temp, htmlPower2);
       if (relay.isOn(POWER_DEVICE2_RELAY)) check(temp, "%___PD2"); else erase(temp, "%___PD2");
+      www.sendContent(temp);
     #endif
-    www.sendContent(temp);
-
-    strcpy_P(temp, htmlPowerB);
     #if POWER_DEVICE3_RELAY != OFF
+      strcpy_P(temp, htmlPower3);
       if (relay.isOn(POWER_DEVICE3_RELAY)) check(temp, "%___PD3"); else erase(temp, "%___PD3");
+      www.sendContent(temp);
     #endif
     #if POWER_DEVICE4_RELAY != OFF
+      strcpy_P(temp, htmlPower4);
       if (relay.isOn(POWER_DEVICE4_RELAY)) check(temp, "%___PD4"); else erase(temp, "%___PD4");
+      www.sendContent(temp);
     #endif
-    if (strlen(temp) > 0) www.sendContent(temp);
-
-    strcpy_P(temp, htmlPowerC);
     #if POWER_DEVICE5_RELAY != OFF
+      strcpy_P(temp, htmlPower5);
       if (relay.isOn(POWER_DEVICE5_RELAY)) check(temp, "%___PD5"); else erase(temp, "%___PD5");
+      www.sendContent(temp);
     #endif
     #if POWER_DEVICE6_RELAY != OFF
+      strcpy_P(temp, htmlPower6);
       if (relay.isOn(POWER_DEVICE6_RELAY)) check(temp, "%___PD6"); else erase(temp, "%___PD6");
+      www.sendContent(temp);
     #endif
-    www.sendContent(temp);
 
     strcpy_P(temp, htmlPowerEnd);
     www.sendContent(temp);

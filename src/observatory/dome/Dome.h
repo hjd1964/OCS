@@ -5,6 +5,7 @@
 
 #ifdef DOME_PRESENT
 
+#include "../../locales/Locale.h" 
 #include "../../lib/axis/Axis.h"
 
 enum ParkState: uint8_t {PS_UNPARKED, PS_PARKING, PS_PARKED, PS_PARK_FAILED, PS_UNPARKING};
@@ -154,7 +155,7 @@ class Dome {
     float targetAzm = 0.0F;
     float targetAlt = 0.0F;
 
-    char statusMsg[40] = "Stopped";
+    char statusMsg[40] = L_STOPPED;
 };
 
 extern Dome dome;
