@@ -181,7 +181,7 @@
       const char *rainSensorStr[4] = {L_INVALID, L_RAIN, L_WARN, L_DRY};
       int i = lroundf(weatherSensor.rain());
       if (i < 0 || i > 3) i = 0;
-      temp = rainSensorStr[i];
+      strcpy(temp, rainSensorStr[i]);
     }
   #endif
 
