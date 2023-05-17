@@ -315,12 +315,12 @@ void Observatory::connectionCheck() {
       int success = connectionCheckClient.connect(connectCheckIP, 80);
 
       if (success) {
-        VLF("MSG: Connection Check Success");
+        VLF("MSG: Observatory, connection check success");
         connectionCheckClient.stop();
         connectionCheckTry = 0;
         nextConnectionCheck = millis() + (1000UL*3600UL*(CONNECT_CHECK_HOURS/CHECK_FAST));
       } else {
-        VLF("MSG: Connection Check FAILED!");
+        DLF("MSG: Observatory, connection check FAILED!");
         nextConnectionCheck = millis() + (1000UL*CONNECT_RECHECK_TIME);
       }
 
@@ -333,7 +333,7 @@ void Observatory::connectionCheck() {
           !dome.isSlewing() &&
         #endif
         connectionCheckTry >= CONNECT_REBOOT_TRIES) {
-        VLF("MSG: Forcing Watchdog Reboot");
+        DLF("MSG: Observatory, forcing watchdog reboot!");
         while (true) {};
       }
     #endif
