@@ -24,8 +24,8 @@ bool Bmp280t::init() {
   if (_inside_temperatureAssigned || _inside_pressureAssigned) return false;
 
   if (bmp280SensorT.begin(THERMOSTAT_SENSOR_TP_BMP280)) {
-    bme280SensorT.setSampling(Adafruit_BME280::MODE_FORCED, Adafruit_BME280::SAMPLING_X1, Adafruit_BME280::SAMPLING_X1,
-                              Adafruit_BME280::SAMPLING_X1, Adafruit_BME280::FILTER_OFF);
+    bmp280SensorT.setSampling(Adafruit_BMP280::MODE_FORCED, Adafruit_BMP280::SAMPLING_X1,
+                              Adafruit_BMP280::SAMPLING_X1, Adafruit_BMP280::FILTER_OFF);
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -51,7 +51,7 @@ void Bmp280t::poll() {
   _inside_temperature = bmp280SensorT.readTemperature();
   tasks.yield(1000);
   _inside_pressure = bmp280SensorT.readPressure()/100.0;
-  bme280SensorT.takeForcedMeasurement();
+  bmp280SensorT.takeForcedMeasurement();
 }
 
 Bmp280t bmp280t;

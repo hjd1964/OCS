@@ -33,7 +33,7 @@ void ThermostatSensor::init(){
     bmp280t.init();
   #endif
 
-  #if defined(THERMOSTAT_SENSOR_TP_BMP280) && THERMOSTAT_SENSOR_TP_BMP280 != OFF
+  #if defined(THERMOSTAT_SENSOR_TP_BMP085) && THERMOSTAT_SENSOR_TP_BMP085 != OFF
     bmp085t.init();
   #endif
 
