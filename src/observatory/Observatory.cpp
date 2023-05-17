@@ -340,11 +340,6 @@ void Observatory::connectionCheck() {
 
     #if ETHERNET_RESET_PIN != OFF
       if (!success && connectionCheckTry == CONNECT_RESET_TRIES) {
-        VLF("MSG: Reset Ethernet shield");
-        digitalWrite(ETHERNET_RESET_PIN, LOW);
-        tasks.yield(1000);
-        digitalWrite(ETHERNET_RESET_PIN, HIGH);
-        tasks.yield(1000);
 
         www.restart();
 
