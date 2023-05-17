@@ -26,6 +26,8 @@ bool Bmp280w::init() {
   if (_temperatureAssigned || _pressureAssigned) return false;
 
   if (bmp280SensorW.begin(WEATHER_SENSOR_TP_BMP280)) {
+    bmp280SensorW.setSampling(Adafruit_BMP280::MODE_FORCED, Adafruit_BMP280::SAMPLING_X1,
+                              Adafruit_BMP280::SAMPLING_X1, Adafruit_BMP280::FILTER_OFF);
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
       Wire.end();
@@ -41,7 +43,7 @@ bool Bmp280w::init() {
         strcpy(_temperatureName, "Bosch BMP280 Temperature Sensor on I2C");
       }
       if (!_pressureAssigned) {
-        _humidityAss_pressureAssignedigned = true;
+        _pressureAssigned = true;
         strcpy(_pressureName, "Bosch BMP280 Pressure Sensor on I2C");
       }
       active = true;
@@ -58,6 +60,8 @@ void Bmp280w::poll() {
   _temperature = bmp280SensorW.readTemperature();
   tasks.yield(1000);
   _pressure = bmp280SensorW.readPressure()/100.0;
+  bmp280SensorW.takeForcedMeasurement();
+
 }
 
 Bmp280w bmp280w;
