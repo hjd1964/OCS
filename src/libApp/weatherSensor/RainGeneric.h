@@ -8,10 +8,7 @@
 
 #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
 
-#define WEATHER_SENSOR_RAIN_LOW 0.25
-#define WEATHER_SENSOR_RAIN_HIGH 0.75
-
-// setup anemometer
+// setup Rain Sensor
 class RainGeneric {
   public:
     bool init();
