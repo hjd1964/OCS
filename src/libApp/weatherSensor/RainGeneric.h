@@ -8,8 +8,13 @@
 
 #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
 
-#define WEATHER_SENSOR_RAIN_LOW 0.25
-#define WEATHER_SENSOR_RAIN_HIGH 0.75
+// set default low/high thresholds if not specified
+#ifndef WEATHER_SENSOR_RAIN_LOW
+  #define WEATHER_SENSOR_RAIN_LOW 0.25
+#endif
+#ifndef WEATHER_SENSOR_RAIN_HIGH
+  #define WEATHER_SENSOR_RAIN_HIGH 0.75
+#endif
 
 // setup anemometer
 class RainGeneric {
