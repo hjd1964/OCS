@@ -11,6 +11,7 @@
 #include "TAnalog.h"
 #include "CloudMlx90614.h"
 #include "RainGeneric.h"
+#include "RainDigital.h"
 #include "SkyQTsl2591.h"
 #include "WindCupAnem.h"
 #include "WindModernRevP.h"
@@ -86,8 +87,12 @@ void WeatherSensor::init() {
     windRevP.init();
   #endif
 
-  #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
+   #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
     rainGeneric.init();
+  #endif
+
+  #if defined(WEATHER_SENSOR_RAIN_DIGITAL) && WEATHER_SENSOR_RAIN_DIGITAL != OFF
+    rainDigital.init();
   #endif
 
   #if defined(WEATHER_SENSOR_CLOUD_MLX90614) && WEATHER_SENSOR_CLOUD_MLX90614 != OFF
