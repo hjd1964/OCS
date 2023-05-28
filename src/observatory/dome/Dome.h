@@ -143,8 +143,6 @@ class Dome {
     void monitor();
 
     bool ready = false;
-    bool gotoAxis1 = false;
-    bool gotoAxis2 = false;
 
   private:
     DomeSettings settings = {
@@ -154,6 +152,8 @@ class Dome {
 
     float targetAzm = 0.0F;
     float targetAlt = 0.0F;
+
+    bool homing = false;
 
     char statusMsg[40] = L_STOPPED;
 };

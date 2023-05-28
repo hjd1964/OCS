@@ -102,7 +102,6 @@ CommandError Dome::gotoAzimuthTarget() {
   if (axis1.isSlewing()) return CE_NONE;
 
   CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE);
-  if (e == CE_NONE) gotoAxis1 = true;
   return e;
 }
 
@@ -138,7 +137,6 @@ CommandError Dome::gotoAltitudeTarget() {
     if (axis2.isSlewing()) return CE_NONE;
 
     CommandError e = axis2.autoGoto(AXIS2_SLEW_RATE);
-    if (e == CE_NONE) gotoAxis2 = true;
     return e;
   #else
     return CE_GOTO_FAIL;
@@ -157,23 +155,31 @@ CommandError Dome::findHome() {
 
   CommandError e = CE_NONE;
 
-  #if (AXIS1_SENSE_HOME) != OFF
+  #if AXIS1_SENSE_HOME != OFF
     axis1.setFrequencySlew(goTo.rate);
-    axis1.autoSlewHome();
+    e = axis1.autoSlewHome();
+    if (e == CE_NONE) homing = true;
   #else
     e = gotoAzimuthTarget();
   #endif
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
-      #if (AXIS2_SENSE_HOME) != OFF
+      #if AXIS2_SENSE_HOME != OFF
         axis2.setFrequencySlew(goTo.rate);
-        axis2.autoSlewHome();
+        e = axis2.autoSlewHome();
+        if (e == CE_NONE) {
+          homing = true;
+        } else {
+          axis1.autoSlewAbort();
+          homing = false;
+        }
       #else
         e = gotoAltitudeTarget();
       #endif
     }
   #endif
+
 
   return e;
 }
@@ -189,6 +195,7 @@ void Dome::stop() {
     #if AXIS2_DRIVER_MODEL != OFF
       axis2.autoSlewAbort();
     #endif
+    homing = false;
   }
 }
 
@@ -206,14 +213,12 @@ CommandError Dome::park() {
   axis1.setBacklash(0.0F);
   axis1.setTargetCoordinatePark(settings.park.azimuth);
   CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE);
-  if (e == CE_NONE) gotoAxis1 = true;
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       axis2.setBacklash(0.0F);
       axis2.setTargetCoordinatePark(settings.park.altitude);
       e = axis2.autoGoto(AXIS2_SLEW_RATE);
-      if (e == CE_NONE) gotoAxis2 = true;
     }
   #endif
 
@@ -309,31 +314,26 @@ const char* Dome::statusMessage() {
 
 // poll dome to monitor motion
 void Dome::monitor() {
-  if (settings.park.state == PS_PARKING) {
-    if (!axis1.isSlewing())
-      #if AXIS2_DRIVER_MODEL != OFF
-        if (!axis2.isSlewing())
-      #endif
-        {
-          settings.park.state = PS_PARKED;
-          nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
-          axis1.enable(false);
-          #if AXIS2_DRIVER_MODEL != OFF
-            axis2.enable(false);
-          #endif
-          gotoAxis1 = false;
-          gotoAxis2 = false;
+  if (!axis1.isSlewing()) {
+  #if AXIS2_DRIVER_MODEL != OFF
+    if (!axis2.isSlewing())
+  #endif
+    {
+      if (settings.park.state == PS_PARKING) {
+        settings.park.state = PS_PARKED;
+        nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+        axis1.enable(false);
+        #if AXIS2_DRIVER_MODEL != OFF
+          axis2.enable(false);
+        #endif
+      } else
+
+      if (settings.park.state == PS_UNPARKED) {
+        if (homing) {
+          reset();
+          homing = false;
         }
-  } else
-  if (gotoAxis1 || gotoAxis2) {
-    if (!axis1.isSlewing()) {
-      gotoAxis1 = false;
-      #if AXIS2_DRIVER_MODEL != OFF
-        if (!axis2.isSlewing())
-      #endif
-        {
-          gotoAxis2 = false;
-        }
+      }
     }
   }
 }
