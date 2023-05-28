@@ -158,6 +158,9 @@
 #define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
 #define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
 
+//For rain sensors that switch a relay. The digital input is switched against ground. e.g. Kemo M152K or Hydreon RG-9
+ #define WEATHER_SENSOR_RAIN_DIGITAL   4 //    OFF, n. Where n=1..16 (Digital#) to enable.
+
 #define WEATHER_SENSOR_CLOUD_MLX90614 OFF //    OFF, 0x5A (I2C Address) to enable. Gets IR sky IR temp. for cloud detection.  Adjust
 
 #define WEATHER_SENSOR_SKYQ_TSL2591   OFF //    OFF, 0x28 (I2C Address) to enable. Sky brightness for sky quality estimate.   Option
