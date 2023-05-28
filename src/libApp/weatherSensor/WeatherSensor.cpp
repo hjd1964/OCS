@@ -87,7 +87,7 @@ void WeatherSensor::init() {
     windRevP.init();
   #endif
 
-   #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
+  #if defined(WEATHER_SENSOR_RAIN_GENERIC) && WEATHER_SENSOR_RAIN_GENERIC != OFF
     rainGeneric.init();
   #endif
 
