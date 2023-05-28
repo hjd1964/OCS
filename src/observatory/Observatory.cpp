@@ -341,7 +341,7 @@ void Observatory::connectionCheck() {
     #if ETHERNET_RESET_PIN != OFF
       if (!success && connectionCheckTry == CONNECT_RESET_TRIES) {
 
-        www.restart();
+        ethernetManager.restart();
 
         #if STANDARD_COMMAND_CHANNEL == ON
           ipSerial.restart();
