@@ -41,7 +41,7 @@ bool Bmp085w::init() {
         strcpy(_temperatureName, "Bosch BMP085/BMP180 Temperature Sensor on I2C");
       }
       if (!_pressureAssigned) {
-        _humidityAss_pressureAssignedigned = true;
+        _pressureAssigned = true;
         strcpy(_pressureName, "Bosch BMP085/BMP180 Pressure Sensor on I2C");
       }
       active = true;
