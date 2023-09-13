@@ -105,7 +105,7 @@ const char html_script_chartJs_A[] PROGMEM =
     "datasets: [{"
       "label: '";
 const char html_script_chartJs_B[] PROGMEM = "',"
-      "backgroundColor: \"rgba(192,32,32,0.4)\","
+      "backgroundColor: \"" COLOR_CHART_BACKGROUND "\","
       "data: [";
 const char html_script_chartJs_C[] PROGMEM = 
       "]"
