@@ -94,7 +94,7 @@ void Weather::poll(void) {
         sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
         #if DEBUG_SD == ON
-          VF("MSG: Weather, log "); VL(fn);
+          VF("MSG: Weather, log "); VL(fileName);
         #endif
 
         if (!FS.exists(fileName)) {
@@ -189,6 +189,7 @@ void Weather::poll(void) {
           int n;
           dataFile = FS.open(fileName, FILE_READ);
           if (dataFile) {
+            char temp[120];
             dataFile.seek(logRecordLocation(t)*80L);
             n = dataFile.read(temp, 80);
             VL(n);
