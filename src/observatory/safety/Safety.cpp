@@ -26,15 +26,11 @@ bool Safety::isSafe() {
 
   #if STAT_MAINS_SENSE != OFF
     // check for mains power out
-    #if (STAT_MAINS_SAFETY_DELAY != OFF )
-      if (delayForMains >= STAT_MAINS_SAFETY_DELAY && !sense.isOn(STAT_MAINS_SENSE)) safe = false;
-      else {
-        if (!sense.isOn(STAT_MAINS_SENSE)) delayForMains ++;
-         else delayForMains = 0;
-      }
-    #else
-      if (!sense.isOn(STAT_MAINS_SENSE)) safe = false;
-    #endif
+    if (sense.isOn(STAT_MAINS_SENSE)) {
+      delayForMains = 0;
+    } else {
+      if (delayForMains < STAT_MAINS_SAFETY_DELAY) delayForMains++; else safe = false;
+    }
   #endif
 
   #ifdef WEATHER_PRESENT

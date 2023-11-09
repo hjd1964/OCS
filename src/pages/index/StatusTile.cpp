@@ -44,6 +44,7 @@
     www.sendContent(temp);
 
     #if STAT_MAINS_SENSE != OFF
+      getStatusMainsSenseStr(temp1);
       sprintf_P(temp, htmlInnerStatusMains, temp1);
       www.sendContent(temp);
     #endif
