@@ -44,7 +44,7 @@
     www.sendContent(temp);
 
     #if STAT_MAINS_SENSE != OFF
-      getStatusMainsSenseStr(temp1);
+      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp1, "GOOD"); else strcpy(temp1, "OUT"); 
       sprintf_P(temp, htmlInnerStatusMains, temp1);
       www.sendContent(temp);
     #endif
