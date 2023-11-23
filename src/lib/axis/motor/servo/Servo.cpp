@@ -231,7 +231,7 @@ void ServoMotor::poll() {
 
   long encoderCountsOrig = encoderCounts;
 
-  // for absolute encoders initalize the motor position at startup
+  // for absolute encoders initialize the motor position at startup
   if (syncThreshold != OFF) {
     if (!motorStepsInitDone && encoder->ready && homeSet) {
       noInterrupts();
@@ -341,7 +341,7 @@ void ServoMotor::poll() {
 IRAM_ATTR void ServoMotor::move() {
 
   #if SERVO_SLEW_DIRECT == ON
-    if (synchronized && !inBacklash) targetSteps += step;
+    if (sync && !inBacklash) targetSteps += step;
 
     if (motorSteps > targetSteps) {
       motorSteps = targetSteps;
@@ -352,7 +352,7 @@ IRAM_ATTR void ServoMotor::move() {
     }
 
   #else
-    if (synchronized && !inBacklash) targetSteps += step;
+    if (sync && !inBacklash) targetSteps += step;
 
     if (motorSteps > targetSteps) {
       if (backlashSteps > 0) {
