@@ -62,6 +62,10 @@
   #error "Configuration (Config.h): STAT_MAINS_AUX_CURRENT_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif
 
+#if (STAT_MAINS_SAFETY_DELAY < 1 || STAT_MAINS_SAFETY_DELAY > 600) && STAT_MAINS_SAFETY_DELAY != OFF
+  #error "Configuration (Config.h): STAT_MAINS_SAFETY_DELAY must OFF or between 1 and 600 (s.)"
+#endif
+
 #if (STAT_DC_VOLTAGE_ANALOG < 1 || STAT_DC_VOLTAGE_ANALOG > 16) && STAT_DC_VOLTAGE_ANALOG != OFF
   #error "Configuration (Config.h): STAT_DC_VOLTAGE_ANALOG must OFF or between 1 and 16 (ASENSE#.)"
 #endif

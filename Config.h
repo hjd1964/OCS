@@ -44,6 +44,7 @@
 #define STAT_MAINS_SENSE              OFF //    OFF, n. Where n=1..8 (Sense#) mains power good, OFF (power failure) is UNSAFE Option
 #define STAT_MAINS_CURRENT_ANALOG     OFF //    OFF, n. Where n=1..16 (Analog#) measure/display current mains.                Option
 #define STAT_MAINS_AUX_CURRENT_ANALOG OFF //    OFF, n. Where n=1..16 (Analog#) measure/display current mains (aux.)          Option
+#define STAT_MAINS_SAFETY_DELAY       OFF //    OFF, n. Where n=1..600 (s). Mains safety sense delay time.                    Option
 
 // Converts the analog measure (range 0 to 1.0) to Amps
 #define STAT_MAINS_ANALOG_TO_CURRENT(x) (x*NAN)
