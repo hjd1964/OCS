@@ -16,14 +16,13 @@ extern char _windSpeedName[40];
 volatile unsigned long _cupAnemometerPulseCount = 0;
 
 void cupAnemISR() {
-  bool pulse = true;
   #if defined WEATHER_SENSOR_WIND_CUP_DB && WEATHER_SENSOR_WIND_CUP_DB != OFF
     volatile static unsigned long lastPulseTime = 0;
     long timePassed = (long)(millis() - lastPulseTime);
+    if (timePassed <= WEATHER_SENSOR_WIND_CUP_DB) return;
     lastPulseTime = millis();
-    if (timePassed <= WEATHER_SENSOR_WIND_CUP_DB) pulse = false;
   #endif
-  if (pulse)  _cupAnemometerPulseCount++;
+  _cupAnemometerPulseCount++;
 }
 
 void cupAnemWrapper() { cupAnem.poll(); }
@@ -67,7 +66,7 @@ void CupAnem::poll() {
   sei();
 
   // convert pulses per sample period to PPM
-  long PPM = pulseCountThisElapsed * (60000L/timeElapsed);
+  float PPM = pulseCountThisElapsed*(60000.0F/(float)timeElapsed);
   _windspeed = WEATHER_SENSOR_WIND_CUP2KPH(PPM);
 }
 
