@@ -197,9 +197,9 @@ void Weather::poll(void) {
           if (dataFile) {
             char temp[120];
             dataFile.seek(logRecordLocation(t)*80L);
-            n = dataFile.read(temp, 80);
-            VL(n);
-            VL(temp);
+            n = dataFile.read((uint8_t*)temp, 80);
+            temp[78] = 0;
+            V("MSG: Weather, read last record "); V(n); V(" bytes '"); V(temp); VL("'");
             dataFile.close();
           }
           #if DEBUG_SD == VERBOSE
