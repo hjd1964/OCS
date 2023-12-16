@@ -49,6 +49,7 @@ NVS nv;
 #include "src/lib/tasks/OnTask.h"
 
 #include "src/observatory/Observatory.h"
+#include "src/pages/chartJS/ChartJS.h"
 
 char ocsVersion[10];
 
@@ -93,6 +94,28 @@ void setup() {
 
   #if WEATHER_CHARTS == ON
     #ifdef ESP32
+      hasFileSystem = FS.begin(true);
+
+      if (hasFileSystem) {
+        VF("MSG: Setup, FatFS ");
+        File dataFile = FS.open(FS_PREFIX "Chart.js", FILE_READ);
+
+        if (!dataFile) {
+          VLF("didn't find Chart.js");
+          File dataFile = FS.open(FS_PREFIX "Chart.js", FILE_WRITE);
+          if (dataFile) {
+            VLF("MSG: Setup, writting FatFS Chart.js data");
+            dataFile.print(ChartJS);
+            dataFile.close();
+          } else { DLF("ERR: Setup, error opening FatFS Chart.js file for write"); }
+        } else {
+          VLF("found Chart.js");
+          dataFile.close();
+        }
+
+        FS.end();
+      } else { DLF("ERR: Setup, error opening FatFS"); }
+
       hasFileSystem = FS.begin();
     #else
       #if defined(SDCARD_CS_PIN) && SDCARD_CS_PIN != OFF
