@@ -93,7 +93,7 @@ void Weather::poll(void) {
         time_t t = now();
         sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
-        #if DEBUG_SD == ON
+        #if DEBUG_SD == VERBOSE
           VF("MSG: Weather, log "); VL(fileName);
         #endif
 
@@ -104,16 +104,16 @@ void Weather::poll(void) {
             char oldFileName[32];
             sprintf(oldFileName, "L%02d%02d%02d.TXT", year(t1) - 2000, month(t1), day(t1));
             if (FS.exists(oldFileName)) {
-              #if DEBUG_SD == ON
+              #if DEBUG_SD == VERBOSE
                 VF("MSG: Weather, remove old log file: ");
               #endif
               FS.remove(oldFileName);
-              #if DEBUG_SD == ON
+              #if DEBUG_SD == VERBOSE
                 if (!FS.exists(oldFileName)) { VLF("success."); } else { VLF("failed."); }
               #endif
             } else {
-              #if DEBUG_SD == ON
                 VF("MSG: Weather, no old log file to remove.");
+              #if DEBUG_SD == VERBOSE
               #endif
             }
           #endif
@@ -130,8 +130,8 @@ void Weather::poll(void) {
           
           dataFile = FS.open(fileName, FILE_WRITE);
           if (dataFile) {
-            #if DEBUG_SD == ON
               VLF("MSG: Weather, log create file...");
+            #if DEBUG_SD == VERBOSE
             #endif
             for (int i = 0; i < LogRecordsPerDay; i++) {
               #if DEBUG_SD == ON
@@ -145,13 +145,13 @@ void Weather::poll(void) {
             }
             dataFile.close();
           } else { 
-            #if DEBUG_SD == ON
+            #if DEBUG_SD == VERBOSE
               VLF("MSG: Weather, log create failed"); 
             #endif
           }
         }
 
-        #if DEBUG_SD == ON
+        #if DEBUG_SD == VERBOSE
           VLF("MSG: Weather, log opening file");
         #endif
 
@@ -159,8 +159,8 @@ void Weather::poll(void) {
         dataFile = FS.open(fileName, FILE_WRITE);
         if (dataFile) {
 
-          #if DEBUG_SD == ON
             VLF("MSG: Weather, log writing data...");
+          #if DEBUG_SD != OFF
           #endif
 
           dataFile.seek(logRecordLocation(t)*80L);
@@ -177,15 +177,15 @@ void Weather::poll(void) {
           for (int i = 0; i < 29; i++) dataFile.print(" ");                              //  ,29
           dataFile.print("\r\n");                                                        //  , 2
 
-          #if DEBUG_SD == ON
+          #if DEBUG_SD == VERBOSE
             VLF("MSG: Weather, log close file");
           #endif
 
           dataFile.close();
         }
 
-        #if DEBUG_SD == ON
           VLF("MSG: Weather, log debug output opening...");
+        #if DEBUG_SD != OFF
           int n;
           dataFile = FS.open(fileName, FILE_READ);
           if (dataFile) {
