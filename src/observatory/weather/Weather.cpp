@@ -122,9 +122,6 @@ void Weather::poll(void) {
             }
           #endif
 
-          dataFile = FS.open(fileName, FILE_WRITE);
-          dataFile.close();
-
           // for example: fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
           // size = 250400/day
