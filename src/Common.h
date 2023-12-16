@@ -30,9 +30,11 @@ extern NVS nv;
     #include <FS.h>
     #include <LittleFS.h>
     #define FS LittleFS
+    #define FS_PREFIX "/"
   #else
     #include <SD.h>
     #define FS SD
+    #define FS_PREFIX ""
   #endif
 #endif
 

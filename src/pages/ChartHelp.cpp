@@ -36,10 +36,10 @@
 
     rec = logRecordLocation(t) - LogRecordsPerHour*hours;
     while (rec < 0) { rec += LogRecordsPerDay; t -= 24L*60L*60L; }
-    sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     //Serial.print("Primary log="); Serial.println(fn);
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
+    sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
     File dataFile = FS.open(fileName, FILE_READ);
@@ -49,7 +49,7 @@
           dataFile.close();
           k = rec + i*hours;
           t += 24L*60L*60L;
-          sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
+          sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
           dataFile = FS.open(fileName, FILE_READ);
           if (!dataFile) break;
 
@@ -123,7 +123,7 @@
     time_t t = now();
     startRecord = logRecordLocation(t) - spanInHours;
     while (startRecord < 0) { startRecord += LogRecordsPerDay; t -= 24L*60L*60L; }
-    sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
+    sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     //Serial.print("Primary log="); Serial.println(fn);
     //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);

@@ -91,7 +91,7 @@ void Weather::poll(void) {
         char fileName[32];
 
         time_t t = now();
-        sprintf(fileName, "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
+        sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
         #if DEBUG_SD == VERBOSE
           VF("MSG: Weather, log "); VL(fileName);
@@ -106,7 +106,7 @@ void Weather::poll(void) {
             // erase log file from 31 days ago (to stay within 2MB spiff)
             time_t t1 = t - 20L*24L*60L*60L;
             char oldFileName[32];
-            sprintf(oldFileName, "L%02d%02d%02d.TXT", year(t1) - 2000, month(t1), day(t1));
+            sprintf(oldFileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t1) - 2000, month(t1), day(t1));
             if (FS.exists(oldFileName)) {
               #if DEBUG_SD == VERBOSE
                 VF("MSG: Weather, remove old log file: ");
