@@ -98,6 +98,10 @@ void Weather::poll(void) {
         #endif
 
         if (!FS.exists(fileName)) {
+          #if DEBUG_SD == VERBOSE
+            VLF("MSG: Weather, log doesn't exist...");
+          #endif
+
           #ifdef ESP32
             // erase log file from 31 days ago (to stay within 2MB spiff)
             time_t t1 = t - 20L*24L*60L*60L;
@@ -112,38 +116,38 @@ void Weather::poll(void) {
                 if (!FS.exists(oldFileName)) { VLF("success."); } else { VLF("failed."); }
               #endif
             } else {
-                VF("MSG: Weather, no old log file to remove.");
               #if DEBUG_SD == VERBOSE
+                VLF("MSG: Weather, no old log file to remove.");
               #endif
             }
           #endif
 
-          #if DEBUG_SD == ON
-            VLF("MSG: Weather, log doesn't exist...");
-          #endif
           dataFile = FS.open(fileName, FILE_WRITE);
           dataFile.close();
 
           // for example: fill the datafile 2 per minute * 60 * 24 = 2880 records per day
           // each record is as follows (80 bytes):
           // size = 250400/day
-          
           dataFile = FS.open(fileName, FILE_WRITE);
           if (dataFile) {
-              VLF("MSG: Weather, log create file...");
             #if DEBUG_SD == VERBOSE
+              VF("MSG: Weather, log create file "); VL(fileName);
+              VF("MSG: Weather, log create writing record ");
             #endif
             for (int i = 0; i < LogRecordsPerDay; i++) {
-              #if DEBUG_SD == ON
-                VF("MSG: Weather, log create writing record#"); VL(i);
-              #endif
               //               time   sa    sad   lad   p      h     wind  sq
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
               //              01234567890123456789012345678901234567890123456789
               //              0         1         2         3         4
               dataFile.print("                                                                              \r\n");
+              #if DEBUG_SD == VERBOSE
+                if (i % 500 == 0) V(".");
+              #endif
             }
             dataFile.close();
+            #if DEBUG_SD == VERBOSE
+              VLF("");
+            #endif
           } else { 
             #if DEBUG_SD == VERBOSE
               VLF("MSG: Weather, log create failed"); 
@@ -159,8 +163,8 @@ void Weather::poll(void) {
         dataFile = FS.open(fileName, FILE_WRITE);
         if (dataFile) {
 
-            VLF("MSG: Weather, log writing data...");
           #if DEBUG_SD != OFF
+            VF("MSG: Weather, log writing data at record "); V(logRecordLocation(t)); VL("...");
           #endif
 
           dataFile.seek(logRecordLocation(t)*80L);
@@ -184,8 +188,10 @@ void Weather::poll(void) {
           dataFile.close();
         }
 
-          VLF("MSG: Weather, log debug output opening...");
         #if DEBUG_SD != OFF
+          #if DEBUG_SD == VERBOSE
+            VLF("MSG: Weather, log debug output opening...");
+          #endif
           int n;
           dataFile = FS.open(fileName, FILE_READ);
           if (dataFile) {
@@ -196,7 +202,9 @@ void Weather::poll(void) {
             VL(temp);
             dataFile.close();
           }
-          VLF("MSG: Weather, log debug output closed");
+          #if DEBUG_SD == VERBOSE
+            VLF("MSG: Weather, log debug output closed");
+          #endif
         #endif
       }
 
