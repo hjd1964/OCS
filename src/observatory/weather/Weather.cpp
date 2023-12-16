@@ -102,9 +102,9 @@ void Weather::poll(void) {
             VLF("MSG: Weather, log doesn't exist...");
           #endif
 
-          #ifdef ESP32
-            // erase log file from 31 days ago (to stay within 2MB spiff)
-            time_t t1 = t - 20L*24L*60L*60L;
+          #ifdef LOG_CLEANUP_DAYS_AGO
+            // erase log file from LOG_CLEANUP_DAYS_AGO
+            time_t t1 = t - LOG_CLEANUP_DAYS_AGO*24L*60L*60L;
             char oldFileName[32];
             sprintf(oldFileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t1) - 2000, month(t1), day(t1));
             if (FS.exists(oldFileName)) {

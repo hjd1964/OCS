@@ -20,6 +20,9 @@
 #ifndef LOG_PERIOD_SECONDS
 #define LOG_PERIOD_SECONDS           300L   // 300 seconds between log enteries
 #endif
+#ifndef LOG_CLEANUP_DAYS_AGO
+#define LOG_CLEANUP_DAYS_AGO           60   // retain two months of files (80 bytes * 0.2 * 60 * 24 = 23040 bytes per day * 120 = 2764800 bytes)
+#endif
 #else
 #ifndef LOG_PERIOD_SECONDS
 #define LOG_PERIOD_SECONDS            30L   // 30 seconds between log enteries
