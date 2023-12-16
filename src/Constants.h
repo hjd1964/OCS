@@ -58,14 +58,9 @@
 #define AJAX_PAGE_UPDATE_FAST_SHED_MS 5000    // time before return to normal update rate
 
 // for weather logging
-#ifdef ESP32
-  #define LogSecondsBetweenEntries  120L
-#else
-  #define LogSecondsBetweenEntries  30L
-#endif
-#define LogRecordsPerHour           (3600L/LogSecondsBetweenEntries)
-#define LogRecordsPerDay            (86400L/LogSecondsBetweenEntries)
-#define logRecordLocation(t)        (round(hour(t)*3600L+minute(t)*60L+second(t))/LogSecondsBetweenEntries)
+#define LogRecordsPerHour           (3600L/LOG_PERIOD_SECONDS)
+#define LogRecordsPerDay            (86400L/LOG_PERIOD_SECONDS)
+#define logRecordLocation(t)        ((long)round(hour(t)*3600L+minute(t)*60L+second(t))/LOG_PERIOD_SECONDS)
 
 // we don't use BT in the OCS
 #define SERIAL_BT_MODE              OFF

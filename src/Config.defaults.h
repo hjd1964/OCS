@@ -15,6 +15,17 @@
 #define WATCHDOG                      OFF   // ON resets if OCS hangs for >8 seconds
 #endif
 
+// log files
+#ifdef ESP32
+#ifndef LOG_PERIOD_SECONDS
+#define LOG_PERIOD_SECONDS           300L   // 300 seconds between log enteries
+#endif
+#else
+#ifndef LOG_PERIOD_SECONDS
+#define LOG_PERIOD_SECONDS            30L   // 30 seconds between log enteries
+#endif
+#endif
+
 // network settings
 #ifndef ASCOM_ALPACA_SERVER
 #define ASCOM_ALPACA_SERVER           OFF   // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
