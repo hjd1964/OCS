@@ -104,7 +104,7 @@ void setup() {
           VLF("didn't find Chart.js");
           File dataFile = FS.open(FS_PREFIX "Chart.js", FILE_WRITE);
           if (dataFile) {
-            VLF("MSG: Setup, writting FatFS Chart.js data");
+            VLF("MSG: Setup, writing FatFS Chart.js data");
             dataFile.print(ChartJS);
             dataFile.close();
           } else { DLF("ERR: Setup, error opening FatFS Chart.js file for write"); }
