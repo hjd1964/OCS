@@ -91,7 +91,6 @@ void setup() {
     #define SDCARD_CS_PIN BUILTIN_SDCARD
   #endif
 
-  VF("MSG: Setup, start filesystem ");
   #if WEATHER_CHARTS == ON
     #ifdef ESP32
       hasFileSystem = FS.begin();
@@ -105,8 +104,13 @@ void setup() {
         #endif
       #endif
     #endif
+
+    if (hasFileSystem) {
+      VLF("MSG: Setup, start FatFS success");
+    } else {
+      DLF("ERR: Setup, error opening FatFS");
+    }
   #endif
-  if (hasFileSystem) { VLF("success"); } else { VLF("FAILED!"); }
 
   // start system service task
   VF("MSG: Setup, start system service task (rate 10ms priority 7)... ");

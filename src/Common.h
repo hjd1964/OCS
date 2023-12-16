@@ -28,8 +28,8 @@ extern NVS nv;
 #if SD_CARD == ON
   #ifdef ESP32
     #include <FS.h>
-    #include <LittleFS.h>
-    #define FS LittleFS
+    #include <FFat.h>
+    #define FS FFat
     #define FS_PREFIX "/"
   #else
     #include <SD.h>
