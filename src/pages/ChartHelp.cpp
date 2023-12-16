@@ -36,14 +36,12 @@
 
     rec = logRecordLocation(t) - LogRecordsPerHour*hours;
     while (rec < 0) { rec += LogRecordsPerDay; t -= 24L*60L*60L; }
-
-    //Serial.print("Primary log="); Serial.println(fn);
-    //Serial.print("Reading "); Serial.print(120); Serial.print(" records from rec#"); Serial.println(rec);
     sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
     if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
     File dataFile = FS.open(fileName, FILE_READ);
     if (dataFile) {
+      V("MSG: makeChartJs, processing log file "); V(fileName); V(" for "); V(chartId); V(" at record "); VL(rec);
       for (long i = 0; i < LogRecordsPerHour; i++) {
         if (((rec + i*hours) - k) >= LogRecordsPerDay) {
           dataFile.close();
@@ -53,14 +51,14 @@
           dataFile = FS.open(fileName, FILE_READ);
           if (!dataFile) break;
 
-          //Serial.print("Secondary log="); Serial.println(fn);
-          //Serial.print("Reading "); Serial.print(120-i); Serial.print(" records from rec#"); Serial.println(0);
+          V("MSG: makeChartJs, switching log file "); V(fileName); V(" for "); V(chartId); V(" at record "); VL(((rec + i*hours) - k));
         }
         dataFile.seek(((rec + i*hours) - k)*80L);
 
         //if (chartId[0]=='B') Serial.println(((rec+i*step)-k));
 
         dataFile.read((unsigned char*)temp1, 80);
+
         temp1[abs(logColumn) + colWidth] = 0;
         int j = abs(logColumn);
         while (temp1[j] == ' ' && temp1[j] != 0) j++;
@@ -86,6 +84,8 @@
         }
       }
       dataFile.close();
+    } else {
+      V("MSG: makeChartJs, opening log file "); V(fileName); VLF(" failed!");
     }
     if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
     
