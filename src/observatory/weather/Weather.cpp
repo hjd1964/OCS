@@ -131,7 +131,7 @@ void Weather::poll(void) {
               VF("MSG: Weather, log create file "); VL(fileName);
               VF("MSG: Weather, log create writing record ");
             #endif
-            for (int i = 0; i < LogRecordsPerDay; i++) {
+            for (int i = 0; i < LOG_RECORDS_PER_DAY; i++) {
               //               time   sa    sad   lad   p      h     wind  sq
               //             "hhmmss: ttt.t ttt.t ttt.t mmmm.m fff.f kkk.k mm.mm                                "
               //              01234567890123456789012345678901234567890123456789

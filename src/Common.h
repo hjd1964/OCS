@@ -70,6 +70,9 @@ extern char ocsVersion[10];
     WEATHER_WIND_SPD != OFF || WEATHER_RAIN != OFF || WEATHER_CLOUD_CVR != OFF || WEATHER_SKY_QUAL != OFF
   #define WEATHER_PRESENT
 #endif
+#define LOG_RECORDS_PER_HOUR  (3600L/LOG_PERIOD_SECONDS)
+#define LOG_RECORDS_PER_DAY   (86400L/LOG_PERIOD_SECONDS)
+#define logRecordLocation(t)  ((long)round(hour(t)*3600L+minute(t)*60L+second(t))/LOG_PERIOD_SECONDS)
 
 #if AXIS1_DRIVER_MODEL != OFF
   #define AXIS_PRESENT
@@ -79,3 +82,4 @@ extern char ocsVersion[10];
 #if ROOF_MOTOR_OPEN_RELAY != OFF && ROOF_MOTOR_CLOSE_RELAY != OFF
   #define ROOF_PRESENT
 #endif
+
