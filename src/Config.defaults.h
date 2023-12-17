@@ -18,10 +18,10 @@
 // log files
 #ifdef ESP32
 #ifndef LOG_PERIOD_SECONDS
-#define LOG_PERIOD_SECONDS           300L   // 300 seconds between log enteries
+#define LOG_PERIOD_SECONDS           120L   // 120 seconds between log enteries
 #endif
 #ifndef LOG_CLEANUP_DAYS_AGO
-#define LOG_CLEANUP_DAYS_AGO           60   // retain two months of files (80 bytes * 0.2 * 60 * 24 = 23040 bytes per day * 120 = 1382400 bytes)
+#define LOG_CLEANUP_DAYS_AGO           30   // retain one month of files (80 bytes * 0.5 * 60 * 24 = 57600 bytes per day * 30 = 1728000 bytes)
 #endif
 #else
 #ifndef LOG_PERIOD_SECONDS
