@@ -78,7 +78,7 @@
 
           if (hours >= 4) unitsDivisor = 3600.0F; else unitsDivisor = 60.0F;
           if (REVERSE_WEATHER_CHART_X_AXIS == ON) sign = -1.0F; else sign = 1.0F;
-          dtostrf(sign*((LOG_RECORDS_PER_HOUR - i)*hours)*(LOG_PERIOD_SECONDS/unitsDivisor), 1, 1, xAxisText);
+          dtostrf(sign*((LOG_RECORDS_PER_HOUR - i)*hours)*((LOG_PERIOD_SECONDS)/unitsDivisor), 1, 1, xAxisText);
 
           sprintf(temp, "{x:%s,y:%s},", xAxisText, logItemText);
           www.sendContent(temp);

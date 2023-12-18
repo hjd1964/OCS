@@ -42,19 +42,19 @@ void Weather::poll(void) {
     if (isnan(sa))
       sa = ambientTemp;
     else
-      sa = ((sa*((double)LOG_PERIOD_SECONDS/2.0 - 1.0)) + ambientTemp)/((double)LOG_PERIOD_SECONDS/2.0);
+      sa = ((sa*((double)(LOG_PERIOD_SECONDS)/2.0 - 1.0)) + ambientTemp)/((double)(LOG_PERIOD_SECONDS)/2.0);
     
     // short-term sky temp
     if (isnan(ss))
       ss = skyTemp;
     else
-      ss = ((ss*((double)LOG_PERIOD_SECONDS/2.0 - 1.0)) + skyTemp)/((double)LOG_PERIOD_SECONDS/2.0);
+      ss = ((ss*((double)(LOG_PERIOD_SECONDS)/2.0 - 1.0)) + skyTemp)/((double)(LOG_PERIOD_SECONDS)/2.0);
     
     // short-term average diff temp
     if (isnan(sad))
       sad = skyDiffTemp;
     else
-      sad = ((sad*((double)LOG_PERIOD_SECONDS/2.0 - 1.0)) + skyDiffTemp)/((float)LOG_PERIOD_SECONDS/2.0);
+      sad = ((sad*((double)(LOG_PERIOD_SECONDS)/2.0 - 1.0)) + skyDiffTemp)/((float)(LOG_PERIOD_SECONDS)/2.0);
 
     // long-term average diff temp
     lad = avgSkyDiffTemp;
@@ -70,7 +70,7 @@ void Weather::poll(void) {
     if (isnan(wa))
       wa = w;
     else
-      wa = ((wa*((float)LOG_PERIOD_SECONDS/2.0 - 1.0)) + w)/((float)LOG_PERIOD_SECONDS/2.0);
+      wa = ((wa*((float)(LOG_PERIOD_SECONDS)/2.0 - 1.0)) + w)/((float)(LOG_PERIOD_SECONDS)/2.0);
 
     // Sky quality -------------------------------------------------------------
     float q = weatherSensor.skyQuality();
@@ -81,7 +81,7 @@ void Weather::poll(void) {
     // log with 80 chars written once a minute (about 41MB a year)
     // on the ESP32 old log files are automatically deleted to stay within 3MB flash
     TimeSeconds += 2;
-    if (TimeSeconds >= LOG_PERIOD_SECONDS) {
+    if (TimeSeconds >= (LOG_PERIOD_SECONDS)) {
       TimeSeconds = 0;
 
       File dataFile;
