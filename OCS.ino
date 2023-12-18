@@ -76,7 +76,7 @@ void setup() {
   #endif
 
   VF("MSG: OCS "); VL(ocsVersion);
-  VF("MSG: MCU = "); VLF(MCU_STR);
+  VF("MSG: MCU "); VLF(MCU_STR);
 
   // start low level hardware
   VLF("MSG: Setup, HAL initalize");
