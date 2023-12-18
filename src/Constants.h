@@ -11,12 +11,11 @@
 #define OCS2                        1      // OCS V2 board (as above with onboard 5V switching regulator)
 #define LEGACY                      1      // Generic Mega2560 board (for builds using eBay relay boards, etc.)
 // Teensy3.5/3.6/4.1 based:
-#define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ opt eBay 8CH) + 6 DIN + 6 AIN)
-#define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
-// ESP32S based:
-#define OCSE                        5      // Basic pinmap for ESP32S (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
-// ESP32-S2 based:
-#define OCSES2                      6      // OCS board for ESP32-S2 (5 SSR + 2 MOSFET + 5 MECH RELAY (+ opt eBay 4CH) + 6 DIN + 6 AIN)
+#define OCS3                        2      // OCS V3 board (4 SSR + 2 MOSFET + 4 MECH RELAY (+ 8 optional RELAYS) + 6 DIN + 6 AIN)
+#define OCS4                        3      // OCS V4 board (5 SSR + 2 MOSFET + 5 MECH RELAY (+ 6 optional RELAYS) + 6 DIN + 6 AIN)
+// ESP32 based:
+#define OCS_ESP1                    5      // OCS ESP32-S DevKit-C basic pinmap (10 RELAYS + 6 DIN + 6 AIN)
+#define OCS_ESP2                    6      // OCS ESP32-S2 DevKitM-1 basic pinmap (16 RELAYS + 6 DIN + 6 AIN)
 #define PINMAP_LAST                 6
 
 // TIME LOCATION SOURCE devices supported
