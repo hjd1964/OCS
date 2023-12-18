@@ -77,24 +77,24 @@
 #endif
 
 // Digital inputs for sensing events
-#define SENSE1_PIN              2   // DIN1 (ESD proteted, current limited, with pullup to 3.3V)
-#define SENSE2_PIN              3   // DIN2 (ESD proteted, current limited, with pullup to 3.3V)
-#define SENSE3_PIN              4   // DIN3 (ESD proteted, current limited, with pullup to 3.3V)
-#define SENSE4_PIN              5   // DIN4 (ESD proteted, current limited, with pullup to 3.3V)
+#define SENSE1_PIN              2   // DIN1 (ESD protected, current limited, with pullup to 3.3V)
+#define SENSE2_PIN              3   // DIN2 (ESD protected, current limited, with pullup to 3.3V)
+#define SENSE3_PIN              4   // DIN3 (ESD protected, current limited, with pullup to 3.3V)
+#define SENSE4_PIN              5   // DIN4 (ESD protected, current limited, with pullup to 3.3V)
 #define SENSE5_PIN              20  // ADIN1, shared analog or digital not both (current limited)
 #define SENSE6_PIN              21  // ADIN2, shared analog or digital not both (current limited)
 #define SENSE7_PIN              22  // ADIN3, shared analog or digital not both (ESD protected, current limited)
 #define SENSE8_PIN              23  // ADIN4, shared analog or digital not both (ESD protected, current limited)
 
 // Analog inputs
-#define ASENSE1_PIN             14  // AIN1 (ESD proteted, current limited)
-#define ASENSE2_PIN             15  // AIN2 (ESD proteted, current limited)
-#define ASENSE3_PIN             16  // AIN3 (ESD proteted, current limited)
-#define ASENSE4_PIN             17  // AIN4 (ESD proteted, current limited)
-#define ASENSE5_PIN             20  // ADIN1, shared analog or digital not both
-#define ASENSE6_PIN             21  // ADIN2, shared analog or digital not both
-#define ASENSE7_PIN             22  // ADIN3, shared analog or digital not both
-#define ASENSE8_PIN             23  // ADIN4, shared analog or digital not both
+#define ASENSE1_PIN             14  // AIN1 (ESD protected, current limited)
+#define ASENSE2_PIN             15  // AIN2 (ESD protected, current limited)
+#define ASENSE3_PIN             16  // AIN3 (ESD protected, current limited)
+#define ASENSE4_PIN             17  // AIN4 (ESD protected, current limited)
+#define ASENSE5_PIN             20  // ADIN1, shared analog or digital not both (current limited)
+#define ASENSE6_PIN             21  // ADIN2, shared analog or digital not both (current limited)
+#define ASENSE7_PIN             22  // ADIN3, shared analog or digital not both (ESD protected, current limited)
+#define ASENSE8_PIN             23  // ADIN4, shared analog or digital not both (ESD protected, current limited)
 
 #else
 #error "Wrong processor for this configuration!"
