@@ -5,7 +5,7 @@
 
 #ifdef THERMOSTAT_PRESENT
 
-#include "../../libApp/weatherSensor/WeatherSensor.h"
+#include "../../libApp/thermostatSensor/ThermostatSensor.h"
 #include "../../libApp/relay/Relay.h"
 
 bool Thermostat::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
