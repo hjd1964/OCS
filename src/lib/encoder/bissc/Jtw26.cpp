@@ -1,12 +1,12 @@
-// JTW 24 BIT BISS-C encoders
+// JTW 26 BIT BISS-C encoders
 
-#include "Jtw24.h"
+#include "Jtw26.h"
 
-#ifdef HAS_JTW_24BIT
+#ifdef HAS_JTW_26BIT
 
 // initialize BiSS-C encoder
 // nvAddress holds settings for the 9 supported axes, 9*4 = 72 bytes; set nvAddress 0 to disable
-Jtw24::Jtw24(int16_t maPin, int16_t sloPin, int16_t axis) {
+Jtw26::Jtw26(int16_t maPin, int16_t sloPin, int16_t axis) {
   if (axis < 1 || axis > 9) return;
 
   this->maPin = maPin;
@@ -15,7 +15,7 @@ Jtw24::Jtw24(int16_t maPin, int16_t sloPin, int16_t axis) {
 }
 
 // read encoder count
-IRAM_ATTR bool Jtw24::readEnc(uint32_t &position) {
+IRAM_ATTR bool Jtw26::readEnc(uint32_t &position) {
 
   bool foundAck = false;
   bool foundStart = false;
@@ -72,10 +72,10 @@ IRAM_ATTR bool Jtw24::readEnc(uint32_t &position) {
       // if we have an Cds, read the data
       if (foundCds) {
 
-        // the first 24 bits are the encoder absolute count
-        for (int i = 0; i < 24; i++) {
+        // the first 26 bits are the encoder absolute count
+        for (int i = 0; i < 26; i++) {
           digitalWriteF(maPin, LOW_MA);
-          if (digitalReadF(sloPin) == HIGH_SLO) bitSet(position, 23 - i);
+          if (digitalReadF(sloPin) == HIGH_SLO) bitSet(position, 25 - i);
           delayNanoseconds(rate);
           digitalWriteF(maPin, HIGH_MA);
           delayNanoseconds(rate);
@@ -126,35 +126,35 @@ IRAM_ATTR bool Jtw24::readEnc(uint32_t &position) {
   encData = (encData << 1) | encErr;
   encData = (encData << 1) | encWrn;
 
-  if (!foundAck)   { VF("WRN: Encoder JTW_24BIT"); V(axis); VLF(", Ack bit invalid"); errors++; } else
-  if (!foundStart) { VF("WRN: Encoder JTW_24BIT"); V(axis); VLF(", Start bit invalid"); errors++; } else
-  if (!foundCds)   { VF("WRN: Encoder JTW_24BIT"); V(axis); VLF(", Cds bit invalid"); errors++; } else
-  if (!encErr)     { VF("WRN: Encoder JTW_24BIT"); V(axis); VLF(", Error bit set"); errors++; } else
-  if (!encWrn)     { VF("WRN: Encoder JTW_24BIT"); V(axis); VLF(", Warn bit set"); } else errors = 0;
+  if (!foundAck)   { VF("WRN: Encoder JTW_26BIT"); V(axis); VLF(", Ack bit invalid"); errors++; } else
+  if (!foundStart) { VF("WRN: Encoder JTW_26BIT"); V(axis); VLF(", Start bit invalid"); errors++; } else
+  if (!foundCds)   { VF("WRN: Encoder JTW_26BIT"); V(axis); VLF(", Cds bit invalid"); errors++; } else
+  if (!encErr)     { VF("WRN: Encoder JTW_26BIT"); V(axis); VLF(", Error bit set"); errors++; } else
+  if (!encWrn)     { VF("WRN: Encoder JTW_26BIT"); V(axis); VLF(", Warn bit set"); } else errors = 0;
   if (errors > 0) return false;
 
   if (crc6(encData) != encCrc) {
     bad++;
-    VF("WRN: Encoder JTW_24BIT"); V(axis); VF(", Crc failed ("); V(((float)bad/good)*100.0F); VLF("%)"); 
+    VF("WRN: Encoder JTW_26BIT"); V(axis); VF(", Crc failed ("); V(((float)bad/good)*100.0F); VLF("%)"); 
     return false;
   } else good++;
 
   #if BISSC_SINGLE_TURN == ON
     // extend negative to 32 bits
-    if (bitRead(position, 24)) { position |= 0b11111111000000000000000000000000; }
+    if (bitRead(position, 26)) { position |= 0b11111100000000000000000000000000; }
   #else
     // combine absolute and 8 low order bits of multi-turn count for a 32 bit count
-    position = position | ((encTurns & 0b0011111111) << 24);
+    position = position | ((encTurns & 0b0000111111) << 26);
   #endif
 
   position += origin;
 
   #if BISSC_SINGLE_TURN == ON
-    if ((int32_t)position > 16777216) position -= 16777216;
-    if ((int32_t)position < 0) position += 16777216;
+    if ((int32_t)position > 67108864) position -= 67108864;
+    if ((int32_t)position < 0) position += 67108864;
   #endif
 
-  position -= 8388608;
+  position -= 33554432;
 
   return true;
 }
@@ -162,11 +162,11 @@ IRAM_ATTR bool Jtw24::readEnc(uint32_t &position) {
 // Designed according protocol description found in as38-H39e-b-an100.pdf and
 // Renishaw application note E201D02_02
 
-// BiSS-C 6-bit CRC of 26 bit data (24 position + 2 err/wrn)
-uint8_t Jtw24::crc6(uint64_t data) {
+// BiSS-C 6-bit CRC of 28 bit data (26 position + 2 err/wrn)
+uint8_t Jtw26::crc6(uint64_t data) {
   uint8_t crc;
   uint64_t idx;
-  idx = ((data >> 24) & 0b000011);
+  idx = ((data >> 24) & 0b001111);
   crc = ((data >> 18) & 0b111111);
   idx = crc ^ CRC6[idx];
   crc = ((data >> 12) & 0b111111);

@@ -1,11 +1,11 @@
 // -----------------------------------------------------------------------------------
-// axis servo TMC5160 stepper motor driver
+// axis servo TMC2130 and TMC5160 DC motor driver
 #pragma once
 
 #include <Arduino.h>
 #include "../../../../../Common.h"
 
-#ifdef SERVO_TMC5160_PRESENT
+#ifdef SERVO_DC_TMC_SPI_PRESENT
 
 #include "../ServoDriver.h"
 
@@ -15,7 +15,7 @@
 
 #include <TMCStepper.h> // https://github.com/teemuatlut/TMCStepper
 
-typedef struct ServoTmcSpiPins {
+typedef struct ServoDcTmcSpiPins {
   int16_t step;
   int16_t dir;
   int16_t enable;
@@ -25,21 +25,21 @@ typedef struct ServoTmcSpiPins {
   int16_t m2;
   int16_t m3;
   int16_t fault;
-} ServoTmcPins;
+} ServoDcTmcPins;
 
-typedef struct ServoTmcSettings {
+typedef struct ServoDcTmcSettings {
   int16_t model;
   int8_t  status;
   int32_t velocityMax;   // maximum velocity in steps/second
   int32_t acceleration;  // acceleration steps/second/second
   int16_t microsteps;
   int16_t current;
-} ServoTmcSettings;
+} ServoDcTmcSettings;
 
-class ServoTmc5160 : public ServoDriver {
+class ServoDcTmcSPI : public ServoDriver {
   public:
     // constructor
-    ServoTmc5160(uint8_t axisNumber, const ServoTmcPins *Pins, const ServoTmcSettings *TmcSettings);
+    ServoDcTmcSPI(uint8_t axisNumber, const ServoDcTmcPins *Pins, const ServoDcTmcSettings *TmcSettings);
 
     // decodes driver model and sets up the pin modes
     void init();
@@ -53,27 +53,17 @@ class ServoTmc5160 : public ServoDriver {
     // update status info. for driver
     void updateStatus();
 
-    // calibrate the motor if required
-    void calibrateDriver();
-
-    const ServoTmcSettings *Settings;
+    const ServoDcTmcSettings *Settings;
 
   private:
-    float rSense = 0.075F;
 
-    bool stealthChop() { 
-      if ((axisNumber == 1 && AXIS1_DRIVER_DECAY == AXIS1_DRIVER_DECAY_GOTO && AXIS1_DRIVER_DECAY == STEALTHCHOP) ||
-         (axisNumber == 2 && AXIS2_DRIVER_DECAY == AXIS2_DRIVER_DECAY_GOTO && AXIS2_DRIVER_DECAY == STEALTHCHOP)) return true; else return false;
-    }
+    TMCStepper *driver;
 
-    TMC5160Stepper *driver;
-
-    int16_t currentRms;
     bool powered = false;
     float currentVelocity = 0.0F;
     float acceleration;
     float accelerationFs;
-    const ServoTmcSpiPins *Pins;
+    const ServoDcTmcSpiPins *Pins;
 };
 
 #endif
