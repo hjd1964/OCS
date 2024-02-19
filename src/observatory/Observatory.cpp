@@ -10,8 +10,6 @@
 #include "../libApp/weatherSensor/WeatherSensor.h"
 #include "../libApp/relay/Relay.h"
 #include "../lib/sense/Sense.h"
-#include "../lib/tls/Tls.h"
-
 #include "power/Power.h"
 #include "roof/Roof.h"
 #include "safety/Safety.h"
@@ -294,7 +292,20 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
 
   #if TIME_LOCATION_SOURCE != OFF
-    tls.init();
+    // get time ready
+    #if TIME_LOCATION_SOURCE == DS3231
+      tls = new TlsDs3231;
+    #elif TIME_LOCATION_SOURCE == DS3234
+      tls = new TlsDs3234;
+    #elif TIME_LOCATION_SOURCE == NTP
+      tls = new TlsNTP;
+    #elif TIME_LOCATION_SOURCE == SD3031
+      tls = new TlsSd3031;
+    #elif TIME_LOCATION_SOURCE == TEENSY
+      tls = new TlsTeensy;
+    #endif
+
+    tls->init();
     #if TIME_LOCATION_SOURCE != NTP
       startupTime = now();
     #endif
@@ -352,7 +363,7 @@ void Observatory::connectionCheck() {
         #endif
 
         #if TIME_LOCATION_SOURCE == NTP
-          tls.restart();
+          tls->restart();
         #endif
 
         #if CONNECT_FAIL_WATCHDOG == OFF

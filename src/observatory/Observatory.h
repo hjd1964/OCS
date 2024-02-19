@@ -6,6 +6,12 @@
 #include "../Common.h"
 #include "../libApp/commands/ProcessCmds.h"
 
+#include "../lib/tls/ds3231/DS3231.h"
+#include "../lib/tls/ds3234/DS3234.h"
+#include "../lib/tls/sd3031/SD3031.h"
+#include "../lib/tls/ntp/NTP.h"
+#include "../lib/tls/teensy/Teensy.h"
+
 typedef struct InitError {
   uint8_t nv:1;       // NV data size/structure error (disables writes to NV)
   uint8_t value:1;    // invalid value error
@@ -41,6 +47,7 @@ class Observatory {
     Firmware firmware;
     bool fastNTPSync = false;
     IPAddress connectCheckIP = IPAddress CONNECT_IP_ADDR;
+    TimeLocationSource *tls;
 };
 
 extern Observatory observatory;
