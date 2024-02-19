@@ -313,6 +313,9 @@
 #ifndef AXIS1_LIMIT_MAX
 #define AXIS1_LIMIT_MAX                180                         // in degrees
 #endif
+#ifndef AXIS1_SYNC_THRESHOLD
+#define AXIS1_SYNC_THRESHOLD           OFF                         // sync threshold in counts (required for absolute encoders) or OFF
+#endif
 #ifndef AXIS1_SENSE_HOME
 #define AXIS1_SENSE_HOME               OFF
 #endif
@@ -378,20 +381,22 @@
 #endif
 #if AXIS1_DRIVER_MODEL >= SERVO_DRIVER_FIRST
   #define AXIS1_SERVO_PRESENT
-  #if AXIS1_DRIVER_MODEL == SERVO_TMC2209
-    #error "Config.h: TMC Drivers are not supported!"
-  #else
-    #define AXIS1_SERVO_DC
-  #endif
 
-  #ifndef AXIS1_SERVO_MAX_VELOCITY
-  #define AXIS1_SERVO_MAX_VELOCITY      100                       // max velocity, in % for DC, in steps/s for SERVO_TMC2209
+  #ifndef AXIS1_SERVO_VELOCITY_MAX
+  #define AXIS1_SERVO_VELOCITY_MAX      100                       // max velocity, in % for DC, in steps/s for SERVO_TMC2209
+  #endif
+  #ifndef AXIS1_SERVO_VELOCITY_FACTOR
+  #define AXIS1_SERVO_VELOCITY_FACTOR   frequency*0               // converts frequency (counts per second) to velocity (in steps per second or DC motor PWM ADU range)
   #endif
   #ifndef AXIS1_SERVO_ACCELERATION
-  #define AXIS1_SERVO_ACCELERATION      20                        // acceleration, in %/s/s for DC, in steps/s/s for SERVO_TMC2209
+  #define AXIS1_SERVO_ACCELERATION      20                        // acceleration, in %/s
   #endif
-  #ifndef AXIS1_SERVO_SYNC_THRESHOLD
-  #define AXIS1_SERVO_SYNC_THRESHOLD    OFF                       // sync threshold in counts or OFF (for absolute encoders)
+  #ifndef AXIS1_SERVO_FEEDBACK
+  #define AXIS1_SERVO_FEEDBACK          FB_PID                    // type of feedback: FB_PID
+  #endif
+
+  #ifndef AXIS1_SERVO_FLTR
+  #define AXIS1_SERVO_FLTR              OFF
   #endif
 
   #ifndef AXIS1_PID_P
@@ -430,12 +435,12 @@
   #ifndef AXIS1_SERVO_PH2_STATE
   #define AXIS1_SERVO_PH2_STATE        LOW
   #endif
-  #define AXIS1_PARAMETER1             AXIS1_SERVO_P
-  #define AXIS1_PARAMETER2             AXIS1_SERVO_I
-  #define AXIS1_PARAMETER3             AXIS1_SERVO_D
-  #define AXIS1_PARAMETER4             AXIS1_SERVO_P_GOTO
-  #define AXIS1_PARAMETER5             AXIS1_SERVO_I_GOTO
-  #define AXIS1_PARAMETER6             AXIS1_SERVO_D_GOTO
+  #define AXIS1_PARAMETER1             AXIS1_PID_P
+  #define AXIS1_PARAMETER2             AXIS1_PID_I
+  #define AXIS1_PARAMETER3             AXIS1_PID_D
+  #define AXIS1_PARAMETER4             AXIS1_PID_P_GOTO
+  #define AXIS1_PARAMETER5             AXIS1_PID_I_GOTO
+  #define AXIS1_PARAMETER6             AXIS1_PID_D_GOTO
 #endif
 
 #ifndef AXIS2_DRIVER_MODEL
@@ -485,6 +490,9 @@
 #endif
 #ifndef AXIS2_SENSE_LIMIT_MAX
 #define AXIS2_SENSE_LIMIT_MAX          OFF
+#endif
+#ifndef AXIS2_SYNC_THRESHOLD
+#define AXIS2_SYNC_THRESHOLD          OFF
 #endif
 #ifndef AXIS2_SENSE_LIMIT_INIT
 #define AXIS2_SENSE_LIMIT_INIT         INPUT_PULLUP
@@ -536,64 +544,66 @@
 #endif
 #if AXIS2_DRIVER_MODEL >= SERVO_DRIVER_FIRST
   #define AXIS2_SERVO_PRESENT
-  #if AXIS1_DRIVER_MODEL == SERVO_TMC2209
-    #error "Config.h: TMC Drivers are not supported!"
-  #else
-    #define AXIS1_SERVO_DC
-  #endif
 
-  #ifndef AXIS2_SERVO_MAX_VELOCITY
-  #define AXIS2_SERVO_MAX_VELOCITY      100
+  #ifndef AXIS2_SERVO_VELOCITY_MAX
+  #define AXIS2_SERVO_VELOCITY_MAX      100
+  #endif
+  #ifndef AXIS2_SERVO_VELOCITY_FACTOR
+  #define AXIS2_SERVO_VELOCITY_FACTOR   frequency*0
   #endif
   #ifndef AXIS2_SERVO_ACCELERATION
   #define AXIS2_SERVO_ACCELERATION      20
   #endif
-  #ifndef AXIS2_SERVO_SYNC_THRESHOLD
-  #define AXIS2_SERVO_SYNC_THRESHOLD    OFF
+  #ifndef AXIS2_SERVO_FEEDBACK
+  #define AXIS2_SERVO_FEEDBACK          FB_PID
   #endif
 
-  #ifndef AXIS2_SERVO_P
-  #define AXIS2_SERVO_P                2.0
+  #ifndef AXIS2_SERVO_FLTR
+  #define AXIS2_SERVO_FLTR              OFF
   #endif
-  #ifndef AXIS2_SERVO_I
-  #define AXIS2_SERVO_I                5.0
+
+  #ifndef AXIS2_PID_P
+  #define AXIS2_PID_P                   2.0
   #endif
-  #ifndef AXIS2_SERVO_D
-  #define AXIS2_SERVO_D                1.0
+  #ifndef AXIS2_PID_I
+  #define AXIS2_PID_I                   5.0
   #endif
-  #ifndef AXIS2_SERVO_P_GOTO
-  #define AXIS2_SERVO_P_GOTO           AXIS2_SERVO_P
+  #ifndef AXIS2_PID_D
+  #define AXIS2_PID_D                   1.0
   #endif
-  #ifndef AXIS2_SERVO_I_GOTO
-  #define AXIS2_SERVO_I_GOTO           AXIS2_SERVO_I
+  #ifndef AXIS2_PID_P_GOTO
+  #define AXIS2_PID_P_GOTO              AXIS2_PID_P
   #endif
-  #ifndef AXIS2_SERVO_D_GOTO
-  #define AXIS2_SERVO_D_GOTO           AXIS2_SERVO_D
+  #ifndef AXIS2_PID_I_GOTO
+  #define AXIS2_PID_I_GOTO              AXIS2_PID_I
+  #endif
+  #ifndef AXIS2_PID_D_GOTO
+  #define AXIS2_PID_D_GOTO              AXIS2_PID_D
   #endif
   #ifndef AXIS2_ENCODER
-  #define AXIS2_ENCODER                AB
+  #define AXIS2_ENCODER                 AB
   #endif
   #ifndef AXIS2_ENCODER_ORIGIN
-  #define AXIS2_ENCODER_ORIGIN         0
+  #define AXIS2_ENCODER_ORIGIN          0
   #endif
   #ifndef AXIS2_ENCODER_REVERSE
-  #define AXIS2_ENCODER_REVERSE        OFF
+  #define AXIS2_ENCODER_REVERSE         OFF
   #endif
   #ifndef AXIS2_SERVO_FEEDBACK
-  #define AXIS2_SERVO_FEEDBACK         FB_PID
+  #define AXIS2_SERVO_FEEDBACK          FB_PID
   #endif
   #ifndef AXIS2_SERVO_PH1_STATE
-  #define AXIS2_SERVO_PH1_STATE        LOW
+  #define AXIS2_SERVO_PH1_STATE         LOW
   #endif
   #ifndef AXIS2_SERVO_PH2_STATE
-  #define AXIS2_SERVO_PH2_STATE        LOW
+  #define AXIS2_SERVO_PH2_STATE         LOW
   #endif
-  #define AXIS2_PARAMETER1             AXIS2_SERVO_P
-  #define AXIS2_PARAMETER2             AXIS2_SERVO_I
-  #define AXIS2_PARAMETER3             AXIS2_SERVO_D
-  #define AXIS2_PARAMETER4             AXIS2_SERVO_P_GOTO
-  #define AXIS2_PARAMETER5             AXIS2_SERVO_I_GOTO
-  #define AXIS2_PARAMETER6             AXIS2_SERVO_D_GOTO
+  #define AXIS2_PARAMETER1              AXIS2_PID_P
+  #define AXIS2_PARAMETER2              AXIS2_PID_I
+  #define AXIS2_PARAMETER3              AXIS2_PID_D
+  #define AXIS2_PARAMETER4              AXIS2_PID_P_GOTO
+  #define AXIS2_PARAMETER5              AXIS2_PID_I_GOTO
+  #define AXIS2_PARAMETER6              AXIS2_PID_D_GOTO
 #endif
 
 #if defined(AXIS1_STEP_DIR_LEGACY) || defined(AXIS2_STEP_DIR_LEGACY)
@@ -604,12 +614,11 @@
   #define STEP_DIR_MOTOR_PRESENT
 #endif
 
-#if defined(AXIS1_SERVO_PRESENT) || defined(AXIS2_SERVO_PRESENT)
-  #define SERVO_MOTOR_PRESENT
-#endif
-
-#if defined(AXIS1_SERVO_DC) || defined(AXIS2_SERVO_DC)
+// flag presence of servo motors
+#if AXIS1_DRIVER_MODEL == SERVO_PE || AXIS1_DRIVER_MODEL == SERVO_EE || \
+    AXIS2_DRIVER_MODEL == SERVO_PE || AXIS2_DRIVER_MODEL == SERVO_EE
   #define SERVO_DC_PRESENT
+  #define SERVO_MOTOR_PRESENT
 #endif
 
 #if defined(STEP_DIR_MOTOR_PRESENT) || defined(SERVO_MOTOR_PRESENT)

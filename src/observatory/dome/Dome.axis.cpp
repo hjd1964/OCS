@@ -14,22 +14,34 @@
       PulseDir encAxis1(AXIS1_ENCODER_A_PIN, AXIS1_ENCODER_B_PIN, 1);
     #elif AXIS1_ENCODER == PULSE_ONLY
       PulseOnly encAxis1(AXIS1_ENCODER_A_PIN, &servoControlAxis1.directionHint, 1);
+    #elif AXIS1_ENCODER == VIRTUAL
+      VirtualEnc encAxis1(1);
     #elif AXIS1_ENCODER == AS37_H39B_B
       As37h39bb encAxis1(AXIS1_ENCODER_A_PIN, AXIS1_ENCODER_B_PIN, 1);
     #elif AXIS1_ENCODER == SERIAL_BRIDGE
       SerialBridge encAxis1(1);
     #endif
 
+    #if AXIS1_SERVO_FLTR == KALMAN
+      KalmanFilter filterAxis1(AXIS1_SERVO_FLTR_MEAS_U, AXIS1_SERVO_FLTR_VARIANCE);
+    #elif AXIS1_SERVO_FLTR == ROLLING
+      RollingFilter filterAxis1(AXIS1_SERVO_FLTR_WSIZE);
+    #elif AXIS1_SERVO_FLTR == WINDOWING
+      WindowingFilter filterAxis1(AXIS1_SERVO_FLTR_WSIZE);
+    #elif AXIS1_SERVO_FLTR == OFF
+      Filter filterAxis1;
+    #endif
+
     #if AXIS1_SERVO_FEEDBACK == FB_PID
       Pid pidAxis1(AXIS1_PID_P, AXIS1_PID_I, AXIS1_PID_D, AXIS1_PID_P_GOTO, AXIS1_PID_I_GOTO, AXIS1_PID_D_GOTO);
     #endif
 
-    #if defined(AXIS1_SERVO_DC)
+    #if AXIS1_DRIVER_MODEL == SERVO_EE || AXIS1_DRIVER_MODEL == SERVO_PE
       const ServoDcPins ServoPinsAxis1 = {AXIS1_SERVO_PH1_PIN, AXIS1_SERVO_PH1_STATE, AXIS1_SERVO_PH2_PIN, AXIS1_SERVO_PH2_STATE, AXIS1_ENABLE_PIN, AXIS1_ENABLE_STATE, AXIS1_FAULT_PIN};
-      const ServoDcSettings ServoSettingsAxis1 = {AXIS1_DRIVER_MODEL, AXIS1_DRIVER_STATUS, AXIS1_SERVO_MAX_VELOCITY, AXIS1_SERVO_ACCELERATION};
+      const ServoDcSettings ServoSettingsAxis1 = {AXIS1_DRIVER_MODEL, AXIS1_DRIVER_STATUS, AXIS1_SERVO_VELOCITY_MAX, AXIS1_SERVO_ACCELERATION};
       ServoDc driver1(1, &ServoPinsAxis1, &ServoSettingsAxis1);
     #endif
-    ServoMotor motor1(1, ((ServoDriver*)&driver1), &encAxis1, AXIS1_ENCODER_ORIGIN, AXIS1_ENCODER_REVERSE == ON, &pidAxis1, &servoControlAxis1, AXIS1_SERVO_SYNC_THRESHOLD);
+    ServoMotor motor1(1, ((ServoDriver*)&driver1), &filterAxis1, &encAxis1, AXIS1_ENCODER_ORIGIN, AXIS1_ENCODER_REVERSE == ON, &pidAxis1, &servoControlAxis1, AXIS1_SYNC_THRESHOLD);
   #endif
 
   #ifdef AXIS1_DRIVER_PRESENT
@@ -58,6 +70,8 @@
         PulseDir encAxis2(AXIS2_ENCODER_A_PIN, AXIS2_ENCODER_B_PIN, 2);
       #elif AXIS2_ENCODER == PULSE_ONLY
         PulseOnly encAxis2(AXIS2_ENCODER_A_PIN, &servoControlAxis2.directionHint, 2);
+      #elif AXIS1_ENCODER == VIRTUAL
+        VirtualEnc encAxis1(1);
       #elif AXIS2_ENCODER == AS37_H39B_B
         As37h39bb encAxis2(AXIS2_ENCODER_A_PIN, AXIS2_ENCODER_B_PIN, 2);
       #elif AXIS2_ENCODER == SERIAL_BRIDGE
@@ -68,12 +82,22 @@
         Pid pidAxis2(AXIS2_PID_P, AXIS2_PID_I, AXIS2_PID_D, AXIS2_PID_P_GOTO, AXIS2_PID_I_GOTO, AXIS2_PID_D_GOTO);
       #endif
 
-      #if defined(AXIS2_SERVO_DC)
+      #if AXIS2_SERVO_FLTR == KALMAN
+        KalmanFilter filterAxis2(AXIS2_SERVO_FLTR_MEAS_U, AXIS2_SERVO_FLTR_VARIANCE);
+      #elif AXIS2_SERVO_FLTR == ROLLING
+        RollingFilter filterAxis2(AXIS2_SERVO_FLTR_WSIZE);
+      #elif AXIS2_SERVO_FLTR == WINDOWING
+        WindowingFilter filterAxis2(AXIS2_SERVO_FLTR_WSIZE);
+      #elif AXIS2_SERVO_FLTR == OFF
+        Filter filterAxis2;
+      #endif
+
+      #if AXIS2_DRIVER_MODEL == SERVO_EE || AXIS2_DRIVER_MODEL == SERVO_PE
         const ServoDcPins ServoPinsAxis2 = {AXIS2_SERVO_PH1_PIN, AXIS2_SERVO_PH1_STATE, AXIS2_SERVO_PH2_PIN, AXIS2_SERVO_PH2_STATE, AXIS2_ENABLE_PIN, AXIS2_ENABLE_STATE, AXIS2_FAULT_PIN};
-        const ServoDcSettings ServoSettingsAxis2 = {AXIS2_DRIVER_MODEL, AXIS2_DRIVER_STATUS, AXIS2_SERVO_MAX_VELOCITY, AXIS2_SERVO_ACCELERATION};
+        const ServoDcSettings ServoSettingsAxis2 = {AXIS2_DRIVER_MODEL, AXIS2_DRIVER_STATUS, AXIS2_SERVO_VELOCITY_MAX, AXIS2_SERVO_ACCELERATION};
         ServoDc driver2(2, &ServoPinsAxis2, &ServoSettingsAxis2);
       #endif
-      ServoMotor motor2(2, ((ServoDriver*)&driver2), &encAxis2, AXIS2_ENCODER_ORIGIN, AXIS2_ENCODER_REVERSE == ON, &pidAxis2, &servoControlAxis2, AXIS2_SERVO_SYNC_THRESHOLD);
+      ServoMotor motor2(2, ((ServoDriver*)&driver2), &filterAxis2, &encAxis2, AXIS2_ENCODER_ORIGIN, AXIS2_ENCODER_REVERSE == ON, &pidAxis2, &servoControlAxis2, AXIS2_SYNC_THRESHOLD);
     #endif
 
     #ifdef AXIS2_DRIVER_PRESENT
