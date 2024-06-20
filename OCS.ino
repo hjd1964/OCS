@@ -38,7 +38,7 @@
 // Firmware version ----------------------------------------------------------------------------------------------------------------
 #define FirmwareName                "OCS"
 #define FirmwareVersionMajor        3
-#define FirmwareVersionMinor        08     // minor version 00 to 99
+#define FirmwareVersionMinor        8      // minor version 00 to 99
 #define FirmwareVersionPatch        "a"    // for example major.minor patch: 10.03c
 #define FirmwareVersionConfig       2      // internal, for tracking configuration file changes
 
