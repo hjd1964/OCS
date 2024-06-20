@@ -57,7 +57,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
     //  :RSL#  Roof Status Last Error
     //         Returns: status string
     if (command[1] == 'S' && parameter[0] == 'L' && parameter[1] == 0) {
-      strcpy(reply, roof.getLastError());
+      if (strlen(roof.getLastError()) > 0) { strcpy(reply, roof.getLastError()); } else { strcpy(reply, "No Error"); }
       *numericReply = false;
     } else *commandError = CE_CMD_UNKNOWN;
 	} else
