@@ -2,7 +2,7 @@
  * Title       Observatory-Control-System
  * by          Howard Dutton
  *
- * Copyright (C) 2012 to 2023 Howard Dutton
+ * Copyright (C) 2012 to 2024 Howard Dutton
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 #define FirmwareName                "OCS"
 #define FirmwareVersionMajor        3
 #define FirmwareVersionMinor        07     // minor version 00 to 99
-#define FirmwareVersionPatch        "e"    // for example major.minor patch: 10.03c
+#define FirmwareVersionPatch        "f"    // for example major.minor patch: 10.03c
 #define FirmwareVersionConfig       2      // internal, for tracking configuration file changes
 
 #include "src/Common.h"
