@@ -104,7 +104,11 @@
 
     time_t t = getStatusDateTimeAndUnitStr(temp);
 
-    sprintf(temp, "%02d/%02d/%04d", month(t), day(t), year(t));
+    #if DISPLAY_LANGUAGE == L_us
+      sprintf(temp, "%02d/%02d/%04d", month(t), day(t), year(t));
+    #else
+      sprintf(temp, "%02d/%02d/%04d", day(t), month(t), year(t));
+    #endif
     www.sendContent("stat_date|"); www.sendContent(temp); www.sendContent("\n");
 
     sprintf(temp, "%02d:%02d:%02d", hour(t), minute(t), second(t));
