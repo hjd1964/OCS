@@ -87,7 +87,7 @@
 
 // in milliseconds
 #ifndef WEATHER_SENSOR_SAMPLE_PERIOD
-#define WEATHER_SENSOR_SAMPLE_PERIOD  5000
+#define WEATHER_SENSOR_SAMPLE_PERIOD  5000       // recommended <= 30 seconds
 #endif
 
 #if DEBUG_CONNECT_CHECK == ON
