@@ -156,7 +156,7 @@ CommandError Dome::findHome() {
   CommandError e = CE_NONE;
 
   #if AXIS1_SENSE_HOME != OFF
-    axis1.setFrequencySlew(goTo.rate);
+    axis1.setFrequencySlew(AXIS1_SLEW_RATE);
     e = axis1.autoSlewHome();
     if (e == CE_NONE) homing = true;
   #else
@@ -166,7 +166,7 @@ CommandError Dome::findHome() {
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       #if AXIS2_SENSE_HOME != OFF
-        axis2.setFrequencySlew(goTo.rate);
+        axis2.setFrequencySlew(AXIS2_SLEW_RATE);
         e = axis2.autoSlewHome();
         if (e == CE_NONE) {
           homing = true;
