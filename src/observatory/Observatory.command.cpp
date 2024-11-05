@@ -6,7 +6,7 @@
 
 #include "../lib/convert/Convert.h"
 #include "../lib/sense/Sense.h"
-#include "../lib/tls/Tls.h"
+#include "../lib/tls/TLS.h"
 #include "../libApp/analog/Analog.h"
 
 #include "Observatory.h"
