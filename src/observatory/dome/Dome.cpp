@@ -96,7 +96,7 @@ CommandError Dome::gotoAzimuthTarget() {
   VF("MSG: Dome, goto azimuth target coordinate set ("); V(targetAzm); VL("°)");
   VLF("MSG: Dome, starting goto");
 
-  axis1.enable(true);
+  if (!axis1.isEnabled()) axis1.enable(true);
   axis1.setTargetCoordinate(targetAzm);
 
   if (axis1.isSlewing()) return CE_NONE;
@@ -114,7 +114,7 @@ CommandError Dome::syncAzimuthTarget() {
 
   VF("MSG: Dome, sync azimuth target coordinate set ("); V(targetAzm); VL("°)");
   reset();
-  axis1.enable(true);
+  if (!axis1.isEnabled()) axis1.enable(true);
   axis1.setInstrumentCoordinate(targetAzm);
 
   return CE_NONE;
@@ -131,7 +131,7 @@ CommandError Dome::gotoAltitudeTarget() {
     VF("MSG: Dome, goto altitude target coordinate set ("); V(targetAlt); VL("°)");
     VLF("MSG: Dome, starting goto");
 
-    axis2.enable(true);
+    if (!axis1.isEnabled()) axis2.enable(true);
     axis2.setTargetCoordinate(targetAlt);
 
     if (axis2.isSlewing()) return CE_NONE;
