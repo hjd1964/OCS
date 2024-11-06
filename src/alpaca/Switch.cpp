@@ -9,7 +9,7 @@
 #include "Alpaca.h"
 #include "../libApp/relay/Relay.h"
 
-extern StaticJsonDocument<1000> alpacaJsonDoc;
+extern JsonDocument alpacaJsonDoc;
 int32_t switchConnected = 0;
 int32_t maxSwitch = 0;
 int32_t switchRelay[10];

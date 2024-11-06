@@ -8,7 +8,7 @@
 #include <ArduinoJson.h>
 #include "Alpaca.h"
 
-StaticJsonDocument<1000> alpacaJsonDoc;
+JsonDocument alpacaJsonDoc;
 uint32_t alpacaServerTransactionID = 0;
 
 // common
@@ -94,7 +94,7 @@ void alpacaDefaultAction() {
 
 void alpacaDefaultSupportedActions() {
   alpacaJsonStart();
-  alpacaJsonDoc.createNestedArray("Value");
+  alpacaJsonDoc["Value"].to<JsonArray>();
   alpacaJsonFinish(NoException, "");
 }
 

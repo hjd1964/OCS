@@ -10,7 +10,7 @@
 #include "../observatory/weather/Weather.h"
 #include "../libApp/weatherSensor/WeatherSensor.h"
 
-extern StaticJsonDocument<1000> alpacaJsonDoc;
+extern JsonDocument alpacaJsonDoc;
 int32_t observingConditionsConnected = 0;
 
 void alpacaObservingConditionsConnected() {

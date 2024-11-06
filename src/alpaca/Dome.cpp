@@ -11,7 +11,7 @@
 #include "../observatory/roof/Roof.h"
 #include "../observatory/dome/Dome.h"
 
-extern StaticJsonDocument<1000> alpacaJsonDoc;
+extern JsonDocument alpacaJsonDoc;
 int32_t domeConnected = 0;
 
 #define SHUTTER_STATUS_OPEN 0

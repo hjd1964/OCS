@@ -9,18 +9,18 @@
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 
-extern StaticJsonDocument<1000> alpacaJsonDoc;
+extern JsonDocument alpacaJsonDoc;
 
 void alpacaManagementApiVersions() {
   alpacaJsonStart();
-  JsonArray versions = alpacaJsonDoc.createNestedArray("Value");
+  JsonArray versions = alpacaJsonDoc["Value"].to<JsonArray>();
   versions.add(1);
   alpacaJsonFinish(NoException, "");
 }
 
 void alpacaManagementDescription() {
   alpacaJsonStart();
-  JsonObject values = alpacaJsonDoc.createNestedObject("Value");
+  JsonObject values = alpacaJsonDoc["Value"].to<JsonObject>();
   values["ServerName"] = "OCS Observatory Control System";
   values["Manufacturer"] = "OnCue";
   values["ManufacturerVersion"] = ocsVersion;
@@ -30,10 +30,8 @@ void alpacaManagementDescription() {
 
 void alpacaManagementConfiguredDevices() {
   alpacaJsonStart();
-
-  JsonArray devices = alpacaJsonDoc.createNestedArray("Value");
-  StaticJsonDocument<1000> device;
-
+  JsonArray devices = alpacaJsonDoc["Value"].to<JsonArray>();
+  JsonDocument device;
   #if defined(WEATHER_PRESENT)
     device.clear();
     device["DeviceName"] = "OCS Safety Monitor";

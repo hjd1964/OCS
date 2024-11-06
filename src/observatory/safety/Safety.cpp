@@ -35,6 +35,8 @@ bool Safety::isSafe() {
 
   #ifdef WEATHER_PRESENT
     float f;
+    UNUSED(f);
+
     #if WEATHER_RAIN == ON
       // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
       f = weatherSensor.rain();
