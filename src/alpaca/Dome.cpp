@@ -236,6 +236,7 @@ void alpacaDomeFindHome() {
   alpacaJsonStart();
   if (domeConnected == 0) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return;  }
   #ifdef DOME_PRESENT
+    if (dome.isParked()) dome.unpark();
     if (dome.findHome() != CE_NONE) {
       alpacaJsonFinish(InvalidOperationException, InvalidOperationMessage); return;
     }
@@ -293,6 +294,7 @@ void alpacaDomeSlewToAltitude() {
       if (altitude < 0.0F || altitude > 90.0F) {
         alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; 
       }
+      if (dome.isParked()) dome.unpark();
       dome.setTargetAltitude(altitude);
       if (dome.gotoAltitudeTarget() != CE_NONE) {
         alpacaJsonFinish(InvalidOperationException, InvalidOperationMessage); return;
