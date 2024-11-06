@@ -312,8 +312,8 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
 
   // start observatory monitor task
-  VF("MSG: Observatory, start monitor task (rate 100ms priority 4)... ");
-  if (tasks.add(100, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
+  VF("MSG: Observatory, start monitor task (rate 200ms priority 4)... ");
+  if (tasks.add(200, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
 }
 
 void Observatory::connectionCheck() {
