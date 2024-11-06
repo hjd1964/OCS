@@ -71,8 +71,11 @@ class Dome {
 
     // set dome goto target altitude (0 to 90 degrees)
     inline void setTargetAltitude(float alt) {
-      if (alt < 0.0F || alt > 90.0F) return;
-      targetAlt = alt;
+      targetAlt = axis2.getInstrumentCoordinate();
+      if (alt >= (float)(AXIS2_LIMIT_MIN) && alt <= (float)(AXIS2_LIMIT_MAX)) targetAlt = alt;
+
+      if (targetAlt < (float)(AXIS2_LIMIT_MIN)) targetAlt = (float)(AXIS2_LIMIT_MIN);
+      if (targetAlt > (float)(AXIS2_LIMIT_MAX)) targetAlt = (float)(AXIS2_LIMIT_MAX);
     }
 
     inline float dist(float z1, float z2) { return abs(z1 - z2); }
@@ -80,19 +83,28 @@ class Dome {
     // set dome goto target azimuth (0 to 360 degrees)
     inline void setTargetAzimuth(float azm) {
       float z1 = azm - 360.0F; // -360 to 0
+      bool valid1 = (z1 >= (float)(AXIS1_LIMIT_MIN) && z1 <= (float)(AXIS1_LIMIT_MAX));
+
       float z2 = azm;          // 0 to 360
-      if (dist(targetAzm, z1) <= dist(targetAzm, z2) && z1 >= AXIS1_LIMIT_MIN && z1 <= AXIS1_LIMIT_MAX) {
-        targetAzm = z1;
-      } else
-      if (dist(targetAzm, z2) <= dist(targetAzm, z1) && z2 >= AXIS1_LIMIT_MIN && z2 <= AXIS1_LIMIT_MAX) {
+      bool valid2 = (z2 >= (float)(AXIS1_LIMIT_MIN) && z2 <= (float)(AXIS1_LIMIT_MAX));
+
+      targetAzm = axis1.getInstrumentCoordinate();
+
+      if (dist(targetAzm, z2) <= dist(targetAzm, z1) && valid2) {
         targetAzm = z2;
       } else
-      if (z1 >= AXIS1_LIMIT_MIN && z1 <= AXIS1_LIMIT_MAX) {
+      if (dist(targetAzm, z1) <= dist(targetAzm, z2) && valid1) {
         targetAzm = z1;
       } else
-      if (z2 >= AXIS1_LIMIT_MIN && z2 <= AXIS1_LIMIT_MAX) {
+      if (valid2) {
         targetAzm = z2;
-      } else return;
+      } else
+      if (valid1) {
+        targetAzm = z1;
+      }
+
+      if (targetAzm < (float)(AXIS1_LIMIT_MIN)) targetAzm = (float)(AXIS1_LIMIT_MIN);
+      if (targetAzm > (float)(AXIS1_LIMIT_MAX)) targetAzm = (float)(AXIS1_LIMIT_MAX);
     }
 
     // get dome azimuth (0 to 360 degrees)
