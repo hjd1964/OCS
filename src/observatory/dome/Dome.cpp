@@ -259,6 +259,16 @@ CommandError Dome::unpark() {
     }
   #endif
 
+  // wait for unpark to finish
+  unsigned long timeout = millis() + 500;
+  while (
+    (axis1.isSlewing()
+    #if AXIS2_DRIVER_MODEL != OFF
+      || axis2.isSlewing()
+    #endif
+    ) && (long)(millis() - timeout) < 0
+  ) { };
+
   if (e == CE_NONE) {
     settings.park.state = PS_UNPARKED;
     nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
