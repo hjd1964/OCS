@@ -31,7 +31,11 @@
 
     time_t t = getStatusDateTimeAndUnitStr(temp2);
 
-    sprintf(temp1, "%02d/%02d/%04d", month(t), day(t), year(t));
+    #if DISPLAY_LANGUAGE == L_us
+      sprintf(temp1, "%02d/%02d/%04d", month(t), day(t), year(t));
+    #else
+      sprintf(temp1, "%02d/%02d/%04d", day(t), month(t), year(t));
+    #endif
     sprintf_P(temp, htmlInnerStatusDate, temp2, temp1);
     www.sendContent(temp);
 
