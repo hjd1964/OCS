@@ -66,17 +66,19 @@ class Dome {
       return z;
     }
 
-    // get dome altitude (0 to 90 degrees)
-    inline float getTargetAltitude() { return targetAlt; }
+    #if AXIS2_DRIVER_MODEL != OFF
+      // get dome altitude (0 to 90 degrees)
+      inline float getTargetAltitude() { return targetAlt; }
 
-    // set dome goto target altitude (0 to 90 degrees)
-    inline void setTargetAltitude(float alt) {
-      targetAlt = axis2.getInstrumentCoordinate();
-      if (alt >= (float)(AXIS2_LIMIT_MIN) && alt <= (float)(AXIS2_LIMIT_MAX)) targetAlt = alt;
+      // set dome goto target altitude (0 to 90 degrees)
+      inline void setTargetAltitude(float alt) {
+        targetAlt = axis2.getInstrumentCoordinate();
+        if (alt >= (float)(AXIS2_LIMIT_MIN) && alt <= (float)(AXIS2_LIMIT_MAX)) targetAlt = alt;
 
-      if (targetAlt < (float)(AXIS2_LIMIT_MIN)) targetAlt = (float)(AXIS2_LIMIT_MIN);
-      if (targetAlt > (float)(AXIS2_LIMIT_MAX)) targetAlt = (float)(AXIS2_LIMIT_MAX);
-    }
+        if (targetAlt < (float)(AXIS2_LIMIT_MIN)) targetAlt = (float)(AXIS2_LIMIT_MIN);
+        if (targetAlt > (float)(AXIS2_LIMIT_MAX)) targetAlt = (float)(AXIS2_LIMIT_MAX);
+      }
+    #endif
 
     inline float dist(float z1, float z2) { return abs(z1 - z2); }
 

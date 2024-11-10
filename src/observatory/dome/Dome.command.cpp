@@ -68,20 +68,22 @@ bool Dome::command(char reply[], char command[], char parameter[], bool *supress
       *numericReply = false;
     } else
 
-    // :DA#  Dome Get Altitude (0 to 90 degrees)
-    //         Returns: D.D
-    if (command[1] == 'A' && parameter[0] == 0) {
-      sprintF(reply, "%0.3f", dome.getAltitude());
-      *numericReply = false;
-    } else
+    #if AXIS2_DRIVER_MODEL != OFF
+      // :DA#  Dome Get Altitude (0 to 90 degrees)
+      //         Returns: D.D
+      if (command[1] == 'A' && parameter[0] == 0) {
+        sprintF(reply, "%0.3f", dome.getAltitude());
+        *numericReply = false;
+      } else
 
-    // :Da[D.D]#  Dome Set Altitude target (0 to 90 degrees)
-    //         Returns: nothing
-    if (command[1] == 'a') {
-      float altitude = atof(parameter);
-      dome.setTargetAltitude(altitude);
-      *numericReply = false;
-    } else
+      // :Da[D.D]#  Dome Set Altitude target (0 to 90 degrees)
+      //         Returns: nothing
+      if (command[1] == 'a') {
+        float altitude = atof(parameter);
+        dome.setTargetAltitude(altitude);
+        *numericReply = false;
+      } else
+    #endif
 
     // :DN#       Dome Sync Target (Azimuth only)
     //            Returns:
