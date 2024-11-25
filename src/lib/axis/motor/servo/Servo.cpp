@@ -125,6 +125,7 @@ bool ServoMotor::validateParameters(float param1, float param2, float param3, fl
 // sets motor enable on/off (if possible)
 void ServoMotor::enable(bool state) {
   driver->enable(state);
+  if (state == false) feedback->reset();
   enabled = state;
 }
 
@@ -226,17 +227,18 @@ void ServoMotor::setFrequencySteps(float frequency) {
     }
 
     currentFrequency = frequency;
-    if (encoderReverse) {
-      velocityEstimate = driver->getVelocityEstimate(currentFrequency*dir);
-    } else {
-      velocityEstimate = -driver->getVelocityEstimate(currentFrequency*dir);
-    }
 
     // change the motor rate/direction
     noInterrupts();
     step = 0;
     interrupts();
     tasks.setPeriodSubMicros(taskHandle, lastPeriod);
+  }
+
+  if (encoderReverse) {
+    velocityEstimate = driver->getVelocityEstimate(currentFrequency*dir);
+  } else {
+    velocityEstimate = -driver->getVelocityEstimate(currentFrequency*dir);
   }
 
   noInterrupts();

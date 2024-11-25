@@ -9,7 +9,7 @@
 #include "Alpaca.h"
 #include "../observatory/safety/Safety.h"
 
-extern StaticJsonDocument<1000> alpacaJsonDoc;
+extern JsonDocument alpacaJsonDoc;
 int32_t safetyMonitorConnected = 0;
 
 void alpacaSafetyMonitorConnected() {

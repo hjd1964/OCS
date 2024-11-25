@@ -92,7 +92,7 @@ const char html_main_css8[] PROGMEM =
 const char html_main_css9[] PROGMEM =
 "button { background-color:" COLOR_CONTROL "; font-weight: bold; border-radius: 5px; font-size: 12px; margin: 2px; padding: 4px 8px; }";
 const char html_main_css10[] PROGMEM =
-".obsControl { position: relative; font-size: 14px; width: 260px; height: 198px; float:left; padding: 10px; margin: 10px; "
+".obsControl { position: relative; font-size: 14px; width: 280px; height: 198px; float:left; padding: 10px; margin: 10px; "
 "background-color:" COLOR_CONTROL_BACKGROUND "; border-style: solid; border-width: 3px; border-color: " COLOR_CONTROL_BORDER "; }";
 const char html_main_css11[] PROGMEM =
 ".aStatus { background-color:" COLOR_LIGHT_BACKGROUND "; color:" COLOR_LIGHT_FOREGROUND "; width: 80px; height: 2px; float: right; padding: 0px; margin: 2px;}"
