@@ -6,9 +6,11 @@
 
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
+#include "../../lib/watchdog/Watchdog.h"
 #include "../../lib/tasks/OnTask.h"
 #include "../../lib/ethernet/webServer/WebServer.h"
 #include "../../lib/wifi/webServer/WebServer.h"
+
 #include "../../libApp/weatherSensor/WeatherSensor.h"
 
 void weatherWrapper() { weather.poll(); }

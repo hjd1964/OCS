@@ -4,6 +4,8 @@
 #ifdef DOME_PRESENT
 
 #include "../../lib/tasks/OnTask.h"
+#include "../../lib/nv/Nv.h"
+
 #include "../../observatory/Observatory.h"
 #include "../roof/Roof.h"
 

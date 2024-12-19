@@ -5,8 +5,10 @@
 #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
 #include "../../lib/tasks/OnTask.h"
-#include "../../libApp/weatherSensor/WeatherSensor.h"
 #include "../../lib/sense/Sense.h"
+
+#include "../../libApp/weatherSensor/WeatherSensor.h"
+
 #include "../weather/Weather.h"
 #include "../roof/Roof.h"
 

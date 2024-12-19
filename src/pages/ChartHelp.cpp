@@ -4,6 +4,7 @@
 #if WEATHER == ON && WEATHER_CHARTS == ON
   #include <TimeLib.h>  // from here: https://github.com/PaulStoffregen/Time
 
+  #include "../lib/watchdog/Watchdog.h"
   #include "htmlHeaders.h"
   #include "htmlScripts.h"
 

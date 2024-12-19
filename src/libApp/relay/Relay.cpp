@@ -4,8 +4,9 @@
 #include "Relay.h"
 
 #include "../../lib/tasks/OnTask.h"
-
+#include "../../lib/gpioEx/GpioEx.h"
 #include "../../lib/sense/Sense.h"
+
 #include "../../observatory/roof/Roof.h"
 
 void pollWrapper() { relay.poll(); }

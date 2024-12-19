@@ -4,12 +4,16 @@
 
 #include "Observatory.h"
 
+#include "../lib/watchdog/Watchdog.h"
+#include "../lib/tasks/OnTask.h"
+#include "../lib/nv/Nv.h"
+#include "../lib/sense/Sense.h"
 #include "../lib/ethernet/webServer/WebServer.h"
 #include "../lib/wifi/webServer/WebServer.h"
-#include "../lib/tasks/OnTask.h"
+
 #include "../libApp/weatherSensor/WeatherSensor.h"
 #include "../libApp/relay/Relay.h"
-#include "../lib/sense/Sense.h"
+
 #include "power/Power.h"
 #include "roof/Roof.h"
 #include "safety/Safety.h"
@@ -18,7 +22,6 @@
 #include "dome/Dome.h"
 
 #include "../pages/Pages.h"
-
 #include "../alpaca/Alpaca.h"
 
 #if ASCOM_ALPACA_SERVER == ON

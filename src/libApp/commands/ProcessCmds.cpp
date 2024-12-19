@@ -2,11 +2,12 @@
 // Command processing
 
 #include "../../Common.h"
+
 #include "../../lib/tasks/OnTask.h"
 #include "../../lib/convert/Convert.h"
-#include "ProcessCmds.h"
 
 #include "../../observatory/Observatory.h"
+#include "ProcessCmds.h"
 
 #ifdef MOUNT_PRESENT
   #if ST4_INTERFACE == ON && ST4_HAND_CONTROL == ON
