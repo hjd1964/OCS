@@ -2,7 +2,10 @@
 #include "PowerTile.h"
 
 #if POWER == ON
+  #include "../../lib/nv/Nv.h"
+
   #include "../../libApp/relay/Relay.h"
+
   #include "../CheckHelp.h"
 
   void powerTile() {

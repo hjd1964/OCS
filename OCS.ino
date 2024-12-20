@@ -43,10 +43,12 @@
 #define FirmwareVersionConfig       2      // internal, for tracking configuration file changes
 
 #include "src/Common.h"
-NVS nv;
-#include "src/Validate.h"
-#include "src/lib/sense/Sense.h"
+
 #include "src/lib/tasks/OnTask.h"
+#include "src/lib/nv/Nv.h"
+#include "src/lib/sense/Sense.h"
+
+#include "src/Validate.h"
 
 #include "src/observatory/Observatory.h"
 #include "src/pages/chartJS/ChartJS.h"
@@ -81,7 +83,7 @@ void setup() {
   // start low level hardware
   VLF("MSG: Setup, HAL initalize");
   HAL_INIT();
-  HAL_NV_INIT();
+  nv.init();
   delay(2000);
 
   // start any file system

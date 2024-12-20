@@ -6,8 +6,11 @@
 #ifdef THERMOSTAT_PRESENT
 
 #include "../../lib/tasks/OnTask.h"
+#include "../../lib/nv/Nv.h"
+
 #include "../../libApp/thermostatSensor/ThermostatSensor.h"
 #include "../../libApp/relay/Relay.h"
+
 #include "../roof/Roof.h"
 
 void thermostatWrapper() { thermostat.poll(); }
