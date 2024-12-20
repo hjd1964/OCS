@@ -45,7 +45,7 @@
     }
     sprintf(fileName, FS_PREFIX "L%02d%02d%02d.TXT", year(t) - 2000, month(t), day(t));
 
-    if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
+    if (WATCHDOG_DURING_SD == OFF) { watchdog.disable(); }
     File dataFile = FS.open(fileName, FILE_READ);
     if (dataFile) {
       V("MSG: makeChartJs, open log file "); V(fileName); V(" for "); V(chartId); V(" at record "); V(rec); V(" of "); VL(LOG_RECORDS_PER_DAY);
@@ -89,7 +89,7 @@
     } else {
       V("MSG: makeChartJs, opening log file "); V(fileName); VLF(" failed!");
     }
-    if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
+    if (WATCHDOG_DURING_SD == OFF) { watchdog.enable(8); }
     
     sprintf_P(temp, html_script_chartJs_C, rangeMax, rangeMin, rangeStep);
     www.sendContent(temp);

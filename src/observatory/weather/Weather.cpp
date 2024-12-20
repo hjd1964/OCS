@@ -77,7 +77,7 @@ void Weather::poll(void) {
     // Sky quality -------------------------------------------------------------
     float q = weatherSensor.skyQuality();
 
-    if (WATCHDOG_DURING_SD == OFF) { WDT_DISABLE; }
+    if (WATCHDOG_DURING_SD == OFF) { watchdog.disable(); }
 
     // Logging ------------------------------------------------------------------
     // log with 80 chars written once a minute (about 41MB a year)
@@ -213,7 +213,7 @@ void Weather::poll(void) {
     }
 
     #if WATCHDOG != OFF
-      if (WATCHDOG_DURING_SD == OFF) { WDT_ENABLE; }
+      if (WATCHDOG_DURING_SD == OFF) { watchdog.enable(8); }
     #endif
   #endif
 }

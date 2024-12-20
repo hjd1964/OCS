@@ -45,6 +45,7 @@
 #include "src/Common.h"
 
 #include "src/lib/tasks/OnTask.h"
+#include "src/lib/watchdog/Watchdog.h"
 #include "src/lib/nv/Nv.h"
 #include "src/lib/sense/Sense.h"
 
@@ -173,5 +174,5 @@ void setup() {
 
 void loop() {
   tasks.yield();
-  WDT_RESET;
+  watchdog.reset();
 }
