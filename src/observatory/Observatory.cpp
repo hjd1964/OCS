@@ -4,8 +4,8 @@
 
 #include "Observatory.h"
 
-#include "../lib/watchdog/Watchdog.h"
 #include "../lib/tasks/OnTask.h"
+#include "../lib/watchdog/Watchdog.h"
 #include "../lib/nv/Nv.h"
 #include "../lib/sense/Sense.h"
 #include "../lib/ethernet/webServer/WebServer.h"
@@ -131,7 +131,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     dome.init();
   #endif
 
-  WDT_ENABLE;
+  watchdog.enable(8);
 
   // bring network servers up
   #if OPERATIONAL_MODE == WIFI
