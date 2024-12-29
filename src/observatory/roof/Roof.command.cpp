@@ -6,7 +6,8 @@
 #ifdef ROOF_PRESENT
 
 bool Roof::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
-
+  UNUSED(supressFrame);
+  
 	if (command[0] == 'R') {
     //  :RC#  Roof Close
     //         Returns: nothing
