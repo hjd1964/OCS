@@ -53,7 +53,10 @@ bool Thermostat::command(char reply[], char command[], char parameter[], bool *s
     if (command[1] == 'T' && parameter[0] == 0) {
       float t = getTemperature();
       float h = getHumidity();
-      sprintf(reply, "%.1f,%.1f", t, h);
+      char strT[20], strH[20];
+      sprintF(strT, "%.1f", t);
+      sprintF(strH, "%.1f", h);
+      sprintf(reply, "%s,%s", strT, strH);
       *numericReply = false;
     } else
       return false;
