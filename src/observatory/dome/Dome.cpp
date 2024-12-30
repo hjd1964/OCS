@@ -39,9 +39,9 @@ void Dome::init() {
   if (!axis1.init(&motor1)) {  DLF("ERR: Axis1, no motion controller exiting!"); return;  }
   axis1.resetPositionSteps(0);
   axis1.setBacklash(settings.backlash.azimuth);
-  axis1.setFrequencyMax(AXIS1_SLEW_RATE);
+  axis1.setFrequencyMax(AXIS1_SLEW_RATE_DESIRED);
   axis1.setFrequencyMin(0.01F);
-  axis1.setFrequencySlew(AXIS1_SLEW_RATE);
+  axis1.setFrequencySlew(AXIS1_SLEW_RATE_DESIRED);
   axis1.setSlewAccelerationTime(AXIS1_ACCELERATION_TIME);
   axis1.setSlewAccelerationTimeAbort(AXIS1_RAPID_STOP_TIME);
   if (AXIS1_POWER_DOWN == ON) axis1.setPowerDownTime(DEFAULT_POWER_DOWN_TIME);
@@ -51,9 +51,9 @@ void Dome::init() {
     if (!axis2.init(&motor2)) {  DLF("ERR: Axis1, no motion controller exiting!"); return;  }
     axis2.resetPositionSteps(0);
     axis2.setBacklash(settings.backlash.altitude);
-    axis2.setFrequencyMax(AXIS2_SLEW_RATE);
+    axis2.setFrequencyMax(AXIS2_SLEW_RATE_DESIRED);
     axis2.setFrequencyMin(0.01F);
-    axis2.setFrequencySlew(AXIS2_SLEW_RATE);
+    axis2.setFrequencySlew(AXIS2_SLEW_RATE_DESIRED);
     axis2.setSlewAccelerationTime(AXIS2_ACCELERATION_TIME);
     axis2.setSlewAccelerationTimeAbort(AXIS2_RAPID_STOP_TIME);
     if (AXIS2_POWER_DOWN == ON) axis2.setPowerDownTime(DEFAULT_POWER_DOWN_TIME);
@@ -103,7 +103,7 @@ CommandError Dome::gotoAzimuthTarget() {
 
   if (axis1.isSlewing()) return CE_NONE;
 
-  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE_DESIRED);
   return e;
 }
 
@@ -138,7 +138,7 @@ CommandError Dome::gotoAltitudeTarget() {
 
     if (axis2.isSlewing()) return CE_NONE;
 
-    CommandError e = axis2.autoGoto(AXIS2_SLEW_RATE);
+    CommandError e = axis2.autoGoto(AXIS2_SLEW_RATE_DESIRED);
     return e;
   #else
     return CE_GOTO_FAIL;
@@ -158,7 +158,7 @@ CommandError Dome::findHome() {
   CommandError e = CE_NONE;
 
   #if AXIS1_SENSE_HOME != OFF
-    axis1.setFrequencySlew(AXIS1_SLEW_RATE);
+    axis1.setFrequencySlew(AXIS1_SLEW_RATE_DESIRED);
     e = axis1.autoSlewHome();
     if (e == CE_NONE) homing = true;
   #else
@@ -168,7 +168,7 @@ CommandError Dome::findHome() {
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       #if AXIS2_SENSE_HOME != OFF
-        axis2.setFrequencySlew(AXIS2_SLEW_RATE);
+        axis2.setFrequencySlew(AXIS2_SLEW_RATE_DESIRED);
         e = axis2.autoSlewHome();
         if (e == CE_NONE) {
           homing = true;
@@ -214,13 +214,13 @@ CommandError Dome::park() {
   VLF("MSG: Dome, parking");
   axis1.setBacklash(0.0F);
   axis1.setTargetCoordinatePark(settings.park.azimuth);
-  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE_DESIRED);
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       axis2.setBacklash(0.0F);
       axis2.setTargetCoordinatePark(settings.park.altitude);
-      e = axis2.autoGoto(AXIS2_SLEW_RATE);
+      e = axis2.autoGoto(AXIS2_SLEW_RATE_DESIRED);
     }
   #endif
 
@@ -248,7 +248,7 @@ CommandError Dome::unpark() {
   axis1.setInstrumentCoordinatePark(settings.park.azimuth);
   axis1.setBacklash(settings.backlash.azimuth);
   axis1.setTargetCoordinate(settings.park.azimuth);
-  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE);
+  CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE_DESIRED);
 
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
@@ -257,7 +257,7 @@ CommandError Dome::unpark() {
       axis2.setInstrumentCoordinatePark(settings.park.altitude);
       axis2.setBacklash(settings.backlash.altitude);
       axis2.setTargetCoordinate(settings.park.altitude);
-      e = axis2.autoGoto(AXIS2_SLEW_RATE);
+      e = axis2.autoGoto(AXIS2_SLEW_RATE_DESIRED);
     }
   #endif
 
