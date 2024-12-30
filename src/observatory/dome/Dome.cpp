@@ -46,6 +46,12 @@ void Dome::init() {
   axis1.setSlewAccelerationTimeAbort(AXIS1_RAPID_STOP_TIME);
   if (AXIS1_POWER_DOWN == ON) axis1.setPowerDownTime(DEFAULT_POWER_DOWN_TIME);
 
+  if (AXIS1_WRAP == ON) {
+    axis1.coordinateWrap(360.0);
+    axis1.settings.limits.min = -360.0;
+    axis1.settings.limits.max = 360.0;
+  }
+
   #if AXIS2_DRIVER_MODEL != OFF
     VLF("MSG: Dome, init (Axis2)");
     if (!axis2.init(&motor2)) {  DLF("ERR: Axis1, no motion controller exiting!"); return;  }
