@@ -159,6 +159,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
       #endif
     #endif
 
+    if (strlen(CAMERA_WEBPAGE) > 0) {
+      www.on("/camerapage.htm", cameraPage);
+    }
+
     www.on("/", indexPage);
 
     www.onNotFound(handleNotFound);
