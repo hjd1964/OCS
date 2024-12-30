@@ -3,7 +3,7 @@
 #include "Page.h"
 
 void pageHeader(int selected) {
-  char temp[150];
+  char temp[300];
 
   strcpy_P(temp, html_body_begin); www.sendContent(temp);
 
@@ -14,6 +14,12 @@ void pageHeader(int selected) {
   strcpy_P(temp, html_links_index_begin); www.sendContent(temp);
   if (selected == PAGE_INDEX) { strcpy_P(temp, html_links_selected); www.sendContent(temp); }
   strcpy_P(temp, html_links_index_end); www.sendContent(temp);
+
+  if (strlen(CAMERA_WEBPAGE) > 0) {
+    strcpy_P(temp, html_links_cam_begin); www.sendContent(temp);
+    if (selected == PAGE_CAMERA) { strcpy_P(temp, html_links_selected); www.sendContent(temp); }
+    strcpy_P(temp, html_links_cam_end); www.sendContent(temp);
+  }
 
   #if WEATHER == ON && WEATHER_CHARTS == ON
     strcpy_P(temp, html_links_weather_begin); www.sendContent(temp);

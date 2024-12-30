@@ -10,6 +10,7 @@
 #define L_OVERVIEW "Overview"
 #define L_WEATHER "Weather"
 #define L_SKY_CONDITIONS "Sky Conditions"
+#define L_CAMERA "Camera"
 
 // status tile
 #define L_STATUS "Status"

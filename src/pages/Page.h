@@ -6,6 +6,7 @@
 #define PAGE_INDEX 0
 #define PAGE_WEATHER 1
 #define PAGE_SKY_CONDITIONS 2
+#define PAGE_CAMERA 3
 
 void pageHeader(int selected);
 
@@ -27,5 +28,8 @@ const char html_links_weather_end[] PROGMEM = "'>" L_WEATHER "</a>";
 
 const char html_links_sky_begin[] PROGMEM = "<a href='/skypage.htm' ";
 const char html_links_sky_end[] PROGMEM = "'>" L_SKY_CONDITIONS "</a>";
+
+const char html_links_cam_begin[] PROGMEM = "<a href='/camerapage.htm' ";
+const char html_links_cam_end[] PROGMEM = "'>" L_CAMERA "</a>";
 
 const char html_links_selected[] PROGMEM =" style='background-color: " COLOR_LINK_SELECTED_BACKGROUND ";";

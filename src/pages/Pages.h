@@ -24,5 +24,6 @@ extern void relaysAjaxGet();
 
 extern void weatherPage();
 extern void skyPage();
+extern void cameraPage();
 
 extern void handleNotFound();
