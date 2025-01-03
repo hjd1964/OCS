@@ -6,8 +6,13 @@
 
 #include "../../lib/tasks/OnTask.h"
 
-#include <Adafruit_Si7021.h> // https://github.com/adafruit/Adafruit_Si7021
-Adafruit_Si7021 siSensorT = Adafruit_Si7021();
+#ifndef USE_SI7021_LIBRARY
+  #include <Adafruit_HTU21DF.h> // https://github.com/adafruit/Adafruit_HTU21DF_Library/tree/master
+  Adafruit_HTU21DF siSensorT = Adafruit_HTU21DF();
+#else
+  #include <Adafruit_Si7021.h> // https://github.com/adafruit/Adafruit_Si7021
+  Adafruit_Si7021 siSensorT = Adafruit_Si7021();
+#endif
 
 extern float _inside_temperature;
 extern bool _inside_temperatureAssigned;
