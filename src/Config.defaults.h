@@ -1,24 +1,39 @@
 #pragma once
 
+// host name for this microcontroller
+#ifndef HOST_NAME
+#define HOST_NAME                      "OCS"
+#endif
+
+// settings identification
+#ifndef CONFIG_NAME
+#define CONFIG_NAME                    HOST_NAME
+#endif
+
+// use the HAL specified default NV driver
+#ifndef NV_DRIVER
+#define NV_DRIVER                      NV_DEFAULT
+#endif
+
 // pinmap
 #ifndef PINMAP
-#define PINMAP                         OFF  // specify the board you're using here
+#define PINMAP                         OFF   // specify the board you're using here
 #endif
 
 // display
 #ifndef DISPLAY_LANGUAGE
-#define DISPLAY_LANGUAGE              L_en  // currently english (en and us) are the only options
+#define DISPLAY_LANGUAGE               L_en  // currently english (en and us) are the only options
 #endif
 
 // watchdog
 #ifndef WATCHDOG
-#define WATCHDOG                      OFF   // ON resets if OCS hangs for >8 seconds
+#define WATCHDOG                       OFF   // ON resets if OCS hangs for >8 seconds
 #endif
 
 // log files
 #ifdef ESP32
 #ifndef LOG_PERIOD_SECONDS
-#define LOG_PERIOD_SECONDS            120   // 120 seconds between log enteries
+#define LOG_PERIOD_SECONDS             120   // 120 seconds between log enteries
 #endif
 #ifndef LOG_CLEANUP_DAYS_AGO
 #define LOG_CLEANUP_DAYS_AGO           30   // retain one month of files (80 bytes * 0.5 * 60 * 24 = 57600 bytes per day * 30 = 1728000 bytes)
@@ -31,179 +46,174 @@
 
 // network settings
 #ifndef ASCOM_ALPACA_SERVER
-#define ASCOM_ALPACA_SERVER           OFF   // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
+#define ASCOM_ALPACA_SERVER            OFF   // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
 #endif
 #ifndef CONNECT_CHECK_HOURS
-#define CONNECT_CHECK_HOURS           OFF   // connection check time
+#define CONNECT_CHECK_HOURS            OFF   // connection check time
 #endif
 #ifndef CONNECT_IP_ADDR
-#define CONNECT_IP_ADDR  {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
+#define CONNECT_IP_ADDR   {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
 #endif
 #ifndef CONNECT_FAIL_WATCHDOG
-#define CONNECT_FAIL_WATCHDOG         OFF   // ON to stop all processing and trigger the watchdog reset
+#define CONNECT_FAIL_WATCHDOG          OFF   // ON to stop all processing and trigger the watchdog reset
 #endif
 
 // time settings
 #ifndef TIME_LOCATION_SOURCE
-#define TIME_LOCATION_SOURCE          NTP   // using Network Time Protocol is the default
+#define TIME_LOCATION_SOURCE           NTP   // using Network Time Protocol is the default
 #endif
 #ifndef TIME_IP_ADDR
-#define TIME_IP_ADDR        {129,6,15,28}   // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
+#define TIME_IP_ADDR         {129,6,15,28}   // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
 #endif
 #ifndef TIME_ZONE
 #define TIME_ZONE                      -5   // Time Zone (US Eastern Standard Time in this case)
 #endif
 #ifndef TIME_DISPLAY
-#define TIME_DISPLAY                  STD   // display Standard Time, UT1 to display Universal Time
-#endif
-
-// use the HAL specified default NV driver
-#ifndef NV_DRIVER
-#define NV_DRIVER                     NV_DEFAULT
+#define TIME_DISPLAY                   STD   // display Standard Time, UT1 to display Universal Time
 #endif
 
 // serial ports
 #ifndef SERIAL_A_BAUD_DEFAULT
-#define SERIAL_A_BAUD_DEFAULT         9600
+#define SERIAL_A_BAUD_DEFAULT          9600
 #endif
 #ifndef SERIAL_B_BAUD_DEFAULT
-#define SERIAL_B_BAUD_DEFAULT         OFF
+#define SERIAL_B_BAUD_DEFAULT          OFF
 #endif
 #ifndef SERIAL_C_BAUD_DEFAULT
-#define SERIAL_C_BAUD_DEFAULT         OFF
+#define SERIAL_C_BAUD_DEFAULT          OFF
 #endif
 
 // enable IP functionality
 #if ASCOM_ALPACA_SERVER == OFF
   // optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
   // OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
-  #define SERIAL_SERVER               BOTH
+  #define SERIAL_SERVER                BOTH
 #else
-  #define SERIAL_SERVER               OFF
-  #define WEB_HANDLER_COUNT_MAX       200        // for Ethernet webserver
+  #define SERIAL_SERVER                OFF
+  #define WEB_HANDLER_COUNT_MAX        200        // for Ethernet webserver
 #endif
 
 // VIRTUAL SERIAL IP COMMAND CHANNELS
 
 // in milliseconds
 #ifndef WEATHER_SENSOR_SAMPLE_PERIOD
-#define WEATHER_SENSOR_SAMPLE_PERIOD  5000       // recommended <= 30 seconds
+#define WEATHER_SENSOR_SAMPLE_PERIOD   5000       // recommended <= 30 seconds
 #endif
 
 #if DEBUG_CONNECT_CHECK == ON
-  #define CHECK_FAST                  3600.0
+  #define CHECK_FAST                   3600.0
 #else
-  #define CHECK_FAST                  1UL
+  #define CHECK_FAST                   1UL
 #endif
 
 // Relays
 #ifndef RELAY1_DEFAULT_STATE
-#define RELAY1_DEFAULT_STATE          OFF
+#define RELAY1_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY1_ON_STATE
-#define RELAY1_ON_STATE               HIGH
+#define RELAY1_ON_STATE                HIGH
 #endif
 #ifndef RELAY2_DEFAULT_STATE
-#define RELAY2_DEFAULT_STATE          OFF
+#define RELAY2_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY2_ON_STATE
-#define RELAY2_ON_STATE               HIGH
+#define RELAY2_ON_STATE                HIGH
 #endif
 #ifndef RELAY3_DEFAULT_STATE
-#define RELAY3_DEFAULT_STATE          OFF
+#define RELAY3_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY3_ON_STATE
-#define RELAY3_ON_STATE               HIGH
+#define RELAY3_ON_STATE                HIGH
 #endif
 #ifndef RELAY4_DEFAULT_STATE
-#define RELAY4_DEFAULT_STATE          OFF
+#define RELAY4_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY4_ON_STATE
-#define RELAY4_ON_STATE               HIGH
+#define RELAY4_ON_STATE                HIGH
 #endif
 #ifndef RELAY5_DEFAULT_STATE
-#define RELAY5_DEFAULT_STATE          OFF
+#define RELAY5_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY5_ON_STATE
-#define RELAY5_ON_STATE               HIGH
+#define RELAY5_ON_STATE                HIGH
 #endif
 #ifndef RELAY6_DEFAULT_STATE
-#define RELAY6_DEFAULT_STATE          HIGH
+#define RELAY6_DEFAULT_STATE           HIGH
 #endif
 #ifndef RELAY6_ON_STATE
-#define RELAY6_ON_STATE               HIGH
+#define RELAY6_ON_STATE                HIGH
 #endif
 #ifndef RELAY7_DEFAULT_STATE
-#define RELAY7_DEFAULT_STATE          OFF
+#define RELAY7_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY7_ON_STATE
-#define RELAY7_ON_STATE               HIGH
+#define RELAY7_ON_STATE                HIGH
 #endif
 #ifndef RELAY8_DEFAULT_STATE
-#define RELAY8_DEFAULT_STATE          OFF
+#define RELAY8_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY8_ON_STATE
-#define RELAY8_ON_STATE               HIGH
+#define RELAY8_ON_STATE                HIGH
 #endif
 #ifndef RELAY9_DEFAULT_STATE
-#define RELAY9_DEFAULT_STATE          OFF
+#define RELAY9_DEFAULT_STATE           OFF
 #endif
 #ifndef RELAY9_ON_STATE
-#define RELAY9_ON_STATE               HIGH
+#define RELAY9_ON_STATE                HIGH
 #endif
 #ifndef RELAY10_DEFAULT_STATE
-#define RELAY10_DEFAULT_STATE         OFF
+#define RELAY10_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY10_ON_STATE
-#define RELAY10_ON_STATE              HIGH
+#define RELAY10_ON_STATE               HIGH
 #endif
 #ifndef RELAY11_DEFAULT_STATE
-#define RELAY11_DEFAULT_STATE         OFF
+#define RELAY11_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY11_ON_STATE
-#define RELAY11_ON_STATE              HIGH
+#define RELAY11_ON_STATE               HIGH
 #endif
 #ifndef RELAY12_DEFAULT_STATE
-#define RELAY12_DEFAULT_STATE         OFF
+#define RELAY12_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY12_ON_STATE
-#define RELAY12_ON_STATE              HIGH
+#define RELAY12_ON_STATE               HIGH
 #endif
 #ifndef RELAY13_DEFAULT_STATE
-#define RELAY13_DEFAULT_STATE         OFF
+#define RELAY13_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY13_ON_STATE
-#define RELAY13_ON_STATE              HIGH
+#define RELAY13_ON_STATE               HIGH
 #endif
 #ifndef RELAY14_DEFAULT_STATE
-#define RELAY14_DEFAULT_STATE         OFF
+#define RELAY14_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY14_ON_STATE
-#define RELAY14_ON_STATE              HIGH
+#define RELAY14_ON_STATE               HIGH
 #endif
 #ifndef RELAY15_DEFAULT_STATE
-#define RELAY15_DEFAULT_STATE         OFF
+#define RELAY15_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY15_ON_STATE
-#define RELAY15_ON_STATE              HIGH
+#define RELAY15_ON_STATE               HIGH
 #endif
 #ifndef RELAY16_DEFAULT_STATE
-#define RELAY16_DEFAULT_STATE         OFF
+#define RELAY16_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY16_ON_STATE
-#define RELAY16_ON_STATE              HIGH
+#define RELAY16_ON_STATE               HIGH
 #endif
 #ifndef RELAY17_DEFAULT_STATE
-#define RELAY17_DEFAULT_STATE         OFF
+#define RELAY17_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY17_ON_STATE
-#define RELAY17_ON_STATE              HIGH
+#define RELAY17_ON_STATE               HIGH
 #endif
 #ifndef RELAY18_DEFAULT_STATE
-#define RELAY18_DEFAULT_STATE         OFF
+#define RELAY18_DEFAULT_STATE          OFF
 #endif
 #ifndef RELAY18_ON_STATE
-#define RELAY18_ON_STATE              HIGH
+#define RELAY18_ON_STATE               HIGH
 #endif
 
 #if ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_OPEN_RELAY != ROOF_MOTOR_CLOSE_RELAY
@@ -221,52 +231,52 @@
 
 // Digital, optionally add: |HYST(n) Where n=0..1023 stability time in ms.
 #ifndef SENSE1_ON_STATE
-#define SENSE1_ON_STATE               LOW
+#define SENSE1_ON_STATE                LOW
 #endif
 #ifndef SENSE1_INIT
-#define SENSE1_INIT                   INPUT_PULLUP
+#define SENSE1_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE2_ON_STATE
-#define SENSE2_ON_STATE               LOW
+#define SENSE2_ON_STATE                LOW
 #endif
 #ifndef SENSE2_INIT
-#define SENSE2_INIT                   INPUT_PULLUP
+#define SENSE2_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE3_ON_STATE
-#define SENSE3_ON_STATE               LOW
+#define SENSE3_ON_STATE                LOW
 #endif
 #ifndef SENSE3_INIT
-#define SENSE3_INIT                   INPUT_PULLUP
+#define SENSE3_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE4_ON_STATE
-#define SENSE4_ON_STATE               LOW
+#define SENSE4_ON_STATE                LOW
 #endif
 #ifndef SENSE4_INIT
-#define SENSE4_INIT                   INPUT_PULLUP
+#define SENSE4_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE5_ON_STATE
-#define SENSE5_ON_STATE               LOW
+#define SENSE5_ON_STATE                LOW
 #endif
 #ifndef SENSE5_INIT
-#define SENSE5_INIT                   INPUT_PULLUP
+#define SENSE5_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE6_ON_STATE
-#define SENSE6_ON_STATE               LOW
+#define SENSE6_ON_STATE                LOW
 #endif
 #ifndef SENSE6_INIT
-#define SENSE6_INIT                   INPUT_PULLUP
+#define SENSE6_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE7_ON_STATE
-#define SENSE7_ON_STATE               LOW
+#define SENSE7_ON_STATE                LOW
 #endif
 #ifndef SENSE7_INIT
-#define SENSE7_INIT                   INPUT_PULLUP
+#define SENSE7_INIT                    INPUT_PULLUP
 #endif
 #ifndef SENSE8_ON_STATE
-#define SENSE8_ON_STATE               LOW
+#define SENSE8_ON_STATE                LOW
 #endif
 #ifndef SENSE8_INIT
-#define SENSE8_INIT                   INPUT_PULLUP
+#define SENSE8_INIT                    INPUT_PULLUP
 #endif
 
 // -----------------------------------------------------------------------------------
@@ -346,7 +356,7 @@
   #define AXIS1_STEP_STATE             HIGH
   #endif
   #ifndef AXIS1_M2_ON_STATE
-  #define AXIS1_M2_ON_STATE            HIGH                        // default ON state for M2
+  #define AXIS1_M2_ON_STATE            HIGH
   #endif
   #ifndef AXIS1_DRIVER_MICROSTEPS
   #define AXIS1_DRIVER_MICROSTEPS      OFF
@@ -444,7 +454,7 @@
 #endif
 
 #ifndef AXIS2_DRIVER_MODEL
-#define AXIS2_DRIVER_MODEL             OFF                         // specify a driver to enable
+#define AXIS2_DRIVER_MODEL             OFF
 #endif
 #ifndef AXIS2_STEPS_PER_DEGREE
 #define AXIS2_STEPS_PER_DEGREE         64.0
@@ -459,22 +469,22 @@
 #define AXIS2_ENABLE_STATE             LOW
 #endif
 #ifndef AXIS2_SLEW_RATE_DESIRED
-#define AXIS2_SLEW_RATE_DESIRED        5.0                         // in degrees/sec
+#define AXIS2_SLEW_RATE_DESIRED        5.0
 #endif
 #ifndef AXIS2_ACCELERATION_TIME
-#define AXIS2_ACCELERATION_TIME        5                           // in seconds, to selected rate
+#define AXIS2_ACCELERATION_TIME        5
 #endif
 #ifndef AXIS2_RAPID_STOP_TIME
-#define AXIS2_RAPID_STOP_TIME          3                           // in seconds, to stop
+#define AXIS2_RAPID_STOP_TIME          3
 #endif
 #ifndef AXIS2_BACKLASH_RATE
-#define AXIS2_BACKLASH_RATE            (AXIS2_SLEW_RATE_DESIRED/4) // in degrees/sec
+#define AXIS2_BACKLASH_RATE            (AXIS2_SLEW_RATE_DESIRED/4)
 #endif
 #ifndef AXIS2_LIMIT_MIN
-#define AXIS2_LIMIT_MIN                0                           // in degrees
+#define AXIS2_LIMIT_MIN                0
 #endif
 #ifndef AXIS2_LIMIT_MAX
-#define AXIS2_LIMIT_MAX                90                          // in degrees
+#define AXIS2_LIMIT_MAX                90
 #endif
 #ifndef AXIS2_SENSE_HOME
 #define AXIS2_SENSE_HOME               OFF
@@ -483,7 +493,7 @@
 #define AXIS2_SENSE_HOME_INIT          INPUT_PULLUP
 #endif
 #ifndef AXIS2_SENSE_HOME_DIST_LIMIT
-#define AXIS2_SENSE_HOME_DIST_LIMIT    90.0                        // max distance in degrees
+#define AXIS2_SENSE_HOME_DIST_LIMIT    90.0
 #endif
 #ifndef AXIS2_SENSE_LIMIT_MIN
 #define AXIS2_SENSE_LIMIT_MIN          OFF
@@ -495,7 +505,7 @@
 #define AXIS2_SYNC_THRESHOLD          OFF
 #endif
 #ifndef AXIS2_SENSE_LIMIT_INIT
-#define AXIS2_SENSE_LIMIT_INIT         INPUT_PULLUP
+#define AXIS2_SENSE_LIMIT_INIT        INPUT_PULLUP
 #endif
 #if AXIS2_DRIVER_MODEL >= STEP_DIR_DRIVER_FIRST && AXIS2_DRIVER_MODEL <= STEP_DIR_DRIVER_LAST
   #define AXIS2_DRIVER_PRESENT
