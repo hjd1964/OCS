@@ -1,13 +1,16 @@
 #pragma once
 
-// host name for this microcontroller
+// host name for this microcontroller, by default used for the following if enabled/supported:
+// PRODUCT_DESCRIPTION    the user friendly name for this device, appears on websites etc.
+// AP_SSID                the name WiFi SSID clients see when the ESP32 WiFi Soft Access Point is enabled
+// MDNS_NAME              the name mDNS (Multicast DNS) clients see for IP address resolution
 #ifndef HOST_NAME
 #define HOST_NAME                      "OCS"
 #endif
 
 // settings identification
-#ifndef CONFIG_NAME
-#define CONFIG_NAME                    HOST_NAME
+#ifndef PRODUCT_DESCRIPTION
+#define PRODUCT_DESCRIPTION            HOST_NAME
 #endif
 
 // use the HAL specified default NV driver
@@ -83,14 +86,25 @@
 #define SERIAL_C_BAUD_DEFAULT          OFF
 #endif
 
-// enable IP functionality
+// enable and customize WiFi/Ethernet functionality
+// for other default IP settings see the file:
+// src/lib/wifi/WifiManager.defaults.h
+
+#ifndef MDNS_SERVER
+#define MDNS_SERVER                    ON
+#endif
+
+#ifndef MDNS_NAME
+#define MDNS_NAME                      HOST_NAME
+#endif
+
 #if ASCOM_ALPACA_SERVER == OFF
-  // optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
-  // OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
-  #define SERIAL_SERVER                BOTH
+// optional Arduino Serial class work-alike IP channels 9996 to 9999 as a server (listens to clients)
+// OFF or STANDARD (port 9999), or PERSISTENT (ports 9996 to 9998), or BOTH
+#define SERIAL_SERVER                  BOTH
 #else
-  #define SERIAL_SERVER                OFF
-  #define WEB_HANDLER_COUNT_MAX        200        // for Ethernet webserver
+#define SERIAL_SERVER                  OFF
+#define WEB_HANDLER_COUNT_MAX          200        // for Ethernet webserver
 #endif
 
 // VIRTUAL SERIAL IP COMMAND CHANNELS
@@ -101,9 +115,9 @@
 #endif
 
 #if DEBUG_CONNECT_CHECK == ON
-  #define CHECK_FAST                   3600.0
+#define CHECK_FAST                     3600.0
 #else
-  #define CHECK_FAST                   1UL
+#define CHECK_FAST                     1UL
 #endif
 
 // Relays
