@@ -8,7 +8,7 @@ void pageHeader(int selected) {
   strcpy_P(temp, html_body_begin); www.sendContent(temp);
 
   strcpy_P(temp, html_page_header_begin); www.sendContent(temp);
-  sprintf(temp, PROD_ABV " %s</b>", ocsVersion); www.sendContent(temp);
+  sprintf(temp, HOST_NAME " %s</b>", ocsVersion); www.sendContent(temp);
   strcpy_P(temp, html_page_header_links); www.sendContent(temp);
 
   strcpy_P(temp, html_links_index_begin); www.sendContent(temp);

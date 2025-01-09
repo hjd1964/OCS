@@ -78,8 +78,6 @@
   #define RESPONSE_INTERVAL         1000
 #endif
 
-#define PROD_ABV "OCS"
-
 // NV addresses
 #define INIT_NV_KEY                 3062703968UL
 
