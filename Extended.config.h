@@ -1,13 +1,17 @@
-// ---------------------------------------------------------------------------------------------------------------------------------
-// Extended configuration for OnStep SmartWebServer infrequently used options
+/* ---------------------------------------------------------------------------------------------------------------------------------
+ * Extended configuration for OCS INFREQUENTLY USED options
+ *
+ *                        For more information join the OnStep Groups.io at https://groups.io/g/onstep
+ * 
+ *           *** Read the compiler warnings and errors, they are there to help guard against invalid configurations ***
+ *
+ * ---------------------------------------------------------------------------------------------------------------------------------
+ * ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
+ * <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
+*/
+//      Parameter Name              Value   Default  Notes                                                                      Hint
 
-//                                 *** Most users will not change anything in this file! ***
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
-// <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
-
-// DEBUG ------------------------------------------------------------ see https://onstep.groups.io/g/main/wiki/6-Configuration#DEBUG
+// DEBUG ----------------------------------------------------------------------------------------------------------------------------
 // Enable additional debugging and/or status messages on the specified SERIAL_DEBUG port
 // Note that the SERIAL_DEBUG port cannot be used for normal communication with OnStep
 #define DEBUG                         OFF //    OFF, Use ON for background error messages only, use VERBOSE for all           Infreq
