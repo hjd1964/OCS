@@ -411,8 +411,8 @@
   #error "Configuration (Config.h): ROOF_TIME_TOL must be a number between 0 and 120 (seconds.)"
 #endif
 
-#if ROOF_TIME_LIMIT_SENSE_FAIL < 1 || ROOF_TIME_LIMIT_SENSE_FAIL > 60
-  #error "Configuration (Config.h): ROOF_TIME_LIMIT_SENSE_FAIL must be a number between 1 and 60 (seconds.)"
+#if ROOF_LIMIT_SENSE_FAIL_TIME < 1 || ROOF_LIMIT_SENSE_FAIL_TIME > 60
+  #error "Configuration (Config.h): ROOF_LIMIT_SENSE_FAIL_TIME must be a number between 1 and 60 (seconds.)"
 #endif
 
 #if MOUNT_PARK_TIMEOUT < 20 || MOUNT_PARK_TIMEOUT > 480

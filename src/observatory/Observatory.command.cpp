@@ -99,9 +99,9 @@ bool Observatory::command(char reply[], char command[], char parameter[], bool *
     } else
 
     //  :IT#  get Timeout #defines
-    //         Returns: 1.5,2.0#, ROOF_TIME_PRE_MOTION,ROOF_TIME_POST_MOTION
+    //         Returns: 1.5,2.0#, ROOF_INTERLOCK_PRE_MOVE_TIME,ROOF_INTERLOCK_POST_MOVE_TIME
     if (command[1] == 'T' && parameter[0] == 0) {
-      sprintf(reply, "%.1f,%.1f", ROOF_TIME_PRE_MOTION, ROOF_TIME_POST_MOTION);
+      sprintf(reply, "%.1f,%.1f", ROOF_INTERLOCK_PRE_MOVE_TIME, ROOF_INTERLOCK_POST_MOVE_TIME);
       *numericReply = false;
     } else return false;
   } else

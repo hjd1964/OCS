@@ -31,25 +31,13 @@
                                           //         ***     LEAVING THIS OPTION ENABLED CAN CAUSE EXCESSIVE NV        ***
                                           //         ***     WEAR AND DAMAGE THE MICROCONTROLLER NV SUBSYSTEM !!!      ***
 
-// SERIAL PORT COMMAND CHANNELS ------------------------------------ see https://onstep.groups.io/g/main/wiki/6-Configuration#SERIAL
-#define SERIAL_A_BAUD_DEFAULT        9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Infreq
-#define SERIAL_B_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
-#define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
-
 // NETWORK SETTINGS ----------------------------------------------------------------------------------------------------------------
+
 #define CONNECT_RECHECK_TIME           60 //     60, n. Where n=1 to 60 seconds.                                              Infreq
 #define CONNECT_RESET_TRIES             5 //      5, n. Where n=1 to 60. Ethernet shield reset after connection attempts.     Infreq
 #define CONNECT_REBOOT_TRIES           10 //     10, n. Where n=CONNECT_RESET_TRIES to 60 before watchdog reboot is forced.   Infreq
 
-// IP ADDRESS SETTINGS -------------------------------------------------------------------------------------------------------------
-
-// The unique (Ethernet) MAC address for your OCS
-#define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF}
-
-// These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
-// NV is wiped, these settings (where applicable) can be changed at runtime however.
 #define AP_ENABLED                  false //       false, Wifi Access Point Enabled.                                          Adjust
-#define AP_SSID                     "OCS" //       "OCS", Wifi Access Point SSID.                                             Adjust
 #define AP_PASSWORD            "password" //  "password", Wifi Access Point password.                                         Adjust
 #define AP_CHANNEL                      7 //           7, Wifi Access Point channel.                                          Adjust
 #define AP_IP_ADDR          {192,168,1,1} // ..,168,1,1}, Wifi Access Point IP Address.                                       Adjust
@@ -64,18 +52,15 @@
 #define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Ethernet/Wifi Station GATEWAY Address.                              Adjust
 #define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Ethernet/Wifi Station SUBNET Mask.                                  Adjust
 
+#define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF} // ..E,0xEF}, Ethernet unique MAC address.                                        Adjust
+
 // VISUAL --------------------------------------------------------------------------------------------------------------------------
 #define REVERSE_WEATHER_CHART_X_AXIS  OFF //    OFF, ON reverses the weather charts x-axis so new data is to the left.        Adjust
-#define FAV_ICON                      OFF //    OFF, ON and place favicon.ico file SD card root directory for website icon.   Adjust 
+#define FAV_ICON                      OFF //    OFF, ON and place favicon.ico file SD card root directory for website icon.   Adjust
 
 // WATCHDOG ------------------------------------------------------------------------------------------------------------------------
 #define WATCHDOG_DURING_SD            OFF //    OFF, ON keeps the watchdog enabled at all times.                              Infreq
 
-// ROOF/SHUTTER CONTROL PANEL ------------------------------------------------------------------------------------------------------
-#define ROOF_TIME_LIMIT_SENSE_FAIL      6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Infreq
-#define ROOF_TIME_BUTTON_PRESS        1.0 //    1.0, n. Where n=1..10 (seconds) For garage door openers.                      Infreq
-#define ROOF_TIME_PRE_MOTION          1.5 //    1.5, n. Where n=1..10 (seconds) For roof open interlock sense.                Infreq
-#define ROOF_TIME_POST_MOTION         2.0 //    2.0, n. Where n=1..10 (seconds) For roof close interlock sense.               Infreq
 
 // EXTERNAL GPIO SUPPORT -----------------------------------------------------------------------------------------------------------
 #define GPIO_DEVICE                   OFF //    OFF, MCP23008: for 8-ch I2C gpio.                                             Option

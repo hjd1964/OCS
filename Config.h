@@ -1,21 +1,33 @@
-// ---------------------------------------------------------------------------------------------------------------------------------
-// Configuration for the Observatory Control System (OCS)
-
-/*
+/* ---------------------------------------------------------------------------------------------------------------------------------
+ * Configuration for the Observatory Control System (OCS)
+ *
+ *
  *          For more information on setting the OCS up see http://www.stellarjourney.com/index.php?r=site/observatory_control
  *                      and join the OCS Groups.io at https://onstep.groups.io/g/onstep-ocs
+ *
+ *
+ *         ***   _RELAY and _SENSE numbers are mapped to pins in a platform specific pinmap, see: /src/pinmaps      ***
+ *         ***                            Additional settings are present in /src/Config.defaults.h                 ***
+ *
+ * ---------------------------------------------------------------------------------------------------------------------------------
+ * ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
+ * <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
 */
+//      Parameter Name              Value   Default  Notes                                                                      Hint
 
-// ******         _RELAY and _SENSE numbers are mapped to pins in a platform specific pinmap, see: /src/pinmaps               ******
-// ******                            Additional settings are present in /src/Config.defaults.h                                ******
+// =================================================================================================================================
+// CONTROLLER ======================================================================================================================
 
-// ---------------------------------------------------------------------------------------------------------------------------------
-// ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
-// <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
+#define HOST_NAME                   "OCS" //  "OCS", This devices name up to 16 chars.                                        Adjust
 
 // PINMAP --------------------------------------------------------------------------------------------------------------------------
 #define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCS_ESP1, OCS_ESP2.        <-Req'd
                                           //         Other boards/more info. in /src/Constants.h
+
+// SERIAL PORT COMMAND CHANNELS ----------------------------------------------------------------------------------------------------
+#define SERIAL_A_BAUD_DEFAULT        9600 //   9600, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Infreq
+#define SERIAL_B_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
+#define SERIAL_C_BAUD_DEFAULT         OFF //    OFF, n. Where n=9600,19200,57600,115200 (common baud rates.)                  Option
 
 // DISPLAY -------------------------------------------------------------------------------------------------------------------------
 #define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL units) two letter country code.        Adjust
@@ -202,7 +214,8 @@
 
 #define ROOF_MOTOR_OPEN_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to open roof.               Option
 #define ROOF_MOTOR_CLOSE_RELAY        OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to close roof.              Option
-#define ROOF_MOTOR_RELAY_MOMENTARY    OFF //    OFF, ON engage above momentarily (~1.5s) to start an automatic open or close. Option
+#define ROOF_MOTOR_PRESS_TIME         1.5 //    1.5, n. Where n=1..10 (seconds) For garage door openers.                      Infreq
+#define ROOF_MOTOR_RELAY_MOMENTARY    OFF //    OFF, ON engage momentarily (_PRESS_TIME) to start an automatic open or close. Option
 #define ROOF_MOTOR_STOP_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) momentarily engages this relay to stop roof.   Option
 
 #define ROOF_POWER_RELAY              OFF //    OFF, n. Where n=1..18 (Relay#) This controls roof motor power. For DC motors  Option
@@ -213,13 +226,17 @@
 
 #define ROOF_LIMIT_OPENED_SENSE       OFF //    OFF, n. Where n=1..8 (Sense#) Roof open switch (OPEN when ON.)                Option
 #define ROOF_LIMIT_CLOSED_SENSE       OFF //    OFF, n. Where n=1..8 (Sense#) Roof closed switch (CLOSED when ON.)            Option
+#define ROOF_LIMIT_SENSE_FAIL_TIME      6 //      6, n. Where n=1..60 (seconds) Time to limit switch disengage failure error. Infreq
 #define ROOF_INTERLOCK_SENSE          OFF //    OFF, n. Where n=1..8 (Sense#) Roof safety interlock, motion allowed when ON.  Option
+#define ROOF_INTERLOCK_PRE_MOVE_TIME  1.5 //    1.5, n. Where n=1..10 (seconds) For roof open interlock sense.                Infreq
+#define ROOF_INTERLOCK_POST_MOVE_TIME 2.0 //    2.0, n. Where n=1..10 (seconds) For roof close interlock sense.               Infreq
 
 #define ROOF_TIME_AVG                 300 //    300, n. Where n=30..1200 (seconds) Average time to open or close roof.        Adjust
 #define ROOF_TIME_TOL                  30 //     30, n. Where n=0..120 (seconds) Additional time before stop & error thrown.  Adjust
 #define MOUNT_PARK_TIMEOUT             30 //     30, n. Where n=20..480 (seconds) Maximum time to park mount before error.    Adjust
 
 // DOME CONTROL PANEL --------------------------------------------------------------------------------------------------------------
+#define DOME                          OFF //    OFF, ON to enable the OCS website dome panel display.                         Option
 
 #define DOME_SHUTTER_LOCK             OFF //    OFF, ON to disable dome motion unless shutter is open.                        Option
 

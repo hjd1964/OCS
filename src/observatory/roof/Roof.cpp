@@ -75,7 +75,7 @@ bool Roof::open() {
   state = 'o';
   clearStatus(false);
 
-  delay(ROOF_TIME_PRE_MOTION*1000);
+  delay(ROOF_INTERLOCK_PRE_MOVE_TIME*1000);
   if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_OPEN_SAFETY_INTERLOCK;
@@ -84,7 +84,7 @@ bool Roof::open() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_TIME_BUTTON_PRESS);
+    relay.onDelayedOff(ROOF_MOTOR_OPEN_RELAY, ROOF_MOTOR_PRESS_TIME);
   } else {
     relay.off(ROOF_MOTOR_CLOSE_RELAY);
     relay.on(ROOF_MOTOR_OPEN_RELAY);
@@ -164,7 +164,7 @@ bool Roof::close() {
   state = 'c';
   clearStatus(false);
 
-  delay(ROOF_TIME_PRE_MOTION*1000);
+  delay(ROOF_INTERLOCK_PRE_MOVE_TIME*1000);
   if (!safetyOverride && ROOF_INTERLOCK_SENSE != OFF && !sense.isOn(ROOF_INTERLOCK_SENSE)) {
     state = 'i';
     lastError = RERR_CLOSE_SAFETY_INTERLOCK;
@@ -173,7 +173,7 @@ bool Roof::close() {
 
   // Set relay/MOSFET
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON) {
-    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_TIME_BUTTON_PRESS);
+    relay.onDelayedOff(ROOF_MOTOR_CLOSE_RELAY, ROOF_MOTOR_PRESS_TIME);
   } else {
     relay.off(ROOF_MOTOR_OPEN_RELAY);
     relay.on(ROOF_MOTOR_CLOSE_RELAY);
@@ -201,7 +201,7 @@ void Roof::stop() {
     wasActive = true;
     delay(100);
   }
-  if (wasActive) delay(ROOF_TIME_POST_MOTION*1000);
+  if (wasActive) delay(ROOF_INTERLOCK_POST_MOVE_TIME*1000);
 
   // Stop any DC motor
   relay.off(ROOF_MOTOR_OPEN_RELAY);
@@ -210,7 +210,7 @@ void Roof::stop() {
   // And press the stop button if this roof has one
   if (ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY != OFF) {
     // make sure any button press is finished before pressing again
-    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_TIME_BUTTON_PRESS);
+    relay.onDelayedOff(ROOF_MOTOR_STOP_RELAY, ROOF_MOTOR_PRESS_TIME);
   }
 
   // If there is a close waiting for mount to park, cancel it
@@ -410,7 +410,7 @@ void Roof::continueOpening() {
   }
 
   // Or a stuck limit switch
-  if (!safetyOverride && (timeAvg - timeLeftToOpenNow) > ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
+  if (!safetyOverride && (timeAvg - timeLeftToOpenNow) > ROOF_LIMIT_SENSE_FAIL_TIME*1000 && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
     // Set the error in the status register, the user can resume the opening operation by checking for any malfunction then using the safety override if required
     fault.openLimitSW = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
@@ -439,7 +439,7 @@ void Roof::continueOpening() {
   // Detect that the roof has finished opening
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_TIME_POST_MOTION*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_INTERLOCK_POST_MOVE_TIME*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)0);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)timeAvg);
@@ -487,7 +487,7 @@ void Roof::continueClosing() {
   }
 
   // On a stuck limit switch
-  if (!safetyOverride && (timeAvg-timeLeftToCloseNow) > ROOF_TIME_LIMIT_SENSE_FAIL*1000 && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
+  if (!safetyOverride && (timeAvg-timeLeftToCloseNow) > ROOF_LIMIT_SENSE_FAIL_TIME*1000 && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
     // Set the error in the status register, the user can resume the closing operation by checking for any malfunction then using the safety override if required
     fault.closeLimitSW = true;
     // Go idle (assume the roof is still moving where we can't cut the power)
@@ -516,7 +516,7 @@ void Roof::continueClosing() {
   // Detect that the roof has finished closing
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
     // wait for a bit before powering off the roof drive (for automatic opener that stops itself)
-    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_TIME_POST_MOTION*1000);
+    if (ROOF_MOTOR_RELAY_MOMENTARY == ON) tasks.yield(ROOF_INTERLOCK_POST_MOVE_TIME*1000);
     // reset position timers
     nv.write(NV_ROOF_TIME_TO_OPEN, (int32_t)timeAvg);
     nv.write(NV_ROOF_TIME_TO_CLOSE, (int32_t)0);
