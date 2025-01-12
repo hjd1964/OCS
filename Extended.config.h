@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------------------------------------------------
- * Extended configuration for OCS INFREQUENTLY USED options
+ * Extended configuration for OCS options
  *
  *                        For more information join the OnStep Groups.io at https://groups.io/g/onstep
  * 
