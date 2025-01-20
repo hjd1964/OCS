@@ -154,6 +154,7 @@ class ServoDriver {
     int16_t statusMode = OFF;
 
     float velocityMax = SERVO_ANALOG_WRITE_RANGE;
+    float velocityMin = velocityMax*SERVO_MOTOR_MIN_VELOCITY;
 
     Direction motorDirection = DIR_FORWARD;
 

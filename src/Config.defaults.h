@@ -646,6 +646,12 @@
   #define SERVO_MOTOR_PRESENT
 #endif
 
+#if defined(SERVO_MOTOR_PRESENT)
+  #ifndef SERVO_MOTOR_MIN_VELOCITY
+  #define SERVO_MOTOR_MIN_VELOCITY 0.0F                          // Minimum servo velocity as a percentage of maximum velocity
+  #endif
+#endif
+
 #if defined(STEP_DIR_MOTOR_PRESENT) || defined(SERVO_MOTOR_PRESENT)
   #define MOTOR_PRESENT
 #endif
