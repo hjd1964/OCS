@@ -164,8 +164,6 @@ void setup() {
   // start command channel tasks
   commandChannelInit();
 
-  tasks.yield(2000);
-
   // start task manager debug events
   #if DEBUG == PROFILER
     tasks.add(142, 0, true, 7, profiler, "Profilr");
