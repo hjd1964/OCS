@@ -15,19 +15,22 @@
 #define PROFILER                    -11
 #define VERBOSE                     -12
 #define REMOTE                      -13
+#define ETHERNET_LAST               -14
 #define ETHERNET_W5100              -14
 #define ETHERNET_W5500              -15
-#define WIFI                        -16
-#define WIFI_ACCESS_POINT           -17    // shorthand for easy WIFI mode settings
-#define WIFI_STATION                -18    // shorthand for easy WIFI mode settings
-#define BLUETOOTH                   -19    // shorthand for easy bluetooth mode settings
-#define SHARED                      -20
-#define STANDARD                    -21
-#define PERSISTENT                  -22
-#define ERRORS_ONLY                 -23
-#define MINIMUM                     -24
-#define MIDDLE                      -25
-#define MAXIMUM                     -26
+#define ETHERNET_TEENSY41           -16
+#define ETHERNET_FIRST              -16
+#define WIFI                        -17
+#define WIFI_ACCESS_POINT           -18    // shorthand for easy WIFI mode settings
+#define WIFI_STATION                -19    // shorthand for easy WIFI mode settings
+#define BLUETOOTH                   -20    // shorthand for easy bluetooth mode settings
+#define SHARED                      -21
+#define STANDARD                    -22
+#define PERSISTENT                  -23
+#define ERRORS_ONLY                 -24
+#define MINIMUM                     -25
+#define MIDDLE                      -26
+#define MAXIMUM                     -27
 #define INVALID                     -127
 
 // CAN interface options

@@ -136,7 +136,7 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // bring network servers up
   #if OPERATIONAL_MODE == WIFI
     wifiManager.init();
-  #elif (OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500)
+  #elif OPERATIONAL_MODE >= ETHERNET_FIRST && OPERATIONAL_MODE <= ETHERNET_LAST
     ethernetManager.init();
   #endif
 
@@ -413,7 +413,7 @@ void Observatory::poll() {
   #endif
 
   // keep DHCP alive if used
-  #if OPERATIONAL_MODE == ETHERNET_W5100 || OPERATIONAL_MODE == ETHERNET_W5500
+  #if OPERATIONAL_MODE >= ETHERNET_FIRST && OPERATIONAL_MODE <= ETHERNET_LAST
     if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
   #endif
 }

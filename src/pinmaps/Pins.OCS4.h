@@ -4,7 +4,9 @@
 
 #if defined(ARDUINO_TEENSY41) || defined(__MK66FX1M0__) || defined(__MK64FX512__)
 
-#define OPERATIONAL_MODE        ETHERNET_W5500
+#ifndef OPERATIONAL_MODE
+  #define OPERATIONAL_MODE      ETHERNET_W5500
+#endif
 
 // Serial ports (see Pins.defaults.h for SERIAL_A)
 // Serial1: RX1 Pin 0, TX1 Pin 1
