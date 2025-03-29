@@ -42,12 +42,9 @@
 #endif
 
 // Status
-#if (TIME_LOCATION_SOURCE != NTP) && (TIME_LOCATION_SOURCE != DS3231) && (TIME_LOCATION_SOURCE != DS3234) && (TIME_LOCATION_SOURCE != GPS)
-  #error "Configuration (Config.h): TIME_LOCATION_SOURCE must be either NTP, GPS, DS3231, or DS3234"
-#endif
-
-#if TIME_LOCATION_SOURCE == DS3234_INIT
-  //#warning "Configuration (Config.h): TIME_LOCATION_SOURCE set to DS3234_INIT, remember to revert to DS3234_RTC after uploading once"
+#if (TIME_LOCATION_SOURCE != DS3231) && (TIME_LOCATION_SOURCE != DS3234) && (TIME_LOCATION_SOURCE != GPS) && \
+    (TIME_LOCATION_SOURCE != NTP) && (TIME_LOCATION_SOURCE != SD3031) && (TIME_LOCATION_SOURCE != TEENSY)
+  #error "Configuration (Config.h): TIME_LOCATION_SOURCE must be either DS3231, DS3234, GPS, NTP, SD3031 or TEENSY"
 #endif
 
 #if (STAT_MAINS_SENSE < 1 || STAT_MAINS_SENSE > 8) && STAT_MAINS_SENSE != OFF
