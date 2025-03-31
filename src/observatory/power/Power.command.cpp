@@ -50,7 +50,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     } else return false;
   } else
 
-  #if LIGHT != OFF
+  #ifdef LIGHT_PRESENT
     //  :IL#  get Light relay #defines
     //         Returns: 8,9,10,-1,12#, LIGHT_WRW_RELAY,LIGHT_WRR_RELAY,LIGHT_ORW_RELAY,LIGHT_ORR_RELAY,
     //                                ,LIGHT_OUTSIDE_RELAY, -1 for undefined light
@@ -61,7 +61,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     } else
   #endif
 
-  #if POWER != OFF
+  #ifdef POWER_PRESENT
     //  :Ip#  get Power relay #defines
     //        Returns: 1,2,3,-1,5,6#, POWER_DEVICE1_RELAY,POWER_DEVICE2_RELAY,POWER_DEVICE3_RELAY,
     //                                POWER_DEVICE4_RELAY,POWER_DEVICE5_RELAY,POWER_DEVICE6_RELAY
