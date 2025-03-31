@@ -8,73 +8,79 @@
 #include <ArduinoJson.h>
 #include "Alpaca.h"
 #include "../libApp/relay/Relay.h"
+#include "../observatory/lighting/Lighting.h"
+
+#define LightWRW -1
+#define LightWRR -2
+#define LightORW -3
+#define LightORR -4
 
 extern JsonDocument alpacaJsonDoc;
 int32_t switchConnected = 0;
 int32_t maxSwitch = 0;
-int32_t switchRelay[10];
+int32_t switchIdentifier[10];
 char switchDescription[10][40];
 char switchName[10][40];
 
 void findMaxSwitch() {
   maxSwitch = 0;
   #if POWER_DEVICE1_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE1_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE1_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device1 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE1_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE2_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE2_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE2_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device2 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE2_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE3_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE3_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE3_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device3 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE3_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE4_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE4_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE4_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device4 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE4_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE5_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE5_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE5_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device5 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE5_NAME);
     maxSwitch++;
   #endif
   #if POWER_DEVICE6_RELAY != OFF
-    switchRelay[maxSwitch] = POWER_DEVICE6_RELAY;
+    switchIdentifier[maxSwitch] = POWER_DEVICE6_RELAY;
     strcpy(switchDescription[maxSwitch], "Power Device6 Relay");
     strcpy(switchName[maxSwitch], POWER_DEVICE6_NAME);
     maxSwitch++;
   #endif
-  #if LIGHT_WRW_RELAY != OFF
-    switchRelay[maxSwitch] = LIGHT_WRW_RELAY;
-    strcpy(switchDescription[maxSwitch], "Lights WRW Relay");
+  #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightWRW;
+    strcpy(switchDescription[maxSwitch], "Lights WRW");
     strcpy(switchName[maxSwitch], "Warm Room White Lights");
     maxSwitch++;
   #endif
-  #if LIGHT_WRR_RELAY != OFF
-    switchRelay[maxSwitch] = LIGHT_WRR_RELAY;
-    strcpy(switchDescription[maxSwitch], "Lights WRR Relay");
+  #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightWRR;
+    strcpy(switchDescription[maxSwitch], "Lights WRR");
     strcpy(switchName[maxSwitch], "Warm Room Red Lights");
     maxSwitch++;
   #endif
-  #if LIGHT_ORW_RELAY != OFF
-    switchRelay[maxSwitch] = LIGHT_ORW_RELAY;
-    strcpy(switchDescription[maxSwitch], "Lights ORW Relay");
+  #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightORW;
+    strcpy(switchDescription[maxSwitch], "Lights ORW");
     strcpy(switchName[maxSwitch], "Observing Room White Lights");
     maxSwitch++;
   #endif
-  #if LIGHT_ORR_RELAY != OFF
-    switchRelay[maxSwitch] = LIGHT_ORR_RELAY;
-    strcpy(switchDescription[maxSwitch], "Lights ORR Relay");
+  #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightORR;
+    strcpy(switchDescription[maxSwitch], "Lights ORR");
     strcpy(switchName[maxSwitch], "Observing Room Red Lights");
     maxSwitch++;
   #endif
@@ -112,7 +118,7 @@ void alpacaSwitchCanWrite() {
   if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
-  alpacaJsonDoc["Value"] = "true";
+  alpacaJsonDoc["Value"] = true;
   alpacaJsonFinish(NoException, "");
 }
 
@@ -121,7 +127,13 @@ void alpacaSwitchGetSwitch() {
   if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
-  alpacaJsonDoc["Value"] = relay.isOn(switchRelay[id]) ? "true" : "false";
+  #ifdef LIGHT_PRESENT
+    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_WHITE) ? true : false; else
+    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_RED) ? true : false; else
+    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_WHITE) ? true : false; else
+    if (switchIdentifier[id] == LightORR) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_RED) ? true : false; else
+  #endif
+  alpacaJsonDoc["Value"] = relay.isOn(switchIdentifier[id]) ? true : false;
   alpacaJsonFinish(NoException, "");
 }
 
@@ -148,7 +160,13 @@ void alpacaSwitchGetSwitchValue() {
   if (!switchConnected) { alpacaJsonFinish(NotConnectedException, NotConnectedMessage); return; }
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
-  alpacaJsonDoc["Value"] = relay.isOn(switchRelay[id]) ? 1.0 : 0.0;
+  #ifdef LIGHT_PRESENT
+    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_WHITE ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_RED ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_WHITE ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightORR) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_RED ? 1.0 : 0.0; else
+  #endif
+  alpacaJsonDoc["Value"] = relay.isOn(switchIdentifier[id]) ? 1.0 : 0.0;
   alpacaJsonFinish(NoException, "");
 }
 
@@ -176,9 +194,25 @@ void alpacaSwitchSetSwitch() {
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   String state = alpacaArgLowerCase("state");
-  if (state.equals("true")) relay.on(switchRelay[id]); else
-    if (state.equals("false")) relay.off(switchRelay[id]); else
-      { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
+  if (state.equals("true")) {
+    #ifdef LIGHT_PRESENT
+      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_RED); else
+    #endif
+    relay.on(switchIdentifier[id]);
+  } else
+  if (state.equals("false")) {
+    #ifdef LIGHT_PRESENT
+      if (switchIdentifier[id] == LightWRW || switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_OFF); else
+      if (switchIdentifier[id] == LightORW || switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+    #endif
+    relay.off(switchIdentifier[id]);
+  } else {
+    alpacaJsonFinish(InvalidValueException, InvalidValueMessage);
+    return;
+  }
   alpacaJsonFinish(NoException, "");
 }
 
@@ -193,9 +227,25 @@ void alpacaSwitchSetSwitchValue() {
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   int32_t value = round(atof(alpacaArgLowerCase("value").c_str()));
-  if (value == 1) relay.on(switchRelay[id]); else
-    if (value == 0) relay.off(switchRelay[id]); else
-      { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
+  if (value == 1) {
+    #ifdef LIGHT_PRESENT
+      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_RED); else
+    #endif
+    relay.on(switchIdentifier[id]);
+  } else
+  if (value == 0) {
+    #ifdef LIGHT_PRESENT
+      if (switchIdentifier[id] == LightWRW || switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_OFF); else
+      if (switchIdentifier[id] == LightORW || switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+    #endif
+    relay.off(switchIdentifier[id]);
+  } else {
+    alpacaJsonFinish(InvalidValueException, InvalidValueMessage);
+    return;
+  }
   alpacaJsonFinish(NoException, "");
 }
 
