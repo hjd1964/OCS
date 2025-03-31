@@ -231,6 +231,20 @@
 #define RELAY18_ON_STATE               HIGH
 #endif
 
+// LED lighting (for FastLED library)
+#ifndef LIGHT_STRIP_INIT
+#define LIGHT_STRIP_INIT <WS2811, LIGHT_STRIP_DATA_PIN, BRG>
+#endif
+
+#ifndef LIGHT_STRIP_WHITE
+#define LIGHT_STRIP_WHITE 0xFFFFFF
+#endif
+
+#ifndef LIGHT_STRIP_RED
+#define LIGHT_STRIP_RED 0x800000
+#endif
+
+// Roof
 #if ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_OPEN_RELAY != ROOF_MOTOR_CLOSE_RELAY
   #define ROOF_SINGLE_OPEN_CLOSE_RELAY OFF
 #endif

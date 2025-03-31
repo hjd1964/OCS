@@ -13,6 +13,7 @@
 #include "Observatory.h"
 #include "safety/Safety.h"
 #include "power/Power.h"
+#include "lighting/Lighting.h"
 #include "thermostat/Thermostat.h"
 #include "weather/Weather.h"
 #include "roof/Roof.h"
@@ -21,6 +22,10 @@
 bool Observatory::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
 
   if (power.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
+
+  #ifdef LIGHT_PRESENT
+    if (lighting.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;
+  #endif
 
   #ifdef THERMOSTAT_PRESENT
     if (thermostat.command(reply, command, parameter, supressFrame, numericReply, commandError)) return true;

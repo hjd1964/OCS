@@ -19,25 +19,25 @@
   const char htmlLightingEnd[] PROGMEM = "</div>\r\n";
 
   const char htmlLighting1[] PROGMEM =
-  #if LIGHT_WRR_RELAY != OFF
+  #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   "<input id='light_WRR' type='checkbox' onclick='s(\"light_WRR\",this.checked)' %___WRR />&nbsp;" L_RED " "
   #endif
-  #if LIGHT_WRW_RELAY != OFF
+  #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   "<input id='light_WRW' type='checkbox' onclick='s(\"light_WRW\",this.checked)' %___WRW />&nbsp;" L_WHITE
   #endif
-  #if LIGHT_WRR_RELAY != OFF || LIGHT_WRW_RELAY != OFF
+  #if LIGHT_WRR_RELAY != OFF || LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   " " L_WARM_ROOM_LIGHTS "<br />&nbsp;&nbsp;"
   #endif
   "";
 
   const char htmlLighting2[] PROGMEM =
-  #if LIGHT_ORR_RELAY != OFF
+  #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   "<input id='light_ORR' type='checkbox' onclick='s(\"light_ORR\",this.checked)' %___ORR />&nbsp;" L_RED " "
   #endif
-  #if LIGHT_ORW_RELAY != OFF
+  #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   "<input id='light_ORW' type='checkbox' onclick='s(\"light_ORW\",this.checked)' %___ORW />&nbsp;" L_WHITE
   #endif
-  #if LIGHT_ORR_RELAY != OFF || LIGHT_ORW_RELAY != OFF
+  #if LIGHT_ORR_RELAY != OFF || LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
   " " L_OBSERVING_ROOM_LIGHTS "<br />&nbsp;&nbsp;"
   #endif
   "<br />"

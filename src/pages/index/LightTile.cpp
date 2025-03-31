@@ -3,6 +3,7 @@
 
 #if LIGHT == ON
   #include "../../libApp/relay/Relay.h"
+  #include "../../observatory/lighting/Lighting.h"
   #include "../CheckHelp.h"
 
   void lightTile() {
@@ -12,20 +13,20 @@
     www.sendContent(temp);
 
     strcpy_P(temp, htmlLighting1);
-    #if LIGHT_WRW_RELAY != OFF
-      if (relay.isOn(LIGHT_WRW_RELAY)) check(temp, "%___WRW"); else erase(temp, "%___WRW");
+    #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      if (lighting.get(LL_WARM_ROOM) == LM_WHITE) check(temp, "%___WRW"); else erase(temp, "%___WRW");
     #endif
-    #if LIGHT_WRR_RELAY != OFF
-      if (relay.isOn(LIGHT_WRR_RELAY)) check(temp, "%___WRR"); else erase(temp, "%___WRR");
-    #endif
+    #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      if (lighting.get(LL_WARM_ROOM) == LM_RED) check(temp, "%___WRR"); else erase(temp, "%___WRR");
+    #endif    
     if (strlen(temp) > 0) www.sendContent(temp);
 
     strcpy_P(temp, htmlLighting2);
-    #if LIGHT_ORW_RELAY != OFF
-      if (relay.isOn(LIGHT_ORW_RELAY)) check(temp, "%___ORW"); else erase(temp, "%___ORW");
+    #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      if (lighting.get(LL_OBSERVING_ROOM) == LM_WHITE) check(temp, "%___ORW"); else erase(temp, "%___ORW");
     #endif
-    #if LIGHT_ORR_RELAY != OFF
-      if (relay.isOn(LIGHT_ORR_RELAY)) check(temp, "%___ORR"); else erase(temp, "%___ORR");
+    #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      if (lighting.get(LL_OBSERVING_ROOM) == LM_RED) check(temp, "%___ORR"); else erase(temp, "%___ORR");
     #endif
     if (strlen(temp) > 0) www.sendContent(temp);
 
@@ -37,17 +38,17 @@
   }
 
   void lightTileAjax() {
-    #if LIGHT_WRW_RELAY != OFF
-      www.sendContent("light_WRW|"); www.sendContent(relay.isOn(LIGHT_WRW_RELAY) ? "checked" : "unchecked"); www.sendContent("\n");
+    #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      www.sendContent("light_WRW|"); www.sendContent((lighting.get(LL_WARM_ROOM) == LM_WHITE) ? "checked" : "unchecked"); www.sendContent("\n");
     #endif
-    #if LIGHT_WRR_RELAY != OFF
-      www.sendContent("light_WRR|"); www.sendContent(relay.isOn(LIGHT_WRR_RELAY) ? "checked" : "unchecked"); www.sendContent("\n");
+    #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      www.sendContent("light_WRR|"); www.sendContent((lighting.get(LL_WARM_ROOM) == LM_RED)  ? "checked" : "unchecked"); www.sendContent("\n");
     #endif
-    #if LIGHT_ORW_RELAY != OFF
-      www.sendContent("light_ORW|"); www.sendContent(relay.isOn(LIGHT_ORW_RELAY) ? "checked" : "unchecked"); www.sendContent("\n");
+    #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      www.sendContent("light_ORW|"); www.sendContent((lighting.get(LL_OBSERVING_ROOM) == LM_WHITE) ? "checked" : "unchecked"); www.sendContent("\n");
     #endif
-    #if LIGHT_ORR_RELAY != OFF
-      www.sendContent("light_ORR|"); www.sendContent(relay.isOn(LIGHT_ORR_RELAY) ? "checked" : "unchecked"); www.sendContent("\n");
+    #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      www.sendContent("light_ORR|"); www.sendContent((lighting.get(LL_OBSERVING_ROOM) == LM_RED) ? "checked" : "unchecked"); www.sendContent("\n");
     #endif
   }
 
@@ -55,43 +56,43 @@
     String s;
     UNUSED(s);
 
-    #if LIGHT_WRR_RELAY != OFF
-      s = www.arg("light_WRR");
-      if (s.equals("true")) {
-        relay.on(LIGHT_WRR_RELAY);
-      } else
-      if (s.equals("false")) {
-        relay.off(LIGHT_WRR_RELAY);
-      }
-    #endif
-
-    #if LIGHT_WRW_RELAY != OFF
+    #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
       s = www.arg("light_WRW");
       if (s.equals("true")) {
-        relay.on(LIGHT_WRW_RELAY);
+        lighting.set(LL_WARM_ROOM, LM_WHITE);
       } else
       if (s.equals("false")) {
-        relay.off(LIGHT_WRW_RELAY);
+        lighting.set(LL_WARM_ROOM, LM_OFF);
       }
     #endif
 
-    #if LIGHT_ORW_RELAY != OFF
+    #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      s = www.arg("light_WRR");
+      if (s.equals("true")) {
+        lighting.set(LL_WARM_ROOM, LM_RED);
+      } else
+      if (s.equals("false")) {
+        lighting.set(LL_WARM_ROOM, LM_OFF);
+      }
+    #endif
+
+    #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
       s = www.arg("light_ORW");
       if (s.equals("true")) {
-        relay.on(LIGHT_ORW_RELAY);
+        lighting.set(LL_OBSERVING_ROOM, LM_WHITE);
       } else
       if (s.equals("false")) {
-        relay.off(LIGHT_ORW_RELAY);
+        lighting.set(LL_OBSERVING_ROOM, LM_OFF);
       }
     #endif
 
-    #if LIGHT_ORR_RELAY != OFF
+    #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
       s = www.arg("light_ORR");
       if (s.equals("true")) {
-        relay.on(LIGHT_ORR_RELAY);
+        lighting.set(LL_OBSERVING_ROOM, LM_RED);
       } else
       if (s.equals("false")) {
-        relay.off(LIGHT_ORR_RELAY);
+        lighting.set(LL_OBSERVING_ROOM, LM_OFF);
       }
     #endif
 

@@ -60,7 +60,7 @@ extern char ocsVersion[10];
 #endif
 
 #if LIGHT_WRW_RELAY != OFF || LIGHT_WRR_RELAY != OFF || LIGHT_ORW_RELAY != OFF || \
-    LIGHT_ORR_RELAY != OFF || LIGHT_OUTSIDE_RELAY != OFF 
+    LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF || LIGHT_OUTSIDE_RELAY != OFF 
   #define LIGHT_PRESENT
 #endif
 
