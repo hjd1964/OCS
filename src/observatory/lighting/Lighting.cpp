@@ -58,9 +58,13 @@ void Lighting::set(LightLocation location, LightMode mode) {
 LightMode Lighting::get(LightLocation location) {
   switch (location) {
     case LL_OBSERVING_ROOM:
+      if (relay.isOn(LIGHT_ORW_RELAY)) return LM_WHITE; else
+      if (relay.isOn(LIGHT_ORR_RELAY)) return LM_RED; else
       return observingRoomLightMode;
     break;
     case LL_WARM_ROOM:
+      if (relay.isOn(LIGHT_WRW_RELAY)) return LM_WHITE; else
+      if (relay.isOn(LIGHT_WRR_RELAY)) return LM_RED; else
       return warmRoomLightMode;
     break;
     default:
