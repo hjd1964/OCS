@@ -12,7 +12,7 @@
 #endif
 
 enum LightLocation {LL_WARM_ROOM, LL_OBSERVING_ROOM};
-enum LightMode {LM_OFF, LM_RED, LM_WHITE};
+enum LightMode {LM_OFF, LM_DIM_RED, LM_RED, LM_WHITE};
 
 class Lighting {
   public:

@@ -9,6 +9,8 @@
 void Lighting::init() {
   #if LIGHT_STRIP_DATA_PIN != OFF
     FastLED.addLeds LIGHT_STRIP_INIT (leds, LIGHT_STRIP_COUNT);
+    for (int index = 0; index <= LIGHT_STRIP_COUNT - 1; index++) leds[index] = 0;
+    FastLED.show();
   #endif
 }
 
@@ -20,6 +22,7 @@ void Lighting::set(LightLocation location, LightMode mode) {
     CRGB rgb;
     switch (mode) {
       case LM_OFF: rgb = 0x000000; break;
+      case LM_DIM_RED: rgb = LIGHT_STRIP_DIM_RED; break;
       case LM_RED: rgb = LIGHT_STRIP_RED; break;
       case LM_WHITE: rgb = LIGHT_STRIP_WHITE; break;
     }

@@ -20,14 +20,15 @@
 
     // send a standard http response header with some css
     strcpy_P(temp, html_head_begin); www.sendContent(temp);
-    strcpy_P(temp, html_main_css1); www.sendContent(temp); 
-    strcpy_P(temp, html_main_css2); www.sendContent(temp);
-    strcpy_P(temp, html_main_css4); www.sendContent(temp);
-    strcpy_P(temp, html_main_css6); www.sendContent(temp);
-    strcpy_P(temp, html_main_css7); www.sendContent(temp);
-    strcpy_P(temp, html_main_css8); www.sendContent(temp);
-    strcpy_P(temp, html_main_css10); www.sendContent(temp);
-    strcpy_P(temp, html_main_css11); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_begin); www.sendContent(temp); 
+    strcpy_P(temp, html_main_css_a); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_b); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_stopBtn); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_misc); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_a1); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_a2); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_obsControl); www.sendContent(temp);
+    strcpy_P(temp, html_main_css_end); www.sendContent(temp);
     strcpy_P(temp, html_head_end); www.sendContent(temp);
 
     pageHeader(PAGE_WEATHER);

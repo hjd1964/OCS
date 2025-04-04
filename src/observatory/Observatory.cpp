@@ -15,6 +15,7 @@
 #include "../libApp/relay/Relay.h"
 
 #include "power/Power.h"
+#include "lighting/Lighting.h"
 #include "roof/Roof.h"
 #include "safety/Safety.h"
 #include "thermostat/Thermostat.h"
@@ -109,6 +110,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   #endif
   #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
     if (nv.readC(NV_POWER_DEVICE6)) relay.on(POWER_DEVICE6_RELAY);
+  #endif
+
+  #ifdef LIGHT_PRESENT
+    lighting.init();
   #endif
 
   #ifdef ROOF_PRESENT

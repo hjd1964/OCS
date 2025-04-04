@@ -12,6 +12,7 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
     //  :GLW# Get warm room light mode 
     if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'W' && parameter[1] == 0) {
       if (get(LL_WARM_ROOM) == LM_OFF) strcpy(reply, "OFF"); else
+      if (get(LL_WARM_ROOM) == LM_DIM_RED) strcpy(reply, "DIM"); else
       if (get(LL_WARM_ROOM) == LM_RED) strcpy(reply, "RED"); else
       if (get(LL_WARM_ROOM) == LM_WHITE) strcpy(reply, "WHITE");
       *numericReply = false;
@@ -20,6 +21,7 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
     //  :GLO# Get observing room light mode
     if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'O' && parameter[1] == 0) {
       if (get(LL_OBSERVING_ROOM) == LM_OFF) strcpy(reply, "OFF"); else
+      if (get(LL_OBSERVING_ROOM) == LM_DIM_RED) strcpy(reply, "DIM"); else
       if (get(LL_OBSERVING_ROOM) == LM_RED) strcpy(reply, "RED"); else
       if (get(LL_OBSERVING_ROOM) == LM_WHITE) strcpy(reply, "WHITE");
       *numericReply = false;
@@ -32,6 +34,7 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
       String ws = String(parameter);
       ws = ws.substring(2);
       if (ws.equals("OFF")) set(LL_WARM_ROOM, LM_OFF); else
+      if (ws.equals("DIM")) set(LL_WARM_ROOM, LM_DIM_RED); else
       if (ws.equals("RED")) set(LL_WARM_ROOM, LM_RED); else
       if (ws.equals("WHITE")) set(LL_WARM_ROOM, LM_WHITE); else *commandError = CE_PARAM_FORM;
     } else
@@ -43,6 +46,7 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
       String ws = String(parameter);
       ws = ws.substring(2);
       if (ws.equals("OFF")) set(LL_OBSERVING_ROOM, LM_OFF); else
+      if (ws.equals("DIM")) set(LL_OBSERVING_ROOM, LM_DIM_RED); else
       if (ws.equals("RED")) set(LL_OBSERVING_ROOM, LM_RED); else
       if (ws.equals("WHITE")) set(LL_OBSERVING_ROOM, LM_WHITE); else *commandError = CE_PARAM_FORM;
     } else

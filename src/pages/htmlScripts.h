@@ -56,8 +56,8 @@ const char html_script_ajax_E[] PROGMEM =
             "var e=document.getElementById(k);\n"
             "if (e!=null) {\n"
               "if (m==1) e.value=v; else\n"
-              "if (v=='selected') e.style.background='#E02020'; else\n"
-              "if (v=='unselected') e.style.background='#B02020'; else\n";
+              "if (v=='selected') e.style.background='" COLOR_CONTROL_SELECTED "'; else\n"
+              "if (v=='unselected') e.style.background='" COLOR_CONTROL_UNSELECTED "'; else\n";
 const char html_script_ajax_F[] PROGMEM =
               "if (v=='disabled') e.disabled=true; else\n"
               "if (v=='enabled') e.disabled=false; else\n"

@@ -3,6 +3,8 @@
 #pragma once
 
 // general
+#define L_OFF "Off"
+#define L_ON "On"
 #define L_INVALID "Invalid"
 #define L_STOP "Stop!"
 
@@ -57,10 +59,12 @@
 
 // lighting tile
 #define L_LIGHTING "Lighting"
+#define L_DARK "Dark"
 #define L_RED "Red"
+#define L_DIM "Dim"
 #define L_WHITE "White"
-#define L_WARM_ROOM_LIGHTS "Warm Rm Lights"
-#define L_OBSERVING_ROOM_LIGHTS "Obs Rm Lights"
+#define L_WARM_ROOM_LIGHTS "Warm Room"
+#define L_OBSERVING_ROOM_LIGHTS "Observing Room"
 #define L_OUTSIDE_LIGHTS "Outside Light Timer"
 #define L_EXIT "Exit"
 
