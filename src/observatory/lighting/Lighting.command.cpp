@@ -8,7 +8,7 @@
 bool Lighting::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
   UNUSED(supressFrame);
 
-  //  :GLW#        Get observing room light mode
+  //  :GLW#        Get warm room light mode
   //               Returns OFF#, DIM#, RED#, or WHITE#
       if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'W' && parameter[1] == 0) {
     if (get(LL_WARM_ROOM) == LM_OFF) strcpy(reply, "OFF"); else
