@@ -9,8 +9,9 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
   UNUSED(supressFrame);
 
   #if LIGHT != OFF
-    //  :GLW# Get warm room light mode 
-    if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'W' && parameter[1] == 0) {
+    //  :GLW#        Get observing room light mode
+    //               Returns OFF#, DIM#, RED#, or WHITE#
+        if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'W' && parameter[1] == 0) {
       if (get(LL_WARM_ROOM) == LM_OFF) strcpy(reply, "OFF"); else
       if (get(LL_WARM_ROOM) == LM_DIM_RED) strcpy(reply, "DIM"); else
       if (get(LL_WARM_ROOM) == LM_RED) strcpy(reply, "RED"); else
@@ -18,7 +19,8 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
       *numericReply = false;
     } else
 
-    //  :GLO# Get observing room light mode
+    //  :GLO#        Get observing room light mode
+    //               Returns OFF#, DIM#, RED#, or WHITE#
     if (command[0] == 'G' && command[1] == 'L' && parameter[0] == 'O' && parameter[1] == 0) {
       if (get(LL_OBSERVING_ROOM) == LM_OFF) strcpy(reply, "OFF"); else
       if (get(LL_OBSERVING_ROOM) == LM_DIM_RED) strcpy(reply, "DIM"); else
@@ -27,9 +29,9 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
       *numericReply = false;
     } else
 
-    //  :SLW,[mode]# Set warm room light [mode] = OFF, RED, WHITE 
-    //         Example: :SLW,OFF#
-    //         Returns: 1 on success, 0 on failure
+    //  :SLW,[mode]# Set warm room light [mode] = OFF, DIM, RED, WHITE 
+    //               Example: :SLW,OFF#
+    //               Returns: 1 on success, 0 on failure
     if (command[0] == 'S' && command[1] == 'L' && parameter[0] == 'W' && parameter[1] == ',') {
       String ws = String(parameter);
       ws = ws.substring(2);
@@ -39,9 +41,9 @@ bool Lighting::command(char reply[], char command[], char parameter[], bool *sup
       if (ws.equals("WHITE")) set(LL_WARM_ROOM, LM_WHITE); else *commandError = CE_PARAM_FORM;
     } else
 
-    //  :SLO,[mode]# Set observing room light [mode] = OFF, RED, WHITE 
-    //         Example: :SLO,RED#
-    //         Returns: 1 on success, 0 on failure
+    //  :SLO,[mode]# Set observing room light [mode] = OFF, DIM, RED, WHITE 
+    //               Example: :SLO,RED#
+    //               Returns: 1 on success, 0 on failure
     if (command[0] == 'S' && command[1] == 'L' && parameter[0] == 'O' && parameter[1] == ',') {
       String ws = String(parameter);
       ws = ws.substring(2);
