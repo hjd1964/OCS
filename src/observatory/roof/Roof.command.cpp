@@ -8,7 +8,7 @@
 bool Roof::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
   UNUSED(supressFrame);
   
-	if (command[0] == 'R') {
+  if (command[0] == 'R') {
     //  :RC#  Roof Close
     //         Returns: nothing
     if (command[1] == 'C' && parameter[0] == 0) {
