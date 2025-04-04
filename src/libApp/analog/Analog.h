@@ -57,7 +57,17 @@
 
 class Analog {
   public:
-    float read(int n);
+    // gets OCS analog input value
+    // \param aSense OCS analog input number
+    // \returns analog value between 0.0 and 1.0
+    float read(int aSense);
+
+    // get AC mains current using SCT-013 current transformer
+    // \param aSense OCS analog input number
+    // \param freq one full wave is averaged per call
+    // \param sensitivity for scaling measured voltage to current in Amps
+    // \returns current in Amps
+    float readSct013(int aSense, float freqHz = 60.0, float sensitivity = 100.0);
 
   private:
     volatile int pins[ANALOG_MAX] {

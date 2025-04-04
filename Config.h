@@ -61,6 +61,7 @@
 
 // Converts the analog measure (range 0 to 1.0) to Amps
 #define STAT_MAINS_ANALOG_TO_CURRENT(x) (x*NAN)
+// Converts the analog measure (range 0 to 1.0) to Amps or use a SCT-013 with (analog.readSct013(aSense, freqHz, sensitivity))
 
 #define STAT_DC_VOLTAGE_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply voltage.   Option
 #define STAT_DC_CURRENT_ANALOG        OFF //    OFF, n. Where n=1..16 (Analog#) measure/display 12VDC power supply current.   Option
