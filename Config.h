@@ -219,6 +219,7 @@
 #define ROOF_AUTOCLOSE_DAWN_DEFAULT   OFF //    OFF, ON enables AUTOCLOSE_DAWN option at startup, disabled otherwise.         Option
 #define ROOF_AUTOCLOSE_SAFETY         OFF //    OFF, ON closes the roof automatically if an UNSAFE condition is detected.     Option
 #define ROOF_CLOSE_PARKS_MOUNT        OFF //    OFF, n. Where n=1..18 (Relay#) momentarily engages this relay to park mount.  Option
+#define ROOF_ACTUATE_SENSE            OFF //    OFF, n. Where n=1..8 (Sense#) for momentary switch to open or close roof.     Option
 
 #define ROOF_MOTOR_OPEN_RELAY         OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to open roof.               Option
 #define ROOF_MOTOR_CLOSE_RELAY        OFF //    OFF, n. Where n=1..18 (Relay#) engages this relay to close roof.              Option

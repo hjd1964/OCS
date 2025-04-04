@@ -421,6 +421,18 @@ void Observatory::poll() {
     }
   #endif
 
+  // a wall mounted push button to open/close the roof or shutter
+  #ifdef ROOF_PRESENT
+    #if ROOF_ACTUATE_SENSE != OFF
+      if (sense.isOn(ROOF_ACTUATE_SENSE) && sense.stableMillis(ROOF_ACTUATE_SENSE) > 1000) {
+        #if ROOF_LIMIT_OPENED_SENSE != OFF && ROOF_LIMIT_CLOSED_SENSE != OFF
+          if (roof.isMoving()) roof.stop(); else
+          if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) roof.open(); else roof.close();
+        #endif
+      }
+    #endif
+  #endif
+
   // keep DHCP alive if used
   #if OPERATIONAL_MODE >= ETHERNET_FIRST && OPERATIONAL_MODE <= ETHERNET_LAST
     if (ethernetManager.settings.dhcpEnabled) Ethernet.maintain();
