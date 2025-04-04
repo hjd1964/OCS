@@ -43,7 +43,7 @@ class Observatory {
   private:
     Firmware firmware;
     bool fastNTPSync = false;
-    IPAddress connectCheckIP = IPAddress CONNECT_IP_ADDR;
+    IPAddress connectCheckIP = IPAddress CONNECT_CHECK_IP;
     TimeLocationSource *tls;
 };
 

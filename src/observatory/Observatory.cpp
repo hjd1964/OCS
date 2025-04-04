@@ -330,7 +330,11 @@ void Observatory::connectionCheck() {
     if ((long)(millis() - nextConnectionCheck) > 0) {
       connectionCheckTry++;
 
-      int success = connectionCheckClient.connect(connectCheckIP, 80);
+      #ifdef CONNECT_CHECK_HOSTNAME
+        int success = connectionCheckClient.connect(CONNECT_CHECK_HOSTNAME, CONNECT_CHECK_PORT);
+      #else
+        int success = connectionCheckClient.connect(connectCheckIP, CONNECT_CHECK_PORT);
+      #endif
 
       if (success) {
         VLF("MSG: Observatory, connection check success");

@@ -41,7 +41,7 @@
                                           //         Note: this disables the IP command servers on ports 9998, 9999 and
                                           //         works best w/my Ethernet library from: https://github.com/hjd1964/Ethernet
 #define CONNECT_CHECK_HOURS           OFF //    OFF, n. Where n=1 to 48 (hours.)  Connection check time.                      Option
-#define CONNECT_IP_ADDR    {13,226,22,41} //         Default is Arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
+#define CONNECT_CHECK_IP   {13,226,22,41} //         Default is Arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset.
 #define CONNECT_FAIL_WATCHDOG         OFF //    OFF, ON to stop all processing and trigger the watchdog reset.                Option
 
 // TIME SETTINGS -------------------------------------------------------------------------------------------------------------------

@@ -55,8 +55,11 @@
 #ifndef CONNECT_CHECK_HOURS
 #define CONNECT_CHECK_HOURS            OFF   // connection check time
 #endif
-#ifndef CONNECT_IP_ADDR
-#define CONNECT_IP_ADDR   {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
+#ifndef CONNECT_CHECK_IP
+#define CONNECT_CHECK_IP  {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
+#endif
+#ifndef CONNECT_CHECK_PORT
+#define CONNECT_CHECK_PORT              80
 #endif
 #ifndef CONNECT_FAIL_WATCHDOG
 #define CONNECT_FAIL_WATCHDOG          OFF   // ON to stop all processing and trigger the watchdog reset
