@@ -59,16 +59,17 @@ void Lighting::set(LightLocation location, LightMode mode) {
 }
 
 LightMode Lighting::get(LightLocation location) {
+  LightMode relayLightMode = LM_OFF;
   switch (location) {
     case LL_OBSERVING_ROOM:
-      if (relay.isOn(LIGHT_ORW_RELAY)) return LM_WHITE; else
-      if (relay.isOn(LIGHT_ORR_RELAY)) return LM_RED; else
-      return observingRoomLightMode;
+      if (relay.isOn(LIGHT_ORR_RELAY)) relayLightMode = LM_RED;
+      if (relay.isOn(LIGHT_ORW_RELAY)) relayLightMode = LM_WHITE;
+      if (observingRoomLightMode < relayLightMode) return relayLightMode; else return observingRoomLightMode;
     break;
     case LL_WARM_ROOM:
-      if (relay.isOn(LIGHT_WRW_RELAY)) return LM_WHITE; else
-      if (relay.isOn(LIGHT_WRR_RELAY)) return LM_RED; else
-      return warmRoomLightMode;
+      if (relay.isOn(LIGHT_WRR_RELAY)) relayLightMode = LM_RED;
+      if (relay.isOn(LIGHT_WRW_RELAY)) relayLightMode = LM_WHITE;
+      if (warmRoomLightMode < relayLightMode) return relayLightMode; else return warmRoomLightMode;
     break;
     default:
       return LM_OFF;
