@@ -299,6 +299,14 @@
   #error "Configuration (Config.h): LIGHT_SW_SENSE must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
+#if (LIGHT_STRIP_DATA_PIN < 0 || LIGHT_STRIP_DATA_PIN > 127) && LIGHT_STRIP_DATA_PIN != OFF
+  #error "Configuration (Config.h): LIGHT_STRIP_DATA_PIN must OFF or a number between 0 and 127 (microcontroller pin#.)"
+#endif
+
+#if LIGHT_STRIP_COUNT < 1 || LIGHT_STRIP_COUNT > 1200
+  #error "Configuration (Config.h): LIGHT_STRIP_COUNT must a number between 1 and 1200 (number of addressable LED controller chips.)"
+#endif
+
 // ROOF
 #if ROOF != OFF && ROOF != ON
   #error "Configuration (Config.h): ROOF, OCS website roll off roof control display, must OFF or ON."
@@ -326,6 +334,10 @@
 
 #if (ROOF_CLOSE_PARKS_MOUNT < 1 || ROOF_CLOSE_PARKS_MOUNT > 18) && ROOF_CLOSE_PARKS_MOUNT != OFF
   #error "Configuration (Config.h): ROOF_CLOSE_PARKS_MOUNT must OFF or a number between 1 and 18 (RELAY#.)"
+#endif
+
+#if (ROOF_ACTUATE_SENSE < 1 || ROOF_ACTUATE_SENSE > 8) && ROOF_ACTUATE_SENSE != OFF
+  #error "Configuration (Config.h): ROOF_ACTUATE_SENSE must be OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
 #if (ROOF_CLOSE_PARKS_MOUNT > 0 && ROOF_CLOSE_PARKS_MOUNT < 19) && ROOF_INTERLOCK_SENSE == OFF

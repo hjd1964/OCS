@@ -235,20 +235,33 @@
 #endif
 
 // LED lighting (for FastLED library)
+#ifndef LIGHT_STRIP_DATA_PIN
+#define LIGHT_STRIP_DATA_PIN OFF                                   // GPIO pin to LED controller chips (default WS2811GRB)
+#endif
+#ifndef LIGHT_STRIP_COUNT
+#define LIGHT_STRIP_COUNT 16                                       // LED controller chip count
+#endif
+#ifndef LIGHT_STRIP_WR_RANGE
+#define LIGHT_STRIP_WR_RANGE {0,7}                                 // ID range for Warm room
+#endif
+#ifndef LIGHT_STRIP_OR_RANGE
+#define LIGHT_STRIP_OR_RANGE {8,15}                                // ID range for Observing room
+#endif
+
 #ifndef LIGHT_STRIP_INIT
-#define LIGHT_STRIP_INIT <WS2811, LIGHT_STRIP_DATA_PIN, RGB>
+#define LIGHT_STRIP_INIT <WS2811, LIGHT_STRIP_DATA_PIN, RGB>       // For FastLED library initialization
 #endif
 
 #ifndef LIGHT_STRIP_DIM_RED
-#define LIGHT_STRIP_DIM_RED 0x100000
+#define LIGHT_STRIP_DIM_RED 0x100000                               // A dim red for use while observing
 #endif
 
 #ifndef LIGHT_STRIP_RED
-#define LIGHT_STRIP_RED 0xFF0000
+#define LIGHT_STRIP_RED 0xFF0000                                   // A brighter red for better nighttime visibility
 #endif
 
 #ifndef LIGHT_STRIP_WHITE
-#define LIGHT_STRIP_WHITE 0xFFA060
+#define LIGHT_STRIP_WHITE 0xFFA060                                 // Normal white light
 #endif
 
 // Roof
