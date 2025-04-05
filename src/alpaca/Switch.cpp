@@ -10,10 +10,12 @@
 #include "../libApp/relay/Relay.h"
 #include "../observatory/lighting/Lighting.h"
 
-#define LightWRW -1
-#define LightWRR -2
+#define LightORD -1
+#define LightORR -2
 #define LightORW -3
-#define LightORR -4
+#define LightWRD -4
+#define LightWRR -5
+#define LightWRW -6
 
 extern JsonDocument alpacaJsonDoc;
 int32_t switchConnected = 0;
@@ -60,16 +62,16 @@ void findMaxSwitch() {
     strcpy(switchName[maxSwitch], POWER_DEVICE6_NAME);
     maxSwitch++;
   #endif
-  #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-    switchIdentifier[maxSwitch] = LightWRW;
-    strcpy(switchDescription[maxSwitch], "Lights WRW");
-    strcpy(switchName[maxSwitch], "Warm Room White Lights");
+  #if LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightORD;
+    strcpy(switchDescription[maxSwitch], "Lights ORD");
+    strcpy(switchName[maxSwitch], "Observing Room Dark Red Lights");
     maxSwitch++;
   #endif
-  #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-    switchIdentifier[maxSwitch] = LightWRR;
-    strcpy(switchDescription[maxSwitch], "Lights WRR");
-    strcpy(switchName[maxSwitch], "Warm Room Red Lights");
+  #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightORR;
+    strcpy(switchDescription[maxSwitch], "Lights ORR");
+    strcpy(switchName[maxSwitch], "Observing Room Red Lights");
     maxSwitch++;
   #endif
   #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
@@ -78,10 +80,22 @@ void findMaxSwitch() {
     strcpy(switchName[maxSwitch], "Observing Room White Lights");
     maxSwitch++;
   #endif
-  #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-    switchIdentifier[maxSwitch] = LightORR;
-    strcpy(switchDescription[maxSwitch], "Lights ORR");
-    strcpy(switchName[maxSwitch], "Observing Room Red Lights");
+  #if LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightWRD;
+    strcpy(switchDescription[maxSwitch], "Lights WRD");
+    strcpy(switchName[maxSwitch], "Warm Room Dark Red Lights");
+    maxSwitch++;
+  #endif
+  #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightWRR;
+    strcpy(switchDescription[maxSwitch], "Lights WRR");
+    strcpy(switchName[maxSwitch], "Warm Room Red Lights");
+    maxSwitch++;
+  #endif
+  #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+    switchIdentifier[maxSwitch] = LightWRW;
+    strcpy(switchDescription[maxSwitch], "Lights WRW");
+    strcpy(switchName[maxSwitch], "Warm Room White Lights");
     maxSwitch++;
   #endif
 }
@@ -128,10 +142,12 @@ void alpacaSwitchGetSwitch() {
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   #ifdef LIGHT_PRESENT
-    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_WHITE) ? true : false; else
-    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_RED) ? true : false; else
-    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_WHITE) ? true : false; else
+    if (switchIdentifier[id] == LightORD) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_DIM_RED) ? true : false; else
     if (switchIdentifier[id] == LightORR) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_RED) ? true : false; else
+    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = (lighting.get(LL_OBSERVING_ROOM) == LM_WHITE) ? true : false; else
+    if (switchIdentifier[id] == LightWRD) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_DIM_RED) ? true : false; else
+    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_RED) ? true : false; else
+    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = (lighting.get(LL_WARM_ROOM) == LM_WHITE) ? true : false; else
   #endif
   alpacaJsonDoc["Value"] = relay.isOn(switchIdentifier[id]) ? true : false;
   alpacaJsonFinish(NoException, "");
@@ -161,10 +177,12 @@ void alpacaSwitchGetSwitchValue() {
   int id = alpacaArgLowerCase("id").toInt();
   if (id < 0 || id >= maxSwitch) { alpacaJsonFinish(InvalidValueException, InvalidValueMessage); return; }
   #ifdef LIGHT_PRESENT
-    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_WHITE ? 1.0 : 0.0; else
-    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_RED ? 1.0 : 0.0; else
-    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_WHITE ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightORD) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_DIM_RED ? 1.0 : 0.0; else
     if (switchIdentifier[id] == LightORR) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_RED ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightORW) alpacaJsonDoc["Value"] = lighting.get(LL_OBSERVING_ROOM) == LM_WHITE ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightWRD) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_DIM_RED ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightWRR) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_RED ? 1.0 : 0.0; else
+    if (switchIdentifier[id] == LightWRW) alpacaJsonDoc["Value"] = lighting.get(LL_WARM_ROOM) == LM_WHITE ? 1.0 : 0.0; else
   #endif
   alpacaJsonDoc["Value"] = relay.isOn(switchIdentifier[id]) ? 1.0 : 0.0;
   alpacaJsonFinish(NoException, "");
@@ -196,17 +214,19 @@ void alpacaSwitchSetSwitch() {
   String state = alpacaArgLowerCase("state");
   if (state.equals("true")) {
     #ifdef LIGHT_PRESENT
-      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
-      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
-      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightORD) lighting.set(LL_OBSERVING_ROOM, LM_DIM_RED); else
       if (switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightWRD) lighting.set(LL_WARM_ROOM, LM_DIM_RED); else
+      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
     #endif
     relay.on(switchIdentifier[id]);
   } else
   if (state.equals("false")) {
     #ifdef LIGHT_PRESENT
-      if (switchIdentifier[id] == LightWRW || switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_OFF); else
-      if (switchIdentifier[id] == LightORW || switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+      if (switchIdentifier[id] >= LightORW && switchIdentifier[id] <= LightORD) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+      if (switchIdentifier[id] >= LightWRW && switchIdentifier[id] <= LightWRD) lighting.set(LL_WARM_ROOM, LM_OFF); else
     #endif
     relay.off(switchIdentifier[id]);
   } else {
@@ -229,17 +249,19 @@ void alpacaSwitchSetSwitchValue() {
   int32_t value = round(atof(alpacaArgLowerCase("value").c_str()));
   if (value == 1) {
     #ifdef LIGHT_PRESENT
-      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
-      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
-      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightORD) lighting.set(LL_OBSERVING_ROOM, LM_DIM_RED); else
       if (switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightORW) lighting.set(LL_OBSERVING_ROOM, LM_WHITE); else
+      if (switchIdentifier[id] == LightWRD) lighting.set(LL_WARM_ROOM, LM_DIM_RED); else
+      if (switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_RED); else
+      if (switchIdentifier[id] == LightWRW) lighting.set(LL_WARM_ROOM, LM_WHITE); else
     #endif
     relay.on(switchIdentifier[id]);
   } else
   if (value == 0) {
     #ifdef LIGHT_PRESENT
-      if (switchIdentifier[id] == LightWRW || switchIdentifier[id] == LightWRR) lighting.set(LL_WARM_ROOM, LM_OFF); else
-      if (switchIdentifier[id] == LightORW || switchIdentifier[id] == LightORR) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+      if (switchIdentifier[id] >= LightORW && switchIdentifier[id] <= LightORD) lighting.set(LL_OBSERVING_ROOM, LM_OFF); else
+      if (switchIdentifier[id] >= LightWRW && switchIdentifier[id] <= LightWRD) lighting.set(LL_WARM_ROOM, LM_OFF); else
     #endif
     relay.off(switchIdentifier[id]);
   } else {

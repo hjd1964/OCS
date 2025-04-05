@@ -147,13 +147,13 @@ void alpacaSetup() {
       apc.sendContent(temp);
       maxSwitch++;
     #endif
-    #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights WRW<br/>\r\n", maxSwitch);
+    #if LIGHT_STRIP_DATA_PIN != OFF
+      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights ORD<br/>\r\n", maxSwitch);
       apc.sendContent(temp);
       maxSwitch++;
     #endif
-    #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights WRR<br/>\r\n", maxSwitch);
+    #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights ORR<br/>\r\n", maxSwitch);
       apc.sendContent(temp);
       maxSwitch++;
     #endif
@@ -162,8 +162,18 @@ void alpacaSetup() {
       apc.sendContent(temp);
       maxSwitch++;
     #endif
-    #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights ORR<br/>\r\n", maxSwitch);
+    #if LIGHT_STRIP_DATA_PIN != OFF
+      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights WRD<br/>\r\n", maxSwitch);
+      apc.sendContent(temp);
+      maxSwitch++;
+    #endif
+    #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights WRR<br/>\r\n", maxSwitch);
+      apc.sendContent(temp);
+      maxSwitch++;
+    #endif
+    #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      sprintf(temp, "&nbsp;&nbsp;Switch %d: Lights WRW<br/>\r\n", maxSwitch);
       apc.sendContent(temp);
       maxSwitch++;
     #endif
