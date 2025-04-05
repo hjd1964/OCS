@@ -41,7 +41,7 @@
 
   #if STAT_DC_VOLTAGE_ANALOG != OFF
   const char htmlInnerStatusDC[] PROGMEM =
-  "&nbsp;&nbsp;" L_DC_POWER_VOLTS "<div id='stat_dc_v' class='aStatus'>%s</div><br />";
+  "&nbsp;&nbsp;" L_DC_POWER_VOLTS "<div id='stat_dc_V' class='aStatus'>%s</div><br />";
   #endif
 
   #if STAT_DC_CURRENT_ANALOG != OFF
