@@ -307,6 +307,10 @@
   #error "Configuration (Config.h): LIGHT_STRIP_COUNT must a number between 1 and 1200 (number of addressable LED controller chips.)"
 #endif
 
+#if (LIGHT_STRIP_POWER_RELAY < 1 || LIGHT_STRIP_POWER_RELAY > 18) && LIGHT_STRIP_POWER_RELAY != OFF
+  #error "Configuration (Config.h): LIGHT_STRIP_POWER_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
+#endif
+
 // ROOF
 #if ROOF != OFF && ROOF != ON
   #error "Configuration (Config.h): ROOF, OCS website roll off roof control display, must OFF or ON."
