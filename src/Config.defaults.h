@@ -264,6 +264,10 @@
 #define LIGHT_STRIP_WHITE 0xFFA060                                 // Normal white light
 #endif
 
+#ifndef LIGHT_STRIP_POWER_RELAY
+#define LIGHT_STRIP_POWER_RELAY OFF                                // Optional POWER_DEVICEn relay used for light strip
+#endif
+
 // Roof
 #if ROOF_MOTOR_OPEN_RELAY == OFF || ROOF_MOTOR_OPEN_RELAY != ROOF_MOTOR_CLOSE_RELAY
   #define ROOF_SINGLE_OPEN_CLOSE_RELAY OFF

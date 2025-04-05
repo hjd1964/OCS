@@ -56,10 +56,25 @@ void Lighting::set(LightLocation location, LightMode mode) {
       warmRoomLightMode = mode;
     break;
   }
+
+  #if LIGHT_STRIP_POWER_RELAY != OFF
+    if (!relay.isOn(LIGHT_STRIP_POWER_RELAY)) {
+      observingRoomLightMode = LM_OFF;
+      warmRoomLightMode = LM_OFF;
+    }
+  #endif
 }
 
 LightMode Lighting::get(LightLocation location) {
   LightMode relayLightMode = LM_OFF;
+
+  #if LIGHT_STRIP_POWER_RELAY != OFF
+    if (!relay.isOn(LIGHT_STRIP_POWER_RELAY)) {
+      observingRoomLightMode = LM_OFF;
+      warmRoomLightMode = LM_OFF;
+    }
+  #endif
+
   switch (location) {
     case LL_OBSERVING_ROOM:
       if (relay.isOn(LIGHT_ORR_RELAY)) relayLightMode = LM_RED;
