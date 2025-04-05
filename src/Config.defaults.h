@@ -69,8 +69,8 @@
 #ifndef TIME_LOCATION_SOURCE
 #define TIME_LOCATION_SOURCE           NTP   // using Network Time Protocol is the default
 #endif
-#ifndef TIME_IP_ADDR
-#define TIME_IP_ADDR         {129,6,15,28}   // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
+#ifndef TIME_NTP_IP
+#define TIME_NTP_IP         {129,6,15,28}   // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
 #endif
 #ifndef TIME_ZONE
 #define TIME_ZONE                      -5   // Time Zone (US Eastern Standard Time in this case)
