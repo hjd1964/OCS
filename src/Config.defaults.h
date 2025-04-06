@@ -111,8 +111,6 @@
 #define WEB_HANDLER_COUNT_MAX          200        // for Ethernet webserver
 #endif
 
-// VIRTUAL SERIAL IP COMMAND CHANNELS
-
 // in milliseconds
 #ifndef WEATHER_SENSOR_SAMPLE_PERIOD
 #define WEATHER_SENSOR_SAMPLE_PERIOD   5000       // recommended <= 30 seconds
@@ -124,7 +122,15 @@
 #define CHECK_FAST                     1UL
 #endif
 
-// Relays
+// for status panel
+#ifndef MAINS_VOLTAGE
+#define MAINS_VOLTAGE                  120        // used for calculating power
+#endif
+#ifndef STAT_MAINS_CURRENT_AS_POWER
+#define STAT_MAINS_CURRENT_AS_POWER    OFF        // show AC mains power in Watts instead of current in Amps
+#endif
+
+// relays
 #ifndef RELAY1_DEFAULT_STATE
 #define RELAY1_DEFAULT_STATE           OFF
 #endif

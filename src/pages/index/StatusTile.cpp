@@ -17,6 +17,7 @@
   time_t getStatusDateTimeAndUnitStr(char *temp);
   void getStatusVoltsStr(float f, char *temp);
   void getStatusAmpsStr(float f, char *temp);
+  void getStatusMainsStr(float f, char *temp);
 
   void statusTile() {
     char temp[256];
@@ -54,13 +55,13 @@
     #endif
 
     #if STAT_MAINS_CURRENT_ANALOG != OFF
-      getStatusAmpsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG)), temp1);
+      getStatusMainsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG)), temp1);
       sprintf_P(temp, htmlInnerStatusMainsA, temp1);
       www.sendContent(temp);
     #endif
 
     #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
-      getStatusAmpsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG)), temp1);
+      getStatusMainsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG)), temp1);
       sprintf_P(temp, htmlInnerStatusAuxA, temp1);
       www.sendContent(temp);
     #endif
@@ -122,17 +123,17 @@
     www.sendContent("stat_upTime|"); www.sendContent(temp); www.sendContent("\n");
 
     #if STAT_MAINS_SENSE != OFF
-      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp,"GOOD"); else strcpy(temp,"OUT");
+      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp, L_ON); else strcpy(temp, L_OFF);
       www.sendContent("stat_mains|"); www.sendContent(temp); www.sendContent("\n");
     #endif
 
     #if STAT_MAINS_CURRENT_ANALOG != OFF
-      getStatusAmpsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG)), temp);
+      getStatusMainsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_CURRENT_ANALOG)), temp);
       www.sendContent("stat_mains_A|"); www.sendContent(temp); www.sendContent("\n");
     #endif
 
     #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
-      getStatusAmpsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG)), temp);
+      getStatusMainsStr(STAT_MAINS_ANALOG_TO_CURRENT(analog.read(STAT_MAINS_AUX_CURRENT_ANALOG)), temp);
       www.sendContent("stat_aux_A|"); www.sendContent(temp); www.sendContent("\n");
     #endif
 
@@ -207,4 +208,11 @@
     if (isnan(f)) strcpy_P(temp, htmlStringInvalid); else sprintF(temp, "%6.1fA", f);
   }
 
+  void getStatusMainsStr(float f, char *temp) {
+    #if STAT_MAINS_CURRENT_AS_POWER == ON
+      if (isnan(f)) strcpy_P(temp, htmlStringInvalid); else sprintF(temp, "%6.0fW", f*MAINS_VOLTAGE);
+    #else
+      if (isnan(f)) strcpy_P(temp, htmlStringInvalid); else sprintF(temp, "%6.1fA", f);
+    #endif
+  }
 #endif

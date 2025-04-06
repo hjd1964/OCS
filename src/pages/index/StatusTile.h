@@ -26,17 +26,29 @@
 
   #if STAT_MAINS_SENSE != OFF
   const char htmlInnerStatusMains[] PROGMEM =
-  "&nbsp;&nbsp;" L_MAINS_POWER "<div id='stat_mains' class='aStatus'>%s</div><br />";
+  "&nbsp;&nbsp;" L_MAINS_SENSE "<div id='stat_mains' class='aStatus'>%s</div><br />";
   #endif
 
   #if STAT_MAINS_CURRENT_ANALOG != OFF
   const char htmlInnerStatusMainsA[] PROGMEM =
-  "&nbsp;&nbsp;" L_MAINS_CURRENT "<div id='stat_mains_A' class='aStatus'>%s</div><br />";
+  "&nbsp;&nbsp;"
+  #if STAT_MAINS_CURRENT_AS_POWER == ON
+    L_MAINS_POWER
+  #else
+    L_MAINS_CURRENT
+  #endif
+  "<div id='stat_mains_A' class='aStatus'>%s</div><br />";
   #endif
 
   #if STAT_MAINS_AUX_CURRENT_ANALOG != OFF
   const char htmlInnerStatusAuxA[] PROGMEM =
-  "&nbsp;&nbsp;" L_MAINS_AUX_CURRENT "<div id='stat_aux_A' class='aStatus'>%s</div><br />";
+  "&nbsp;&nbsp;"
+  #if STAT_MAINS_CURRENT_AS_POWER == ON
+    L_MAINS_AUX_POWER
+  #else
+    L_MAINS_AUX_CURRENT
+  #endif
+  "<div id='stat_aux_A' class='aStatus'>%s</div><br />";
   #endif
 
   #if STAT_DC_VOLTAGE_ANALOG != OFF
