@@ -209,7 +209,7 @@
       if (isnan(h)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-        sprintF(temp, "%5.1f % ", h);
+        sprintF(temp, "%5.1f %% ", h);
       }
       #if HUMIDITY_RELAY != OFF
         if (relay.isOn(HUMIDITY_RELAY)) strcat(temp, "ˇ"); else strcat(temp, "-");
