@@ -156,7 +156,7 @@
       if (isnan(f)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-        sprintF(temp, "%6.1f %", f);
+        sprintF(temp, "%6.1f %%", f);
       }
     }
   #endif
