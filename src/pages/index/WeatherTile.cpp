@@ -191,7 +191,7 @@
       if (isnan(f)) {
         strcpy_P(temp, htmlStringInvalid);
       } else {
-        sprintF(temp, "%4.1fmpsas", f);
+        sprintF(temp, "%4.1f mpsas", f);
       }
     }
   #endif
