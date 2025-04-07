@@ -191,8 +191,8 @@
 #define THERMOSTAT                    OFF //    OFF, ON to enable the OCS website thermostat panel display.                   Option
 #define THERMOSTAT_HUMIDITY           OFF //    OFF, ON displays indoor humidity.                                             Option
 #define HEAT_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for indoor heat.                               Option
-#define COOL_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for cooling/venting.                           Option
 #define HEAT_WITH_ROOF_OPEN           OFF //    OFF, ON Heat control whilst roof is open.                                     Option
+#define COOL_RELAY                    OFF //    OFF, n. Where n=1..18 (Relay#) for cooling/venting.                           Option
 #define COOL_WITH_ROOF_OPEN           OFF //    OFF, ON Cool control whilst roof is open.                                     Option
 #define HUMIDITY_RELAY                OFF //    OFF, n. Where n=1..18 (Relay#) for dehumidifying.                             Option
 #define HUMIDITY_WITH_ROOF_OPEN       OFF //    OFF, ON Dehumidify control whilst roof is open.                               Option
