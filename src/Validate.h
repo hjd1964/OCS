@@ -262,8 +262,16 @@
   #error "Configuration (Config.h): HUMIDITY_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
-#if CONTROL_WITH_ROOF_OPEN != OFF && CONTROL_WITH_ROOF_OPEN != ON
-  #error "Configuration (Config.h): CONTROL_WITH_ROOF_OPEN, Heat/cool/dehumidify control whilst roof is open, must OFF or ON."
+#if HEAT_WITH_ROOF_OPEN != OFF && HEAT_WITH_ROOF_OPEN != ON
+  #error "Configuration (Config.h): HEAT_WITH_ROOF_OPEN, Heat control whilst roof is open, must OFF or ON."
+#endif
+
+#if COOL_WITH_ROOF_OPEN != OFF && COOL_WITH_ROOF_OPEN != ON
+  #error "Configuration (Config.h): COOL_WITH_ROOF_OPEN, Cool control whilst roof is open, must OFF or ON."
+#endif
+
+#if HUMIDITY_WITH_ROOF_OPEN != OFF && HUMIDITY_WITH_ROOF_OPEN != ON
+  #error "Configuration (Config.h): HUMIDITY_WITH_ROOF_OPEN, Dehumidify control whilst roof is open, must OFF or ON."
 #endif
 
 // Lighting

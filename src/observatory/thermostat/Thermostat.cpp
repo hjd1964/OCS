@@ -34,7 +34,7 @@ void Thermostat::poll() {
 
   #if HEAT_RELAY != OFF
     if (!isnan(averageTemperature) && averageTemperature < getHeatSetpoint() && getHeatSetpoint() != 0
-     #if CONTROL_WITH_ROOF_OPEN != ON && ROOF != OFF
+     #if HEAT_WITH_ROOF_OPEN != ON && ROOF != OFF
         && roof.isClosed()
       #endif
       ) {
@@ -46,7 +46,7 @@ void Thermostat::poll() {
 
   #if COOL_RELAY != OFF
     if (!isnan(averageTemperature) && averageTemperature > getCoolSetpoint() && getCoolSetpoint() != 0
-      #if CONTROL_WITH_ROOF_OPEN != ON && ROOF != OFF
+      #if COOL_WITH_ROOF_OPEN != ON && ROOF != OFF
         && roof.isClosed()
       #endif
     ) {
@@ -58,7 +58,7 @@ void Thermostat::poll() {
 
   #if HUMIDITY_RELAY != OFF
     if (!isnan(humidity) && (humidity > getHumiditySetpoint()) && getHumiditySetpoint() != 0
-      #if CONTROL_WITH_ROOF_OPEN != ON && ROOF != OFF
+      #if HUMIDITY_WITH_ROOF_OPEN != ON && ROOF != OFF
         && roof.isClosed()
       #endif
       ) {
