@@ -76,6 +76,9 @@
 #ifndef COLOR_CRITICAL_CONTROL_BACKGROUND
 #define COLOR_CRITICAL_CONTROL_BACKGROUND "#dcc"
 #endif
+#ifndef COLOR_IMPORTANT_CONTROL_BACKGROUND
+#define COLOR_IMPORTANT_CONTROL_BACKGROUND "#eec"
+#endif
 #ifndef COLOR_CRITICAL_CONTROL_BORDER
 #define COLOR_CRITICAL_CONTROL_BORDER "#f22"
 #endif
@@ -117,8 +120,6 @@ const char html_main_css_obsWideSwCtrl[] PROGMEM =
 const char html_main_css_obsControl[] PROGMEM =
 ".obsControl { position: relative; font-size: " TILE_FONT_SIZE_PIXELS "px; width: " TILE_WIDTH_PIXELS "px; height: " TILE_HEIGHT_PIXELS "px; float:left; padding: 10px; margin: 10px; "
 "background-color:" COLOR_CONTROL_BACKGROUND "; border-style: solid; border-width: 3px; border-color: " COLOR_CONTROL_BORDER "; }";
-const char html_main_css_stopBtn[] PROGMEM =
-".stopBtn { width:6em; height:2em; border-radius:5px; border-color:" COLOR_CRITICAL_CONTROL_BORDER "; background-color:" COLOR_CRITICAL_CONTROL_BACKGROUND "; margin-bottom:5px; margin-top:5px; }";
 const char html_main_css_buttons[] PROGMEM = 
 "button:disabled { background-color: " COLOR_CONTROL_DISABLED_BACKGROUND "; color: " COLOR_CONTROL_DISABLED "; } button { background-color: " COLOR_CONTROL ";  border-radius:6px; margin:2px; padding: 4px 8px; }";
 const char html_main_css_buttons_left[] PROGMEM = 
@@ -127,6 +128,8 @@ const char html_main_css_buttons_mid[] PROGMEM =
 ".btns_mid { margin-left: -1px; margin-right: -1px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }";
 const char html_main_css_buttons_right[] PROGMEM = 
 ".btns_right { margin-right: -1px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }";
+const char html_main_css_buttons_attn[] PROGMEM =
+".btns_attn { height:3em; border-radius:5px; border-color:" COLOR_CRITICAL_CONTROL_BORDER "; background-color:" COLOR_CRITICAL_CONTROL_BACKGROUND "; margin-bottom:5px; margin-top:5px; }";
 const char html_main_css_end[] PROGMEM =
 ".aStatus { background-color:" COLOR_LIGHT_BACKGROUND "; color:" COLOR_LIGHT_FOREGROUND "; width: 80px; height: 2px; float: right; padding: 0px; margin: 2px;}"
 "</STYLE>\r\n";

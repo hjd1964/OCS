@@ -19,7 +19,7 @@
 
   const char htmlDomeControlsBegin[] PROGMEM =
   "</div><div style='text-align: left; overflow:hidden;'>"
-  "<div style='text-align: center'><br/>";
+  "<div style='text-align: center; margin-top:5px;'>";
 
   const char htmlDomeControlsEnd[] PROGMEM = "</div>\r\n";
 
@@ -43,20 +43,21 @@
   "onchange='s(\"dome_azm\",value)' value='%d'>&nbsp;&nbsp;";
 
   const char htmlDomeGoto[] PROGMEM =
-  "<input type='button' onclick='s(\"dome\",\"goto\")' value='" L_GOTO "'>&nbsp;&nbsp;"
-  "<input type='button' onclick='s(\"dome\",\"sync\")' value='" L_SYNC "'><br/>";
+  "<button onclick='s(\"dome\",\"goto\")' type='button'>" L_GOTO "</button>&nbsp;"
+  "<button onclick='s(\"dome\",\"sync\")'  type='button'>" L_SYNC "</button><br/>";
 
   const char htmlDomeStop[] PROGMEM =
-  "<input type='button' class='stopBtn' onclick='s(\"dome\",\"stop\")' value='" L_STOP "'><br/>";
+  "<button class='btns_attn' onclick='s(\"dome\",\"stop\")' type='button'>&nbsp;" L_STOP "&nbsp;</button><br/>";
 
   const char htmlDomeHome[] PROGMEM =
-  "<input type='button' onclick='s(\"dome\",\"home\")' value='" L_FIND_HOME "'>&nbsp;&nbsp;"
-  "<input type='button' onclick='s(\"dome\",\"reset\")' value='" L_RESET_HOME "'><br/>";
+  "<button onclick='s(\"dome\",\"home\")' type='button'>" L_FIND_HOME "</button>&nbsp;&nbsp;"
+  "<button onclick='s(\"dome\",\"reset\")' type='button'>" L_RESET_HOME "</button><br/>";
 
   const char htmlDomePark1[] PROGMEM =
-  "<input type='button' style='margin-top:5px;' onclick='s(\"dome\",\"park\")' value='" L_PARK "'>"
-  "<input type='button' onclick='s(\"dome\",\"unpark\")' value='" L_UNPARK "'>";
+  "<button onclick='s(\"dome\",\"unpark\")' type='button'>" L_UNPARK "</button>"
+  "<button onclick='s(\"dome\",\"park\")' type='button'>" L_PARK "</button>";
   const char htmlDomePark2[] PROGMEM =
-  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' onclick='s(\"dome\",\"setpark\")' value='" L_SET_PARK "'><br/>";
+  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+  "<button onclick='s(\"dome\",\"setpark\")' type='button'>" L_SET_PARK "</button><br/>";
 
 #endif

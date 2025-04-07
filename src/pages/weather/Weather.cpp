@@ -23,7 +23,6 @@
     strcpy_P(temp, html_main_css_begin); www.sendContent(temp); 
     strcpy_P(temp, html_main_css_a); www.sendContent(temp);
     strcpy_P(temp, html_main_css_b); www.sendContent(temp);
-    strcpy_P(temp, html_main_css_stopBtn); www.sendContent(temp);
     strcpy_P(temp, html_main_css_misc); www.sendContent(temp);
     strcpy_P(temp, html_main_css_a1); www.sendContent(temp);
     strcpy_P(temp, html_main_css_a2); www.sendContent(temp);

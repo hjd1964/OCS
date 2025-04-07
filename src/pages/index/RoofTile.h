@@ -37,20 +37,22 @@
   #if !(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)
     const char htmlRoofControlStopPress[] PROGMEM =
     #if ROOF_SINGLE_OPEN_CLOSE_STOP_RELAY == ON
-      "<input type='button' class='stopBtn' onclick='s(\"roof\",\"stop\")' value='" L_PRESS "' />&nbsp;&nbsp;&nbsp;";
+      "<input type='button' class='btns_attn' onclick='s(\"roof\",\"stop\")' value='&nbsp;" L_PRESS "&nbsp;' />&nbsp;&nbsp;&nbsp;";
     #else
-      "<input type='button' class='stopBtn' onclick='s(\"roof\",\"stop\")' value='" L_STOP "' />&nbsp;&nbsp;&nbsp;";
+      "<input type='button' class='btns_attn' onclick='s(\"roof\",\"stop\")' value='&nbsp;" L_STOP "&nbsp;' />&nbsp;&nbsp;&nbsp;";
     #endif
   #endif
 
   const char htmlRoofControlSafetyOverride[] PROGMEM =
   #if ROOF_USER_SAFETY_OVERRIDE == ON
-    "<input type='button' onclick='s(\"roof\",\"override\")' value='" L_SAFETY_OVERRIDE "' />"
+    "<input type='button' class='btns_attn' style='background-color: " COLOR_IMPORTANT_CONTROL_BACKGROUND "' onclick='s(\"roof\",\"override\")' value='&nbsp;" L_SAFETY_OVERRIDE "&nbsp;' />"
   #endif
   "<br />";
 
   const char htmlRoofControlOpenClose[] PROGMEM =
-  "<input type='button' onclick='s(\"roof\",\"open\")' value='" L_OPEN_ROOF "' />&nbsp;&nbsp;&nbsp;"
-  "<input type='button' onclick='s(\"roof\",\"close\")' value='" L_CLOSE_ROOF "' /><br />";
+  "<button class='btns_right' onpointerdown=\"s('roof','open')\" type='button'>" L_OPEN_ROOF "</button>"
+  "<button class='btns_left' onpointerdown=\"s('roof','close')\" type='button'>" L_CLOSE_ROOF "</button><br />";
+//  "<input type='button' onclick='s(\"roof\",\"open\")' class='btns_left' value='" L_OPEN_ROOF "' />&nbsp;&nbsp;&nbsp;"
+//  "<input type='button' onclick='s(\"roof\",\"close\")' class='btns_right' value='" L_CLOSE_ROOF "' /><br />";
 
 #endif
