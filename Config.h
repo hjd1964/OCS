@@ -113,11 +113,11 @@
 #define LIGHT_ORR_RELAY               OFF //    OFF, n. Where n=1..18 (Relay#) for Observing room red lights.                 Option
 #define LIGHT_OUTSIDE_RELAY           OFF //    OFF, n. Where n=1..18 (Relay#) for Outside flood.                             Option
 
-#define LIGHT_STRIP_DATA_PIN          OFF //    OFF, n. GPIO pin to LED controller chips (default WS2811GRB)                  Option
 #define LIGHT_STRIP_COUNT              16 //     16, n. Where n=1..1000 LED controller chip count                             Option
 #define LIGHT_STRIP_WR_RANGE        {0,7} //  {0,7}, n,n. Where n=0..LIGHT_STRIP_COUNT-1 ID range for Warm room               Option
 #define LIGHT_STRIP_OR_RANGE       {8,15} // {8,15}, n,n. Where n=0..LIGHT_STRIP_COUNT-1 LED ID for Observing room            Option
 #define LIGHT_STRIP_POWER_RELAY       OFF //    OFF, n. Where n=1..18 (Relay#) optional POWER_DEVICE used for light strip.    Option
+#define LIGHT_STRIP_DATA_PIN          OFF //    OFF, n. GPIO pin to LED controller chips (default WS2811RGB.)                 Option
 
 #define LIGHT_SW_SENSE                OFF //    OFF, n. Where n=1..8 (Sense#) for switch to turn warm room lights on/off.     Option
 
