@@ -16,18 +16,20 @@
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(L_WARM_ROOM_LIGHTS);
       www.sendContent("</div><div class='obsWideSwCtrl'>");
-      sprintf_P(temp, htmlLightControl, "wr","off","right","wr","off",L_OFF);
-      www.sendContent(temp);
-      #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-        sprintf_P(temp, htmlLightControl, "wr","dr","mid","wr","dr",L_DARK);
-        www.sendContent(temp);
-        sprintf_P(temp, htmlLightControl, "wr","r",(LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF) ? "mid" : "left","wr","r",L_RED);
-        www.sendContent(temp);
-      #endif
       #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
         sprintf_P(temp, htmlLightControl, "wr","w","left","wr","w",L_ON);
         www.sendContent(temp);
       #endif
+      #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+        sprintf_P(temp, htmlLightControl, "wr","r",(LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF) ? "mid" : "left","wr","r",L_RED);
+        www.sendContent(temp);
+        #if LIGHT_STRIP_DATA_PIN != OFF
+          sprintf_P(temp, htmlLightControl, "wr","dr","mid","wr","dr",L_DARK);
+          www.sendContent(temp);
+        #endif
+      #endif
+      sprintf_P(temp, htmlLightControl, "wr","off","right","wr","off",L_OFF);
+      www.sendContent(temp);
       www.sendContent("</div><br />\n");
     #endif
 
@@ -35,18 +37,20 @@
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(L_OBSERVING_ROOM_LIGHTS);
       www.sendContent("</div><div class='obsWideSwCtrl'>");
-      sprintf_P(temp, htmlLightControl, "or","off","right","or","off",L_OFF);
-      www.sendContent(temp);
-      #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
-        sprintf_P(temp, htmlLightControl, "or","dr","mid","or","dr",L_DARK);
-        www.sendContent(temp);
-        sprintf_P(temp, htmlLightControl, "or","r",(LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF) ? "mid" : "left","or","r",L_RED);
-        www.sendContent(temp);
-      #endif
       #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
         sprintf_P(temp, htmlLightControl, "or","w","left","or","w",L_ON);
         www.sendContent(temp);
       #endif
+      #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+        sprintf_P(temp, htmlLightControl, "or","r",(LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF) ? "mid" : "left","or","r",L_RED);
+        www.sendContent(temp);
+        #if LIGHT_STRIP_DATA_PIN != OFF
+          sprintf_P(temp, htmlLightControl, "or","dr","mid","or","dr",L_DARK);
+          www.sendContent(temp);
+        #endif
+      #endif
+      sprintf_P(temp, htmlLightControl, "or","off","right","or","off",L_OFF);
+      www.sendContent(temp);
       www.sendContent("</div><br />\n");
     #endif
 
@@ -67,7 +71,7 @@
         if (lightMode == LM_DIM_RED) www.sendContent("light_wr_dr|selected\n"); else www.sendContent("light_wr_dr|unselected\n");
         if (lightMode == LM_RED) www.sendContent("light_wr_r|selected\n"); else www.sendContent("light_wr_r|unselected\n");
       #endif
-      #if LIGHT_WRR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      #if LIGHT_WRW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
         if (lightMode == LM_WHITE) www.sendContent("light_wr_w|selected\n"); else www.sendContent("light_wr_w|unselected\n");
       #endif
     #endif
@@ -79,7 +83,7 @@
         if (lightMode == LM_DIM_RED) www.sendContent("light_or_dr|selected\n"); else www.sendContent("light_or_dr|unselected\n");
         if (lightMode == LM_RED) www.sendContent("light_or_r|selected\n"); else www.sendContent("light_or_r|unselected\n");
       #endif
-      #if LIGHT_ORR_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
+      #if LIGHT_ORW_RELAY != OFF || LIGHT_STRIP_DATA_PIN != OFF
         if (lightMode == LM_WHITE) www.sendContent("light_or_w|selected\n"); else www.sendContent("light_or_w|unselected\n");
       #endif
     #endif

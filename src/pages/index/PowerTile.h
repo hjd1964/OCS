@@ -16,7 +16,7 @@
   "<div>";
 
   const char html_powerControl[] PROGMEM =
-  "<button id='pwr%s_%s' class='btns_%s' onpointerdown=\"s('pwr%s','%s')\" type='button'>%s</button>";
+  "<button id='pwr%s_%s' class='btns_%s' style='float: right;' onpointerdown=\"s('pwr%s','%s')\" type='button'>%s</button>";
 
   const char htmlPowerEnd[] PROGMEM =
   "<br />"

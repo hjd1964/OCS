@@ -18,7 +18,7 @@
   const char htmlLightingEnd[] PROGMEM = "</div>\r\n";
 
   const char htmlLightControl[] PROGMEM =
-  "<button id='light_%s_%s' class='btns_%s' onpointerdown=\"s('light_%s','%s')\" type='button'>%s</button>";
+  "<button id='light_%s_%s' class='btns_%s' style='float:right' onpointerdown=\"s('light_%s','%s')\" type='button'>%s</button>";
 
   const char htmlLightingExit[] PROGMEM =
   #if LIGHT_OUTSIDE_RELAY != OFF

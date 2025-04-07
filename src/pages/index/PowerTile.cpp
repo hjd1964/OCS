@@ -18,9 +18,9 @@
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE1_NAME);
       www.sendContent("</div><div class='obsSwCtrl'>");
-      sprintf_P(temp, html_powerControl, "1","off","right","1","off",L_OFF);
-      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "1","on","left","1","on",L_ON);
+      www.sendContent(temp);
+      sprintf_P(temp, html_powerControl, "1","off","right","1","off",L_OFF);
       www.sendContent(temp);
       www.sendContent("</div><br/>");
     #endif
@@ -28,9 +28,9 @@
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE2_NAME);
       www.sendContent("</div><div class='obsSwCtrl'>");
-      sprintf_P(temp, html_powerControl, "2","off","right","2","off",L_OFF);
-      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "2","on","left","2","on",L_ON);
+      www.sendContent(temp);
+      sprintf_P(temp, html_powerControl, "2","off","right","2","off",L_OFF);
       www.sendContent(temp);
       www.sendContent("</div><br/>");
     #endif
@@ -38,9 +38,9 @@
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE3_NAME);
       www.sendContent("</div><div class='obsSwCtrl'>");
-      sprintf_P(temp, html_powerControl, "3","off","right","3","off",L_OFF);
-      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "3","on","left","3","on",L_ON);
+      www.sendContent(temp);
+      sprintf_P(temp, html_powerControl, "3","off","right","3","off",L_OFF);
       www.sendContent(temp);
       www.sendContent("</div><br/>");
     #endif
