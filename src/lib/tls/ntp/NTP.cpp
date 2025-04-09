@@ -16,7 +16,7 @@
 
 #include "../../tasks/OnTask.h"
 
-IPAddress timeServer = IPAddress TIME_NTP_IP;
+IPAddress timeServer = IPAddress TIME_IP_ADDR;
 
 // local port to listen for UDP packets
 unsigned int localPort = 8888;
