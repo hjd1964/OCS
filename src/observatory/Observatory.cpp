@@ -136,8 +136,6 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     dome.init();
   #endif
 
-  watchdog.enable(8);
-
   // bring network servers up
   #if OPERATIONAL_MODE == WIFI
     wifiManager.init();
@@ -326,6 +324,9 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
   // start observatory monitor task
   VF("MSG: Observatory, start monitor task (rate 200ms priority 4)... ");
   if (tasks.add(200, 0, true, 4, observatoryWrapper, "Obsrvty")) { VLF("success"); } else { VLF("FAILED!"); }
+
+  // finally, start the watchdog
+  watchdog.enable(8);
 }
 
 void Observatory::connectionCheck() {
