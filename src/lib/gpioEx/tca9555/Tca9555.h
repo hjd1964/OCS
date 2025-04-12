@@ -11,9 +11,6 @@ class Tca9555 : public Gpio {
     // scan for TCA9555 device
     bool init();
 
-    // process any gpio commands
-    bool command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError);
-
     void pinMode(int pin, int mode);
 
     // one sixteen channel TCA9555 GPIO is supported, this gets the last set value

@@ -5,17 +5,17 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == DS2413
 
-#include "../1wire/1Wire.h"
+#include "../../1wire/1Wire.h"
 
 #include <DallasGPIO.h>               // my DallasGPIO library https://github.com/hjd1964/Arduino-DS2413GPIO-Control-Library
 DallasGPIO DS2413GPIO(&oneWire);
 
-#include "../tasks/OnTask.h"
+#include "../../tasks/OnTask.h"
 
 void ds2413Wrapper() { gpio.poll(); }
 
 // scan for a DS2413 device on the 1-wire bus
-bool GpioDs2413::init() {
+bool Ds2413::init() {
   static bool initialized = false;
   if (initialized) return found;
 
@@ -74,7 +74,7 @@ bool GpioDs2413::init() {
 }
 
 // set GPIO pin mode for INPUT or OUTPUT (both pins of any device must be in the same mode)
-void GpioDs2413::pinMode(int pin, int mode) {
+void Ds2413::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin <= lastValidPin) {
     if (mode == INPUT_PULLUP) mode = INPUT;
     this->mode[pin/2] = mode;
@@ -82,19 +82,19 @@ void GpioDs2413::pinMode(int pin, int mode) {
 }
 
 // get GPIO pin state
-int GpioDs2413::digitalRead(int pin) {
+int Ds2413::digitalRead(int pin) {
   if (found && (long)(millis() - goodUntil[pin/2]) < 0 && pin >= 0 && pin <= lastValidPin) {
     return state[pin];
   } else return -1;
 }
 
 // set GPIO pin state
-void GpioDs2413::digitalWrite(int pin, int value) {
+void Ds2413::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin <= lastValidPin) state[pin] = value;
 }
 
 // update the DS2413
-void GpioDs2413::poll() {
+void Ds2413::poll() {
   if (found) {
     // loop to get/set the GPIO
     // tasks.yield() during the 1-wire command sequence is ok since:

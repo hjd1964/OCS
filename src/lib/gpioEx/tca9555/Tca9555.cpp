@@ -9,20 +9,18 @@
   #define GPIO_TCA9555_I2C_ADDRESS 0x27
 #endif
 
-#include "../tasks/OnTask.h"
-
 #include <TCA9555.h> // https://www.arduino.cc/reference/en/libraries/tca9555/
 
 TCA9555 tca(GPIO_TCA9555_I2C_ADDRESS, &HAL_WIRE); // might need to change this I2C Address?
 
 // check for TCA9555 device on the I2C bus
-bool GpioTca9555::init() {
+bool Tca9555::init() {
   static bool initialized = false;
   if (initialized) return found;
 
   if (tca.begin()) {
     found = true;
-    for (int i = 0; i < 16; i++) { tca.pinMode(i, INPUT); }
+    for (int i = 0; i < 16; i++) { tca.pinMode1(i, INPUT); }
   } else { found = false; DLF("WRN: Gpio.init(), TCA9555 (I2C 0x"); if (DEBUG != OFF) SERIAL_DEBUG.print(GPIO_TCA9555_I2C_ADDRESS, HEX); DLF(") not found"); }
   #ifdef HAL_WIRE_CLOCK
     HAL_WIRE.setClock(HAL_WIRE_CLOCK);
@@ -32,34 +30,34 @@ bool GpioTca9555::init() {
 }
 
 // set GPIO pin (0 to 15) mode for INPUT, INPUT_PULLUP, or OUTPUT
-void GpioTca9555::pinMode(int pin, int mode) {
+void Tca9555::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin <= 15) {
     #ifdef INPUT_PULLDOWN
       if (mode == INPUT_PULLDOWN) mode = INPUT;
     #endif
     if (mode == INPUT_PULLUP) mode = INPUT;
-    tca.pinMode(pin, mode);
+    tca.pinMode1(pin, mode);
     this->mode[pin] = mode;
   }
 }
 
 // one sixteen channel Tca9555 GPIO is supported, this gets the last set value
-int GpioTca9555::digitalRead(int pin) {
+int Tca9555::digitalRead(int pin) {
   if (found && pin >= 0 && pin <= 15) {
     if (mode[pin] == INPUT || mode[pin] == INPUT_PULLUP) {
-      return tca.digitalRead(pin);
+      return tca.read1(pin);
     } else return state[pin]; 
   } else return 0;
 }
 
 // one sixteen channel Tca9555 GPIO is supported, this sets each output on or off
-void GpioTca9555::digitalWrite(int pin, int value) {
+void Tca9555::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin <= 15) {
     state[pin] = value;
     if (mode[pin] == OUTPUT) {
-      tca.digitalWrite(pin, value);
+      tca.write1(pin, value);
     } else {
-      if (value == HIGH) pinMode(pin, INPUT_PULLUP); else pinMode(pin, INPUT);
+      if (value == HIGH) tca.pinMode1(pin, INPUT_PULLUP); else tca.pinMode1(pin, INPUT);
     }
   } else return;
 }

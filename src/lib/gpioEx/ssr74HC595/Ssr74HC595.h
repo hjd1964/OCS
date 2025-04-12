@@ -6,13 +6,10 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == SSR74HC595
 
-class GpioSsr74HC595 : public Gpio {
+class Ssr74HC595 : public Gpio {
   public:
     // init for SSR74HC595 device
     bool init();
-
-    // process any gpio commands
-    bool command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError);
 
     // set GPIO pin mode for INPUT, INPUT_PULLUP, or OUTPUT (input does nothing always, false)
     void pinMode(int pin, int mode);
@@ -31,6 +28,6 @@ class GpioSsr74HC595 : public Gpio {
     bool state[32];
 };
 
-extern GpioSsr74HC595 gpio;
+extern Ssr74HC595 gpio;
 
 #endif

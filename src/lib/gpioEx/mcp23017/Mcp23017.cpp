@@ -9,14 +9,12 @@
   #define GPIO_MCP23017_I2C_ADDRESS 0x20
 #endif
 
-#include "../tasks/OnTask.h"
-
 // needs: https://github.com/adafruit/Adafruit-MCP23017-Arduino-Library and https://github.com/adafruit/Adafruit_BusIO
 #include "Adafruit_MCP23X17.h"
 Adafruit_MCP23X17 mcp;
 
 // check for MCP23017 device on the I2C bus
-bool GpioMcp23017::init() {
+bool Mcp23017::init() {
   static bool initialized = false;
   if (initialized) return found;
 
@@ -35,7 +33,7 @@ bool GpioMcp23017::init() {
 }
 
 // set GPIO pin (0 to 15) mode for INPUT, INPUT_PULLUP, or OUTPUT
-void GpioMcp23017::pinMode(int pin, int mode) {
+void Mcp23017::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin <= 15) {
     #ifdef INPUT_PULLDOWN
       if (mode == INPUT_PULLDOWN) mode = INPUT;
@@ -46,7 +44,7 @@ void GpioMcp23017::pinMode(int pin, int mode) {
 }
 
 // one sixteen channel MCP23017 GPIO is supported, this gets the last set value
-int GpioMcp23017::digitalRead(int pin) {
+int Mcp23017::digitalRead(int pin) {
   if (found && pin >= 0 && pin <= 15) {
     if (mode[pin] == INPUT || mode[pin] == INPUT_PULLUP) {
       return mcp.digitalRead(pin);
@@ -55,7 +53,7 @@ int GpioMcp23017::digitalRead(int pin) {
 }
 
 // one sixteen channel MCP23017 GPIO is supported, this sets each output on or off
-void GpioMcp23017::digitalWrite(int pin, int value) {
+void Mcp23017::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin <= 15) {
     state[pin] = value;
     if (mode[pin] == OUTPUT) {
@@ -66,6 +64,6 @@ void GpioMcp23017::digitalWrite(int pin, int value) {
   } else return;
 }
 
-GpioMcp23017 gpio;
+Mcp23017 gpio;
 
 #endif

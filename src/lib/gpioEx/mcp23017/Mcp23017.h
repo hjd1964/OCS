@@ -11,9 +11,6 @@ class Mcp23017 : public Gpio {
     // scan for MCP23017 device
     bool init();
 
-    // process any gpio commands
-    bool command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError);
-
     void pinMode(int pin, int mode);
 
     // one sixteen channel MCP23017 GPIO is supported, this gets the last set value
@@ -29,6 +26,6 @@ class Mcp23017 : public Gpio {
     bool state[16] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 };
 
-extern GpioMcp23017 gpio;
+extern Mcp23017 gpio;
 
 #endif

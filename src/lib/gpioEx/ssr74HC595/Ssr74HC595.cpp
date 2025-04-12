@@ -5,8 +5,6 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == SSR74HC595
 
-#include "../tasks/OnTask.h"
-
 #if !defined(GPIO_SSR74HC595_LATCH_PIN) || GPIO_SSR74HC595_LATCH_PIN == OFF
   #error "GPIO device SSR74HC595 GPIO_SSR74HC595_LATCH_PIN must be present and not OFF."
 #endif
@@ -70,7 +68,7 @@ IRAM_ATTR void shiftOut20MHz(uint32_t val) {
 }
 
 // get device ready
-bool GpioSsr74HC595::init() {
+bool Ssr74HC595::init() {
   static bool initialized = false;
   if (initialized) return found;
 
@@ -90,7 +88,7 @@ bool GpioSsr74HC595::init() {
 }
 
 // set GPIO pin mode for INPUT, INPUT_PULLUP, or OUTPUT (input does nothing always, false)
-void GpioSsr74HC595::pinMode(int pin, int mode) {
+void Ssr74HC595::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin < GPIO_SSR74HC595_COUNT) {
     #ifdef INPUT_PULLDOWN
       if (mode == INPUT_PULLDOWN) mode = INPUT;
@@ -100,14 +98,14 @@ void GpioSsr74HC595::pinMode(int pin, int mode) {
 }
 
 // up to four eight channel 74HC595 GPIOs are supported, this gets the last set value (output only)
-int GpioSsr74HC595::digitalRead(int pin) {
+int Ssr74HC595::digitalRead(int pin) {
   if (found && pin >= 0 && pin < GPIO_SSR74HC595_COUNT) {
     return state[pin]; 
   } else return 0;
 }
 
 // up to four eight channel 74HC595 GPIOs are supported, this sets each output on or off
-void GpioSsr74HC595::digitalWrite(int pin, int value) {
+void Ssr74HC595::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin < GPIO_SSR74HC595_COUNT) {
     cli();
     state[pin] = value;
@@ -124,6 +122,6 @@ void GpioSsr74HC595::digitalWrite(int pin, int value) {
   } else return;
 }
 
-GpioSsr74HC595 gpio;
+Ssr74HC595 gpio;
 
 #endif

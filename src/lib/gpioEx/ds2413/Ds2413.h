@@ -8,13 +8,10 @@
 
 #define DS2413_MAX_DEVICES 2
 
-class GpioDs2413 : public Gpio {
+class Ds2413 : public Gpio {
   public:
     // scan for DS2413 devices on the 1-wire bus
     bool init();
-
-    // process any gpio commands
-    bool command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError);
 
     // set GPIO pin mode for INPUT or OUTPUT (both pins of any device must be in the same mode)
     void pinMode(int pin, int mode);
@@ -42,6 +39,6 @@ class GpioDs2413 : public Gpio {
     unsigned long goodUntil[DS2413_MAX_DEVICES] = {0, 0};
 };
 
-extern GpioDs2413 gpio;
+extern Ds2413 gpio;
 
 #endif
