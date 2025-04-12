@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------------
-// I2C PCF8575 GPIO support
+// I2C PCF8574 GPIO support
 #pragma once
 
 #include "../GpioBase.h"
