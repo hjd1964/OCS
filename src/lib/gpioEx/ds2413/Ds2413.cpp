@@ -15,7 +15,7 @@ DallasGPIO DS2413GPIO(&oneWire);
 void ds2413Wrapper() { gpio.poll(); }
 
 // scan for a DS2413 device on the 1-wire bus
-bool Ds2413::init() {
+bool GpioDs2413::init() {
   static bool initialized = false;
   if (initialized) return found;
 
@@ -74,7 +74,7 @@ bool Ds2413::init() {
 }
 
 // set GPIO pin mode for INPUT or OUTPUT (both pins of any device must be in the same mode)
-void Ds2413::pinMode(int pin, int mode) {
+void GpioDs2413::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin <= lastValidPin) {
     if (mode == INPUT_PULLUP) mode = INPUT;
     this->mode[pin/2] = mode;
@@ -82,19 +82,19 @@ void Ds2413::pinMode(int pin, int mode) {
 }
 
 // get GPIO pin state
-int Ds2413::digitalRead(int pin) {
+int GpioDs2413::digitalRead(int pin) {
   if (found && (long)(millis() - goodUntil[pin/2]) < 0 && pin >= 0 && pin <= lastValidPin) {
     return state[pin];
   } else return -1;
 }
 
 // set GPIO pin state
-void Ds2413::digitalWrite(int pin, int value) {
+void GpioDs2413::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin <= lastValidPin) state[pin] = value;
 }
 
 // update the DS2413
-void Ds2413::poll() {
+void GpioDs2413::poll() {
   if (found) {
     // loop to get/set the GPIO
     // tasks.yield() during the 1-wire command sequence is ok since:

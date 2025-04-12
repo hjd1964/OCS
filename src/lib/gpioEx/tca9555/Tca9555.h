@@ -6,7 +6,7 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == X9555
 
-class Tca9555 : public Gpio {
+class GpioTca9555 : public Gpio {
   public:
     // scan for TCA9555 device
     bool init();
@@ -26,6 +26,6 @@ class Tca9555 : public Gpio {
     bool state[16] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 };
 
-extern Tca9555 gpio;
+extern GpioTca9555 gpio;
 
 #endif

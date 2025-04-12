@@ -2,8 +2,6 @@
 
 #include "ThermostatSensor.h"
 
-#include <Wire.h>
-
 #include "TphBme280.h"
 #include "TpBmp280.h"
 #include "TpBmp085.h"
@@ -23,7 +21,7 @@ bool _inside_humidityAssigned = false;
 
 void ThermostatSensor::init(){
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
-  Wire.setClock(HAL_WIRE_CLOCK);
+  HAL_WIRE.setClock(HAL_WIRE_CLOCK);
 
   #if defined(THERMOSTAT_SENSOR_TPH_BME280) && THERMOSTAT_SENSOR_TPH_BME280 != OFF
     bme280t.init();

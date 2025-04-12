@@ -27,10 +27,10 @@ bool Mlx90614w::init() {
   if (mlxSensor.begin(WEATHER_SENSOR_CLOUD_MLX90614)) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
-      Wire.end();
-      Wire.begin();
+      HAL_WIRE.end();
+      HAL_WIRE.begin();
     #endif
-    Wire.setClock(HAL_WIRE_CLOCK);
+    HAL_WIRE.setClock(HAL_WIRE_CLOCK);
 
     VF("MSG: Mlx90614w, start monitor task (default rate priority 7)... ");
     if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "weaMlx")) {

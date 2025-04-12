@@ -6,7 +6,7 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == MCP23017
 
-class Mcp23017 : public Gpio {
+class GpioMcp23017 : public Gpio {
   public:
     // scan for MCP23017 device
     bool init();
@@ -26,6 +26,6 @@ class Mcp23017 : public Gpio {
     bool state[16] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 };
 
-extern Mcp23017 gpio;
+extern GpioMcp23017 gpio;
 
 #endif

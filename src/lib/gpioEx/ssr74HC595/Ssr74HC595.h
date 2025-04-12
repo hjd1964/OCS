@@ -6,7 +6,7 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == SSR74HC595
 
-class Ssr74HC595 : public Gpio {
+class GpioSsr74HC595 : public Gpio {
   public:
     // init for SSR74HC595 device
     bool init();
@@ -28,6 +28,6 @@ class Ssr74HC595 : public Gpio {
     bool state[32];
 };
 
-extern Ssr74HC595 gpio;
+extern GpioSsr74HC595 gpio;
 
 #endif

@@ -8,7 +8,7 @@
 
 #define DS2413_MAX_DEVICES 2
 
-class Ds2413 : public Gpio {
+class GpioDs2413 : public Gpio {
   public:
     // scan for DS2413 devices on the 1-wire bus
     bool init();
@@ -39,6 +39,6 @@ class Ds2413 : public Gpio {
     unsigned long goodUntil[DS2413_MAX_DEVICES] = {0, 0};
 };
 
-extern Ds2413 gpio;
+extern GpioDs2413 gpio;
 
 #endif

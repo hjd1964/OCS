@@ -28,10 +28,10 @@ bool Bmp085w::init() {
   if (bmp085SensorW.begin()) {
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
-      Wire.end();
-      Wire.begin();
+      HAL_WIRE.end();
+      HAL_WIRE.begin();
     #endif
-    Wire.setClock(HAL_WIRE_CLOCK);
+    HAL_WIRE.setClock(HAL_WIRE_CLOCK);
 
     VF("MSG: Bmp085w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, bmp085Wrapper, "wea085")) {
