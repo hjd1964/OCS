@@ -69,5 +69,6 @@
 // EXTERNAL GPIO SUPPORT -----------------------------------------------------------------------------------------------------------
 #define GPIO_DEVICE                   OFF //    OFF, MCP23008: for 8-ch I2C gpio.                                             Option
                                           //         MCP23017, X9555, or X8575: for 16-ch I2C gpio.
+                                          //         X8574: for one to four (by GPIO_PCF8574_I2C_NUM_DEVICES) 8-Ch I2C gpio.
                                           //         SSR74HC595: for up to 32-ch gpio (serial shift register, output only.)
                                           //         Works w/OCS sense and relays, channels assigned in order pin# 512 and up.
