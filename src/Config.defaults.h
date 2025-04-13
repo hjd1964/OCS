@@ -93,6 +93,19 @@
 #define SERIAL_C_BAUD_DEFAULT          OFF
 #endif
 
+#ifndef SERIAL_ONSTEP
+#define SERIAL_ONSTEP                  OFF
+#endif
+#if SERIAL_ONSTEP == NETWORK_STATION
+#define SERIAL_CLIENT                  ON
+#elif SERIAL_ONSTEP != OFF
+#define SERIAL_UART SERIAL_ONSTEP
+#ifndef SERIAL_ONSTEP_BAUD
+#define SERIAL_ONSTEP_BAUD             9600
+#endif
+#define SERIAL_UART_BAUD               SERIAL_ONSTEP_BAUD
+#endif
+
 // enable and customize WiFi/Ethernet functionality
 // for other default IP settings see the file:
 // src/lib/wifi/WifiManager.defaults.h

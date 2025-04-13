@@ -5,7 +5,9 @@
 #include "../../Common.h"
 
 #ifdef ROOF_PRESENT
+
 #include "../../locales/Locale.h" 
+#include "../../libApp/commands/ProcessCmds.h"
 
 typedef enum RoofError {
   RERR_NONE,
@@ -32,7 +34,7 @@ typedef enum RoofError {
   RERR_CLOSE_EXCEPT_MOUNT_NOT_PARKED
 } RoofError;
 
-#include "../../libApp/commands/ProcessCmds.h"
+typedef enum RoofState {RS_IDLE, RS_OPENING, RS_CLOSING} RoofState;
 
 typedef struct RoofFault {
   uint16_t openUnknown: 1;
@@ -107,11 +109,10 @@ class Roof {
     // for soft start etc, pwm power level
     int powerLevel();
 
-    // cancel a waiting for park sequence
-    void stopWaitingForPark();
-
-    // called repeatedly to check if the mount is parked to trigger roof close
-    void parkCheckPoll();
+    #if ROOF_MOUNT_PARK_BEFORE_CLOSE == ON
+      // called repeatedly to check if the mount is parked to trigger roof close
+      void parkCheckPoll();
+    #endif
 
     // called repeatedly to control roof movement
     void poll();
@@ -123,8 +124,19 @@ class Roof {
     // called repeatedly to close the roof
     void continueClosing();
 
+    #if ROOF_MOUNT_PARK_BEFORE_CLOSE == ON
+      // cancel waiting for park sequence
+      void stopWaitingForPark();
+
+      // sends a signal to attempt to park the mount
+      bool parkMount();
+    #endif
+
+    // checks roof interlock sense and mount park state to determine if it's safe to move the roof
+    bool safeToMove();
+
     // roof status and errors
-    volatile char state = 'i';
+    volatile RoofState state = RS_IDLE;
     RoofFault fault = {false, false, false, false, false, false, false, false, false, false, false};
     RoofError lastError = RERR_NONE;
     

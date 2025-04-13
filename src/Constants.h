@@ -63,6 +63,11 @@
 // IP modes are directly selected in the OCS pinmaps
 #define SERIAL_IP_MODE              OFF
 
+// a constant to trigger setting up a WiFi or Ethernet station connection to OnStep
+// that connection currently supports parking the mount before closing any roof/shutter
+// and detecting if OnStep thinks the mount has been parked (as a safety interlock)
+#define NETWORK_STATION             -3
+
 // use timeLib for internal clock
 #define TLS_TIMELIB
 

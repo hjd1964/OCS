@@ -161,6 +161,16 @@ void setup() {
     #endif
   #endif
 
+  // start any serial connection to OnStep
+  #if OPERATIONAL_MODE != OFF
+    #if SERIAL_CLIENT == ON
+      SERIAL_IP.begin(9997, 2L*1000L, true);
+    #endif
+  #endif
+  #ifdef SERIAL_UART
+    SERIAL_UART.begin(SERIAL_UART_BAUD);
+  #endif
+
   // start command channel tasks
   commandChannelInit();
 

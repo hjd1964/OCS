@@ -344,16 +344,24 @@
   #error "Configuration (Config.h): ROOF_AUTOCLOSE_SAFETY, OCS website ROOF automatic close safety, must OFF or ON."
 #endif
 
-#if (ROOF_CLOSE_PARKS_MOUNT < 1 || ROOF_CLOSE_PARKS_MOUNT > 18) && ROOF_CLOSE_PARKS_MOUNT != OFF
-  #error "Configuration (Config.h): ROOF_CLOSE_PARKS_MOUNT must OFF or a number between 1 and 18 (RELAY#.)"
+#if ROOF_MOUNT_PARK_BEFORE_CLOSE != OFF && ROOF_MOUNT_PARK_BEFORE_CLOSE != ON
+  #error "Configuration (Config.h): ROOF_MOUNT_PARK_BEFORE_CLOSE, OCS website ROOF automatic park mount on close safety must OFF or ON."
+#endif
+
+#if ROOF_MOUNT_PARK_BEFORE_CLOSE == ON && SERIAL_ONSTEP == OFF && ROOF_MOUNT_PARK_RELAY == OFF
+  #error "Configuration (Config.h): ROOF_MOUNT_PARK_BEFORE_CLOSE, requires SERIAL_ONSTEP or ROOF_MOUNT_PARK_RELAY to initiate parking the mount."
+#endif
+
+#if (ROOF_MOUNT_PARK_RELAY < 1 || ROOF_MOUNT_PARK_RELAY > 18) && ROOF_MOUNT_PARK_RELAY != OFF
+  #error "Configuration (Config.h): ROOF_MOUNT_PARK_RELAY must OFF or a number between 1 and 18 (RELAY#.)"
 #endif
 
 #if (ROOF_ACTUATE_SENSE < 1 || ROOF_ACTUATE_SENSE > 8) && ROOF_ACTUATE_SENSE != OFF
   #error "Configuration (Config.h): ROOF_ACTUATE_SENSE must be OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
-#if (ROOF_CLOSE_PARKS_MOUNT > 0 && ROOF_CLOSE_PARKS_MOUNT < 19) && ROOF_INTERLOCK_SENSE == OFF
-  #error "Configuration (Config.h): ROOF_INTERLOCK_SENSE must be a number between 1 and 8 (SENSE#) if ROOF_CLOSE_PARKS_MOUNT is used."
+#if (ROOF_MOUNT_PARK_RELAY > 0 && ROOF_MOUNT_PARK_RELAY < 19) && ROOF_INTERLOCK_SENSE == OFF
+  #error "Configuration (Config.h): ROOF_INTERLOCK_SENSE must be a number between 1 and 8 (SENSE#) if ROOF_MOUNT_PARK_RELAY is used."
 #endif
 
 #if (ROOF_MOTOR_OPEN_RELAY < 1 || ROOF_MOTOR_OPEN_RELAY > 18) && ROOF_MOTOR_OPEN_RELAY != OFF
@@ -436,8 +444,8 @@
   #error "Configuration (Config.h): ROOF_LIMIT_SENSE_FAIL_TIME must be a number between 1 and 60 (seconds.)"
 #endif
 
-#if MOUNT_PARK_TIMEOUT < 20 || MOUNT_PARK_TIMEOUT > 480
-  #error "Configuration (Config.h): MOUNT_PARK_TIMEOUT must be a number between 20 and 480 (seconds.)"
+#if ROOF_MOUNT_PARK_TIMEOUT < 20 || ROOF_MOUNT_PARK_TIMEOUT > 480
+  #error "Configuration (Config.h): ROOF_MOUNT_PARK_TIMEOUT must be a number between 20 and 480 (seconds.)"
 #endif
 
 #if DOME == ON && AXIS1_DRIVER_MODEL == OFF

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <Arduino.h>
+
 #include "Constants.h"
 #include "lib/Constants.h"
 #include "../Config.h"
@@ -21,7 +22,10 @@
 #endif
 
 #include "lib/ethernet/EthernetManager.h"
+#include "lib/serial/Serial_IP_Ethernet_Client.h"
 #include "lib/wifi/WifiManager.h"
+#include "lib/serial/Serial_IP_Wifi_Client.h"
+#include "libApp/cmd/Cmd.h"
 
 #if SD_CARD == ON
   #ifdef ESP32

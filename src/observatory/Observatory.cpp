@@ -33,7 +33,11 @@ int timeZone = TIME_ZONE;
 time_t startupTime = 0;
 
 #if CONNECT_CHECK_HOURS != OFF
-  EthernetClient connectionCheckClient;
+  #if OPERATIONAL_MODE >= WIFI_FIRST && OPERATIONAL_MODE <= WIFI_LAST
+    WiFiClient connectionCheckClient;
+  #elif OPERATIONAL_MODE >= ETHERNET_FIRST && OPERATIONAL_MODE <= ETHERNET_LAST
+    EthernetClient connectionCheckClient;
+  #endif
 #endif
 
 unsigned long msFiveMinuteCounter;
