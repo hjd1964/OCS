@@ -55,6 +55,8 @@
 #define STA_IP_ADDR        {192,168,1,50} // ..168,1,50}, Ethernet/Wifi Station IP Address.                                   Adjust
 #define STA_GW_ADDR         {192,168,1,1} // ..,168,1,1}, Ethernet/Wifi Station GATEWAY Address.                              Adjust
 #define STA_SN_MASK       {255,255,255,0} // ..55,255,0}, Ethernet/Wifi Station SUBNET Mask.                                  Adjust
+#define STA_NAME                 "OnStep" //   "OnStep" , Wifi Mount mNDS Hostname.                                           Adjust
+#define STA_TARGET          {192,168,1,2} // ..,168,1,2}, Ethernet/Wifi Mount IP Address.                                     Adjust
 
 #define MAC {0xDE,0xAD,0xBE,0xEF,0xFE,0xEF} // ..E,0xEF}, Ethernet unique MAC address.                                        Adjust
 
