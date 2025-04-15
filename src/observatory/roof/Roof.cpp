@@ -26,13 +26,21 @@ void Roof::init() {
 
 // Start opening the roof, returns true if successful or false otherwise
 bool Roof::open() {
+  if (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
+    VLF("MSG: Roof/shutter open, aborted already opened");
+    lastError = RERR_OPEN_EXCEPT_OPENED;
+    return false;
+  }
+
   if (state != RS_IDLE || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
+    VLF("MSG: Roof/shutter open, aborted already in motion");
     lastError = RERR_OPEN_EXCEPT_IN_MOTION;
     return false;
   }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!safetyOverride && ROOF_SINGLE_OPEN_CLOSE_RELAY == ON && !sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
+    VLF("MSG: Roof/shutter open, aborted motion direction unknown");
     lastError = RERR_DIRECTION_UNKNOWN;
     return false;
   }
@@ -52,18 +60,14 @@ bool Roof::open() {
 
   // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
   if (!safetyOverride && (abs((timeLeftToOpenAtStart + timeLeftToCloseAtStart) - timeAvg) > 2000)) {
+    VLF("MSG: Roof/shutter open, aborted motion timeout unknown");
     lastError = RERR_OPEN_LOCATION_UNKNOWN;
-    return false;
-  }
-
-  // Check to see if the roof is already opened
-  if (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
-    lastError = RERR_OPEN_EXCEPT_OPENED;
     return false;
   }
 
   // Just one last sanity check before we start moving the roof
   if (sense.isOn(ROOF_LIMIT_OPENED_SENSE) && sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
+    VLF("MSG: Roof/shutter close, aborted motion direction unknown");
     lastError = RERR_OPEN_EXCEPT_CLOSED_LIMIT_SW_ON;
     return false;
   }
@@ -73,6 +77,8 @@ bool Roof::open() {
   #else
     currentPower = ROOF_POWER_PWM_POWER;
   #endif
+
+  VLF("MSG: Roof/shutter open, started");
 
   // Flag status, no errors
   state = RS_OPENING;
@@ -104,6 +110,7 @@ bool Roof::open() {
 bool Roof::close() {
   // Check to see if the roof is already closed
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && !sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
+    VLF("MSG: Roof/shutter close, aborted already closed");
     lastError = RERR_CLOSE_EXCEPT_CLOSED;
     return false;
   }
@@ -117,7 +124,6 @@ bool Roof::close() {
       return true;
     }
   #endif
-
   
   // Park request has been issued, waiting for interlock to clear or timeout error
   if (waitingForPark) {
@@ -126,12 +132,14 @@ bool Roof::close() {
 
   // Check to see if the roof is already in motion
   if (state != RS_IDLE || relay.isOn(ROOF_MOTOR_OPEN_RELAY) || relay.isOn(ROOF_MOTOR_CLOSE_RELAY) || relay.isOn(ROOF_MOTOR_STOP_RELAY)) {
+    VLF("MSG: Roof/shutter close, aborted already in motion");
     lastError = RERR_CLOSE_EXCEPT_IN_MOTION;
     return false;
   }
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!safetyOverride && ROOF_SINGLE_OPEN_CLOSE_RELAY == ON && !sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
+    VLF("MSG: Roof/shutter close, aborted motion direction unknown");
     lastError = RERR_DIRECTION_UNKNOWN;
     return false;
   }
@@ -151,12 +159,14 @@ bool Roof::close() {
 
   // Check for validity of roof position timers before starting (they need to be within +/- 2 seconds)
   if (!safetyOverride && abs((timeLeftToOpenAtStart + timeLeftToCloseAtStart) - timeAvg) > 2000) {
+    VLF("MSG: Roof/shutter close, aborted motion timeout unknown");
     lastError = RERR_CLOSE_LOCATION_UNKNOWN;
     return false;
   }
 
     // Just one last sanity check before we start moving the roof
   if (sense.isOn(ROOF_LIMIT_CLOSED_SENSE) && sense.isOn(ROOF_LIMIT_OPENED_SENSE)) {
+    VLF("MSG: Roof/shutter close, aborted limit sense failure");
     lastError = RERR_CLOSE_EXCEPT_OPENED_LIMIT_SW_ON;
     return false;
   }
@@ -166,6 +176,8 @@ bool Roof::close() {
   #else
     currentPower = ROOF_POWER_PWM_POWER;
   #endif
+
+  VLF("MSG: Roof/shutter close, started");
 
   // Flag status, no errors
   state = RS_CLOSING;
@@ -224,6 +236,8 @@ void Roof::stop() {
     // If there is a close waiting for mount to park, cancel it
     stopWaitingForPark();
   #endif
+
+  VLF("MSG: Roof/shutter stopped");
 }
 
 // clear errors
@@ -464,6 +478,8 @@ void Roof::continueOpening() {
     safetyOverride = false;
     // Reset roof power to normal level
     maxPower = false;
+
+    VLF("MSG: Roof/shutter stopped");
   }
 }
 
@@ -541,14 +557,22 @@ void Roof::continueClosing() {
     safetyOverride = false;
     // Reset roof power to normal level
     maxPower = false;
+
+    VLF("MSG: Roof/shutter stopped");
   }
 }
 
 #if ROOF_MOUNT_PARK_BEFORE_CLOSE == ON
   // cancel a waiting for park sequence
   void Roof::stopWaitingForPark() {
-    tasks.setDurationComplete(tasks.getHandleByName("pkPoll"));
-    relay.off(ROOF_MOUNT_PARK_RELAY);
+    uint8_t handle = tasks.getHandleByName("pkPoll");
+    if (handle) {
+      tasks.setDurationComplete(handle);
+      VLF("MSG: Stopped park monitor task");
+    }
+    #if ROOF_MOUNT_PARK_RELAY != OFF
+      relay.off(ROOF_MOUNT_PARK_RELAY);
+    #endif
     waitingForPark = 0;
   }
 
