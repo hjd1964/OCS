@@ -21,65 +21,70 @@
 
 // pinmap
 #ifndef PINMAP
-#define PINMAP                         OFF   // specify the board you're using here
+#define PINMAP                         OFF                         // specify the board you're using here
 #endif
 
 // display
 #ifndef DISPLAY_LANGUAGE
-#define DISPLAY_LANGUAGE               L_en  // currently english (en and us) are the only options
+#define DISPLAY_LANGUAGE               L_en                        // currently english (en and us) are the only options
 #endif
 
 // watchdog
 #ifndef WATCHDOG
-#define WATCHDOG                       OFF   // ON resets if OCS hangs for >8 seconds
+#define WATCHDOG                       OFF                         // ON resets if OCS hangs for >8 seconds
 #endif
 
 // log files
 #ifdef ESP32
 #ifndef LOG_PERIOD_SECONDS
-#define LOG_PERIOD_SECONDS             120   // 120 seconds between log enteries
+#define LOG_PERIOD_SECONDS             120                         // 120 seconds between log enteries
 #endif
 #ifndef LOG_CLEANUP_DAYS_AGO
-#define LOG_CLEANUP_DAYS_AGO           30   // retain one month of files (80 bytes * 0.5 * 60 * 24 = 57600 bytes per day * 30 = 1728000 bytes)
-#endif
+#define LOG_CLEANUP_DAYS_AGO           30                          // retain one month of files (80 bytes * 0.5 * 60 * 24 =
+#endif                                                             // 57600 bytes per day * 30 = 1728000 bytes)
 #else
 #ifndef LOG_PERIOD_SECONDS
-#define LOG_PERIOD_SECONDS             30   // 30 seconds between log enteries
+#define LOG_PERIOD_SECONDS             30                          // 30 seconds between log enteries
 #endif
 #endif
 
+// I2C settings
+#ifndef HAL_WIRE_CLOCK
+#define HAL_WIRE_CLOCK                 20000                      // sensors are typically positioned at a distance so
+#endif                                                            // slower than default 100000 is better
+
 // network settings
 #ifndef ASCOM_ALPACA_SERVER
-#define ASCOM_ALPACA_SERVER            OFF   // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
+#define ASCOM_ALPACA_SERVER            OFF                        // enables ASCOM Alpaca server on port 10000, requires W5500 Ethernet
 #endif
 #ifndef CONNECT_CHECK_HOURS
-#define CONNECT_CHECK_HOURS            OFF   // connection check time
+#define CONNECT_CHECK_HOURS            OFF                        // connection check time
 #endif
 #ifndef CONNECT_CHECK_IP
-#define CONNECT_CHECK_IP  {100,24,172,113}   // default is arduino.cc. Needs ETHERNET_RESET_PIN and/or WATCHDOG to reset
+#define CONNECT_CHECK_IP               {100,24,172,113}           // default arduino.cc. use ETHERNET_RESET_PIN and/or WATCHDOG to reset
 #endif
 #ifndef CONNECT_CHECK_PORT
-#define CONNECT_CHECK_PORT              80
+#define CONNECT_CHECK_PORT             80
 #endif
 #ifndef CONNECT_FAIL_WATCHDOG
-#define CONNECT_FAIL_WATCHDOG          OFF   // ON to stop all processing and trigger the watchdog reset
+#define CONNECT_FAIL_WATCHDOG          OFF                         // ON to stop all processing and trigger the watchdog reset
 #endif
 
 // time settings
 #ifndef TIME_LOCATION_SOURCE
-#define TIME_LOCATION_SOURCE           NTP   // using Network Time Protocol is the default
+#define TIME_LOCATION_SOURCE           NTP                         // using Network Time Protocol is the default
 #endif
 #ifndef TIME_NTP_IP
-#define TIME_NTP_IP         {129,6,15,28}    // time-a-g.nist.gov at 129,6,15,28 or 129,6,15,29, 129,6,15,30, etc.
+#define TIME_NTP_IP                    {129,6,15,28}               // time-a-g.nist.gov 129,6,15,28; 129,6,15,29; 129,6,15,30; etc.
 #endif
 #ifndef TIME_IP_ADDR
-#define TIME_IP_ADDR          TIME_NTP_IP
+#define TIME_IP_ADDR                   TIME_NTP_IP
 #endif
 #ifndef TIME_ZONE
-#define TIME_ZONE                      -5   // Time Zone (US Eastern Standard Time in this case)
+#define TIME_ZONE                      -5                          // Time Zone (US Eastern Standard Time in this case)
 #endif
 #ifndef TIME_DISPLAY
-#define TIME_DISPLAY                   STD   // display Standard Time, UT1 to display Universal Time
+#define TIME_DISPLAY                   STD                         // display Standard Time, UT1 to display Universal Time
 #endif
 
 // serial ports
@@ -124,12 +129,12 @@
 #define SERIAL_SERVER                  BOTH
 #else
 #define SERIAL_SERVER                  OFF
-#define WEB_HANDLER_COUNT_MAX          200        // for Ethernet webserver
+#define WEB_HANDLER_COUNT_MAX          200                         // for Ethernet webserver
 #endif
 
 // in milliseconds
 #ifndef WEATHER_SENSOR_SAMPLE_PERIOD
-#define WEATHER_SENSOR_SAMPLE_PERIOD   5000       // recommended <= 30 seconds
+#define WEATHER_SENSOR_SAMPLE_PERIOD   5000                        // recommended <= 30 seconds
 #endif
 
 #if DEBUG_CONNECT_CHECK == ON
@@ -140,10 +145,10 @@
 
 // for status panel
 #ifndef MAINS_VOLTAGE
-#define MAINS_VOLTAGE                  120        // used for calculating power
+#define MAINS_VOLTAGE                  120                         // used for calculating power
 #endif
 #ifndef STAT_MAINS_CURRENT_AS_POWER
-#define STAT_MAINS_CURRENT_AS_POWER    OFF        // show AC mains power in Watts instead of current in Amps
+#define STAT_MAINS_CURRENT_AS_POWER    OFF                         // show AC mains power in Watts instead of current in Amps
 #endif
 
 // relays
