@@ -166,7 +166,7 @@ void setup() {
   // start any serial connection to OnStep
   #if OPERATIONAL_MODE != OFF
     #if SERIAL_CLIENT == ON
-      SERIAL_IP.begin(9997, 2L*1000L, true);
+      SERIAL_IP.begin(9997, 8L*1000L);
     #endif
   #endif
   #ifdef SERIAL_UART

@@ -9,6 +9,7 @@ void MountCmd::commandBlind(const char* cmd, long timeOutMs) {
 
   // clear the queues and send the command
   #ifdef SERIAL_IP
+    if (!SERIAL_IP.isConnected()) return;
     SERIAL_IP.setTimeout(timeOutMs);
     SERIAL_IP.flush();
     while (SERIAL_IP.available() > 0) SERIAL_IP.read();
@@ -27,6 +28,7 @@ int MountCmd::commandBool(const char* cmd, long timeOutMs) {
 
   // clear the queues and send the command
   #ifdef SERIAL_IP
+    if (!SERIAL_IP.isConnected()) return false;
     SERIAL_IP.setTimeout(timeOutMs);
     SERIAL_IP.flush();
     while (SERIAL_IP.available() > 0) SERIAL_IP.read();
@@ -74,6 +76,7 @@ int MountCmd::commandString(const char* cmd, char* response, long timeOutMs) {
 
   // clear the queues and send the command
   #ifdef SERIAL_IP
+    if (!SERIAL_IP.isConnected()) return false;
     SERIAL_IP.setTimeout(timeOutMs);
     SERIAL_IP.flush();
     while (SERIAL_IP.available() > 0) SERIAL_IP.read();
