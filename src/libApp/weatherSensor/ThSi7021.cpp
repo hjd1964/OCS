@@ -39,7 +39,7 @@ bool Si7021w::init() {
       HAL_WIRE.end();
       HAL_WIRE.begin();
     #endif
-    HAL_WIRE.setClock(HAL_WIRE_CLOCK);
+    HAL_WIRE_SET_CLOCK();
 
     VF("MSG: Si7021w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, si7021Wrapper, "weaSi7")) {

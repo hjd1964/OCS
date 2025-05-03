@@ -84,6 +84,8 @@ void setup() {
   // start low level hardware
   VLF("MSG: Setup, HAL initalize");
   HAL_INIT();
+  WIRE_INIT();
+
   nv.init();
   delay(2000);
 

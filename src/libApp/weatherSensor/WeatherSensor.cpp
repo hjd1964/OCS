@@ -52,7 +52,7 @@ char _skyQualityName[40] = "None";
 
 void WeatherSensor::init() {
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
-  HAL_WIRE.setClock(HAL_WIRE_CLOCK);
+  HAL_WIRE_SET_CLOCK();
 
   #if defined(WEATHER_SENSOR_TPH_BME280) && WEATHER_SENSOR_TPH_BME280 != OFF
     bme280w.init();

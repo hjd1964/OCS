@@ -21,7 +21,7 @@ bool _inside_humidityAssigned = false;
 
 void ThermostatSensor::init(){
   // slow down i2c so long distances work, still plenty fast for our little data being moved around
-  HAL_WIRE.setClock(HAL_WIRE_CLOCK);
+  HAL_WIRE_SET_CLOCK();
 
   #if defined(THERMOSTAT_SENSOR_TPH_BME280) && THERMOSTAT_SENSOR_TPH_BME280 != OFF
     bme280t.init();

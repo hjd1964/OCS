@@ -32,7 +32,7 @@ bool Tsl2591w::init() {
       HAL_WIRE.end();
       HAL_WIRE.begin();
     #endif
-    HAL_WIRE.setClock(HAL_WIRE_CLOCK);
+    HAL_WIRE_SET_CLOCK();
 
     VF("MSG: Tsl2591w, start monitor task (rate 30s priority 7)... ");
     if (tasks.add(30000, 0, true, 7, tsl2591Wrapper, "weaTsl")) {

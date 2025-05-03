@@ -30,7 +30,7 @@ bool Mlx90614w::init() {
       HAL_WIRE.end();
       HAL_WIRE.begin();
     #endif
-    HAL_WIRE.setClock(HAL_WIRE_CLOCK);
+    HAL_WIRE_SET_CLOCK();
 
     VF("MSG: Mlx90614w, start monitor task (default rate priority 7)... ");
     if (tasks.add(WEATHER_SENSOR_SAMPLE_PERIOD, 0, true, 7, mlx90614Wrapper, "weaMlx")) {
