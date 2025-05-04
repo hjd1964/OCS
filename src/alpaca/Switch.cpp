@@ -20,9 +20,9 @@
 extern JsonDocument alpacaJsonDoc;
 int32_t switchConnected = 0;
 int32_t maxSwitch = 0;
-int32_t switchIdentifier[10];
-char switchDescription[10][40];
-char switchName[10][40];
+int32_t switchIdentifier[12];
+char switchDescription[12][40];
+char switchName[12][40];
 
 void findMaxSwitch() {
   maxSwitch = 0;
