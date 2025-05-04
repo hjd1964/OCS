@@ -7,7 +7,9 @@
 #ifndef TILE_WIDTH_PIXELS
 #define TILE_WIDTH_PIXELS "320"
 #endif
-
+#ifndef SWITCH_LINE_WIDTH_PIXELS
+#define SWITCH_LINE_WIDTH_PIXELS "312"
+#endif
 #ifndef TILE_HEIGHT_PIXELS
 #define TILE_HEIGHT_PIXELS "220"
 #endif
@@ -112,7 +114,7 @@ const char html_main_css_b[] PROGMEM =
 const char html_main_css_misc[] PROGMEM =
 "h1 { text-align: right; } .g { color: " COLOR_ALERT "; font-weight: bold; }";
 const char html_main_css_obsSwLine[] PROGMEM =
-".obsSwLine { height: 2em; line-height: 2em; float: left; padding: 0px; margin: 0px; }";
+".obsSwLine { height: 2em; width: " SWITCH_LINE_WIDTH_PIXELS "px; line-height: 2em; float: left; padding: 0px; margin: 0px; }";
 const char html_main_css_obsSwCtrl[] PROGMEM =
 ".obsSwCtrl { height: 2em; width: 86px; vertical-align: middle; float: right; padding: 0px; margin: 0px; }";
 const char html_main_css_obsWideSwCtrl[] PROGMEM =

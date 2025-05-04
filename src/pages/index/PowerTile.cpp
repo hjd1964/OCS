@@ -17,56 +17,62 @@
     #if POWER_DEVICE1_RELAY != OFF
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE1_NAME);
-      www.sendContent("</div><div class='obsSwCtrl'>");
+      www.sendContent("<div class='obsSwCtrl'>");
       sprintf_P(temp, html_powerControl, "1","on","left","1","on",L_ON);
       www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "1","off","right","1","off",L_OFF);
       www.sendContent(temp);
-      www.sendContent("</div><br/>");
+      www.sendContent("</div></div><br/>");
     #endif
     #if POWER_DEVICE2_RELAY != OFF
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE2_NAME);
-      www.sendContent("</div><div class='obsSwCtrl'>");
+      www.sendContent("<div class='obsSwCtrl'>");
       sprintf_P(temp, html_powerControl, "2","on","left","2","on",L_ON);
       www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "2","off","right","2","off",L_OFF);
       www.sendContent(temp);
-      www.sendContent("</div><br/>");
+      www.sendContent("</div></div><br/>");
     #endif
     #if POWER_DEVICE3_RELAY != OFF
       www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE3_NAME);
-      www.sendContent("</div><div class='obsSwCtrl'>");
+      www.sendContent("<div class='obsSwCtrl'>");
       sprintf_P(temp, html_powerControl, "3","on","left","3","on",L_ON);
       www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "3","off","right","3","off",L_OFF);
       www.sendContent(temp);
-      www.sendContent("</div><br/>");
+      www.sendContent("</div></div><br/>");
     #endif
     #if POWER_DEVICE4_RELAY != OFF
+      www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE4_NAME);
+      www.sendContent("<div class='obsSwCtrl'>");
+      sprintf_P(temp, html_powerControl, "4","on","left","4","on",L_ON);
+      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "4","off","right","4","off",L_OFF);
       www.sendContent(temp);
-      sprintf_P(temp, html_powerControl, "4","on","left","4","on",L_ON);
-      strcat(temp, "<br/>\n");
-      www.sendContent(temp);
+      www.sendContent("</div></div><br/>");
     #endif
     #if POWER_DEVICE5_RELAY != OFF
+      www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE5_NAME);
+      www.sendContent("<div class='obsSwCtrl'>");
+      sprintf_P(temp, html_powerControl, "5","on","left","5","on",L_ON);
+      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "5","off","right","5","off",L_OFF);
       www.sendContent(temp);
-      sprintf_P(temp, html_powerControl, "5","on","left","5","on",L_ON);
-      strcat(temp, "<br/>\n");
-      www.sendContent(temp);
+      www.sendContent("</div></div><br/>");
     #endif
     #if POWER_DEVICE6_RELAY != OFF
+      www.sendContent("<div class='obsSwLine'>");
       www.sendContent(POWER_DEVICE6_NAME);
+      www.sendContent("<div class='obsSwCtrl'>");
+      sprintf_P(temp, html_powerControl, "6","on","left","6","on",L_ON);
+      www.sendContent(temp);
       sprintf_P(temp, html_powerControl, "6","off","right","6","off",L_OFF);
       www.sendContent(temp);
-      sprintf_P(temp, html_powerControl, "6","on","left","6","on",L_ON);
-      strcat(temp, "<br/>\n");
-      www.sendContent(temp);
+      www.sendContent("</div></div><br/>");
     #endif
 
     strcpy_P(temp, htmlPowerEnd);
