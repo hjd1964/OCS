@@ -432,8 +432,8 @@
   #error "Configuration (Config.h): ROOF_SENSE_LIMIT_OPENED must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
 
-#if ROOF_TIME_AVG < 30 || ROOF_TIME_AVG > 1200
-  #error "Configuration (Config.h): ROOF_TIME_AVG must be a number between 30 and 1200 (seconds.)"
+#if ROOF_TIME_AVG < 10 || ROOF_TIME_AVG > 1200
+  #error "Configuration (Config.h): ROOF_TIME_AVG must be a number between 10 and 1200 (seconds.)"
 #endif
 
 #if ROOF_TIME_TOL < 0 || ROOF_TIME_TOL > 120
