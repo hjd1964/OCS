@@ -39,7 +39,7 @@
 #define FirmwareName                "OCS"
 #define FirmwareVersionMajor        3
 #define FirmwareVersionMinor        12     // minor version 00 to 99
-#define FirmwareVersionPatch        "d"    // for example major.minor patch: 10.03c
+#define FirmwareVersionPatch        "e"    // for example major.minor patch: 10.03c
 #define FirmwareVersionConfig       2      // internal, for tracking configuration file changes
 
 #include "src/Common.h"
