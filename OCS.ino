@@ -54,6 +54,8 @@
 #include "src/observatory/Observatory.h"
 #include "src/pages/chartJS/ChartJS.h"
 
+#include "src/plugins/Plugins.config.h"
+
 char ocsVersion[10];
 
 #if DEBUG == PROFILER
@@ -175,6 +177,34 @@ void setup() {
 
   // start command channel tasks
   commandChannelInit();
+
+  tasks.yield(2000);
+
+  // start any plugins
+  #if PLUGIN1 != OFF
+    PLUGIN1.init();
+  #endif
+  #if PLUGIN2 != OFF
+    PLUGIN2.init();
+  #endif
+  #if PLUGIN3 != OFF
+    PLUGIN3.init();
+  #endif
+  #if PLUGIN4 != OFF
+    PLUGIN4.init();
+  #endif
+  #if PLUGIN5 != OFF
+    PLUGIN5.init();
+  #endif
+  #if PLUGIN6 != OFF
+    PLUGIN6.init();
+  #endif
+  #if PLUGIN7 != OFF
+    PLUGIN7.init();
+  #endif
+  #if PLUGIN8 != OFF
+    PLUGIN8.init();
+  #endif
 
   // start task manager debug events
   #if DEBUG == PROFILER
