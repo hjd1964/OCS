@@ -102,7 +102,7 @@ CommandError Dome::gotoAzimuthTarget() {
   if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
   VF("MSG: Dome, goto azimuth target coordinate set ("); V(targetAzm); VL("°)");
-  VLF("MSG: Dome, starting goto");
+  VLF("MSG: Dome, starting azimuth goto");
 
   if (!axis1.isEnabled()) axis1.enable(true);
   axis1.setTargetCoordinate(targetAzm);
@@ -137,7 +137,7 @@ CommandError Dome::gotoAltitudeTarget() {
     if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
     VF("MSG: Dome, goto altitude target coordinate set ("); V(targetAlt); VL("°)");
-    VLF("MSG: Dome, starting goto");
+    VLF("MSG: Dome, starting altitude goto");
 
     if (!axis2.isEnabled()) axis2.enable(true);
     axis2.setTargetCoordinate(targetAlt);
