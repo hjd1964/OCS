@@ -84,7 +84,7 @@
 #endif
 
 // NV addresses
-#define INIT_NV_KEY                 3062703968UL
+#define INIT_NV_KEY                 3062703969UL
 
 #define NV_KEY                      0      // bytes: 4   , addr:   0..  3
 #define NV_HEAT_SETPOINT            4      // bytes: 4   , addr:   4..  7
