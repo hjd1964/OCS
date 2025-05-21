@@ -24,7 +24,7 @@ void Dome::init() {
     VLF("MSG: Dome, writing defaults to NV");
   }
 
-  nv.readBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+  nv.readBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
 
   if (settings.backlash.azimuth  < 0.0F)  { settings.backlash.azimuth = 0.0F; initError.value = true; DLF("ERR, Dome.init(): bad NV backlash.azimuth < 0 deg (set to 0)"); }
   if (settings.backlash.azimuth  > 10.0F) { settings.backlash.azimuth = 0.0F; initError.value = true; DLF("ERR, Dome.init(): bad NV backlash.azimuth > 10 deg (set to 0)"); }
@@ -91,7 +91,7 @@ void Dome::reset() {
     axis1.enable(false);
   #endif
   settings.park.state = PS_UNPARKED;
-  nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+  nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
 }
 
 // dome goto azimuth
@@ -197,7 +197,7 @@ void Dome::stop() {
   if (isSlewing()) {
     if (settings.park.state == PS_PARKING) {
       settings.park.state = PS_UNPARKED;
-      nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+      nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
     }
     axis1.autoSlewAbort();
     #if AXIS2_DRIVER_MODEL != OFF
@@ -232,7 +232,7 @@ CommandError Dome::park() {
 
   if (e == CE_NONE) {
     settings.park.state = PS_PARKING;
-    nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+    nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
   }
 
   return e;
@@ -279,7 +279,7 @@ CommandError Dome::unpark() {
 
   if (e == CE_NONE) {
     settings.park.state = PS_UNPARKED;
-    nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+    nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
   }
 
   return e;
@@ -303,7 +303,7 @@ CommandError Dome::setpark() {
     settings.park.altitude = NAN;
   #endif
 
-  nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+  nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
   return CE_NONE;
 }
 
@@ -339,7 +339,7 @@ void Dome::monitor() {
     {
       if (settings.park.state == PS_PARKING) {
         settings.park.state = PS_PARKED;
-        nv.updateBytes(NV_DOME_SETTINGS_BASE + DomeSettingsSize, &settings, sizeof(DomeSettings));
+        nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
         axis1.enable(false);
         #if AXIS2_DRIVER_MODEL != OFF
           axis2.enable(false);
