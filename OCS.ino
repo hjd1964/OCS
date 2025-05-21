@@ -178,7 +178,7 @@ void setup() {
   // start command channel tasks
   commandChannelInit();
 
-  tasks.yield(2000);
+  tasks.yield(500);
 
   // start any plugins
   #if PLUGIN1 != OFF
