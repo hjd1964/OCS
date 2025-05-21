@@ -88,7 +88,7 @@ void Dome::reset() {
   axis1.enable(false);
   #if AXIS2_DRIVER_MODEL != OFF
     axis2.resetPositionSteps(0);
-    axis1.enable(false);
+    axis2.enable(false);
   #endif
   settings.park.state = PS_UNPARKED;
   nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
@@ -139,7 +139,7 @@ CommandError Dome::gotoAltitudeTarget() {
     VF("MSG: Dome, goto altitude target coordinate set ("); V(targetAlt); VL("°)");
     VLF("MSG: Dome, starting goto");
 
-    if (!axis1.isEnabled()) axis2.enable(true);
+    if (!axis2.isEnabled()) axis2.enable(true);
     axis2.setTargetCoordinate(targetAlt);
 
     if (axis2.isSlewing()) return CE_NONE;
