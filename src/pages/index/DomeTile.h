@@ -45,6 +45,7 @@
   const char htmlDomeGoto[] PROGMEM =
   "<button onclick='s(\"dome\",\"goto\")' type='button'>" L_GOTO "</button>&nbsp;"
   "<button onclick='s(\"dome\",\"sync\")'  type='button'>" L_SYNC "</button><br/>";
+  "<button onclick='if (confirm(\"" L_ARE_YOU_SURE_ORIENTATION "?\")) s(\"dome\",\"sync\")'  type='button'>" L_SYNC "</button><br/>";
 
   const char htmlDomeStop[] PROGMEM =
   "<button class='btns_attn' onclick='s(\"dome\",\"stop\")' type='button'>&nbsp;" L_STOP "&nbsp;</button><br/>";
@@ -52,9 +53,11 @@
   const char htmlDomeHome[] PROGMEM =
   "<button onclick='s(\"dome\",\"home\")' type='button'>" L_FIND_HOME "</button>&nbsp;&nbsp;"
   "<button onclick='s(\"dome\",\"reset\")' type='button'>" L_RESET_HOME "</button><br/>";
+  "<button onclick='if (confirm(\"" L_ARE_YOU_SURE_ORIENTATION "?\")) s(\"dome\",\"reset\")' type='button'>" L_RESET_HOME "</button><br/>";
 
   const char htmlDomePark1[] PROGMEM =
   "<button onclick='s(\"dome\",\"unpark\")' type='button'>" L_UNPARK "</button>"
+  "<button onclick='if (confirm(\"" L_ARE_YOU_SURE_ORIENTATION "?\")) s(\"dome\",\"unpark\")' type='button'>" L_UNPARK "</button>"
   "<button onclick='s(\"dome\",\"park\")' type='button'>" L_PARK "</button>";
   const char htmlDomePark2[] PROGMEM =
   "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"

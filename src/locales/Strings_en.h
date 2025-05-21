@@ -77,6 +77,7 @@
 #define L_CLOSE_AT_DAWN "Automatically close at dawn"
 #define L_PRESS "Press!"
 #define L_SAFETY_OVERRIDE "Safety Override"
+#define L_ARE_YOU_SURE_ROOF "This will disable roof/shutter motion error checks, are you sure"
 
 // stay within max length of 36 bytes
 #define L_ROOF_ERR1 "Error: Open safety interlock"
@@ -132,3 +133,4 @@
 #define L_PARK "Park"
 #define L_UNPARK "Un-Park"
 #define L_SET_PARK "Set-Park"
+#define L_ARE_YOU_SURE_ORIENTATION "Dome physical orientation must match OCS Alt/Azm coordinates, continue"

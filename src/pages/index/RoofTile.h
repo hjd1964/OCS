@@ -45,7 +45,7 @@
 
   const char htmlRoofControlSafetyOverride[] PROGMEM =
   #if ROOF_USER_SAFETY_OVERRIDE == ON
-    "<input type='button' class='btns_attn' style='background-color: " COLOR_IMPORTANT_CONTROL_BACKGROUND "' onclick='s(\"roof\",\"override\")' value='&nbsp;" L_SAFETY_OVERRIDE "&nbsp;' />"
+    "<input type='button' class='btns_attn' style='background-color: " COLOR_IMPORTANT_CONTROL_BACKGROUND "' onclick='if (confirm(\"" L_ARE_YOU_SURE_ROOF "?\")) s(\"roof\",\"override\")' value='&nbsp;" L_SAFETY_OVERRIDE "&nbsp;' />"
   #endif
   "<br />";
 
