@@ -7,7 +7,11 @@
 #define RELAYS_MAX 18
 
 typedef struct RelaySettings {
-  int16_t pin;
+  #if defined(GPIO_DEVICE) && GPIO_DEVICE != OFF 
+    int16_t pin;
+  #else
+    int8_t pin;
+  #endif
   uint8_t onState;
   int8_t defaultState;
   uint16_t state;
