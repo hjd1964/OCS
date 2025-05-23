@@ -7,7 +7,7 @@
 #define RELAYS_MAX 18
 
 typedef struct RelaySettings {
-  int8_t pin;
+  int16_t pin;
   uint8_t onState;
   int8_t defaultState;
   uint16_t state;
