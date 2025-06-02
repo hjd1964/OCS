@@ -9,14 +9,15 @@
   void getRoofErrorStrColored(const char *errorStr, char *errorStrColored);
 
   void roofTile() {
-    char temp[256];
-    char temp1[64];
+    char temp[160];
 
     strcpy_P(temp, htmlRoofBeg);
     www.sendContent(temp);
 
-    getRoofErrorStrColored(roof.errorMessage(), temp1);
-    sprintf_P(temp, htmlInnerRoofStat, roof.statusMessage(), temp1);
+    strcpy_P(temp, htmlInnerRoofStat1);
+    www.sendContent(temp);
+
+    sprintf_P(temp, htmlInnerRoofStat2, roof.statusMessage(), roof.errorMessage());
     www.sendContent(temp);
 
     #if !(ROOF_MOTOR_RELAY_MOMENTARY == ON && ROOF_MOTOR_STOP_RELAY == OFF && ROOF_POWER_RELAY == OFF)
@@ -24,7 +25,13 @@
       www.sendContent(temp);
     #endif
 
-    strcpy_P(temp, htmlRoofControlSafetyOverride);
+    strcpy_P(temp, htmlRoofControlSafetyOverride1);
+    www.sendContent(temp);
+
+    strcpy_P(temp, htmlRoofControlSafetyOverride2);
+    www.sendContent(temp);
+
+    strcpy_P(temp, htmlRoofControlOpenOpen);
     www.sendContent(temp);
 
     strcpy_P(temp, htmlRoofControlOpenClose);

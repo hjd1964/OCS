@@ -23,8 +23,11 @@
   "</div>"
   "</div>\r\n";
 
-  const char htmlInnerRoofStat[] PROGMEM =
-  "&nbsp;&nbsp;Status <div id='roof_sta' class='aStatus'>%s</div><br />"
+  const char htmlInnerRoofStat1[] PROGMEM =
+  "&nbsp;&nbsp;Status <div id='roof_sta' class='aStatus'>";
+
+  const char htmlInnerRoofStat2[] PROGMEM =
+  "%s</div><br />"
   "<div id='roof_err' style='text-align:center'>%s</div></div>"
   "<div style='text-align: center'>";
 
@@ -43,14 +46,22 @@
     #endif
   #endif
 
-  const char htmlRoofControlSafetyOverride[] PROGMEM =
+  const char htmlRoofControlSafetyOverride1[] PROGMEM =
   #if ROOF_USER_SAFETY_OVERRIDE == ON
-    "<input type='button' class='btns_attn' style='background-color: " COLOR_IMPORTANT_CONTROL_BACKGROUND "' onclick='if (confirm(\"" L_ARE_YOU_SURE_ROOF "?\")) s(\"roof\",\"override\")' value='&nbsp;" L_SAFETY_OVERRIDE "&nbsp;' />"
+    "<input type='button' class='btns_attn' style='background-color: " COLOR_IMPORTANT_CONTROL_BACKGROUND
+  #endif
+  "";
+
+  const char htmlRoofControlSafetyOverride2[] PROGMEM =
+  #if ROOF_USER_SAFETY_OVERRIDE == ON
+    "' onclick='if (confirm(\"" L_ARE_YOU_SURE_ROOF "?\")) s(\"roof\",\"override\")' value='&nbsp;" L_SAFETY_OVERRIDE "&nbsp;' />"
   #endif
   "<br />";
 
+  const char htmlRoofControlOpenOpen[] PROGMEM =
+  "<button class='btns_right' onpointerdown=\"s('roof','open')\" type='button'>" L_OPEN_ROOF "</button>";
+
   const char htmlRoofControlOpenClose[] PROGMEM =
-  "<button class='btns_right' onpointerdown=\"s('roof','open')\" type='button'>" L_OPEN_ROOF "</button>"
   "<button class='btns_left' onpointerdown=\"s('roof','close')\" type='button'>" L_CLOSE_ROOF "</button><br />";
 //  "<input type='button' onclick='s(\"roof\",\"open\")' class='btns_left' value='" L_OPEN_ROOF "' />&nbsp;&nbsp;&nbsp;"
 //  "<input type='button' onclick='s(\"roof\",\"close\")' class='btns_right' value='" L_CLOSE_ROOF "' /><br />";
