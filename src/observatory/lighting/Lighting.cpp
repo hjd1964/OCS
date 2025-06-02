@@ -4,13 +4,14 @@
 
 #ifdef LIGHT_PRESENT
 
+#include "../../lib/gpioEx/GpioEx.h"
 #include "../../libApp/relay/Relay.h"
 
 void Lighting::init() {
   #if LIGHT_STRIP_DATA_PIN != OFF
     #if defined(LIGHT_STRIP_3V3_POWER_PIN) && LIGHT_STRIP_3V3_POWER_PIN != OFF
-      pinMode(LIGHT_STRIP_3V3_POWER_PIN, OUTPUT);
-      digitalWrite(LIGHT_STRIP_3V3_POWER_PIN, HIGH);
+      pinModeEx(LIGHT_STRIP_3V3_POWER_PIN, OUTPUT);
+      digitalWriteEx(LIGHT_STRIP_3V3_POWER_PIN, HIGH);
     #endif
     FastLED.addLeds LIGHT_STRIP_INIT (leds, LIGHT_STRIP_COUNT);
     for (int index = 0; index <= LIGHT_STRIP_COUNT - 1; index++) leds[index] = 0;
