@@ -5,6 +5,19 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == X8574
 
+#ifndef GPIO_PCF8574_MODE1
+  #define GPIO_PCF8574_MODE1 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE2
+  #define GPIO_PCF8574_MODE2 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE3
+  #define GPIO_PCF8574_MODE3 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE4
+  #define GPIO_PCF8574_MODE4 INPUT
+#endif
+
 #ifndef GPIO_PCF8574_I2C_ADDRESS1
   #define GPIO_PCF8574_I2C_ADDRESS1 0x39
 #endif
@@ -50,6 +63,8 @@ bool GpioPcf8574::init() {
   static bool initialized = false;
   if (initialized) return found;
 
+  for (int i = 0; i < 32; i++) { mode[i] = INPUT; state[i] = false; };
+
   for (int i = 0; i < 4; i++) { pcf[i] = NULL; }
   pcf[0] = &pcf0;
   #if GPIO_PCF8574_I2C_NUM_DEVICES > 1
@@ -64,6 +79,23 @@ bool GpioPcf8574::init() {
 
   for (int i = 0; i < 4; i++) {
     if (pcf[i] != NULL) {
+
+      // set this entire PCF8574 for INPUT or OUTPUT
+      for (int pin = 0; pin < 8; pin++) {
+        switch (i) {
+          case 0: mode[i*4 + pin] = GPIO_PCF8574_MODE1; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE1); break;
+          #if GPIO_PCF8574_I2C_NUM_DEVICES > 1
+          case 1: mode[i*4 + pin] = GPIO_PCF8574_MODE2; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE2); break;
+          #endif
+          #if GPIO_PCF8574_I2C_NUM_DEVICES > 2
+          case 2: mode[i*4 + pin] = GPIO_PCF8574_MODE3; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE3); break;
+          #endif
+          #if GPIO_PCF8574_I2C_NUM_DEVICES > 3
+          case 3: mode[i*4 + pin] = GPIO_PCF8574_MODE4; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE4); break;
+          #endif
+        }
+      }
+
       if (pcf[i]->begin()) {
         found = true;
       } else {
@@ -89,21 +121,14 @@ bool GpioPcf8574::init() {
   }
   HAL_WIRE_SET_CLOCK();
 
-  for (int i = 0; i < 32; i++) { mode[i] = INPUT; state[i] = false; };
-
   return found;
 }
 
 // set GPIO pin (0 to 31) mode for INPUT or OUTPUT
+// does nothing for PCF8574 as all pins of a given device are either read or write
 void GpioPcf8574::pinMode(int pin, int mode) {
-  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1) {
-    #ifdef INPUT_PULLDOWN
-      if (mode == INPUT_PULLDOWN) mode = INPUT;
-    #endif
-    if (mode == INPUT_PULLUP) mode = INPUT;
-    pcf[pin >> 3]->pinMode(pin & 0b111, mode);
-    this->mode[pin] = mode;
-  }
+  UNUSED(pin);
+  UNUSED(mode);
 }
 
 // get GPIO pin (0 to 31) state
