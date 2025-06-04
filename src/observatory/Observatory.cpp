@@ -76,6 +76,10 @@ void Observatory::init(const char *fwName, int fwMajor, int fwMinor, const char 
     digitalWrite(AUX_CS_PIN, HIGH);
   }
 
+  #if GPIO_DEVICE != OFF
+    if (!gpio.init()) { DLF("ERR: GpioEx, initalize failed!"); }
+  #endif
+
   // init is done, write the NV key if necessary
   if (!nv.hasValidKey()) {
     nv.writeKey((uint32_t)INIT_NV_KEY);
