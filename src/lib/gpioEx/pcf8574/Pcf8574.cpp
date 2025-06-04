@@ -83,15 +83,15 @@ bool GpioPcf8574::init() {
       // set this entire PCF8574 for INPUT or OUTPUT
       for (int pin = 0; pin < 8; pin++) {
         switch (i) {
-          case 0: mode[i*4 + pin] = GPIO_PCF8574_MODE1; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE1); break;
+          case 0: mode[i*8 + pin] = GPIO_PCF8574_MODE1; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE1); break;
           #if GPIO_PCF8574_I2C_NUM_DEVICES > 1
-          case 1: mode[i*4 + pin] = GPIO_PCF8574_MODE2; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE2); break;
+          case 1: mode[i*8 + pin] = GPIO_PCF8574_MODE2; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE2); break;
           #endif
           #if GPIO_PCF8574_I2C_NUM_DEVICES > 2
-          case 2: mode[i*4 + pin] = GPIO_PCF8574_MODE3; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE3); break;
+          case 2: mode[i*8 + pin] = GPIO_PCF8574_MODE3; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE3); break;
           #endif
           #if GPIO_PCF8574_I2C_NUM_DEVICES > 3
-          case 3: mode[i*4 + pin] = GPIO_PCF8574_MODE4; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE4); break;
+          case 3: mode[i*8 + pin] = GPIO_PCF8574_MODE4; pcf[i]->pinMode(pin, GPIO_PCF8574_MODE4); break;
           #endif
         }
       }
