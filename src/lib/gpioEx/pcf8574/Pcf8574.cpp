@@ -10,7 +10,7 @@ bool GpioPcf8574::init() {
   static bool initialized = false;
   if (initialized) return found;
 
-  for (int i = 0; i < 32; i++) { state[i] = false; mode[i] = -1; }
+  for (int i = 0; i < 32; i++) mode[i] = -1;
 
   HAL_WIRE.begin();
   HAL_WIRE_SET_CLOCK();
@@ -31,40 +31,26 @@ bool GpioPcf8574::init() {
 }
 
 // set GPIO pin (0 to 31) mode for INPUT or OUTPUT
-// enforces all pins for a given PCF8574 device being either read or write
 void GpioPcf8574::pinMode(int pin, int mode) {
   if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1) {
+    uint8_t device = pin >> 3;
+    uint8_t devicePin = pin & 0b0111;
+
     #ifdef INPUT_PULLDOWN
       if (mode == INPUT_PULLDOWN) mode = INPUT;
     #endif
     if (mode == INPUT_PULLUP) mode = INPUT;
 
-    // ------------------------------------
-    // per pin mode, set the high order bit
-    uint8_t device = pin >> 3;
-    uint8_t data = 0;
-    for (int i = 0; i < 7; i++) data |= (state[device*8 + i] & 0b01) << i;
-
     if (this->mode[pin] != mode) {
-      if (mode == INPUT) bitWrite(data, pin & 0b0111, 1);
-      if (mode == OUTPUT) bitWrite(data, pin & 0b0111, 0);
+      if (mode == INPUT) bitWrite(state[device], devicePin, 1);
+      if (mode == OUTPUT) bitWrite(state[device], devicePin, 0);
+
       HAL_WIRE.beginTransmission(iicAddress[device]);
-      HAL_WIRE.write(data);
+      HAL_WIRE.write(state[device]);
       HAL_WIRE.endTransmission();
+
       this->mode[pin] = mode;
     }
-    // ------------------------------------
-
-    // ------------------------------------
-    // force bank INPUT or OUTPUT mode
-    //if (bankMode[device] > 0) {
-    //  if (bankMode[device] != mode) {
-    //    DF("WRN: Gpio.pinMode(), invalid attempt to use INPUT and OUTPUT mode on PCF8574 device# "); DL(device);
-    //    return;
-    //  }
-    //} else bankMode[device] = mode;
-    //this->mode[pin] = mode;
-    // ------------------------------------
   }
 }
 
@@ -73,20 +59,17 @@ int GpioPcf8574::digitalRead(int pin) {
   if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1 && mode[pin] > 0) {
     if (mode[pin] == INPUT) {
       uint8_t device = pin >> 3;
-      uint8_t data;
+      uint8_t devicePin = pin & 0b0111;
 
       HAL_WIRE.requestFrom(iicAddress[device], (uint8_t)1);
 
       unsigned long timeout = millis() + 1000UL;
-      do {
-        if ((long)(timeout - millis()) < 0) return 0; 
-      } while (Wire.available() == 0);
-        
-      data = HAL_WIRE.read();
-      for (int i = 0; i < 7; i++) state[device*8 + i] = (data >> i) & 0b01;
-    }
+      do { if ((long)(timeout - millis()) < 0) return 0; } while (Wire.available() < 1);
 
-    return state[pin];
+      uint8_t data = HAL_WIRE.read();
+      return bitRead(data, devicePin);
+    } else
+      return bitRead(state[device], devicePin);
   }
 
   return 0;
@@ -97,14 +80,15 @@ void GpioPcf8574::digitalWrite(int pin, int value) {
   if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1 && mode[pin] > 0) {
     if (mode[pin] == OUTPUT) {
       uint8_t device = pin >> 3;
-      uint8_t data = 0;
-      for (int i = 0; i < 7; i++) data |= (state[device*8 + i] & 0b01) << i;
+      uint8_t devicePin = pin & 0b0111;
+
+      bitWrite(state[device], devicePin, (value == 0) ? 0 : 1);
 
       HAL_WIRE.beginTransmission(iicAddress[device]);
-      HAL_WIRE.write(data);
+      HAL_WIRE.write(state[device]);
       HAL_WIRE.endTransmission();
     }
-  } else return;
+  }
 }
 
 GpioPcf8574 gpio;

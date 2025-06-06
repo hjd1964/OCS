@@ -25,7 +25,7 @@
 
 class GpioPcf8574 : public Gpio {
   public:
-    // scan for PCF8575 device
+    // scan for PCF8574 device
     bool init();
 
     void pinMode(int pin, int mode);
@@ -40,10 +40,9 @@ class GpioPcf8574 : public Gpio {
     bool found = false;
 
     uint8_t iicAddress[4] = {GPIO_PCF8574_I2C_ADDRESS1, GPIO_PCF8574_I2C_ADDRESS2, GPIO_PCF8574_I2C_ADDRESS3, GPIO_PCF8574_I2C_ADDRESS4};
-//  int bankMode[4] = {-1, -1, -1, -1};
 
     int mode[32];
-    bool state[32];
+    uint8_t state[4] = {0, 0, 0, 0};
 };
 
 extern GpioPcf8574 gpio;
