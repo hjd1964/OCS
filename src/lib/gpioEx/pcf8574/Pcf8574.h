@@ -6,7 +6,35 @@
 
 #if defined(GPIO_DEVICE) && GPIO_DEVICE == X8574
 
-#include <PCF8574.h> // https://github.com/xreef/PCF8574_library/tree/master
+#ifndef GPIO_PCF8574_I2C_NUM_DEVICES
+  #define GPIO_PCF8574_I2C_NUM_DEVICES 1
+#endif
+
+#ifndef GPIO_PCF8574_I2C_ADDRESS1
+  #define GPIO_PCF8574_I2C_ADDRESS1 0x39
+#endif
+#ifndef GPIO_PCF8574_I2C_ADDRESS2
+  #define GPIO_PCF8574_I2C_ADDRESS2 0x3A
+#endif
+#ifndef GPIO_PCF8574_I2C_ADDRESS3
+  #define GPIO_PCF8574_I2C_ADDRESS3 0x3B
+#endif
+#ifndef GPIO_PCF8574_I2C_ADDRESS4
+  #define GPIO_PCF8574_I2C_ADDRESS4 0x3C
+#endif
+
+#ifndef GPIO_PCF8574_MODE1
+  #define GPIO_PCF8574_MODE1 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE2
+  #define GPIO_PCF8574_MODE2 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE3
+  #define GPIO_PCF8574_MODE3 INPUT
+#endif
+#ifndef GPIO_PCF8574_MODE4
+  #define GPIO_PCF8574_MODE4 INPUT
+#endif
 
 class GpioPcf8574 : public Gpio {
   public:
@@ -24,7 +52,8 @@ class GpioPcf8574 : public Gpio {
   private:
     bool found = false;
 
-    PCF8574 *pcf[4];
+    uint8_t iicAddress[4] = {GPIO_PCF8574_I2C_ADDRESS1, GPIO_PCF8574_I2C_ADDRESS2, GPIO_PCF8574_I2C_ADDRESS3, GPIO_PCF8574_I2C_ADDRESS4};
+    uint8_t bankMode[4] = {GPIO_PCF8574_MODE1, GPIO_PCF8574_MODE2, GPIO_PCF8574_MODE3, GPIO_PCF8574_MODE4};
 
     int mode[32];
     bool state[32];
