@@ -40,10 +40,10 @@ void GpioPcf8574::pinMode(int pin, int mode) {
       if (mode == INPUT_PULLDOWN) mode = INPUT;
     #endif
     if (mode == INPUT_PULLUP) mode = INPUT;
+    if (mode != INPUT && mode != OUTPUT) return;
 
     if (this->mode[pin] != mode) {
-      if (mode == INPUT) bitWrite(state[device], devicePin, 1);
-      if (mode == OUTPUT) bitWrite(state[device], devicePin, 0);
+      bitWrite(state[device], devicePin, (mode == INPUT) ? 1 : 0);
 
       HAL_WIRE.beginTransmission(iicAddress[device]);
       HAL_WIRE.write(state[device]);
