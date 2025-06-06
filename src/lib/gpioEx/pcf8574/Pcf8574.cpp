@@ -25,8 +25,8 @@ bool GpioPcf8574::init() {
 
   // check to be sure we find all devices
   for (int i = 0; i < GPIO_PCF8574_I2C_NUM_DEVICES; i++) {
-  	HAL_WIRE.beginTransmission(iicAddress[i]);
-  	uint8_t error = HAL_WIRE.endTransmission();
+    HAL_WIRE.beginTransmission(iicAddress[i]);
+    uint8_t error = HAL_WIRE.endTransmission();
     if (error) {
       if (DEBUG != OFF) { DF("WRN: Gpio.init(), PCF8574 (I2C 0x"); SERIAL_DEBUG.print(iicAddress[i], HEX); DLF(") not found"); }
       found = false;
