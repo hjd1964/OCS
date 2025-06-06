@@ -23,19 +23,6 @@
   #define GPIO_PCF8574_I2C_ADDRESS4 0x3C
 #endif
 
-#ifndef GPIO_PCF8574_MODE1
-  #define GPIO_PCF8574_MODE1 INPUT
-#endif
-#ifndef GPIO_PCF8574_MODE2
-  #define GPIO_PCF8574_MODE2 INPUT
-#endif
-#ifndef GPIO_PCF8574_MODE3
-  #define GPIO_PCF8574_MODE3 INPUT
-#endif
-#ifndef GPIO_PCF8574_MODE4
-  #define GPIO_PCF8574_MODE4 INPUT
-#endif
-
 class GpioPcf8574 : public Gpio {
   public:
     // scan for PCF8575 device
@@ -53,7 +40,7 @@ class GpioPcf8574 : public Gpio {
     bool found = false;
 
     uint8_t iicAddress[4] = {GPIO_PCF8574_I2C_ADDRESS1, GPIO_PCF8574_I2C_ADDRESS2, GPIO_PCF8574_I2C_ADDRESS3, GPIO_PCF8574_I2C_ADDRESS4};
-    uint8_t bankMode[4] = {GPIO_PCF8574_MODE1, GPIO_PCF8574_MODE2, GPIO_PCF8574_MODE3, GPIO_PCF8574_MODE4};
+//  int bankMode[4] = {-1, -1, -1, -1};
 
     int mode[32];
     bool state[32];

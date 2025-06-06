@@ -10,15 +10,7 @@ bool GpioPcf8574::init() {
   static bool initialized = false;
   if (initialized) return found;
 
-  for (int i = 0; i < 32; i++) state[i] = false;
-
-  // set each PCF8574 for all INPUT or all OUTPUT
-  for (int pin = 0; pin < 8; pin++) {
-    mode[0 + pin] = bankMode[0];
-    mode[8 + pin] = bankMode[1];
-    mode[16 + pin] = bankMode[2];
-    mode[24 + pin] = bankMode[3];
-  }
+  for (int i = 0; i < 32; i++) { state[i] = false; mode[i] = -1; }
 
   HAL_WIRE.begin();
   HAL_WIRE_SET_CLOCK();
@@ -39,15 +31,46 @@ bool GpioPcf8574::init() {
 }
 
 // set GPIO pin (0 to 31) mode for INPUT or OUTPUT
-// does nothing for PCF8574 as all pins of a given device are either read or write
+// enforces all pins for a given PCF8574 device being either read or write
 void GpioPcf8574::pinMode(int pin, int mode) {
-  UNUSED(pin);
-  UNUSED(mode);
+  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1) {
+    #ifdef INPUT_PULLDOWN
+      if (mode == INPUT_PULLDOWN) mode = INPUT;
+    #endif
+    if (mode == INPUT_PULLUP) mode = INPUT;
+
+    // ------------------------------------
+    // per pin mode, set the high order bit
+    uint8_t device = pin >> 3;
+    uint8_t data = 0;
+    for (int i = 0; i < 7; i++) data |= (state[device*8 + i] & 0b01) << i;
+
+    if (this->mode[pin] != mode) {
+      if (mode == INPUT) bitWrite(data, pin & 0b0111, 1);
+      if (mode == OUTPUT) bitWrite(data, pin & 0b0111, 0);
+      HAL_WIRE.beginTransmission(iicAddress[device]);
+      HAL_WIRE.write(data);
+      HAL_WIRE.endTransmission();
+      this->mode[pin] = mode;
+    }
+    // ------------------------------------
+
+    // ------------------------------------
+    // force bank INPUT or OUTPUT mode
+    //if (bankMode[device] > 0) {
+    //  if (bankMode[device] != mode) {
+    //    DF("WRN: Gpio.pinMode(), invalid attempt to use INPUT and OUTPUT mode on PCF8574 device# "); DL(device);
+    //    return;
+    //  }
+    //} else bankMode[device] = mode;
+    //this->mode[pin] = mode;
+    // ------------------------------------
+  }
 }
 
 // get GPIO pin (0 to 31) state
 int GpioPcf8574::digitalRead(int pin) {
-  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1) {
+  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1 && mode[pin] > 0) {
     if (mode[pin] == INPUT) {
       uint8_t device = pin >> 3;
       uint8_t data;
@@ -71,8 +94,7 @@ int GpioPcf8574::digitalRead(int pin) {
 
 // set GPIO pin (0 to 31) state
 void GpioPcf8574::digitalWrite(int pin, int value) {
-  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1) {
-    state[pin] = value;
+  if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1 && mode[pin] > 0) {
     if (mode[pin] == OUTPUT) {
       uint8_t device = pin >> 3;
       uint8_t data = 0;
