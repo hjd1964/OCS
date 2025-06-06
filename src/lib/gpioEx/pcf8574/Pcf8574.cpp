@@ -57,9 +57,10 @@ void GpioPcf8574::pinMode(int pin, int mode) {
 // get GPIO pin (0 to 31) state
 int GpioPcf8574::digitalRead(int pin) {
   if (found && pin >= 0 && pin <= GPIO_PCF8574_I2C_NUM_DEVICES*8 - 1 && mode[pin] > 0) {
+    uint8_t device = pin >> 3;
+    uint8_t devicePin = pin & 0b0111;
+
     if (mode[pin] == INPUT) {
-      uint8_t device = pin >> 3;
-      uint8_t devicePin = pin & 0b0111;
 
       HAL_WIRE.requestFrom(iicAddress[device], (uint8_t)1);
 
