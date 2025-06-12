@@ -13,9 +13,11 @@ void pollWrapper() { relay.poll(); }
 void pwmWrapper() { relay.pwm(); }
 
 void Relay::init() {
+  bool hasGpioEx = false;
   for (int r = 1; r <= RELAYS_MAX; r++) {
     pinModeEx(settings[r - 1].pin, OUTPUT);
     if (settings[r - 1].defaultState == ON) on(r); else off(r);
+    if (settings[r - 1].pin >= 0x200) hasGpioEx = true;
   }
 
   // start relay polling task
@@ -27,7 +29,7 @@ void Relay::init() {
   uint8_t handle = tasks.add(1, 0, true, 0, pwmWrapper, "RelyPwm");
   if (handle) {
     VLF("success");
-    if (!tasks.requestHardwareTimer(handle, 0)) { DLF("WRN: Relay::init(), didn't get h/w timer (using s/w timer)"); }
+    if (!hasGpioEx && !tasks.requestHardwareTimer(handle, 0)) { DLF("WRN: Relay::init(), didn't get h/w timer (using s/w timer)"); }
 
   } else { VLF("FAILED!"); }
 }
