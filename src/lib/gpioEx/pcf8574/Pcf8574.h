@@ -30,10 +30,8 @@ class GpioPcf8574 : public Gpio {
 
     void pinMode(int pin, int mode);
 
-    // one sixteen channel PCF8575 GPIO is supported, this gets the last set value
     int digitalRead(int pin);
 
-    // one sixteen channel PCF8575 GPIO is supported, this sets each output on or off
     void digitalWrite(int pin, int value);
 
   private:
