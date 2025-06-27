@@ -84,10 +84,10 @@ void Dome::init() {
 // reset dome at the home position
 void Dome::reset() {
   VLF("MSG: Dome, reset at home");
-  axis1.resetPositionSteps(0);
+  axis1.resetPositionSteps(round(AXIS1_HOME_DEFAULT*AXIS1_STEPS_PER_DEGREE));
   axis1.enable(false);
   #if AXIS2_DRIVER_MODEL != OFF
-    axis2.resetPositionSteps(0);
+    axis2.resetPositionSteps(round(AXIS2_HOME_DEFAULT*AXIS2_STEPS_PER_DEGREE));
     axis2.enable(false);
   #endif
   settings.park.state = PS_UNPARKED;
