@@ -403,6 +403,9 @@
 #ifndef AXIS1_LIMIT_MAX
 #define AXIS1_LIMIT_MAX                180                         // in degrees
 #endif
+#ifndef AXIS1_HOME_DEFAULT
+#define AXIS1_HOME_DEFAULT             0                           // in degrees
+#endif
 #ifndef AXIS1_SYNC_THRESHOLD
 #define AXIS1_SYNC_THRESHOLD           OFF                         // sync threshold in counts (required for absolute encoders) or OFF
 #endif
@@ -565,6 +568,9 @@
 #endif
 #ifndef AXIS2_LIMIT_MAX
 #define AXIS2_LIMIT_MAX                90
+#endif
+#ifndef AXIS2_HOME_DEFAULT
+#define AXIS2_HOME_DEFAULT             0
 #endif
 #ifndef AXIS2_SENSE_HOME
 #define AXIS2_SENSE_HOME               OFF

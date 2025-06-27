@@ -160,8 +160,8 @@ class Dome {
       {0.0F, 0.0F}
     };
 
-    float targetAzm = 0.0F;
-    float targetAlt = 0.0F;
+    float targetAzm = AXIS1_HOME_DEFAULT;
+    float targetAlt = AXIS2_HOME_DEFAULT;
 
     bool homing = false;
 

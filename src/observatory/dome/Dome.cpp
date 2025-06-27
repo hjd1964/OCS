@@ -37,7 +37,7 @@ void Dome::init() {
 
   VLF("MSG: Dome, init (Axis1)");
   if (!axis1.init(&motor1)) { DLF("ERR: Axis1, no motion controller exiting!"); return; }
-  axis1.resetPositionSteps(0);
+  axis1.resetPositionSteps(round(AXIS1_HOME_DEFAULT*AXIS1_STEPS_PER_DEGREE));
   axis1.setBacklash(settings.backlash.azimuth);
   axis1.setFrequencyMax(AXIS1_SLEW_RATE_DESIRED);
   axis1.setFrequencyMin(0.01F);
@@ -55,7 +55,7 @@ void Dome::init() {
   #if AXIS2_DRIVER_MODEL != OFF
     VLF("MSG: Dome, init (Axis2)");
     if (!axis2.init(&motor2)) { DLF("ERR: Axis2, no motion controller exiting!"); return; }
-    axis2.resetPositionSteps(0);
+    axis2.resetPositionSteps(round(AXIS2_HOME_DEFAULT*AXIS2_STEPS_PER_DEGREE));
     axis2.setBacklash(settings.backlash.altitude);
     axis2.setFrequencyMax(AXIS2_SLEW_RATE_DESIRED);
     axis2.setFrequencyMin(0.01F);
@@ -158,8 +158,8 @@ CommandError Dome::findHome() {
   #endif
   if (settings.park.state >= PS_PARKED) return CE_PARKED;
 
-  targetAzm = 0.0F;
-  targetAlt = 0.0F;
+  targetAzm = AXIS1_HOME_DEFAULT;
+  targetAlt = AXIS2_HOME_DEFAULT;
 
   CommandError e = CE_NONE;
 
