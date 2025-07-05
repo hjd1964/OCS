@@ -181,8 +181,8 @@
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 
 #define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
-#define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
-#define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
+#define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
+#define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for upper range above which is dry.                Option
 
 #define WEATHER_SENSOR_RAIN_DIGITAL   OFF //    OFF, n. Where n=1..8 (Sense#) to enable.  e.g. Kemo M152K or Hydreon RG-9     Option
 
