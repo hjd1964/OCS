@@ -21,7 +21,7 @@
 #define HOST_NAME                   "OCS" //  "OCS", This devices name up to 16 chars.                                        Adjust
 
 // PINMAP --------------------------------------------------------------------------------------------------------------------------
-#define PINMAP                        OFF //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCS_ESP1, OCS_ESP2.        <-Req'd
+#define PINMAP                       OCS4 //    OFF, Choose from: LEGACY, OCS1, OCS2, OCS3, OCS4, OCS_ESP1, OCS_ESP2.        <-Req'd
                                           //         Other boards/more info. in /src/Constants.h
 
 // SERIAL PORT COMMAND CHANNELS ----------------------------------------------------------------------------------------------------
@@ -141,6 +141,7 @@
 
 #define WEATHER_WIND_SPD              OFF //    OFF, ON for measuring wind speed.                                             Option
 #define WEATHER_WIND_SPD_THRESHOLD     20 //     20, n. Where n=0..100 (in kph) wind speed above this is considered UNSAFE.   Adjust
+#define WEATHER_WIND_ACCUMULATE       OFF //    OFF, n. Where n=1..20 (X) extend UNSAFE duration by n secs*(kph > threshold)  Option
 
 #define WEATHER_RAIN                  OFF //    OFF, ON to enable rain sensor, a "wet" condition is considered to be UNSAFE.  Option
 

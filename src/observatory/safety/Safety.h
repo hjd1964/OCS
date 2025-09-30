@@ -17,6 +17,7 @@ class Safety {
   private:
     bool roofAutoCloseInitiated = false;
     int delayForMains = 0; // counter for delay period
+    float wa = NAN;
 };
 
 extern Safety safety;
