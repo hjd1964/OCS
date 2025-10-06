@@ -32,21 +32,21 @@
   "<form name='thermostat' >"
   "<div>"
   "&nbsp;&nbsp;&nbsp;" L_HEAT " <span id='HeatStatus'></span>"
-  "<select style='float:right; margin-right:20px' onchange='s(\"tstat_heat\",value)' >";
+  "<select style='float:right; margin-right:20px; border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "' onchange='s(\"tstat_heat\",value)' >";
 
   const char htmlThermostatHeatEnd[] PROGMEM = "</select></div><br />";
 
   const char htmlThermostatCoolBeg[] PROGMEM =
   "<div>"
   "&nbsp;&nbsp;&nbsp;" L_COOL_VENT
-  "<select style='float:right; margin-right:20px' onchange='s(\"tstat_cool\",value)' >";
+  "<select style='float:right; margin-right:20px; border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "' onchange='s(\"tstat_cool\",value)' >";
 
   const char htmlThermostatCoolEnd[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div><br />";
 
   const char htmlThermostatHumidityControlBeg[] PROGMEM =
   "<div>"
   "&nbsp;&nbsp;&nbsp;" L_HUMIDITY_INSIDE
-  "<select style='float:right; margin-right:20px' onchange='s(\"tstat_humidity\",value)' >";
+  "<select style='float:right; margin-right:20px; border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "' onchange='s(\"tstat_humidity\",value)' >";
 
   const char htmlThermostatHumidityControlEnd[] PROGMEM = "</select>&nbsp;&nbsp;&nbsp;&nbsp;</div>";
 

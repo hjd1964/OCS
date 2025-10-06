@@ -10,7 +10,7 @@
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
 
   void weatherPage() {
-    char temp[256] = "";
+    char temp[384] = "";
     String a = www.arg("chart");
 
     // send the header

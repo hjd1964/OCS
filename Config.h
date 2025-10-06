@@ -35,6 +35,7 @@
 // DISPLAY -------------------------------------------------------------------------------------------------------------------------
 #define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL units) two letter country code.        Adjust
 #define CAMERA_WEBPAGE                 "" //     "", To enable add string with web address to camera image display page.      Adjust
+#define COLORS_DARK_THEME             OFF //    OFF, ON set OCS website colors to dark theme.                                 Option
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option

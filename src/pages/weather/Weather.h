@@ -18,9 +18,9 @@
   "<form method=\"get\" action=\"/skypage.htm\">";
 
   const char ChartOptions2[] PROGMEM = 
-  "<button name=\"chart\" value=\"recent\" type=\"submit\">Recent</button>"
-  "<button name=\"chart\" value=\"last24\" type=\"submit\">Last 24 Hours</button>"
-  "<button name=\"chart\" value=\"last48\" type=\"submit\">Last 48 Hours</button>"
+  "<button name=\"chart\" value=\"recent\" type=\"submit\" style=\"border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "\">Recent</button>"
+  "<button name=\"chart\" value=\"last24\" type=\"submit\" style=\"border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "\">Last 24 Hours</button>"
+  "<button name=\"chart\" value=\"last48\" type=\"submit\" style=\"border-radius:5px; background-color:" COLOR_CONTROL_SELECTED "\">Last 48 Hours</button>"
   "</form>";
 
 #endif
