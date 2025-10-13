@@ -50,7 +50,7 @@
       #endif
     #endif
     #if WEATHER_WIND_SPD == ON
-      #if DISPLAY_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL || DISPLAY_UNITS == BRITISH
         makeChartJs("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period);
       #else
         makeChartJs("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period);

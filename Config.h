@@ -33,7 +33,7 @@
 #define SERIAL_ONSTEP                 OFF //    OFF, Serial1, NETWORK_STATION, etc. specify serial interface to OnStep.       Option
 
 // DISPLAY -------------------------------------------------------------------------------------------------------------------------
-#define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL units) two letter country code.        Adjust
+#define DISPLAY_LANGUAGE             L_en //   L_en, Eng. L_us (IMPERIAL units), L_gb (MIXED units), two letter country code. Adjust
 #define CAMERA_WEBPAGE                 "" //     "", To enable add string with web address to camera image display page.      Adjust
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
