@@ -4,7 +4,6 @@
 #if WEATHER == ON
   #include "../../libApp/weatherSensor/WeatherSensor.h"
   #include "../../observatory/weather/Weather.h"
-  #include "../../observatory/safety/Safety.h"
 
   #if WEATHER_TEMPERATURE == ON
     void getWeatherTemperatureStr(char *temp);
@@ -17,9 +16,6 @@
   #endif
   #if WEATHER_WIND_SPD == ON
     void getWeatherWindSpeedStr(char *temp);
-  #endif
-  #if WEATHER_WIND_ACCUMULATE != OFF
-    void getWeatherWindAccumStr(char *temp);
   #endif
   #if WEATHER_RAIN == ON
     void getWeatherRainStr(char *temp);
@@ -63,12 +59,6 @@
       www.sendContent(temp);
     #endif
 
-    #if WEATHER_WIND_ACCUMULATE != OFF
-      getWeatherWindAccumStr(temp1);
-      sprintf_P(temp, htmlInnerWeatherGust, temp1);
-      www.sendContent(temp);
-    #endif
-
     #if WEATHER_RAIN == ON
       getWeatherRainStr(temp1);
       sprintf_P(temp, htmlInnerWeatherRain, temp1);
@@ -107,11 +97,6 @@
     #if WEATHER_HUMIDITY == ON
       getWeatherHumidityStr(temp);
       www.sendContent("wea_humd|"); www.sendContent(temp); www.sendContent("\n");
-    #endif
-
-    #if WEATHER_WIND_ACCUMULATE != OFF
-      getWeatherWindAccumStr(temp);
-      www.sendContent("wea_gust|"); www.sendContent(temp); www.sendContent("\n");
     #endif
 
     #if WEATHER_WIND_SPD == ON
@@ -187,17 +172,6 @@
         #else
           sprintF(temp, "%6.0f kph", f);
         #endif
-      }
-    }
-  #endif
-
-  #if WEATHER_WIND_ACCUMULATE != OFF
-    void getWeatherWindAccumStr(char *temp) {
-      float f = safety.gustCount();
-      if (isnan(f)) {
-        strcpy_P(temp, htmlStringInvalid);
-      } else {
-          sprintF(temp, "%6.0f", f);
       }
     }
   #endif

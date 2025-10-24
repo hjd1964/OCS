@@ -142,7 +142,6 @@
 
 #define WEATHER_WIND_SPD              OFF //    OFF, ON for measuring wind speed.                                             Option
 #define WEATHER_WIND_SPD_THRESHOLD     20 //     20, n. Where n=0..100 (in kph) wind speed above this is considered UNSAFE.   Adjust
-#define WEATHER_WIND_ACCUMULATE       OFF //    OFF, n. Where n=1..20 (X) extend UNSAFE duration by n secs*(kph > threshold)  Option
 
 #define WEATHER_RAIN                  OFF //    OFF, ON to enable rain sensor, a "wet" condition is considered to be UNSAFE.  Option
 

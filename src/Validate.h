@@ -133,10 +133,6 @@
   #error "Configuration (Config.h): WEATHER_WIND_SPD_THRESHOLD must be a number between 0 and 100 (kph.)"
 #endif
 
-#if WEATHER_WIND_ACCUMULATE != OFF && (WEATHER_WIND_ACCUMULATE<1 || WEATHER_WIND_ACCUMULATE>20)
-  #error "Configuration (Config.h): WEATHER_WIND_ACCUMULATE must be OFF or a number between 1 and 20 (secs*(kph > thres))"
-#endif
-
 #if WEATHER_SENSOR_WIND_CUP != OFF && (WEATHER_SENSOR_WIND_CUP<1 || WEATHER_SENSOR_WIND_CUP>8)
   #error "Configuration (Config.h): WEATHER_SENSOR_WIND_CUP must OFF or a number between 1 and 8 (SENSE#.)"
 #endif
