@@ -35,6 +35,11 @@
     "&nbsp;&nbsp;" L_WIND_SPEED "<div id='wea_wind' class='aStatus'>%s</div><br />";
   #endif
 
+  #if WEATHER_WIND_ACCUMULATE != OFF
+    const char htmlInnerWeatherGust[] PROGMEM =
+    "&nbsp;&nbsp;" L_WIND_ACCUM "<div id='wea_gust' class='aStatus'>&s</div><br />";
+  #endif
+
   #if WEATHER_RAIN == ON
     const char htmlInnerWeatherRain[] PROGMEM =
     "&nbsp;&nbsp;" L_RAIN_SENSE "<div id='wea_rain' class='aStatus'>%s</div><br />";

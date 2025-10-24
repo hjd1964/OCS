@@ -9,6 +9,7 @@ class Safety {
     void init();
 
     bool isSafe();
+    float gustCount() {return wa;}
 
     void poll();
 
@@ -17,6 +18,8 @@ class Safety {
   private:
     bool roofAutoCloseInitiated = false;
     int delayForMains = 0; // counter for delay period
+    float wa = 0; // Wind speed accumulator
+    float waMax = 600; // Maximum of 10minutes wind speed safety accumulator
 };
 
 extern Safety safety;
