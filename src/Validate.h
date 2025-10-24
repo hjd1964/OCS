@@ -32,6 +32,11 @@
   #error "Configuration (Config.h): CONNECT_FAIL_WATCHDOG ON requires WATCHDOG ON."
 #endif
 
+// Website colors setup
+#if COLORS_DARK_THEME != OFF && COLORS_DARK_THEME != ON
+  #error "Configuration (Config.h): COLORS_DARK_THEME must be either ON or OFF."
+#endif
+
 // Time setup
 #if TIME_ZONE<-12 || TIME_ZONE>14
   #error "Configuration (Config.h): TIME_ZONE must be a number between -12 and 13 (hours.)"

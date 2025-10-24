@@ -11,7 +11,7 @@
 
   #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
     void skyPage() {
-      char temp[256] = "";
+      char temp[384] = "";
       String a = www.arg("chart");
 
       // send the header

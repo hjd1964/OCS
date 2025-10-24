@@ -10,7 +10,7 @@
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
 
   void weatherPage() {
-    char temp[256] = "";
+    char temp[384] = "";
     String a = www.arg("chart");
 
     // send the header
@@ -50,7 +50,7 @@
       #endif
     #endif
     #if WEATHER_WIND_SPD == ON
-      #if DISPLAY_UNITS == IMPERIAL
+      #if DISPLAY_UNITS == IMPERIAL || DISPLAY_UNITS == BRITISH
         makeChartJs("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period);
       #else
         makeChartJs("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period);

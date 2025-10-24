@@ -96,7 +96,7 @@
   }
 
   void makeChartCanvas(const char *chartId) {
-    www.sendContent(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: #EEEEEE; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
+    www.sendContent(F("<div style=\"font-size: 14px;  float:left; padding: 10px; margin: 10px; background-color: " COLOR_CHART_CANVAS "; border-style: solid; border-width: 3px; border-color: red;\">\r\n"));
     www.sendContent(F("<canvas id=\"")); www.sendContent(chartId); www.sendContent(F("\" width=\"600\" height=\"200\"></canvas>\r\n"));
     www.sendContent(F("</div>\r\n"));
   }

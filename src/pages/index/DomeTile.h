@@ -34,12 +34,14 @@
 
   const char htmlDomeAltitude[] PROGMEM =
   "<label for='altitude'>" L_ALT " </label>"
-  "<input size='3' type='number' id='altitude' name='altitude' min='0' max='90' "
+  "<input size='3' type='number' id='altitude' name='altitude' min='0' max='90'"
+  "style='border-radius:5px; color-scheme:" COLOR_THEME "; color:" COLOR_THEMED_INPUT_TEXT "; background-color:" COLOR_CONTROL_SELECTED "'"
   "onchange='s(\"dome_alt\",value)' value='%d'>&nbsp;&nbsp;";
 
   const char htmlDomeAzimuth[] PROGMEM =
   "<label for='azimuth'>" L_AZM " </label>"
-  "<input size='4' type='number' id='azimuth' name='azimuth' min='0' max='360' "
+  "<input size='4' type='number' id='azimuth' name='azimuth' min='0' max='360'"
+  "style='border-radius:5px; color-scheme:" COLOR_THEME "; color:" COLOR_THEMED_INPUT_TEXT "; background-color:" COLOR_CONTROL_SELECTED "'"
   "onchange='s(\"dome_azm\",value)' value='%d'>&nbsp;&nbsp;";
 
   const char htmlDomeGoto[] PROGMEM =

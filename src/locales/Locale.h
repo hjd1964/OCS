@@ -30,6 +30,10 @@
   #include "Strings_es.h"
   #define UNITS METRIC
 #endif
+#if DISPLAY_LANGUAGE == L_gb // not ISO639-1 but might be useful
+  #include "Strings_en.h"
+  #define UNITS BRITISH
+#endif
 
 // misc. locale support functions
 #ifndef DISPLAY_UNITS

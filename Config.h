@@ -33,8 +33,9 @@
 #define SERIAL_ONSTEP                 OFF //    OFF, Serial1, NETWORK_STATION, etc. specify serial interface to OnStep.       Option
 
 // DISPLAY -------------------------------------------------------------------------------------------------------------------------
-#define DISPLAY_LANGUAGE             L_en //   L_en, English. L_en, L_us (for IMPERIAL units) two letter country code.        Adjust
+#define DISPLAY_LANGUAGE             L_en //   L_en, Eng. L_us (IMPERIAL units), L_gb (MIXED units), two letter country code. Adjust
 #define CAMERA_WEBPAGE                 "" //     "", To enable add string with web address to camera image display page.      Adjust
+#define COLORS_DARK_THEME             OFF //    OFF, ON set OCS website colors to dark theme.                                 Option
 
 // WATCHDOG SETTINGS ---------------------------------------------------------------------------------------------------------------
 #define WATCHDOG                      OFF //    OFF, ON resets OCS after 8 sec. if it hangs for (nearly) any reason.          Option
@@ -182,8 +183,8 @@
 #define WEATHER_SENSOR_WIND_REV_P     OFF //    OFF, n. Where n=1..16 (Analog#) to enable. Wind speed.                        Option
 
 #define WEATHER_SENSOR_RAIN_GENERIC   OFF //    OFF, n. Where n=1..16 (Analog#) to enable.                                    Option
-#define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is dry.                Option
-#define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
+#define WEATHER_SENSOR_RAIN_LOW      0.25 //   0.25, n. Where n=0.0 to 1.0 for lower range below which is wet.                Option
+#define WEATHER_SENSOR_RAIN_HIGH     0.75 //   0.75, n. Where n=0.0 to 1.0 for upper range above which is dry.                Option
 
 #define WEATHER_SENSOR_RAIN_DIGITAL   OFF //    OFF, n. Where n=1..8 (Sense#) to enable.  e.g. Kemo M152K or Hydreon RG-9     Option
 
