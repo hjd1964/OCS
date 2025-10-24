@@ -9,6 +9,7 @@ class Safety {
     void init();
 
     bool isSafe();
+    float gustCount() return wa;
 
     void poll();
 

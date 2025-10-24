@@ -43,6 +43,7 @@
 #define L_PRESSURE "Barometric Pressure"
 #define L_HUMIDITY "Relative Humidity"
 #define L_WIND_SPEED "Wind Speed"
+#define L_WIND_ACCUM "Gust countdown"
 #define L_RAIN_SENSE "Rain Sense"
 #define L_RAIN "Rain"
 #define L_WARN "Warn"
