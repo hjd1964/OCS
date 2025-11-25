@@ -73,6 +73,9 @@
 #ifndef COLOR_CHART_CANVAS
 #define COLOR_CHART_CANVAS "#EEEEEE"
 #endif
+#ifndef COLOR_CHART_THRESHOLD
+#define COLOR_CHART_THRESHOLD "rgba(10,50,10,1)"
+#endif
 
 #ifndef COLOR_THEME
 #define COLOR_THEME "normal"
