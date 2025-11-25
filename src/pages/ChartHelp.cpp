@@ -184,7 +184,7 @@
     // Send the closing for first dataset and open second dataset for threshold
     www.sendContent(F("]},{label:'"));
     www.sendContent(thresholdLabel);
-    www.sendContent(F("',borderColor:'rgba(10,50,10,1)',borderWidth:2,borderDash:[5,5],fill:false,pointRadius:0,data:["));
+    www.sendContent(F("',borderColor: \"" COLOR_CHART_THRESHOLD "\",borderWidth:2,borderDash:[5,5],fill:false,pointRadius:0,data:["));
     
     // Generate threshold data points
     dtostrf(thresholdValue, 1, 1, thresholdText);
