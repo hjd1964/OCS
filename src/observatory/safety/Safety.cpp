@@ -57,6 +57,15 @@ bool Safety::isSafe() {
       // check for invalid or wind speed too high
       f = weatherSensor.windspeed();
       if (isnan(f) || f < 0 || f > WEATHER_WIND_SPD_THRESHOLD) safe = false;
+
+      #if WEATHER_WIND_ACCUMULATE > 0
+        if (!isnan(f) && f > WEATHER_WIND_SPD_THRESHOLD && wa < waMax) wa += (f * WEATHER_WIND_ACCUMULATE);        
+        if (wa > waMax) wa == waMax;
+        if (!isnan(f) && f <= WEATHER_WIND_SPD_THRESHOLD && wa > 0) wa -= ((WEATHER_WIND_SPD_THRESHOLD - f) / WEATHER_WIND_ACCUMULATE);
+        if (wa < 0) wa = 0;
+        if (wa > 0) safe = false;
+      #endif
+
       safetyDeviceCount++;
     #endif
   #endif
