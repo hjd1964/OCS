@@ -40,10 +40,9 @@ private:
     int delayForMains = 0;
     float wa = 0;
     float waMax = 600;
-    // Blocker logic
+
     bool overrideEnabled = false;
     bool lastIsSafe = true;
-    // Output warning logic
     unsigned long lastToggle = 0;
     bool outputState = false;
     void updateWarningOutput();

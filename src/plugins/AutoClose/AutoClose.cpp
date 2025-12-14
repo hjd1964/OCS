@@ -4,7 +4,7 @@
 
 void autoCloseWrapper() { autoClose.poll(); }
 
-bool validTime() { return (now() < 315360000); }
+bool isTimeValid() { return (now() < 315360000); }
 
 void AutoClose::init() {
     VF("MSG: AutoClose, start monitor task (rate 1s priority 3)... ");
@@ -19,7 +19,7 @@ void AutoClose::updateWarningOutput() {
         return;
     }
     unsigned long now = millis();
-    unsigned long interval = lastIsSafe ? 2000 : 500;
+    unsigned long interval = lastIsSafe ? 2000 : 250;
     if (now - lastToggle >= interval) {
         outputState = !outputState;
         digitalWrite(AUTOCLOSE_OUTPUT_PIN, outputState ? AUTOCLOSE_OUTPUT_ON : !AUTOCLOSE_OUTPUT_ON);
@@ -37,6 +37,7 @@ bool AutoClose::isSafe() {
         } else {
             if (delayForMains < STAT_MAINS_SAFETY_DELAY) delayForMains++; else safe = false;
         }
+        safetyDeviceCount++;
     #endif
 
     #ifdef WEATHER_PRESENT
@@ -68,45 +69,62 @@ bool AutoClose::isSafe() {
     #endif
     if (safetyDeviceCount == 0) safe = false;
     lastIsSafe = safe;
-    if (overrideEnabled) return false; // block isSafe if override is on
     return safe;
 }
 
 void AutoClose::poll() {
     // Duplicate Safety::poll() logic for autoclose, but only if ROOF_AUTOCLOSE_SAFETY == OFF
     #if defined(ROOF_PRESENT) && (ROOF_AUTOCLOSE_SAFETY == OFF)
-        if (roofAutoClose && validTime()) {
+    if (!overrideEnabled) {    
+      if (roofAutoClose && isTimeValid()) {
             if (hour() == 8 && !roofAutoCloseInitiated) {
                 roofAutoCloseInitiated = true;
                 roof.close();
             }
             if (hour() != 8) roofAutoCloseInitiated = false;
         }
+      if (!isSafe()) {
+        // if the roof isn't closed, and motion is idle, close it
+        if (!roof.isClosed() && !roof.isMoving()) roof.close();
+      }
+    }
     #endif
     updateWarningOutput();
 }
 
 bool AutoClose::command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError) {
-    // Accepts :SO0# or :SO1#
-    if (command && strncmp(command, "SO", 2) == 0 && (command[2] == '0' || command[2] == '1') && command[3] == '#') {
-        roofAutoClose = (command[2] == '1');
-        snprintf(reply, 32, ":SO%d#", roofAutoClose ? 1 : 0);
-        return true;
+
+    if (command[0] == 'S' && command[1] == 'O' && command[2] == 0) {
+        // :SO0# or :SO1#
+        if (parameter[0] == '0' && parameter[1] == 0) {
+            overrideEnabled = false;
+            strcpy(reply, "OFF");
+            *supressFrame = false;
+            *numericReply = false;
+            return true;
+        } else if (parameter[0] == '1' && parameter[1] == 0) {
+            overrideEnabled = true;
+            strcpy(reply, "ON");
+            *supressFrame = false;
+            *numericReply = false;
+            return true;
+        } else {
+            *commandError = CE_PARAM_FORM;
+            return false;
+        }
+    } else if (command[0] == 'G' && command[1] == 'O' && command[2] == 0) {
+        // :GO#
+        if (parameter[0] == 0) {
+            strcpy(reply, overrideEnabled ? "ON" : "OFF");
+            *supressFrame = false;
+            *numericReply = false;
+            return true;
+        } else {
+            *commandError = CE_PARAM_FORM;
+            return false;
+        }
     }
-        return true;
-    }
-    if (strcmp(command, ":GO#") == 0) {
-        *supressFrame = false;
-        *numericReply = false;
-        strcpy(reply, overrideEnabled ? "Override=1" : "Override=0");
-        return true;
-    }
-    UNUSED(*reply);
-    UNUSED(*command);
-    UNUSED(*parameter);
-    UNUSED(*supressFrame);
-    UNUSED(*numericReply);
-    UNUSED(*commandError);
+    // Not handled
     return false;
 }
 
