@@ -1,6 +1,5 @@
 // AutoClose plugin
 #include "AutoClose.h"
-#ifdef AUTOCLOSE_PLUGIN
 #include <TimeLib.h>
 
 void autoCloseWrapper() { autoClose.poll(); }
@@ -88,12 +87,12 @@ void AutoClose::poll() {
 }
 
 bool AutoClose::command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError) {
-    if (strcmp(command, ":SO#") == 0) {
-        int val = atoi(parameter);
-        overrideEnabled = (val == 1);
-        *supressFrame = false;
-        *numericReply = false;
-        strcpy(reply, overrideEnabled ? "Override Enabled" : "Override Disabled");
+    // Accepts :SO0# or :SO1#
+    if (command && strncmp(command, "SO", 2) == 0 && (command[2] == '0' || command[2] == '1') && command[3] == '#') {
+        roofAutoClose = (command[2] == '1');
+        snprintf(reply, 32, ":SO%d#", roofAutoClose ? 1 : 0);
+        return true;
+    }
         return true;
     }
     if (strcmp(command, ":GO#") == 0) {
@@ -112,4 +111,3 @@ bool AutoClose::command(char *reply, char *command, char *parameter, bool *supre
 }
 
 AutoClose autoClose;
-#endif
