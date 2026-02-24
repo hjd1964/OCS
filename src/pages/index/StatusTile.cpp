@@ -49,7 +49,7 @@
     www.sendContent(temp);
 
     #if STAT_MAINS_SENSE != OFF
-      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp1, "GOOD"); else strcpy(temp1, "OUT"); 
+      if (sense.isOn(STAT_MAINS_SENSE)) strcpy(temp1, L_ON); else strcpy(temp1, L_OFF); 
       sprintf_P(temp, htmlInnerStatusMains, temp1);
       www.sendContent(temp);
     #endif

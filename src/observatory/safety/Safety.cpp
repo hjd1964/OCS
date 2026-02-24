@@ -24,7 +24,6 @@ void Safety::init() {
 
 bool Safety::isSafe() {
   bool safe = true;
-  int safetyDeviceCount = 0;
 
   #if STAT_MAINS_SENSE != OFF
     // check for mains power out
@@ -43,14 +42,12 @@ bool Safety::isSafe() {
       // check for invalid or wet (1=Wet, 2=Warn, 3=Dry)
       f = weatherSensor.rain();
       if (isnan(f) || f < 2.0F) safe = false;
-      safetyDeviceCount++;
     #endif
     
     #if WEATHER_CLOUD_CVR == ON
       // check for invalid or above WEATHER_SAFE_THRESHOLD
       f = weather.getAvgSkyDiffTemp();
       if (isnan(f) || f < -200 || f > WEATHER_SAFE_THRESHOLD) safe = false;
-      safetyDeviceCount++;
     #endif
     
     #if WEATHER_WIND_SPD == ON
@@ -65,12 +62,10 @@ bool Safety::isSafe() {
         if (wa < 0) wa = 0;
         if (wa > 0) safe = false;
       #endif
-
-      safetyDeviceCount++;
     #endif
   #endif
 
-  if (safetyDeviceCount == 0) return false; else return safe;
+  return safe;
 }
 
 void Safety::poll() {
