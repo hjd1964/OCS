@@ -8,6 +8,7 @@
 
   void makeChartCanvas(const char *chartId);
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
+  void makeChartJs2(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours, float thresholdValue, String thresholdLabel);
 
   void weatherPage() {
     char temp[384] = "";
@@ -51,9 +52,10 @@
     #endif
     #if WEATHER_WIND_SPD == ON
       #if DISPLAY_UNITS == IMPERIAL || DISPLAY_UNITS == BRITISH
-        makeChartJs("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period);
+        float threshold = WEATHER_WIND_SPD_THRESHOLD * 0.621371; // Convert kph to mph
+        makeChartJs2("WS", "Wind Speed mph (last "+periodStr+")", -39, 5, 0, 50, 10, period, threshold, "Safety Threshold");
       #else
-        makeChartJs("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period);
+        makeChartJs2("WS", "Wind Speed kph (last "+periodStr+")", 39, 5, 0, 80, 10, period, (float)WEATHER_WIND_SPD_THRESHOLD, "Safety Threshold");
       #endif
     #endif
     #if WEATHER_PRESSURE == ON

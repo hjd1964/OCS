@@ -8,6 +8,7 @@
 
   void makeChartCanvas(const char *chartId);
   void makeChartJs(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours);
+  void makeChartJs2(const char chartId[], String chartName, int logColumn, int colWidth, int rangeMin, int rangeMax, int rangeStep, long hours, float thresholdValue, String thresholdLabel);
 
   #if WEATHER_SKY_QUAL == ON || WEATHER_CLOUD_CVR == ON
     void skyPage() {
@@ -48,7 +49,7 @@
       #endif
 
       #if WEATHER_CLOUD_CVR == ON
-        makeChartJs("skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period);
+        makeChartJs2("skyT", "Sky IR Temperature C (last "+periodStr+")", 14, 5, -40, 5, 5, period, (float)WEATHER_SAFE_THRESHOLD, "Safety Threshold");
       #endif
 
       www.sendContent(F("}\r\n"));

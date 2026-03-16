@@ -73,6 +73,9 @@
 #ifndef COLOR_CHART_CANVAS
 #define COLOR_CHART_CANVAS "#333333"
 #endif
+#ifndef COLOR_CHART_THRESHOLD
+#define COLOR_CHART_THRESHOLD "rgba(10,180,10,1)"
+#endif
 
 #ifndef COLOR_THEME
 #define COLOR_THEME "dark"
