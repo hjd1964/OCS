@@ -163,9 +163,9 @@ bool Weather::command(char reply[], char command[], char parameter[], bool *supr
       sprintf(reply, "%s,%s", ws, wt);
       *numericReply = false;
     } else return false;
-  }
+  } else return false;
 
-  return false;
+  return true;
 }
 
 #endif
