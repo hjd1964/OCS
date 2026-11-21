@@ -18,7 +18,7 @@
   const char htmlRoofEnd[] PROGMEM =
   "<br />"
   #if ROOF_AUTOCLOSE_DAWN == ON
-    "<input type='checkbox' onclick='s(\"roof_auto_close\",this.checked)' %___ACL />&nbsp;" L_CLOSE_AT_DAWN "<br />"
+    "<input type='checkbox' id='roof_acl' autocomplete='off' onclick='s(\"roof_auto_close\",this.checked)' %___ACL />&nbsp;" L_CLOSE_AT_DAWN "<br />"
   #endif
   "</div>"
   "</div>\r\n";

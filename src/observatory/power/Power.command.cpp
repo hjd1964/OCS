@@ -3,6 +3,7 @@
 
 #include "Power.h"
 
+#include "../../lib/nv/Nv.h"
 #include "../../libApp/relay/Relay.h"
 
 bool Power::command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError) {
@@ -36,8 +37,8 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
         String ws = String(parameter);
         ws = ws.substring(separator);
         if (ws.equals("DELAY")) relay.onDelayedOff(r, 30); else
-        if (ws.equals("ON"))    relay.on(r); else
-        if (ws.equals("OFF"))   relay.off(r); else
+        if (ws.equals("ON"))    { relay.on(r); rememberState(r, true); } else
+        if (ws.equals("OFF"))   { relay.off(r); rememberState(r, false); } else
         if (ws.length() == 1 && ws[0] >= '0' && ws[0] <= '9') {
           int j = ws[0] - '0';
           relay.power(r, j*10);
@@ -99,6 +100,30 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
   return false;
   
   return true;
+}
+
+void Power::rememberState(int relayNum, bool state) {
+  UNUSED(relayNum);
+  UNUSED(state);
+
+  #if POWER_DEVICE1_RELAY != OFF && POWER_DEVICE1_MEMORY != OFF
+    if (relayNum == POWER_DEVICE1_RELAY) nv.write(NV_POWER_DEVICE1, (uint8_t)state);
+  #endif
+  #if POWER_DEVICE2_RELAY != OFF && POWER_DEVICE2_MEMORY != OFF
+    if (relayNum == POWER_DEVICE2_RELAY) nv.write(NV_POWER_DEVICE2, (uint8_t)state);
+  #endif
+  #if POWER_DEVICE3_RELAY != OFF && POWER_DEVICE3_MEMORY != OFF
+    if (relayNum == POWER_DEVICE3_RELAY) nv.write(NV_POWER_DEVICE3, (uint8_t)state);
+  #endif
+  #if POWER_DEVICE4_RELAY != OFF && POWER_DEVICE4_MEMORY != OFF
+    if (relayNum == POWER_DEVICE4_RELAY) nv.write(NV_POWER_DEVICE4, (uint8_t)state);
+  #endif
+  #if POWER_DEVICE5_RELAY != OFF && POWER_DEVICE5_MEMORY != OFF
+    if (relayNum == POWER_DEVICE5_RELAY) nv.write(NV_POWER_DEVICE5, (uint8_t)state);
+  #endif
+  #if POWER_DEVICE6_RELAY != OFF && POWER_DEVICE6_MEMORY != OFF
+    if (relayNum == POWER_DEVICE6_RELAY) nv.write(NV_POWER_DEVICE6, (uint8_t)state);
+  #endif
 }
 
 Power power;

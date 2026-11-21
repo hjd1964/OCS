@@ -11,6 +11,29 @@
     void getThermostatHumidityStr(char *temp);
   #endif
 
+  // setpoints as shown in the select controls (display units, 0 = OFF)
+  #if HEAT_RELAY != OFF
+    int heatSetpointDisplay() {
+      #if DISPLAY_UNITS == IMPERIAL
+        if (thermostat.getHeatSetpoint() == 0) return 0;
+        return round(thermostat.getHeatSetpoint()*(9.0/5.0) + 32.0);
+      #else
+        return round(thermostat.getHeatSetpoint());
+      #endif
+    }
+  #endif
+
+  #if COOL_RELAY != OFF
+    int coolSetpointDisplay() {
+      #if DISPLAY_UNITS == IMPERIAL
+        if (thermostat.getCoolSetpoint() == 0) return 0;
+        return round(thermostat.getCoolSetpoint()*(9.0/5.0) + 32.0);
+      #else
+        return round(thermostat.getCoolSetpoint());
+      #endif
+    }
+  #endif
+
   void thermostatTile() {
     char temp[256];
     char temp1[32];
@@ -46,12 +69,7 @@
       strcpy_P(temp, htmlThermostatHeatBeg);
       www.sendContent(temp);
 
-      #if DISPLAY_UNITS == IMPERIAL
-        int h = round(thermostat.getHeatSetpoint()*(9.0/5.0) + 32.0);
-      if (thermostat.getHeatSetpoint() == 0) h = 0;
-      #else
-        int h = round(thermostat.getHeatSetpoint());
-      #endif
+      int h = heatSetpointDisplay();
 
       if (h == 0) strcpy(temp1, "selected"); else strcpy(temp1, "");
       sprintf_P(temp, htmlThermostatOptionZero, temp1);
@@ -80,12 +98,7 @@
       strcpy_P(temp, htmlThermostatCoolBeg);
       www.sendContent(temp);
 
-      #if DISPLAY_UNITS == IMPERIAL
-        int c = round(thermostat.getCoolSetpoint()*(9.0/5.0) + 32.0);
-        if (thermostat.getCoolSetpoint() == 0) c = 0;
-      #else
-        int c = round(thermostat.getCoolSetpoint());
-      #endif
+      int c = coolSetpointDisplay();
 
       if (c == 0) strcpy(temp1, "selected"); else strcpy(temp1, "");
       sprintf_P(temp, htmlThermostatOptionZero, temp1);
@@ -142,6 +155,20 @@
     #if THERMOSTAT_HUMIDITY == ON
       getThermostatHumidityStr(temp);
       www.sendContent("tstat_H|"); www.sendContent(temp); www.sendContent("\n");
+    #endif
+
+    // setpoint selects, so changes made by other clients show up here
+    #if HEAT_RELAY != OFF
+      sprintf(temp, "tstat_heat&%d\n", heatSetpointDisplay());
+      www.sendContent(temp);
+    #endif
+    #if COOL_RELAY != OFF
+      sprintf(temp, "tstat_cool&%d\n", coolSetpointDisplay());
+      www.sendContent(temp);
+    #endif
+    #if HUMIDITY_RELAY != OFF
+      sprintf(temp, "tstat_humidity&%d\n", (int)round(thermostat.getHumiditySetpoint()));
+      www.sendContent(temp);
     #endif
   }
 

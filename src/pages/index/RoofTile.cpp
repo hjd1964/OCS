@@ -9,7 +9,7 @@
   void getRoofErrorStrColored(const char *errorStr, char *errorStrColored);
 
   void roofTile() {
-    char temp[160];
+    char temp[200];
 
     strcpy_P(temp, htmlRoofBeg);
     www.sendContent(temp);
@@ -53,6 +53,10 @@
 
     getRoofErrorStrColored(roof.errorMessage(), temp1);
     www.sendContent("roof_err|"); www.sendContent(temp1); www.sendContent("\n");
+
+    #if ROOF_AUTOCLOSE_DAWN == ON
+      if (safety.roofAutoClose) www.sendContent("roof_acl|checked\n"); else www.sendContent("roof_acl|unchecked\n");
+    #endif
   }
 
   void roofTileGet() {
