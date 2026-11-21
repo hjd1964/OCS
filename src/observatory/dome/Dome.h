@@ -160,6 +160,9 @@ class Dome {
       {0.0F, 0.0F}
     };
 
+    // true if DOME_SHUTTER_LOCK is ON and the roof/shutter isn't fully open
+    bool shutterLocked();
+
     float targetAzm = AXIS1_HOME_DEFAULT;
     float targetAlt = AXIS2_HOME_DEFAULT;
 
