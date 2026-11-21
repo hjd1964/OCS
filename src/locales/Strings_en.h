@@ -101,6 +101,7 @@
 #define L_ROOF_ERR19 "Error: Open location unknown"
 #define L_ROOF_ERR20 "Error: Open already in motion"
 #define L_ROOF_ERR21 "Error: Close mount not parked"
+#define L_ROOF_ERR22 "Error: Open while unsafe"
 
 // roof/shutter and dome
 
