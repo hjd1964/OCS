@@ -11,6 +11,8 @@
 
 #include "../../libApp/relay/Relay.h"
 
+#include "../safety/Safety.h"
+
 void roofWrapper() { roof.poll(); }
 
 #if ROOF_MOUNT_PARK_BEFORE_CLOSE == ON
@@ -37,6 +39,16 @@ bool Roof::open() {
     lastError = RERR_OPEN_EXCEPT_IN_MOTION;
     return false;
   }
+
+  #if ROOF_AUTOCLOSE_SAFETY == ON
+    // Don't open into unsafe conditions, the auto close would only close it again once it's open
+    // (this applies even with the safety override, which only covers limit switches and timing)
+    if (!safety.isSafe()) {
+      VLF("MSG: Roof/shutter open, aborted unsafe conditions");
+      lastError = RERR_OPEN_UNSAFE;
+      return false;
+    }
+  #endif
 
   // Handle case of Garage door opener where we're not sure which way it'll move
   if (!safetyOverride && ROOF_SINGLE_OPEN_CLOSE_RELAY == ON && !sense.isOn(ROOF_LIMIT_OPENED_SENSE) && !sense.isOn(ROOF_LIMIT_CLOSED_SENSE)) {
@@ -301,6 +313,7 @@ const char roofErrorMessage18[] PROGMEM = L_ROOF_ERR18;
 const char roofErrorMessage19[] PROGMEM = L_ROOF_ERR19;
 const char roofErrorMessage20[] PROGMEM = L_ROOF_ERR20;
 const char roofErrorMessage21[] PROGMEM = L_ROOF_ERR21;
+const char roofErrorMessage22[] PROGMEM = L_ROOF_ERR22;
 
 // returns an error description string if an error has occured, "" if no error
 const char * Roof::getLastError() {
@@ -349,6 +362,7 @@ const char * Roof::getLastError() {
     case 19: strcpy_P(errorMessage, roofErrorMessage19); break;
     case 20: strcpy_P(errorMessage, roofErrorMessage20); break;
     case 21: strcpy_P(errorMessage, roofErrorMessage21); break;
+    case 22: strcpy_P(errorMessage, roofErrorMessage22); break;
   }
 
   return errorMessage;
