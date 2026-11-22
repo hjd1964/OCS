@@ -82,14 +82,25 @@ void Dome::init() {
 }
 
 // reset dome at the home position
-void Dome::reset() {
+void Dome::reset(bool useHomeSensorOffset) {
   VLF("MSG: Dome, reset at home");
-  axis1.resetPositionSteps(round(AXIS1_HOME_DEFAULT*AXIS1_STEPS_PER_DEGREE));
+
+  // after a homing run add in the residual between the recorded sensor trip point and the resting position
+  long azmSteps = lround(AXIS1_HOME_DEFAULT*AXIS1_STEPS_PER_DEGREE);
+  #if AXIS1_SENSE_HOME != OFF
+    if (useHomeSensorOffset) azmSteps += axis1.getInstrumentCoordinateSteps() - axis1.getHomeFoundSteps();
+  #endif
+  axis1.resetPositionSteps(azmSteps);
   axis1.enable(false);
   #if AXIS2_DRIVER_MODEL != OFF
-    axis2.resetPositionSteps(round(AXIS2_HOME_DEFAULT*AXIS2_STEPS_PER_DEGREE));
+    long altSteps = lround(AXIS2_HOME_DEFAULT*AXIS2_STEPS_PER_DEGREE);
+    #if AXIS2_SENSE_HOME != OFF
+      if (useHomeSensorOffset) altSteps += axis2.getInstrumentCoordinateSteps() - axis2.getHomeFoundSteps();
+    #endif
+    axis2.resetPositionSteps(altSteps);
     axis2.enable(false);
   #endif
+  UNUSED(useHomeSensorOffset);
   settings.park.state = PS_UNPARKED;
   nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
 }
@@ -115,7 +126,8 @@ CommandError Dome::gotoAzimuthTarget() {
   if (!axis1.isEnabled()) axis1.enable(true);
   axis1.setTargetCoordinate(targetAzm);
 
-  if (axis1.isSlewing()) return CE_NONE;
+  // isHoming() covers the settle gaps between homing moves, where the axis is idle but busy
+  if (axis1.isSlewing() || axis1.isHoming()) return CE_NONE;
 
   CommandError e = axis1.autoGoto(AXIS1_SLEW_RATE_DESIRED);
   return e;
@@ -146,7 +158,7 @@ CommandError Dome::gotoAltitudeTarget() {
     if (!axis2.isEnabled()) axis2.enable(true);
     axis2.setTargetCoordinate(targetAlt);
 
-    if (axis2.isSlewing()) return CE_NONE;
+    if (axis2.isSlewing() || axis2.isHoming()) return CE_NONE;
 
     CommandError e = axis2.autoGoto(AXIS2_SLEW_RATE_DESIRED);
     return e;
@@ -165,10 +177,13 @@ CommandError Dome::findHome() {
 
   CommandError e = CE_NONE;
 
+  // homing runs with backlash off as park()/unpark() already do, the approach always comes from the same side anyway
   #if AXIS1_SENSE_HOME != OFF
+    axis1.setBacklash(0.0F);
     axis1.setFrequencySlew(AXIS1_SLEW_RATE_DESIRED);
     e = axis1.autoSlewHome();
-    if (e == CE_NONE) homing = true;
+    // set the restore flag only once the slew is actually running, since monitor() restores on !isSlewing()
+    if (e == CE_NONE) { homing = true; backlashDisabled = true; }
   #else
     e = gotoAzimuthTarget();
   #endif
@@ -176,10 +191,12 @@ CommandError Dome::findHome() {
   #if AXIS2_DRIVER_MODEL != OFF
     if (e == CE_NONE) {
       #if AXIS2_SENSE_HOME != OFF
+        axis2.setBacklash(0.0F);
         axis2.setFrequencySlew(AXIS2_SLEW_RATE_DESIRED);
         e = axis2.autoSlewHome();
         if (e == CE_NONE) {
           homing = true;
+          backlashDisabled = true;
         } else {
           axis1.autoSlewAbort();
           homing = false;
@@ -190,9 +207,98 @@ CommandError Dome::findHome() {
     }
   #endif
 
+  // nothing is slewing on a failed start, so monitor() will never restore backlash; do it here
+  if (e != CE_NONE && !backlashDisabled) {
+    axis1.setBacklash(settings.backlash.azimuth);
+    #if AXIS2_DRIVER_MODEL != OFF
+      axis2.setBacklash(settings.backlash.altitude);
+    #endif
+  }
 
   return e;
 }
+
+// measure a full rotation, to calibrate AXIS1_STEPS_PER_DEGREE
+CommandError Dome::calibrateRotation() {
+  #if AXIS1_SENSE_HOME == OFF
+    return CE_SLEW_ERR_UNSPECIFIED;
+  #else
+    #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
+      if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
+    #endif
+    if (settings.park.state >= PS_PARKED) return CE_PARKED;
+    if (isSlewing() || calibrating) return CE_SLEW_IN_SLEW;
+    #if AXIS1_WRAP != ON
+      // without wrap the software limits stop the axis before it can complete a revolution
+      VLF("MSG: Dome, rotation calibration needs AXIS1_WRAP ON");
+      return CE_SLEW_ERR_OUTSIDE_LIMITS;
+    #endif
+
+    VF("MSG: Dome, measuring rotation over "); V(DOME_CALIBRATE_REVOLUTIONS); VLF(" revolution(s)");
+
+    axis1.enable(true);
+    // no direction reversal happens during the run so lash can't affect the interval between passes, zero it anyway
+    axis1.setBacklash(0.0F);
+    axis1.setFrequencySlew(AXIS1_SLEW_RATE_DESIRED);
+
+    // reject a trip closer than 10 degrees to the last, well past the switch width but far short of a revolution
+    axis1.homeCaptureStart(lround(10.0*axis1.getStepsPerMeasure()));
+
+    // rotate the way homing seeks, so calibration meets the switch on the same edge homing does
+    CommandError e = axis1.autoSlew((HOME_SEEK_REVERSE) == ON ? DIR_REVERSE : DIR_FORWARD,
+                                    AXIS1_SLEW_RATE_DESIRED);
+    if (e != CE_NONE) {
+      axis1.homeCaptureStop();
+      axis1.setBacklash(settings.backlash.azimuth);
+      VF("MSG: Dome, rotation calibration could not start, error "); VL(e);
+      return e;
+    }
+
+    // allow three times the expected run time before giving up, so a switch that never trips ends the run
+    calibrateTimeout = millis() +
+      (unsigned long)((DOME_CALIBRATE_REVOLUTIONS + 1)*3.0*360.0/(AXIS1_SLEW_RATE_DESIRED)*1000.0);
+    calibrating = true;
+    backlashDisabled = true;
+    return CE_NONE;
+  #endif
+}
+
+#if AXIS1_SENSE_HOME != OFF
+  // work out and report the result of a rotation measurement
+  void Dome::calibrateReport() {
+    uint8_t passes = axis1.getHomeCaptureCount();
+    axis1.homeCaptureStop();
+    calibrating = false;
+
+    if (passes < 2) {
+      DF("WRN: Dome, rotation calibration saw "); D(passes);
+      DLF(" home switch pass(es), need at least 2 - nothing measured");
+      return;
+    }
+
+    VLF("MSG: Dome, rotation calibration complete");
+    long shortest = 0, longest = 0;
+    for (uint8_t i = 1; i < passes; i++) {
+      long interval = labs(axis1.getHomeCaptureSteps(i) - axis1.getHomeCaptureSteps(i - 1));
+      if (i == 1 || interval < shortest) shortest = interval;
+      if (i == 1 || interval > longest) longest = interval;
+      VF("MSG: Dome,   pass "); V(i); VF(" -> "); V(i + 1); VF(": "); V(interval); VLF(" steps");
+    }
+
+    // average over the whole span, the intermediate passes cancel so only the first and last edges contribute error
+    double mean = labs(axis1.getHomeCaptureSteps(passes - 1) - axis1.getHomeCaptureSteps(0))/
+                  (double)(passes - 1);
+
+    // V() prints a double to two decimals, not enough to carry a steps/degree figure
+    char s[24];
+    VF("MSG: Dome,   mean "); sprintF(s, "%0.1f", mean); V(s);
+    VF(" steps/rev over "); V(passes - 1); VLF(" revolution(s)");
+    VF("MSG: Dome,   spread "); V(longest - shortest); VF(" steps (");
+    sprintF(s, "%0.3f", (longest - shortest)*100.0/mean); V(s); VLF("%)");
+    VF("MSG: Dome,   set AXIS1_STEPS_PER_DEGREE "); sprintF(s, "%0.4f", mean/360.0); V(s);
+    VF(" (currently "); sprintF(s, "%0.4f", axis1.getStepsPerMeasure()); V(s); VLF(")");
+  }
+#endif
 
 // stop slew
 void Dome::stop() {
@@ -206,6 +312,11 @@ void Dome::stop() {
       axis2.autoSlewAbort();
     #endif
     homing = false;
+
+    // a calibration stopped part way still yields a usable figure if it recorded two passes
+    #if AXIS1_SENSE_HOME != OFF
+      if (calibrating) { VLF("MSG: Dome, rotation calibration stopped early"); calibrateReport(); }
+    #endif
   }
 }
 
@@ -305,10 +416,11 @@ CommandError Dome::setpark() {
 
 // check if dome is slewing
 bool Dome::isSlewing() {
+  // isHoming() covers the pauses between homing moves, where the axis is idle but still busy
   return
-    (axis1.isSlewing()
+    (axis1.isSlewing() || axis1.isHoming()
     #if AXIS2_DRIVER_MODEL != OFF
-      || axis2.isSlewing()
+      || axis2.isSlewing() || axis2.isHoming()
     #endif
     );
 }
@@ -328,11 +440,37 @@ const char* Dome::statusMessage() {
 
 // poll dome to monitor motion
 void Dome::monitor() {
-  if (!axis1.isSlewing()) {
-  #if AXIS2_DRIVER_MODEL != OFF
-    if (!axis2.isSlewing())
+  #if AXIS1_SENSE_HOME != OFF
+    // a calibration run just rotates until enough passes are recorded, the passes themselves are captured in Axis::poll()
+    if (calibrating) {
+      if (axis1.getHomeCaptureCount() > DOME_CALIBRATE_REVOLUTIONS) {
+        axis1.autoSlewStop();
+        calibrateReport();
+      } else
+      if ((long)(millis() - calibrateTimeout) > 0) {
+        DLF("WRN: Dome, rotation calibration timed out");
+        axis1.autoSlewStop();
+        calibrateReport();
+      } else
+      if (!axis1.isSlewing()) {
+        DLF("WRN: Dome, rotation calibration ended early, the axis stopped");
+        calibrateReport();
+      }
+      return;
+    }
   #endif
-    {
+
+  // isSlewing() also covers a homing run that is between moves, so nothing below fires early
+  if (!isSlewing()) {
+      // restore backlash after a homing run, keyed off its own flag so it fires on every way out of homing
+      if (backlashDisabled) {
+        backlashDisabled = false;
+        axis1.setBacklash(settings.backlash.azimuth);
+        #if AXIS2_DRIVER_MODEL != OFF
+          axis2.setBacklash(settings.backlash.altitude);
+        #endif
+      }
+
       if (settings.park.state == PS_PARKING) {
         settings.park.state = PS_PARKED;
         nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
@@ -344,11 +482,22 @@ void Dome::monitor() {
 
       if (settings.park.state == PS_UNPARKED) {
         if (homing) {
-          reset();
           homing = false;
+
+          // a timeout, motion error, or the motor disabling itself also end the slew, so check home was actually found
+          bool found = true;
+          #if AXIS1_SENSE_HOME != OFF
+            found = found && axis1.isHomeFound();
+          #endif
+          #if AXIS2_DRIVER_MODEL != OFF && AXIS2_SENSE_HOME != OFF
+            found = found && axis2.isHomeFound();
+          #endif
+
+          if (found) reset(true); else {
+            DLF("WRN: Dome, homing stopped without reaching the home sensor, position NOT set");
+          }
         }
       }
-    }
   }
 }
 

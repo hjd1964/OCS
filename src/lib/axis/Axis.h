@@ -100,7 +100,7 @@ typedef struct AxisErrors {
 } AxisErrors;
 
 enum AutoRate: uint8_t {AR_NONE, AR_RATE_BY_TIME_ABORT, AR_RATE_BY_TIME_END, AR_RATE_BY_DISTANCE, AR_RATE_BY_TIME_FORWARD, AR_RATE_BY_TIME_REVERSE};
-enum HomingStage: uint8_t {HOME_NONE, HOME_FINE, HOME_SLOW, HOME_FAST};
+enum HomingStage: uint8_t {HOME_NONE, HOME_FINE, HOME_SLOW, HOME_FAST, HOME_APPROACH, HOME_RETURN};
 enum AxisMeasure: uint8_t {AXIS_MEASURE_UNKNOWN, AXIS_MEASURE_MICRONS, AXIS_MEASURE_DEGREES, AXIS_MEASURE_RADIANS};
 
 class Axis {
@@ -306,8 +306,30 @@ class Axis {
     // returns true homing is in progress
     bool isHoming() { return homingStage != HOME_NONE; }
 
+    // returns true if the last autoSlewHome() actually reached the home sensor, not just ended
+    bool isHomeFound() { return homeFound; }
+
+    // get instrument coordinate, in steps, where the home sensor tripped on the approach
+    long getHomeFoundSteps() { return homeFoundSteps; }
+
     // returns true if a home sensor is available
     inline bool hasHomeSense() { return pins->axisSense.homeTrigger != OFF; }
+
+    // maximum home sensor passes that can be recorded in one capture run
+    static const uint8_t homeCaptureMax = 8;
+
+    // start recording the position of each pass over the home sensor, sampled in poll()
+    // \param minSeparationSteps: ignore a trip closer than this to the last one recorded
+    void homeCaptureStart(long minSeparationSteps);
+
+    // stop recording, the results stay readable until the next homeCaptureStart()
+    inline void homeCaptureStop() { homeCaptureActive = false; }
+
+    // get number of passes recorded so far
+    inline uint8_t getHomeCaptureCount() { return homeCaptureCount; }
+
+    // get instrument coordinate, in steps, of recorded pass i
+    inline long getHomeCaptureSteps(uint8_t i) { return i < homeCaptureCount ? homeCaptureStepsList[i] : 0; }
 
     // stops any autoGoto() or autoSlew() or autoSlewHome() with deacceleration by time
     void autoSlewStop();
@@ -458,6 +480,28 @@ class Axis {
     float abortAccelTime = NAN;          // abort slew acceleration time in seconds
 
     HomingStage homingStage = HOME_NONE;
+    bool homeFound = false;                    // the last homing run reached the sensor, rather than just ending
+    bool lastHomeSensorState = false;          // home sensor state at the last poll, for edge detection (momentary mode)
+    long homeFoundSteps = 0;                   // instrument coordinate where the approach tripped the sensor
+    long homeSeekTripSteps = 0;                // instrument coordinate where the seek first tripped the sensor
+    bool homeSeekTripValid = false;
+    bool homeMovePending = false;              // the next move of the sequence is waiting out the settle delay
+    unsigned long homeSettleTime = 0;          // when that move may start
+    long homeEdgeGuardSteps = 0;               // travel required between accepted sensor edges, rejects switch chatter
+    long homeLastEdgeSteps = 0;
+    bool homeLastEdgeValid = false;
+
+    bool homeCaptureActive = false;            // recording passes over the home sensor
+    bool homeCaptureLastState = false;         // sensor state at the last poll, for edge detection
+    uint8_t homeCaptureCount = 0;              // passes recorded
+    long homeCaptureMinSeparation = 0;         // steps of travel required between accepted passes
+    long homeCaptureStepsList[homeCaptureMax]; // instrument coordinate of each pass
+
+    // hold the sequence for the settle delay before its next move
+    void homeSettle();
+
+    // start the goto for the current homing stage, once the settle delay has passed
+    void startHomingMove();
 
     const AxisPins *pins;
 

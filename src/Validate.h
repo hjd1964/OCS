@@ -469,6 +469,19 @@
   #error "Configuration (Config.h): DOME_SHUTTER_LOCK must be either ON or OFF."
 #endif
 
+#if HOME_SEQUENCE_MOMENTARY != ON && HOME_SEQUENCE_MOMENTARY != OFF
+  #error "Configuration (Config.h): HOME_SEQUENCE_MOMENTARY must be either ON or OFF."
+#endif
+
+#if HOME_SEEK_REVERSE != ON && HOME_SEEK_REVERSE != OFF
+  #error "Configuration (Config.h): HOME_SEEK_REVERSE must be either ON or OFF."
+#endif
+
+// one more pass than revolutions is needed, and Axis::homeCaptureMax records 8
+#if DOME_CALIBRATE_REVOLUTIONS < 1 || DOME_CALIBRATE_REVOLUTIONS > 7
+  #error "Configuration (Config.h): DOME_CALIBRATE_REVOLUTIONS must be 1 to 7."
+#endif
+
 #if AXIS1_DRIVER_STATUS != OFF && AXIS1_DRIVER_STATUS != ON && AXIS1_DRIVER_STATUS != HIGH && AXIS1_DRIVER_STATUS != LOW
   #error "Configuration (Config.h): AXIS1_DRIVER_STATUS must be either ON, OFF, HIGH or LOW."
 #endif

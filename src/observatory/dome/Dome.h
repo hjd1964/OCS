@@ -53,7 +53,8 @@ class Dome {
     bool command(char reply[], char command[], char parameter[], bool *supressFrame, bool *numericReply, CommandError *commandError);
 
     // reset dome at the home position
-    void reset();
+    // \param useHomeSensorOffset: true after a homing run, sets home at the recorded sensor trip point
+    void reset(bool useHomeSensorOffset = false);
 
     // get dome azimuth (0 to 360 degrees)
     inline float getTargetAzimuth() { 
@@ -131,6 +132,9 @@ class Dome {
     // move to the home position
     CommandError findHome();
 
+    // measure a full rotation to calibrate AXIS1_STEPS_PER_DEGREE, the result goes to the debug log and NV is untouched
+    CommandError calibrateRotation();
+
     // stop slew
     void stop();
 
@@ -167,6 +171,16 @@ class Dome {
     float targetAlt = AXIS2_HOME_DEFAULT;
 
     bool homing = false;
+
+    bool backlashDisabled = false;        // backlash was zeroed for a homing run and still needs restoring
+
+    bool calibrating = false;             // a rotation measurement is in progress
+    unsigned long calibrateTimeout = 0;   // give up if the switch never trips
+
+    #if AXIS1_SENSE_HOME != OFF
+      // work out and report the result of a rotation measurement
+      void calibrateReport();
+    #endif
 
     char statusMsg[40] = L_STOPPED;
 };

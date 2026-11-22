@@ -136,6 +136,9 @@ class Motor {
     // return the encoder count, if present
     virtual int32_t getEncoderCount() { return 0; }
 
+    // get the encoder position in steps as the control loop sees it, or 0 where there is no encoder
+    virtual long getEncoderPositionSteps() { return 0; }
+
     // set origin of absolute encoders
     virtual void encoderSetOrigin(uint32_t origin) { UNUSED(origin); }
 

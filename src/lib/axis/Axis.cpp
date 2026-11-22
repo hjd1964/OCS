@@ -368,7 +368,18 @@ CommandError Axis::autoSlewHome(unsigned long timeout) {
 
   if (pins->axisSense.homeTrigger != OFF) {
     motor->setSynchronized(true);
-    if (homingStage == HOME_NONE) homingStage = HOME_FAST;
+    if (homingStage == HOME_NONE) {
+      homeFound = false;
+      #if HOME_SEQUENCE_MOMENTARY == ON
+        // seed edge detection from the current state, if already on the switch that position is a valid approach target
+        lastHomeSensorState = sense.isOn(homeSenseHandle);
+        homeSeekTripSteps = motor->getInstrumentCoordinateSteps();
+        homeSeekTripValid = lastHomeSensorState;
+        homeEdgeGuardSteps = lround((HOME_SENSE_DEBOUNCE)*settings.stepsPerMeasure);
+        homeLastEdgeValid = false;
+      #endif
+      homingStage = HOME_FAST;
+    }
     if (autoRate == AR_NONE) {
       motor->setSlewing(true);
       VF("MSG:"); V(axisPrefix); VF("autoSlewHome ");
@@ -376,10 +387,18 @@ CommandError Axis::autoSlewHome(unsigned long timeout) {
         case HOME_FAST: VF("fast "); break;
         case HOME_SLOW: VF("slow "); break;
         case HOME_FINE: VF("fine "); break;
+        case HOME_APPROACH: VF("approach "); break;
         default: break;
       }
     }
-    if (sense.isOn(homeSenseHandle)) {
+    #if HOME_SEQUENCE_MOMENTARY == ON
+      // a momentary switch reads ON on either side of its arm so its state can't pick the direction, HOME_SEEK_REVERSE does
+      bool seekForward = (HOME_SEEK_REVERSE) != ON;
+      if (homingStage == HOME_APPROACH) seekForward = !seekForward;
+    #else
+      bool seekForward = sense.isOn(homeSenseHandle);
+    #endif
+    if (seekForward) {
       VF("fwd@ ");
       autoRate = AR_RATE_BY_TIME_FORWARD;
     } else {
@@ -402,6 +421,54 @@ CommandError Axis::autoSlewHome(unsigned long timeout) {
   return CE_NONE;
 }
 
+void Axis::homeCaptureStart(long minSeparationSteps) {
+  homeCaptureCount = 0;
+  homeCaptureMinSeparation = minSeparationSteps;
+  // seed from the present state, so starting on the switch does not register as a pass
+  homeCaptureLastState = sense.isOn(homeSenseHandle);
+  homeCaptureActive = true;
+}
+
+// hold the homing sequence to give the drive time to settle before its next move
+void Axis::homeSettle() {
+  homeMovePending = true;
+  homeSettleTime = millis() + HOME_SETTLE_TIME;
+  VF("MSG:"); V(axisPrefix); VF("homing settle "); V((long)(HOME_SETTLE_TIME)); VLF("ms");
+}
+
+// start the goto for the current homing stage, the approach and return are ordinary gotos aimed at the recorded sensor edges
+void Axis::startHomingMove() {
+  homeMovePending = false;
+
+  bool haveTarget = (homingStage == HOME_RETURN) || (homingStage == HOME_APPROACH && homeSeekTripValid);
+  if (haveTarget) {
+    long target = (homingStage == HOME_RETURN) ? homeFoundSteps : homeSeekTripSteps;
+
+    VF("MSG:"); V(axisPrefix);
+    if (homingStage == HOME_RETURN) VF("home return goto to "); else VF("home approach goto to ");
+    double p = target/settings.stepsPerMeasure;
+    if (unitsRadians) V(radToDeg(p)); else V(p);
+    VL(unitsStr);
+
+    setTargetCoordinateSteps(target);
+    if (autoGoto(slewFreq) == CE_NONE) return;
+
+    VF("MSG:"); V(axisPrefix); VLF("homing goto refused");
+    if (homingStage == HOME_RETURN) {
+      // the recorded coordinate is the reference, not where the axis ends up, so the run stands
+      homingStage = HOME_NONE;
+      return;
+    }
+  }
+
+  // no target or the goto refused, fall back to seeking at a rate or end the run if that fails too
+  if (autoSlewHome(SLEW_HOME_REFINE_TIME_LIMIT * 1000) != CE_NONE) {
+    VF("MSG:"); V(axisPrefix); VLF("homing cannot continue, ending");
+    homingStage = HOME_NONE;
+    homeFound = false;
+  }
+}
+
 void Axis::autoSlewStop() {
   if (autoRate <= AR_RATE_BY_TIME_END) return;
 
@@ -413,13 +480,19 @@ void Axis::autoSlewStop() {
 }
 
 void Axis::autoSlewAbort() {
+  // clear homing state before the early return below, a sequence waiting out its settle delay has no active slew to abort
+  homingStage = HOME_NONE;
+  homeFound = false;
+  lastHomeSensorState = false;
+  homeSeekTripValid = false;
+  homeMovePending = false;
+
   if (autoRate <= AR_RATE_BY_TIME_ABORT) return;
 
   motor->setSynchronized(true);
 
   VF("MSG:"); V(axisPrefix); VLF("slew aborting");
   autoRate = AR_RATE_BY_TIME_ABORT;
-  homingStage = HOME_NONE;
   poll();
 }
 
@@ -452,24 +525,119 @@ void Axis::poll() {
     bool senseHome = sense.isOn(homeSenseHandle);
     if (lastSenseHome != senseHome) {
       VF("MSG:"); V(axisPrefix); VF("home sense state: ");
-      if (senseHome) VLF("ON"); else VLF("OFF");
+      if (senseHome) VF("ON"); else VF("OFF");
+      // log the commanded and encoder positions at each edge, the encoder is what the switch actually responded to
+      double homePosition = getInstrumentCoordinate();
+      VF(" at ");
+      if (unitsRadians) V(radToDeg(homePosition)); else V(homePosition);
+      V(unitsStr);
+      VF(" (motor "); V(motor->getMotorPositionSteps());
+      VF(", encoder "); V(motor->getEncoderPositionSteps()); VLF(")");
       lastSenseHome = senseHome;
     }
   #endif
 
-  // stop homing as we pass by the switch or times out
-  if (homingStage != HOME_NONE && (autoRate == AR_RATE_BY_TIME_FORWARD || autoRate == AR_RATE_BY_TIME_REVERSE)) {
-    if (autoRate == AR_RATE_BY_TIME_FORWARD && !sense.isOn(homeSenseHandle)) autoSlewStop();
-    if (autoRate == AR_RATE_BY_TIME_REVERSE && sense.isOn(homeSenseHandle)) autoSlewStop();
-    if ((long)(millis() - homeTimeoutTime) > 0) {
-      VF("MSG:"); V(axisPrefix); VLF("autoSlewHome timed out");
-      autoSlewAbort();
+  // record each pass over the home sensor for measuring a full revolution, every pass is met from the same direction
+  if (homeCaptureActive) {
+    bool captureState = sense.isOn(homeSenseHandle);
+    if (captureState && !homeCaptureLastState) {
+      long steps = motor->getInstrumentCoordinateSteps();
+      // the switch has width and its contacts bounce, so only the first edge of each pass is taken
+      if (homeCaptureCount == 0 ||
+          labs(steps - homeCaptureStepsList[homeCaptureCount - 1]) >= homeCaptureMinSeparation) {
+        if (homeCaptureCount < homeCaptureMax) {
+          homeCaptureStepsList[homeCaptureCount++] = steps;
+          VF("MSG:"); V(axisPrefix); VF("home pass "); V(homeCaptureCount);
+          VF(" at "); V(steps); VLF(" steps");
+        }
+      }
     }
+    homeCaptureLastState = captureState;
+  }
+
+  // stop homing as we pass by the switch or times out
+  if (homingStage != HOME_NONE) {
+    #if HOME_SEQUENCE_MOMENTARY == ON
+      // watch the sensor on every poll of a homing run, edges missed while coasting would put this out of phase
+      bool homeSensorState = sense.isOn(homeSenseHandle);
+      bool homeSensorEdge = homeSensorState != lastHomeSensorState;
+      lastHomeSensorState = homeSensorState;
+
+      // debounce by distance travelled, rejecting switch chatter without delaying the first edge of a pass
+      if (homeSensorEdge) {
+        long edgeSteps = motor->getInstrumentCoordinateSteps();
+        if (homeLastEdgeValid && labs(edgeSteps - homeLastEdgeSteps) < homeEdgeGuardSteps) {
+          homeSensorEdge = false;
+        } else {
+          homeLastEdgeSteps = edgeSteps;
+          homeLastEdgeValid = true;
+        }
+      }
+
+      // run past the switch until it releases then come back onto it from the same side, that repeatable edge is home
+      // the approach runs as a goto so this has to see AR_RATE_BY_DISTANCE too
+      if (homeSensorEdge && (autoRate == AR_RATE_BY_TIME_FORWARD || autoRate == AR_RATE_BY_TIME_REVERSE ||
+                             autoRate == AR_RATE_BY_DISTANCE)) {
+        if (homingStage == HOME_APPROACH) {
+          if (homeSensorState && !homeFound) {
+            // the reference edge, record it and let the move finish on its own since the return goto undoes the overrun
+            homeFoundSteps = motor->getInstrumentCoordinateSteps();
+            homeFound = true;
+            VF("MSG:"); V(axisPrefix); VF("home switch tripped on approach at ");
+            double p = homeFoundSteps/settings.stepsPerMeasure;
+            if (unitsRadians) V(radToDeg(p)); else V(p);
+            VL(unitsStr);
+          }
+          // an OFF edge here means the coast left the axis still on the switch, ride it out and take the next ON edge
+        } else
+        if (homingStage == HOME_FAST) {
+          if (homeSensorState) {
+            // a point known to be on the switch, aiming the approach at it guarantees crossing the near edge
+            homeSeekTripSteps = motor->getInstrumentCoordinateSteps();
+            homeSeekTripValid = true;
+            VF("MSG:"); V(axisPrefix); VLF("home switch tripped, running on until it releases");
+          } else {
+            // the coast past the switch after this stop is the back-off, no retreat stage needed
+            VF("MSG:"); V(axisPrefix); VLF("home switch released, reversing for the approach");
+            homingStage = HOME_APPROACH;
+            autoSlewStop();
+          }
+        }
+      }
+    #endif
+
+    if (autoRate == AR_RATE_BY_TIME_FORWARD || autoRate == AR_RATE_BY_TIME_REVERSE) {
+      #if HOME_SEQUENCE_MOMENTARY == ON
+        // a rate slew only carries the approach as a fallback, stop as soon as the switch trips
+        if (homingStage == HOME_APPROACH && homeFound) autoSlewStop();
+      #else
+        if (autoRate == AR_RATE_BY_TIME_FORWARD && !sense.isOn(homeSenseHandle)) autoSlewStop();
+        if (autoRate == AR_RATE_BY_TIME_REVERSE && sense.isOn(homeSenseHandle)) autoSlewStop();
+      #endif
+      if ((long)(millis() - homeTimeoutTime) > 0) {
+        VF("MSG:"); V(axisPrefix); VLF("autoSlewHome timed out");
+        autoSlewAbort();
+      }
+    }
+
+    #if HOME_SEQUENCE_MOMENTARY == ON
+      if (homeMovePending && !motor->enabled) {
+        // catch a safety shutdown between moves, the motor disabled check below only looks while a slew is running
+        VF("MSG:"); V(axisPrefix); VLF("motor disabled during homing settle, homing abandoned");
+        homingStage = HOME_NONE;
+        homeFound = false;
+        homeMovePending = false;
+      } else
+      // start the next move of the sequence once the drive has settled
+      if (homeMovePending && autoRate == AR_NONE && (long)(millis() - homeSettleTime) >= 0) startHomingMove();
+    #endif
   }
   Y;
 
   // slewing
-  if (autoRate != AR_NONE && !motor->inBacklash) {
+  // backlash takeup must not gate this off, a commanded zero frequency has no direction so takeup would never advance
+  // and the axis would stop dead mid-slew, keep the ramp running and the motor clamps the rate to backlashFreq itself
+  if (autoRate != AR_NONE) {
 
     if (autoRate != AR_RATE_BY_TIME_ABORT) {
       if (motionError(motor->getDirection())) {
@@ -495,6 +663,24 @@ void Axis::poll() {
         freq = 0.0F;
         motor->setSynchronized(true);
         VF("MSG:"); V(axisPrefix); VLF("slew stopped");
+        #if HOME_SEQUENCE_MOMENTARY == ON
+          // advance the homing sequence off the back of a completed goto
+          if (homingStage == HOME_APPROACH) {
+            if (homeFound) {
+              // return to the coordinate the sensor actually tripped at
+              homingStage = HOME_RETURN;
+            } else {
+              // the goto ended without reaching the switch, dropping the recorded target makes the next move a rate seek
+              VF("MSG:"); V(axisPrefix); VLF("approach reached target without the switch, continuing");
+              homeSeekTripValid = false;
+            }
+            homeSettle();
+          } else
+          if (homingStage == HOME_RETURN) {
+            homingStage = HOME_NONE;
+            VF("MSG:"); V(axisPrefix); VLF("homing complete");
+          }
+        #endif
       } else {
         freq = sqrtf(2.0F*(slewAccelRateFs*FRACTIONAL_SEC)*getOriginOrTargetDistance());
         if (freq < backlashFreq) freq = backlashFreq;
@@ -522,22 +708,31 @@ void Axis::poll() {
         motor->setSlewing(false);
         autoRate = AR_NONE;
         freq = 0.0F;
-        if (homingStage == HOME_FAST) homingStage = HOME_SLOW; else 
-        if (homingStage == HOME_SLOW) {
-          if (!sense.isOn(homeSenseHandle)) homingStage = HOME_FINE; else {
-            slewFreq *= 6.0F;
-            VF("MSG:"); V(axisPrefix); VLF("autoSlewHome approach correction");
+        #if HOME_SEQUENCE_MOMENTARY == ON
+          // a leg of the sequence has stopped, the next is an ordinary goto since the reference is the recorded edge
+          if (homingStage == HOME_APPROACH && homeFound) homingStage = HOME_RETURN;
+          if (homingStage != HOME_NONE) homeSettle(); else {
+            VF("MSG:"); V(axisPrefix); VLF("slew stopped");
           }
-        } else
-        if (homingStage == HOME_FINE) homingStage = HOME_NONE;
-        if (homingStage != HOME_NONE) {
-          float f = fabs(slewFreq)/6.0F;
-          if (f < 0.0003F) f = 0.0003F;
-          setFrequencySlew(f);
-          autoSlewHome(SLEW_HOME_REFINE_TIME_LIMIT * 1000);
-        } else {
-          VF("MSG:"); V(axisPrefix); VLF("slew stopped");
-        }
+        #else
+          if (homingStage == HOME_FAST) homingStage = HOME_SLOW; else
+          if (homingStage == HOME_SLOW) {
+            if (!sense.isOn(homeSenseHandle)) homingStage = HOME_FINE; else {
+              slewFreq *= 6.0F;
+              VF("MSG:"); V(axisPrefix); VLF("autoSlewHome approach correction");
+            }
+          } else
+          if (homingStage == HOME_FINE) { homingStage = HOME_NONE; homeFound = true; }
+
+          if (homingStage != HOME_NONE) {
+            float f = fabs(slewFreq)/6.0F;
+            if (f < 0.0003F) f = 0.0003F;
+            setFrequencySlew(f);
+            autoSlewHome(SLEW_HOME_REFINE_TIME_LIMIT * 1000);
+          } else {
+            VF("MSG:"); V(axisPrefix); VLF("slew stopped");
+          }
+        #endif
       }
     } else
     if (autoRate == AR_RATE_BY_TIME_ABORT) {
@@ -564,6 +759,11 @@ void Axis::poll() {
   if (autoRate != AR_NONE && !motor->enabled) {
     autoRate = AR_NONE;
     freq = 0.0F;
+    // this path bypasses autoSlewAbort() so clear the homing state here too, homeFound is kept only if the sequence completed
+    if (homingStage != HOME_NONE) homeFound = false;
+    homingStage = HOME_NONE;
+    homeSeekTripValid = false;
+    homeMovePending = false;
     VF("MSG:"); V(axisPrefix); VLF("motion stopped, motor disabled!");
   }
 }

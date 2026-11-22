@@ -134,7 +134,17 @@ void ServoMotor::enable(bool state) {
   if (!ready) return;
 
   driver->enable(state);
-  if (state == false) feedback->reset(); else safetyShutdown = false;
+  if (state == false) feedback->reset(); else {
+    safetyShutdown = false;
+    // start the hunting detector clean, the following error while disabled is meaningless
+    oscMean = delta;
+    oscIae = 0.0F;
+    oscHalfPeriod = 0.0F;
+    oscLastSign = 0;
+    oscHalfCycles = 0;
+    oscWarned = false;
+    oscLastTime = millis();
+  }
   enabled = state;
 }
 
@@ -278,6 +288,11 @@ float ServoMotor::getFrequencySteps() {
 void ServoMotor::setSlewing(bool state) {
   if (!ready) return;
 
+  #if DEBUG == VERBOSE
+    // force the first trace of a new slew, even one starting on the numbers the last ended at
+    if (state && !slewing) lastTraceValid = false;
+  #endif
+
   slewing = state;
 }
 
@@ -408,8 +423,93 @@ void ServoMotor::poll() {
     feedback->variableParameters(fabs(velocityPercent));
   }
 
-  if (velocityPercent < -33) wasBelow33 = true;
-  if (velocityPercent > 33) wasAbove33 = true;
+  #ifndef SERVO_SAFETY_DISABLE
+    // hunting (oscillation) detection, integrate |following error| between its zero crossings and shut down only on
+    // consecutive significant half cycles so a one-off transient (reversal, settling) can never trip it
+    // per T. Hägglund, "A control-loop performance monitor" (1995) https://doi.org/10.1016/0967-0661(95)00164-P
+    unsigned long oscNow = millis();
+    float oscDt = (oscNow - oscLastTime)/1000.0F;
+    oscLastTime = oscNow;
+
+    // skip the first pass and any gap long enough that the axis was not really being controlled
+    if (oscDt > 0.0F && oscDt < 0.5F) {
+      // only what swings about the steady following lag is oscillation, so track and subtract it
+      oscMean += (delta - oscMean)*(oscDt/((float)(SERVO_SAFETY_OSCILLATION_DC_TC) + oscDt));
+      float oscError = delta - oscMean;
+
+      oscIae += fabs(oscError)*oscDt;
+      oscHalfPeriod += oscDt;
+
+      // zero crossing, with a one count deadband so encoder dither can't chatter across it
+      int8_t oscSign = 0;
+      if (oscError > 1.0F) oscSign = 1; else if (oscError < -1.0F) oscSign = -1;
+      if (oscSign != 0 && oscSign != oscLastSign) {
+        if (oscLastSign != 0) {
+          // a half cycle counts only if it lasted a plausible time and its mean magnitude cleared the threshold
+          if (oscHalfPeriod >= (float)(SERVO_SAFETY_OSCILLATION_PERIOD_MIN) &&
+              oscHalfPeriod <= (float)(SERVO_SAFETY_OSCILLATION_PERIOD_MAX) &&
+              oscIae >= (float)(SERVO_SAFETY_OSCILLATION_AMPLITUDE)*oscHalfPeriod) {
+
+            if (oscHalfCycles < 255) oscHalfCycles++;
+
+            bool shutdown = oscHalfCycles >= SERVO_SAFETY_OSCILLATION_CYCLES*2;
+            if (shutdown || (oscHalfCycles >= SERVO_SAFETY_OSCILLATION_CYCLES && !oscWarned)) {
+              if (shutdown) { DF("WRN:"); } else { DF("MSG:"); }
+              D(axisPrefix); DF("hunting detected! ");
+              D(oscHalfCycles/2.0F); DF(" cycles at "); D(1.0F/(2.0F*oscHalfPeriod));
+              DF("Hz, mean error "); D(oscIae/oscHalfPeriod);
+              if (shutdown) {
+                DLF(" counts - shutting down");
+                enable(false);
+                safetyShutdown = true;
+                oscHalfCycles = 0;
+                oscWarned = false;
+              } else {
+                DLF(" counts");
+                oscWarned = true;
+              }
+            }
+          } else { oscHalfCycles = 0; oscWarned = false; }
+        }
+        oscLastSign = oscSign;
+        oscIae = 0.0F;
+        oscHalfPeriod = 0.0F;
+      }
+    }
+  #endif
+
+  // trace what the control loop is seeing while it moves, only emitted when something changed
+  #if DEBUG == VERBOSE
+    if (slewing && (long)(millis() - lastTraceTime) >= 500) {
+      long traceTarget, traceMotor;
+      noInterrupts();
+      traceTarget = targetSteps;
+      traceMotor = motorSteps;
+      interrupts();
+      // compare the values as printed, so a float wobbling below the displayed precision doesn't count as a change
+      long tracePower = lroundf(velocityPercent*100.0F);
+      long traceRate = lroundf(currentFrequency*100.0F);
+
+      if (!lastTraceValid || traceMotor != lastTraceMotor || traceTarget != lastTraceTarget ||
+          encoderCounts != lastTraceEncoder || tracePower != lastTracePower || traceRate != lastTraceRate) {
+        // only stamped on an actual emit, so the first change after a quiet spell prints at once
+        lastTraceTime = millis();
+        lastTraceValid = true;
+        lastTraceMotor = traceMotor;
+        lastTraceTarget = traceTarget;
+        lastTraceEncoder = encoderCounts;
+        lastTracePower = tracePower;
+        lastTraceRate = traceRate;
+
+        VF("MSG:"); V(axisPrefix); VF("servo: encoder="); V(encoderCounts);
+        VF(" motor="); V(traceMotor);
+        VF(" target="); V(traceTarget);
+        VF(" error="); V(traceTarget - encoderCounts);
+        VF(" power="); V(velocityPercent);
+        VF("% rate="); V(currentFrequency); VLF(" steps/s");
+      }
+    }
+  #endif
 
   if (millis() - lastCheckTime > 2000) {
 
@@ -423,26 +523,27 @@ void ServoMotor::poll() {
         safetyShutdown = true;
       }
 
-      // if above 90% power and we're moving away from the target something is seriously wrong, so shut it down
-      if (labs(encoderCounts - lastEncoderCounts) > lastTargetDistance && abs(velocityPercent) >= 90) {
-        DF("WRN:"); D(axisPrefix); DF("runaway detected!");
-        DLF(" > 90% power while moving away from the target!");
-        enable(false);
-        safetyShutdown = true;
-      }
-      lastTargetDistance = labs(encoderCounts - lastEncoderCounts);
+      // if above 90% power and we're moving opposite to the target something is seriously wrong, so shut it down
+      // two consecutive checks are required so a commanded direction reversal can't be mistaken for a runaway
+      long targetDelta;
+      noInterrupts();
+      targetDelta = targetSteps - lastTargetSteps;
+      lastTargetSteps = targetSteps;
+      interrupts();
+      long encoderDelta = encoderCounts - lastEncoderCounts;
 
-      // if we were below -33% and above 33% power in a one second period something is seriously wrong, so shut it down
-      if (wasBelow33 && wasAbove33) {
-        DF("WRN:"); D(axisPrefix); DF("oscillation detected!");
-        DLF(" below -33% and above 33% power in a 2 second period!");
+      if (labs(targetDelta) >= 10 && labs(encoderDelta) >= 10 &&
+          (targetDelta > 0) != (encoderDelta > 0) && abs(velocityPercent) >= 90) runawayCount++; else runawayCount = 0;
+      if (runawayCount >= 2) {
+        DF("WRN:"); D(axisPrefix); DF("runaway detected!");
+        DF(" > 90% power while moving away from the target! target moved "); D(targetDelta);
+        DF(" but encoder moved "); DL(encoderDelta);
         enable(false);
         safetyShutdown = true;
+        runawayCount = 0;
       }
     #endif
 
-    wasAbove33 = false;
-    wasBelow33 = false;
     lastEncoderCounts = encoderCounts;
     lastCheckTime = millis();
   }

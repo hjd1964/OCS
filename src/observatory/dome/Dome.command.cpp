@@ -29,6 +29,15 @@ bool Dome::command(char reply[], char command[], char parameter[], bool *supress
       *numericReply = false;
     } else
 
+    // :DM#  Dome Measure a full rotation, reporting the averaged steps per revolution to the
+    //         debug log to calibrate AXIS1_STEPS_PER_DEGREE.  Stop it early with :DH#
+    //            Return: 0 on failure
+    //                    1 on success
+    if (command[1] == 'M' && parameter[0] == 0) {
+      CommandError e = dome.calibrateRotation();
+      if (e == CE_NONE) *commandError = CE_1; else { VF("MSG: Dome, calibrate error "); VL(e); *commandError = e; }
+    } else
+
     // :DP#  Dome goto park position
     //            Return: 0 on failure
     //                    1 on success

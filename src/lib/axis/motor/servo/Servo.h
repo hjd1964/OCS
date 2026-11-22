@@ -27,6 +27,23 @@
   #define SERVO_SAFETY_STALL_POWER 33 // in percent
 #endif
 
+// hunting (oscillation) detection, see poll() in Servo.cpp
+#ifndef SERVO_SAFETY_OSCILLATION_CYCLES
+  #define SERVO_SAFETY_OSCILLATION_CYCLES 3 // full cycles of the following error before shutdown, warns at half of this
+#endif
+#ifndef SERVO_SAFETY_OSCILLATION_AMPLITUDE
+  #define SERVO_SAFETY_OSCILLATION_AMPLITUDE 25 // in encoder counts, mean error of a half cycle, set above a healthy slew's
+#endif
+#ifndef SERVO_SAFETY_OSCILLATION_PERIOD_MIN
+  #define SERVO_SAFETY_OSCILLATION_PERIOD_MIN 0.005 // in seconds, shortest half period counted (noise below)
+#endif
+#ifndef SERVO_SAFETY_OSCILLATION_PERIOD_MAX
+  #define SERVO_SAFETY_OSCILLATION_PERIOD_MAX 2.0 // in seconds, longest half period counted (drift above)
+#endif
+#ifndef SERVO_SAFETY_OSCILLATION_DC_TC
+  #define SERVO_SAFETY_OSCILLATION_DC_TC 1.0 // in seconds, time constant for removing the steady following lag
+#endif
+
 #ifdef ABSOLUTE_ENCODER_CALIBRATION
   #ifndef ENCODER_ECM_BUFFER_SIZE
     #define ENCODER_ECM_BUFFER_SIZE 16384
@@ -126,6 +143,9 @@ class ServoMotor : public Motor {
     // read encoder
     int32_t encoderRead();
 
+    // encoder position as the control loop sees it, matching the "encoder=" field of the servo trace
+    long getEncoderPositionSteps() { if (ready) return encoderRead(); else return 0; }
+
     // updates PID and sets servo motor power/direction
     void poll();
 
@@ -206,10 +226,27 @@ class ServoMotor : public Motor {
     uint32_t encoderOrigin = 0;
     bool encoderReverse = false;
     bool encoderReverseDefault = false;
-    bool wasAbove33 = false;
-    bool wasBelow33 = false;
     bool safetyShutdown = false;
-    long lastTargetDistance = 0;
+
+    // hunting detector state, see poll()
+    float oscMean = 0.0F;               // slow mean of the following error, the steady lag to remove
+    float oscIae = 0.0F;                // integral of |error - mean| over the half cycle so far
+    float oscHalfPeriod = 0.0F;         // duration of the half cycle so far, in seconds
+    int8_t oscLastSign = 0;             // sign of the error at the last zero crossing
+    uint8_t oscHalfCycles = 0;          // consecutive significant half cycles
+    bool oscWarned = false;             // warning already logged for this episode
+    unsigned long oscLastTime = 0;      // for the per-poll time step
+    long lastTargetSteps = 0;           // target position at the last check, for direction of demand
+    uint8_t runawayCount = 0;           // consecutive checks travelling opposite to the target
+    #if DEBUG == VERBOSE
+      unsigned long lastTraceTime = 0;  // rate limit for the servo trace while slewing
+      bool lastTraceValid = false;      // a trace has been emitted for this slew
+      long lastTraceEncoder = 0;        // values as printed at the last trace, to suppress repeats
+      long lastTraceMotor = 0;
+      long lastTraceTarget = 0;
+      long lastTracePower = 0;
+      long lastTraceRate = 0;
+    #endif
 };
 
 #endif

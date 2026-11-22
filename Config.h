@@ -287,6 +287,11 @@
                                           //         |THLD(n) Where n=1..1023 (ADU) for Analog threshold.
                                           //         |HYST(n) Where n=0..1023 (ADU) for +/- Hystersis range.
 
+#define HOME_SEQUENCE_MOMENTARY       OFF //    OFF, ON for a momentary home switch (a magnetic or limit switch held only     Option
+                                          //         for a short duration) Homing runs past the switch until it releases,
+                                          //         then approaches from the far side and records that trip edge as home.
+                                          //         Leave OFF for a switch that stays on over a region.
+
 #define AXIS1_WRAP                    OFF //    OFF, ON Allows unlimited Azm range and ignores min/max limits.                Option
 
 #define AXIS2_DRIVER_MODEL            OFF //    OFF, Enter driver model to activate the (optional) dome Altitude axis.        Option

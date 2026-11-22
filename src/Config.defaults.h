@@ -373,6 +373,21 @@
 #ifndef DOME_SHUTTER_LOCK
 #define DOME_SHUTTER_LOCK              OFF
 #endif
+#ifndef HOME_SEQUENCE_MOMENTARY
+#define HOME_SEQUENCE_MOMENTARY        OFF
+#endif
+#ifndef HOME_SETTLE_TIME
+#define HOME_SETTLE_TIME               2500                        // settle time between momentary homing moves, in milliseconds
+#endif
+#ifndef HOME_SEEK_REVERSE
+#define HOME_SEEK_REVERSE              ON                          // momentary homing seeks the switch in the reverse direction
+#endif
+#ifndef DOME_CALIBRATE_REVOLUTIONS
+#define DOME_CALIBRATE_REVOLUTIONS     3                           // revolutions averaged by the :DM# rotation measurement
+#endif
+#ifndef HOME_SENSE_DEBOUNCE
+#define HOME_SENSE_DEBOUNCE            0.5                         // travel required between accepted home sensor edges, in degrees
+#endif
 #ifndef DEFAULT_POWER_DOWN_TIME
 #define DEFAULT_POWER_DOWN_TIME        30000                       // motor power down time, in milliseconds
 #endif
