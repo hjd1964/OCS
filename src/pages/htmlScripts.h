@@ -55,7 +55,7 @@ const char html_script_ajax_E[] PROGMEM =
           "if (k!='') {\n"
             "var e=document.getElementById(k);\n"
             "if (e!=null) {\n"
-              "if (m==1) e.value=v; else\n"
+              "if (m==1) { if (e!==document.activeElement||e.tagName=='SELECT') e.value=v; } else\n"
               "if (v=='selected') e.style.background='" COLOR_CONTROL_SELECTED "'; else\n"
               "if (v=='unselected') e.style.background='" COLOR_CONTROL_UNSELECTED "'; else\n";
 const char html_script_ajax_F[] PROGMEM =

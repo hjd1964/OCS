@@ -5,7 +5,7 @@
   #include "../../observatory/dome/Dome.h"
 
   void domeTile() {
-    char temp[256];
+    char temp[300];
 
     strcpy_P(temp, htmlDomeBegin);
     www.sendContent(temp);
@@ -54,6 +54,14 @@
 
     sprintf(temp, "%1.1f&nbsp;&deg;", dome.getAzimuth());
     www.sendContent("dome_azm|"); www.sendContent(temp); www.sendContent("\n");
+
+    // target inputs, the page skips these while the user is editing them
+    #if AXIS2_DRIVER_MODEL != OFF
+      sprintf(temp, "altitude&%d\n", (int)round(dome.getTargetAltitude()));
+      www.sendContent(temp);
+    #endif
+    sprintf(temp, "azimuth&%d\n", (int)round(dome.getTargetAzimuth()));
+    www.sendContent(temp);
   }
 
   void domeTileGet() {
