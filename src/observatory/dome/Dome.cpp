@@ -94,11 +94,19 @@ void Dome::reset() {
   nv.updateBytes(NV_DOME_SETTINGS_BASE, &settings, sizeof(DomeSettings));
 }
 
+// with DOME_SHUTTER_LOCK ON, dome motion is only allowed while the roof/shutter is fully open
+// (this only checks the shutter, it never moves it)
+bool Dome::shutterLocked() {
+  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
+    return !roof.isOpen();
+  #else
+    return false;
+  #endif
+}
+
 // dome goto azimuth
 CommandError Dome::gotoAzimuthTarget() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
   VF("MSG: Dome, goto azimuth target coordinate set ("); V(targetAzm); VL("°)");
@@ -115,9 +123,7 @@ CommandError Dome::gotoAzimuthTarget() {
 
 // dome sync azimuth
 CommandError Dome::syncAzimuthTarget() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
   VF("MSG: Dome, sync azimuth target coordinate set ("); V(targetAzm); VL("°)");
@@ -131,9 +137,7 @@ CommandError Dome::syncAzimuthTarget() {
 // dome goto altitude
 CommandError Dome::gotoAltitudeTarget() {
   #if AXIS2_DRIVER_MODEL != OFF
-    #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-      if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-    #endif
+    if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
     if (settings.park.state >= PS_PARKED) return CE_SLEW_ERR_IN_PARK;
 
     VF("MSG: Dome, goto altitude target coordinate set ("); V(targetAlt); VL("°)");
@@ -153,9 +157,7 @@ CommandError Dome::gotoAltitudeTarget() {
 
 // move to the home position
 CommandError Dome::findHome() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state >= PS_PARKED) return CE_PARKED;
 
   targetAzm = AXIS1_HOME_DEFAULT;
@@ -209,9 +211,7 @@ void Dome::stop() {
 
 // dome park
 CommandError Dome::park() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state == PS_PARKED)      return CE_NONE;
   if (settings.park.state == PS_PARKING)     return CE_PARK_FAILED;
   if (settings.park.state == PS_UNPARKING)   return CE_PARK_FAILED;
@@ -240,9 +240,7 @@ CommandError Dome::park() {
 
 // dome unpark
 CommandError Dome::unpark() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state == PS_PARKING)     return CE_PARK_FAILED;
   if (settings.park.state == PS_UNPARKING)   return CE_PARK_FAILED;
   if (settings.park.state == PS_PARK_FAILED) return CE_PARK_FAILED;
@@ -287,9 +285,7 @@ CommandError Dome::unpark() {
 
 // dome set park
 CommandError Dome::setpark() {
-  #if defined(ROOF_PRESENT) && DOME_SHUTTER_LOCK == ON
-    if (!roof.open()) return CE_SLEW_ERR_IN_STANDBY;
-  #endif
+  if (shutterLocked()) return CE_SLEW_ERR_IN_STANDBY;
   if (settings.park.state == PS_PARKED)      return CE_NONE;
   if (settings.park.state == PS_PARKING)     return CE_PARK_FAILED;
   if (settings.park.state == PS_UNPARKING)   return CE_PARK_FAILED;
