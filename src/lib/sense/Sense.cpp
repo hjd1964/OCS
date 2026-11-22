@@ -50,6 +50,8 @@ SenseInput::SenseInput(int pin, int initState, int32_t trigger) {
 }
 
 int SenseInput::isOn() {
+  if (pin == OFF) return false;
+
   int value = lastValue;
   if (isAnalog) {
     #ifdef ESP32
@@ -72,6 +74,8 @@ int SenseInput::isOn() {
 }
 
 int SenseInput::changed() {
+  if (pin == OFF) return false;
+
   int value = lastChangedValue;
   if (isAnalog) {
     #ifdef ESP32
@@ -144,22 +148,22 @@ uint8_t Sense::add(int pin, int initState, int32_t trigger, bool force) {
 }
 
 int Sense::isOn(uint8_t handle) {
-  if (handle == 0) return false;
+  if (handle == 0 || handle > senseCount) return false;
   return senseInput[handle - 1]->isOn();
 }
 
 long Sense::stableMillis(uint8_t handle) {
-  if (handle == 0) return false;
+  if (handle == 0 || handle > senseCount) return false;
   return senseInput[handle - 1]->stableMillis();
 }
 
 int Sense::changed(uint8_t handle) {
-  if (handle == 0) return false;
+  if (handle == 0 || handle > senseCount) return false;
   return senseInput[handle - 1]->changed();
 }
 
 void Sense::reverse(uint8_t handle, bool state) {
-  if (handle == 0) return;
+  if (handle == 0 || handle > senseCount) return;
   senseInput[handle - 1]->reverse(state);
 }
 
