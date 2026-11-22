@@ -39,7 +39,7 @@ bool Roof::command(char reply[], char command[], char parameter[], bool *supress
 
     //  :R+#  Roof High Power Mode
     //         Returns: 1 on success
-    if (command[1] == '!' && parameter[0] == 0) {
+    if (command[1] == '+' && parameter[0] == 0) {
       roof.setMaxPower();
     } else
 

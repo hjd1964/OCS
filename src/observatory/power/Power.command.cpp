@@ -13,7 +13,7 @@ bool Power::command(char reply[], char command[], char parameter[], bool *supres
     //  :GRn#  Get Relay n state
     //         Example: :GR1#
     //         Returns: ON#, OFF#, n# (pwm 0-9)
-    if (command[1] == 'R' && (parameter[1] == 0 || parameter[2] == 0)) {
+    if (command[1] == 'R' && parameter[0] >= '0' && parameter[0] <= '9' && (parameter[1] == 0 || parameter[2] == 0)) {
       int r = atoi(parameter);
       if (r >= 1 && r <= RELAYS_MAX) {
         if (!relay.isOn(r)) strcpy(reply, "OFF"); else
