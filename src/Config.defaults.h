@@ -309,6 +309,12 @@
   #endif
 #endif
 
+// sense inputs: the eight SENSEn senses always take handles 1 to 8, plus up to three
+// (home, min, max) for each of the two dome axes
+#ifndef SENSE_MAX
+#define SENSE_MAX                      14
+#endif
+
 // Digital, optionally add: |HYST(n) Where n=0..1023 stability time in ms.
 #ifndef SENSE1_ON_STATE
 #define SENSE1_ON_STATE                LOW
