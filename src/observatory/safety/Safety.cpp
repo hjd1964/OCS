@@ -14,7 +14,8 @@
 
 void safetyWrapper() { safety.poll(); }
 
-bool validTime() { return (now() < 315360000); }
+// true once the clock has been set (TimeLib counts seconds since 1970, from 0 at power up if never set)
+bool validTime() { return (now() >= 315360000UL); } // after 1979
 
 void Safety::init() {
   // start polling task
