@@ -26,12 +26,8 @@ bool Safety::isSafe() {
   bool safe = true;
 
   #if STAT_MAINS_SENSE != OFF
-    // check for mains power out
-    if (sense.isOn(STAT_MAINS_SENSE)) {
-      delayForMains = 0;
-    } else {
-      if (delayForMains < STAT_MAINS_SAFETY_DELAY) delayForMains++; else safe = false;
-    }
+    // check for mains power out for longer than the delay (timed in poll)
+    if (!sense.isOn(STAT_MAINS_SENSE) && delayForMains > STAT_MAINS_SAFETY_DELAY) safe = false;
   #endif
 
   #ifdef WEATHER_PRESENT
@@ -69,6 +65,14 @@ bool Safety::isSafe() {
 }
 
 void Safety::poll() {
+  #if STAT_MAINS_SENSE != OFF
+    // time how long the mains power has been out, once a second here so that
+    // isSafe() can be called from anywhere (web, Alpaca, commands) without
+    // shortening the delay
+    if (sense.isOn(STAT_MAINS_SENSE)) delayForMains = 0; else
+    if (delayForMains <= STAT_MAINS_SAFETY_DELAY) delayForMains++;
+  #endif
+
   #ifdef ROOF_PRESENT
     // auto close the roof at 8am if requested
     if (roofAutoClose && validTime()) {
