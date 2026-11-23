@@ -153,7 +153,7 @@
     #endif
 
     #if STAT_BATTERY_CURRENT_ANALOG != OFF
-      getStatusAmpsStr(STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_BATTERY_CURRENT_ANALOG)), temp1)
+      getStatusAmpsStr(STAT_DC_ANALOG_TO_CURRENT(analog.read(STAT_BATTERY_CURRENT_ANALOG)), temp);
       www.sendContent("stat_bat_A|"); www.sendContent(temp); www.sendContent("\n");
     #endif
 
