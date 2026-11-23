@@ -57,15 +57,17 @@ void Thermostat::poll() {
   #endif
 
   #if HUMIDITY_RELAY != OFF
-    if (!isnan(humidity) && (humidity > getHumiditySetpoint()) && getHumiditySetpoint() != 0
+    // on above the setpoint, off 5% below it, and left as it is in between;
+    // always off if the humidity is unknown, the setpoint is 0 (off) or the roof isn't closed
+    if (isnan(humidity) || getHumiditySetpoint() == 0
       #if HUMIDITY_WITH_ROOF_OPEN != ON && ROOF != OFF
-        && roof.isClosed()
+        || !roof.isClosed()
       #endif
       ) {
-      relay.on(HUMIDITY_RELAY);
-    } else if (!isnan(humidity) && (humidity < (getHumiditySetpoint() - 5))) {
       relay.off(HUMIDITY_RELAY);
-    } else {
+    } else if (humidity > getHumiditySetpoint()) {
+      relay.on(HUMIDITY_RELAY);
+    } else if (humidity < (getHumiditySetpoint() - 5)) {
       relay.off(HUMIDITY_RELAY);
     }
   #endif
