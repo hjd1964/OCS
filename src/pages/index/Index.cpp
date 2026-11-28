@@ -109,7 +109,7 @@
 
   void indexAjax() {
     www.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    www.sendHeader("Cache-Control", "no-cache");
+    www.sendHeader("Cache-Control", "no-store");
     www.send(200, "text/plain", String());
 
     #if STAT == ON
@@ -139,7 +139,7 @@
 
   void indexAjaxGet() {
     www.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    www.sendHeader("Cache-Control", "no-cache");
+    www.sendHeader("Cache-Control", "no-store");
     www.send(200, "text/plain", String());
 
     #if POWER == ON
