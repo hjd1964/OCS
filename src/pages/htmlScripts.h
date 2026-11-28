@@ -30,18 +30,14 @@ const char html_script_ajax_C[] PROGMEM =
   "if (auto2Tick>=0) auto2Tick--;\n"
   "if (auto2Tick==0) auto2Rate=" STR(AJAX_PAGE_UPDATE_RATE_MS) "/10;\n"
   "if (auto1Tick%auto2Rate==0) {\n"
-    "nocache='?nocache='+Math.random()*1000000;\n"
-    "var request = new XMLHttpRequest();\n"
-    "request.onreadystatechange = pageReady(ajaxPage);\n"
-    "request.open('GET',ajaxPage.toLowerCase()+nocache,true);\n";
+    "fetch(ajaxPage.toLowerCase(),{cache:'no-store'})"
+    ".then(function(r){ return r.ok ? r.text() : ''; })"
+    ".then(pageReady).catch(function(){});\n";
 const char html_script_ajax_D[] PROGMEM =
-    "request.send(null);\n"
   "}\n"
 "}\n"
-"function pageReady(aPage) {\n"
-  "return function() {\n"
-    "if ((this.readyState==4)&&(this.status==200)) {\n"
-      "lines=this.responseText.split('\\n');\n"
+"function pageReady(text) {\n"
+      "lines=text.split('\\n');\n"
       "for (var i=0; i<lines.length; i++) {\n"
         "var j=lines[i].indexOf('|');\n"
         "var m=0;\n"
@@ -68,8 +64,6 @@ const char html_script_ajax_F[] PROGMEM =
           "}\n"
         "}\n"
       "}\n"
-    "}\n"
-  "}\n"
 "}\n"
 "</script>\n";
 
@@ -77,9 +71,7 @@ const char html_script_ajax_F[] PROGMEM =
 const char html_script_ajax_get[] PROGMEM =
 "<script>\n"
 "function s(key,v1) {"
-  "var xhttp = new XMLHttpRequest();"
-  "xhttp.open('GET','%s?'+key+'='+encodeURIComponent(v1)+'&x='+new Date().getTime(), true);"
-  "xhttp.send();"
+  "fetch('%s?'+key+'='+encodeURIComponent(v1),{cache:'no-store'}).catch(function(){});"
 "}</script>\n";
 
 // Javascript for Collapsibles
